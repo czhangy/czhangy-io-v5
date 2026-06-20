@@ -63,6 +63,8 @@ Shared UI primitives live in `src/components/common/` (Modal, Dropdown, Accordio
 
 **Component reuse**: When two components share the same markup structure and styles with only content differing, extract a shared component with props rather than duplicating. Thin wrapper components that only pass fixed props to a shared component do not need a `.module.scss` file.
 
+**Page-level padding**: All full-page components must include `padding: 1.5rem` (desktop) and `padding: 1rem` (mobile, `width <= 768px`) on their outermost element. This matches the spacing of the GlobalNav and social link icons from the viewport edge. Because `box-sizing: border-box` is set globally, this padding is included within `@include full-height` — no overflow occurs.
+
 Each component directory contains a `ComponentName.md` documentation file co-located with the `.tsx` and `.module.scss` files. Whenever a component is modified, its documentation file must be updated to reflect the changes.
 
 Documentation files follow this structure (omit any section that does not apply):
@@ -228,6 +230,7 @@ Before writing a raw CSS value in a component SCSS file, check whether it belong
 **Available mixins:**
 
 - `fill-parent` — `position: absolute; inset: 0`
+- `full-height` — `min-height: 100vh` with `100dvh` override — use instead of bare `min-height: 100vh` so mobile browser chrome is accounted for
 - `mono-label` — `font-family: $font-mono; font-weight: 700` — use for all bold monospace text (titles, nav items, button labels)
 - `game-button` — bordered interactive button with hover accent transition — use for any standalone link or action button in the site UI
 
