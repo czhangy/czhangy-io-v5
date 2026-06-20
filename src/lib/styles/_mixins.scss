@@ -6,10 +6,9 @@
     position: absolute;
 }
 
-// Full viewport height that accounts for mobile browser chrome.
+// Fills remaining height in the page flex column (body → .page-main → page component).
 @mixin full-height {
-    min-height: 100vh;
-    min-height: 100dvh;
+    flex: 1;
 }
 
 // Monospace bold text used for labels, titles, and navigation items.

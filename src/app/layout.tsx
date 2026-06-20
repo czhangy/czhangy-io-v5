@@ -44,7 +44,7 @@ export default async function RootLayout({
                 >
                     <Background />
                     <Navbar />
-                    {children}
+                    <main className="page-main">{children}</main>
                 </SessionProvider>
             </body>
         </html>

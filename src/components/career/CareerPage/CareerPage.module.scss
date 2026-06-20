@@ -8,8 +8,6 @@
     display: flex;
     justify-content: center;
     padding: 1.5rem;
-    position: relative;
-    z-index: 11;
 
     @media (width <= 768px) {
         padding: 1rem;
@@ -24,7 +22,7 @@
 
             color: $accent;
             display: block;
-            font-size: 2rem;
+            font-size: 3rem;
             letter-spacing: 0.2em;
             text-align: center;
         }
