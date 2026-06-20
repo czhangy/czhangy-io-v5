@@ -1,5 +1,5 @@
-import WipPage from '@/components/wip/WipPage/WipPage';
+import CareerPage from '@/components/career/CareerPage/CareerPage';
 
 export default function Career() {
-    return <WipPage />;
+    return <CareerPage />;
 }
