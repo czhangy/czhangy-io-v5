@@ -11,9 +11,10 @@ type NavItem = {
 };
 
 const NAV_ITEMS: NavItem[] = [
-    { href: '/page-1', label: 'Page 1' },
-    { href: '/page-2', label: 'Page 2' },
-    { href: '/page-3', label: 'Page 3' },
+    { href: '/logs', label: 'Logs' },
+    { href: '/activity', label: 'Activity' },
+    { href: '/career', label: 'Career' },
+    { href: '/achievements', label: 'Achievements' },
 ];
 
 const NavMenu: React.FC = () => {
