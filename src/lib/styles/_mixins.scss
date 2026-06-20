@@ -1,0 +1,7 @@
+@use 'constants' as *;
+
+// Stretches a positioned element to cover its nearest positioned ancestor.
+@mixin fill-parent {
+    inset: 0;
+    position: absolute;
+}

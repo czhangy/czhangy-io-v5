@@ -6,10 +6,10 @@ import { useRouter } from 'next/navigation';
 
 import styles from './NavMenu.module.scss';
 
-interface NavItem {
+type NavItem = {
     href: string;
     label: string;
-}
+};
 
 const NAV_ITEMS: NavItem[] = [
     { href: '/page-1', label: 'Page 1' },

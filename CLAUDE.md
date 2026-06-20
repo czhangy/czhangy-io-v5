@@ -38,12 +38,13 @@ Pre-commit hooks via Husky/lint-staged automatically run ESLint, Prettier, and S
 - `@/*` → `src/*`
 - `@/styles/*` → `src/lib/styles/*`
 
-**Routing:** File-based in `src/app/` using App Router. Root layout (`src/app/layout.tsx`) loads Geist fonts and imports `src/lib/styles/globals.scss` for global Tailwind styles.
+**Routing:** File-based in `src/app/` using App Router. Root layout (`src/app/layout.tsx`) loads Geist fonts and imports `src/lib/styles/globals.scss` for global styles.
 
 **Global styles** live in `src/lib/styles/`:
-- `globals.scss` — Tailwind import, CSS variables, and body defaults
-- `_constants.scss` — SCSS variables (e.g. `$accent`)
-- `index.scss` — barrel that forwards `_constants.scss`; component SCSS files import directly from `@/styles/constants`
+- `globals.scss` — body defaults and font-smoothing
+- `_constants.scss` — SCSS variables (`$accent`, `$background`, `$foreground`, `$font-mono`)
+- `_mixins.scss` — reusable declaration blocks (e.g. `fill-parent`)
+- `index.scss` — barrel that forwards constants and mixins
 
 ### Components
 
@@ -105,6 +106,10 @@ Custom ESLint rules (in `.eslint-rules/`) enforce a strict section layout inside
 ```typescript
 const MyComponent: React.FC = () => {
     // -------------------------------------------------------------------------
+    // CONSTANTS
+    // -------------------------------------------------------------------------
+
+    // -------------------------------------------------------------------------
     // STATE
     // -------------------------------------------------------------------------
 
@@ -118,6 +123,10 @@ const MyComponent: React.FC = () => {
 
     // -------------------------------------------------------------------------
     // COMPUTATIONS
+    // -------------------------------------------------------------------------
+
+    // -------------------------------------------------------------------------
+    // RENDERING
     // -------------------------------------------------------------------------
 
     // -------------------------------------------------------------------------
@@ -136,7 +145,54 @@ export default MyComponent;
 
 Only include sections that are actually used. MARKUP is always required. The divider lines must contain at least 20 dashes (the ESLint rule enforces this).
 
+**What belongs in each section:**
+
+- **CONSTANTS** — `UPPER_SNAKE_CASE` typed consts, non-Props type aliases, and enums. These are values that depend on props/state/refs and cannot be moved to module level.
+- **STATE** — `useState` calls only.
+- **HOOKS** — `useRef`, `usePathname`, `useReducer`, and `useRouter` only. No other hooks belong here.
+- **HANDLERS** — `handle*`-named arrow functions and `useCallback` calls.
+- **COMPUTATIONS** — Arrow functions and `useMemo` calls that derive values from state/props.
+- **RENDERING** — `render*` arrow functions that return JSX, and typed camelCase consts that hold non-hook values used in the return. No hook calls allowed.
+- **EFFECTS** — `useEffect` calls only.
+- **MARKUP** — The `return` statement.
+
 The exported component name must match the filename.
+
+**`'use client'`** must appear at the top of any component that uses React hooks (`useState`, `useEffect`, etc.), browser APIs, or Next.js client hooks (`useRouter`, `usePathname`, etc.).
+
+**Static module-level data** (arrays, constants, interface definitions that never change) belongs at module level outside the component function — not inside any section block.
+
+**Props** use `type` (not `interface`), named `ComponentNameProps`. Optional props use `?`. The component signature destructures props inline:
+
+```typescript
+type MyComponentProps = {
+    value: string;
+    onChange?: (value: string) => void;
+};
+
+const MyComponent: React.FC<MyComponentProps> = ({ value, onChange }) => {
+```
+
+**Functions:** Always use arrow functions (`const fn = () => ...`). Never use the `function` keyword — this applies to component helpers, callbacks, and module-level functions.
+
+**Event handlers** are prefixed with `handle`, named after event + subject: `handleClick`, `handleKeyDown`, `handleMenuSelect`. Callback parameters are always explicitly typed even when TypeScript can infer them.
+
+**Conditional rendering:** Use ternary (`condition ? <A /> : null`). Do not use `&&` short-circuit — falsy values can render unexpectedly.
+
+**Inline styles** are only used for values that are dynamic at runtime (e.g. user-defined colors). CSS custom properties set via inline style use the `as React.CSSProperties` cast:
+```tsx
+style={{ '--color': value } as React.CSSProperties}
+```
+
+**Avoid `setState` inside `useEffect` bodies.** If multiple state values transition together, use `useReducer` and dispatch from the effect instead. If a value must persist after a nullable prop clears (e.g. during a close animation), split into a non-nullable data prop + a separate `open: boolean` controlled by the parent.
+
+### Component optimization
+
+When optimizing components:
+
+**Do:** remove unused variables/props/refs, simplify logic, fix missing effect dependencies, improve type safety, convert arrays to Maps/Records for O(1) lookups when frequently searched.
+
+**Don't:** change `condition ? <X /> : null` to `condition && <X />`, add ARIA attributes unprompted, use array filter/join for className construction, remove redundant type annotations.
 
 ## Code Style
 
@@ -144,6 +200,10 @@ The exported component name must match the filename.
 - **Import order:** React → Next.js → third-party → components → lib → aliases → relative
 - **SCSS constants:** `$accent`, `$background`, `$foreground` defined in `_constants.scss` — use these in component SCSS files, not CSS `var()` calls. CSS variables are only used where runtime values are unavoidable (e.g. `var(--font-geist-mono)` set by Next.js at runtime).
 - **CSS Modules access:** Use `styles.className` for single-word class names, `styles['hyphenated-name']` for names containing hyphens
+
+### SCSS mixins and constants
+
+Before writing a raw CSS value in a component SCSS file, check whether it belongs in `_constants.scss` (a reusable token like a color or font) or `_mixins.scss` (a reusable block of declarations like `fill-parent`). When the same property+value combination appears in two or more places, extract it. Mixins live in `src/lib/styles/_mixins.scss` and are imported with `@use '@/styles/mixins' as *`.
 
 ### SCSS nesting
 
@@ -156,13 +216,26 @@ Nest selectors in `.module.scss` files to mirror the JSX structure of the compon
 }
 ```
 
-Modifier classes (`&--variant`) nest inside their base class, and any children that change under that modifier nest inside the modifier:
+Modifier classes (`&--variant`) nest inside their base class. **Base styles must appear before the modifier block** — at equal specificity, source order determines which rule wins, so the modifier must come last to override correctly:
 
 ```scss
 .card {
+    .card__label { opacity: 0; }   // base first
     &--active {
-        .card__label { color: $accent; }
+        .card__label { opacity: 1; }  // modifier after
     }
-    .card__label { }
 }
 ```
+
+**Animations** must include a `@media (prefers-reduced-motion: reduce)` block that disables or stills the animation.
+
+**CSS custom properties are scoped to the component that declares them.** Do not declare a variable in a parent component's SCSS intending for a child component to consume it — that creates invisible coupling. Use props instead.
+
+**Hover styles** use `@media (hover: hover)` wrapping `&:hover` to avoid sticky hover states on touch devices:
+```scss
+@media (hover: hover) {
+    .item:hover { color: $accent; }
+}
+```
+
+**Transitions** are declared on the base element, not inside the `:hover` block.
