@@ -6,6 +6,12 @@
     position: absolute;
 }
 
+// Full viewport height that accounts for mobile browser chrome.
+@mixin full-height {
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
 // Monospace bold text used for labels, titles, and navigation items.
 @mixin mono-label {
     font-family: $font-mono;

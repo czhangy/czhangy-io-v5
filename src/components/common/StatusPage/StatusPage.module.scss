@@ -2,10 +2,16 @@
 @use '@/styles/mixins' as *;
 
 .status-page {
+    @include full-height;
+
     align-items: center;
     display: flex;
     justify-content: center;
-    min-height: 100vh;
+    padding: 1.5rem;
+
+    @media (width <= 768px) {
+        padding: 1rem;
+    }
 
     .content {
         align-items: center;
@@ -21,6 +27,7 @@
         color: $accent;
         font-size: 4rem;
         letter-spacing: 0.2em;
+        padding-left: 0.2em;
     }
 
     .subtext {
