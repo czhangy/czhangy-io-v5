@@ -4,12 +4,16 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useSession } from '@/lib/context/SessionContext';
 import HomeIcon from '@/lib/icons/HomeIcon';
-import { NAV_ITEMS, NavItem } from '@/lib/utils';
-import styles from './GlobalNav.module.scss';
+import { AUTH_ROUTES, NAV_ITEMS, NavItem } from '@/lib/utils';
+import styles from './Navbar.module.scss';
 
-const LOGIN_ITEM = { href: '/login', label: 'Login' };
+const Navbar: React.FC = () => {
+    // -------------------------------------------------------------------------
+    // CONSTANTS
+    // -------------------------------------------------------------------------
 
-const GlobalNav: React.FC = () => {
+    const LOGIN_ITEM: NavItem = { href: '/login', label: 'Login' };
+
     // -------------------------------------------------------------------------
     // HOOKS
     // -------------------------------------------------------------------------
@@ -30,6 +34,13 @@ const GlobalNav: React.FC = () => {
     const handleToggle = () => setIsOpen((prev) => !prev);
 
     const handleLinkClick = () => setIsOpen(false);
+
+    // -------------------------------------------------------------------------
+    // COMPUTATIONS
+    // -------------------------------------------------------------------------
+
+    const isProtected = (href: string): boolean =>
+        !isLoggedIn && AUTH_ROUTES.some((route) => href.startsWith(route));
 
     // -------------------------------------------------------------------------
     // RENDERING
@@ -77,7 +88,7 @@ const GlobalNav: React.FC = () => {
     // -------------------------------------------------------------------------
 
     return (
-        <>
+        <div className={styles.navbar}>
             {badgeLabel ? (
                 <span className={styles['session-badge']}>{badgeLabel}</span>
             ) : null}
@@ -102,7 +113,7 @@ const GlobalNav: React.FC = () => {
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={styles['menu-item']}
+                                className={`${styles['menu-item']} ${isProtected(item.href) ? styles['menu-item--disabled'] : ''}`}
                                 onClick={handleLinkClick}
                             >
                                 {item.label.toUpperCase()}
@@ -111,8 +122,8 @@ const GlobalNav: React.FC = () => {
                     </nav>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 
-export default GlobalNav;
+export default Navbar;

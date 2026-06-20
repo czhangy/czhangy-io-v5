@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { cookies } from 'next/headers';
 import Background from '@/components/layout/Background/Background';
-import GlobalNav from '@/components/layout/GlobalNav/GlobalNav';
+import Navbar from '@/components/layout/Navbar/Navbar';
 import SessionProvider from '@/lib/context/SessionContext';
 import '@/lib/styles/globals.scss';
 import { verifyToken } from '@/lib/utils/auth';
@@ -43,7 +43,7 @@ export default async function RootLayout({
                     role={session?.role ?? null}
                 >
                     <Background />
-                    <GlobalNav />
+                    <Navbar />
                     {children}
                 </SessionProvider>
             </body>

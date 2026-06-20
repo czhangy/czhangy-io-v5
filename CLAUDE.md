@@ -175,7 +175,7 @@ The exported component name must match the filename.
 
 **`'use client'`** must appear at the top of any component that uses React hooks (`useState`, `useEffect`, etc.), browser APIs, or Next.js client hooks (`useRouter`, `usePathname`, etc.).
 
-**Static module-level data** (arrays, constants, interface definitions that never change) belongs at module level outside the component function — not inside any section block.
+**All definitions belong inside the component function** in the appropriate section — including static constants that do not depend on state or props. The only things permitted at module level are imports, the component function declaration itself, and the default export.
 
 **Props** use `type` (not `interface`), named `ComponentNameProps`. Optional props use `?`. The component signature destructures props inline:
 
