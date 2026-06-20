@@ -3,7 +3,19 @@
 .home-page {
     display: flex;
     min-height: 100vh;
+    position: relative;
     width: 100%;
+
+    &::before {
+        background-image: url('/bg.png');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        content: '';
+        inset: 0;
+        opacity: 0.08;
+        position: absolute;
+    }
 
     .left-panel {
         align-items: center;
