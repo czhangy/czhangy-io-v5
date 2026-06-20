@@ -1,5 +1,8 @@
-import WipPage from '@/components/wip/WipPage/WipPage';
+import type { Metadata } from 'next';
+import CareerPage from '@/components/career/CareerPage/CareerPage';
+
+export const metadata: Metadata = { title: 'Career' };
 
 export default function Career() {
-    return <WipPage />;
+    return <CareerPage />;
 }

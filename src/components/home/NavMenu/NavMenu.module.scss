@@ -2,6 +2,7 @@
 @use '@/styles/mixins' as *;
 
 .nav-menu {
+    align-items: flex-start;
     display: flex;
     flex-direction: column;
     gap: 2rem;

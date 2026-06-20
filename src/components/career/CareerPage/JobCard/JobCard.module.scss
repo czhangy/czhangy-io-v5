@@ -1,0 +1,49 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.job-card {
+    background: $surface;
+    border: 1px solid $border-subtle;
+    display: flex;
+    gap: 1.25rem;
+    padding: 1.25rem;
+
+    .logo-wrapper {
+        flex-shrink: 0;
+
+        .logo {
+            border-radius: 0.25rem;
+            display: block;
+            object-fit: contain;
+        }
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.375rem;
+        justify-content: center;
+
+        .company {
+            @include mono-label;
+
+            color: $foreground;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+        }
+
+        .role {
+            color: $text-mid;
+            font-family: $font-mono;
+            font-size: 0.875rem;
+            letter-spacing: 0.05em;
+        }
+
+        .dates {
+            color: $text-dim;
+            font-family: $font-mono;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+        }
+    }
+}

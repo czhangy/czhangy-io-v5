@@ -18,7 +18,7 @@
         inset: 0;
         opacity: 0.08;
         pointer-events: none;
-        position: absolute;
+        position: fixed;
     }
 
     .left-panel {
@@ -34,7 +34,7 @@
         flex-direction: column;
         padding-left: 4rem;
         padding-right: 2rem;
-        padding-top: 20vh;
+        padding-top: 10vh;
     }
 
     .social-links {
