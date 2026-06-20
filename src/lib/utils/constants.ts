@@ -4,6 +4,8 @@ export const SESSION_COOKIE = 'session';
 
 export const AUTH_ROUTES = ['/logs'];
 
+export const ADMIN_ROUTES = ['/register'];
+
 export const NAV_ITEMS: NavItem[] = [
     { href: '/activity', label: 'Activity' },
     { href: '/career', label: 'Career' },

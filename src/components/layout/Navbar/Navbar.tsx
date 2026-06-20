@@ -13,6 +13,7 @@ const Navbar: React.FC = () => {
     // -------------------------------------------------------------------------
 
     const LOGIN_ITEM: NavItem = { href: '/login', label: 'Login' };
+    const REGISTER_ITEM: NavItem = { href: '/register', label: 'Register' };
 
     // -------------------------------------------------------------------------
     // HOOKS
@@ -47,7 +48,9 @@ const Navbar: React.FC = () => {
     // -------------------------------------------------------------------------
 
     const allItems: NavItem[] = isLoggedIn
-        ? NAV_ITEMS
+        ? role === 'ADMIN'
+            ? [...NAV_ITEMS, REGISTER_ITEM]
+            : NAV_ITEMS
         : [...NAV_ITEMS, LOGIN_ITEM];
 
     const badgeLabel: string | null = isLoggedIn

@@ -10,17 +10,11 @@ import styles from './NavMenu.module.scss';
 
 const NavMenu: React.FC = () => {
     // -------------------------------------------------------------------------
-    // CONSTANTS
-    // -------------------------------------------------------------------------
-
-    const LOGIN_ITEM: NavItem = { href: '/login', label: 'Login' };
-
-    // -------------------------------------------------------------------------
     // HOOKS
     // -------------------------------------------------------------------------
 
     const router = useRouter();
-    const { isLoggedIn } = useSession();
+    const { isLoggedIn, role } = useSession();
 
     // -------------------------------------------------------------------------
     // STATE
@@ -32,11 +26,13 @@ const NavMenu: React.FC = () => {
     // COMPUTATIONS
     // -------------------------------------------------------------------------
 
-    const allItems = useMemo<NavItem[]>(
-        () => (isLoggedIn ? NAV_ITEMS : [...NAV_ITEMS, LOGIN_ITEM]),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [isLoggedIn]
-    );
+    const allItems = useMemo<NavItem[]>(() => {
+        if (!isLoggedIn)
+            return [...NAV_ITEMS, { href: '/login', label: 'Login' }];
+        if (role === 'ADMIN')
+            return [...NAV_ITEMS, { href: '/register', label: 'Register' }];
+        return NAV_ITEMS;
+    }, [isLoggedIn, role]);
 
     const isProtected = (href: string): boolean =>
         !isLoggedIn && AUTH_ROUTES.some((route) => href.startsWith(route));

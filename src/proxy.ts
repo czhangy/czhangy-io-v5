@@ -1,22 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/utils/auth';
-import { AUTH_ROUTES, SESSION_COOKIE } from '@/lib/utils/constants';
+import {
+    ADMIN_ROUTES,
+    AUTH_ROUTES,
+    SESSION_COOKIE,
+} from '@/lib/utils/constants';
 
 export const proxy = async (request: NextRequest) => {
     const { pathname } = request.nextUrl;
-    const requiresAuth = AUTH_ROUTES.some((route) =>
+    const isAuthRoute = AUTH_ROUTES.some((route) => pathname.startsWith(route));
+    const isAdminRoute = ADMIN_ROUTES.some((route) =>
         pathname.startsWith(route)
     );
 
-    if (!requiresAuth) return NextResponse.next();
+    if (!isAuthRoute && !isAdminRoute) return NextResponse.next();
 
     const token = request.cookies.get(SESSION_COOKIE)?.value;
     const session = token ? await verifyToken(token) : null;
 
-    if (!session) {
+    if (isAuthRoute && !session) {
         const loginUrl = new URL('/login', request.url);
         loginUrl.searchParams.set('callbackUrl', pathname);
         return NextResponse.redirect(loginUrl);
+    }
+
+    if (isAdminRoute && session?.role !== 'ADMIN') {
+        return NextResponse.redirect(new URL('/', request.url));
     }
 
     return NextResponse.next();
