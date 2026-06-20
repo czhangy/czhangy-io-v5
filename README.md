@@ -14,7 +14,8 @@
 
 ## Environment Variables
 
-- TODO
+- `DATABASE_URL`
+- `JWT_SECRET`
 
 ## Tech Stack
 

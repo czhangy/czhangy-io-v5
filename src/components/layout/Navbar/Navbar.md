@@ -1,6 +1,6 @@
-# GlobalNav
+# Navbar
 
-A fixed top-right navigation widget present on every page. Renders a hamburger button that toggles a dropdown menu containing site-wide navigation links. Closes on outside click or Escape key.
+A fixed top-right navigation widget present on every page. Renders a hamburger button that toggles a dropdown menu containing site-wide navigation links. Closes on outside click or Escape key. Also renders a session badge at the top-left indicating the logged-in user's role.
 
 ## State
 

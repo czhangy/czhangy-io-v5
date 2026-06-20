@@ -1,0 +1,87 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.login-page {
+    @include full-height;
+
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem;
+
+    @media (width <= 768px) {
+        padding: 1rem;
+    }
+
+    .form {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        max-width: 20rem;
+        width: 100%;
+    }
+
+    .title {
+        @include mono-label;
+
+        color: $accent;
+        font-size: 2rem;
+        letter-spacing: 0.2em;
+        padding-left: 0.2em;
+    }
+
+    .field {
+        width: 100%;
+    }
+
+    .input {
+        @include mono-label;
+
+        background: transparent;
+        border: 1px solid $border-subtle;
+        color: $foreground;
+        font-size: 1rem;
+        letter-spacing: 0.1em;
+        outline: none;
+        padding: 0.875rem 1.25rem;
+        transition: border-color 0.15s ease;
+        width: 100%;
+
+        &::placeholder {
+            color: $text-dim;
+        }
+
+        &:focus {
+            border-color: $accent;
+        }
+    }
+
+    .error {
+        color: #f45;
+        font-family: $font-mono;
+        font-size: 0.875rem;
+        letter-spacing: 0.05em;
+    }
+
+    .submit {
+        @include game-button;
+
+        cursor: pointer;
+        letter-spacing: 0.2em;
+        padding: 0.875rem 2.5rem;
+        width: 100%;
+
+        &:disabled {
+            cursor: not-allowed;
+            opacity: 0.4;
+
+            @media (hover: hover) {
+                &:hover {
+                    border-color: $border-subtle;
+                    color: $text-dim;
+                }
+            }
+        }
+    }
+}

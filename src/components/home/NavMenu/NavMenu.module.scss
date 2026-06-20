@@ -25,12 +25,27 @@
             transition: opacity 0.15s ease;
         }
 
+        .nav-item__lock {
+            align-items: center;
+            display: flex;
+
+            svg {
+                height: 0.875rem;
+                width: 0.875rem;
+            }
+        }
+
         &--active {
             color: $foreground;
 
             .nav-item__cursor {
                 opacity: 1;
             }
+        }
+
+        &--disabled {
+            color: rgba($foreground, 0.2);
+            pointer-events: none;
         }
     }
 
