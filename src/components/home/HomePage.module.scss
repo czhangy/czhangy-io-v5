@@ -30,14 +30,40 @@
         flex: 1;
         flex-direction: column;
         padding-left: 4rem;
+        padding-right: 2rem;
         padding-top: 20vh;
     }
 
     .title {
         color: $accent;
         font-family: $font-mono;
-        font-size: 3.5rem;
+        font-size: clamp(2rem, 5vw, 3.5rem);
         font-weight: 700;
         letter-spacing: 0.2em;
+    }
+
+    @media (width <= 768px) {
+        align-items: center;
+        flex-direction: column;
+        gap: 4rem;
+        justify-content: center;
+
+        .left-panel {
+            flex: unset;
+            order: 2;
+        }
+
+        .right-panel {
+            align-items: center;
+            flex: unset;
+            order: 1;
+            padding-left: 0;
+            padding-right: 0;
+            padding-top: 0;
+        }
+
+        .title {
+            font-size: 2rem;
+        }
     }
 }

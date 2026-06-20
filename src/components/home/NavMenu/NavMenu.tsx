@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-
 import styles from './NavMenu.module.scss';
 
 type NavItem = {
@@ -38,13 +37,13 @@ const NavMenu: React.FC = () => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Enter') {
                 router.push(NAV_ITEMS[activeIndex].href);
-            } else if (e.key === 'ArrowDown') {
+            } else if (e.key === 'ArrowDown' || e.key === 's') {
                 e.preventDefault();
                 setActiveIndex((prev) => (prev + 1) % NAV_ITEMS.length);
-            } else if (e.key === 'ArrowUp') {
+            } else if (e.key === 'ArrowUp' || e.key === 'w') {
                 e.preventDefault();
                 setActiveIndex(
-                    (prev) => (prev - 1 + NAV_ITEMS.length) % NAV_ITEMS.length,
+                    (prev) => (prev - 1 + NAV_ITEMS.length) % NAV_ITEMS.length
                 );
             }
         };
