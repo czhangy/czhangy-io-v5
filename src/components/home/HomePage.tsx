@@ -1,4 +1,5 @@
 import NavMenu from './NavMenu/NavMenu';
+import Title from './Title/Title';
 
 import styles from './HomePage.module.scss';
 
@@ -13,7 +14,7 @@ const HomePage: React.FC = () => {
                 <NavMenu />
             </div>
             <div className={styles['right-panel']}>
-                <h1 className={styles.title}>CZHANGY.IO</h1>
+                <Title />
             </div>
         </div>
     );
