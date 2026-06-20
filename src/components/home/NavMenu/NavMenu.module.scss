@@ -1,0 +1,49 @@
+@use '@/styles/constants' as *;
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    .nav-item {
+        align-items: center;
+        color: rgba($foreground, 0.35);
+        display: flex;
+        font-family: $font-mono;
+        font-size: 1.5rem;
+        font-weight: 700;
+        gap: 1rem;
+        letter-spacing: 0.15em;
+        text-decoration: none;
+        transition: color 0.15s ease;
+
+        .nav-item__cursor {
+            color: $accent;
+            font-weight: 700;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        }
+
+        &--active {
+            color: $foreground;
+
+            .nav-item__cursor {
+                opacity: 1;
+            }
+        }
+    }
+
+    @media (width <= 768px) {
+        align-items: center;
+
+        .nav-item {
+            position: relative;
+
+            .nav-item__cursor {
+                padding-right: 1rem;
+                position: absolute;
+                right: 100%;
+            }
+        }
+    }
+}

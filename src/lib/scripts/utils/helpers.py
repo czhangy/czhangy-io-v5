@@ -116,7 +116,7 @@ def clear_last_line():
 
 def validate_root_directory():
     current_dir = os.path.basename(os.getcwd())
-    if current_dir != 'clashpedia':
+    if current_dir != 'czhangy-io':
         raise Exception(WRONG_DIRECTORY)
 
 

@@ -1,0 +1,18 @@
+@use '@/styles/constants' as *;
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    background: $background;
+    color: $foreground;
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+}

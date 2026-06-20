@@ -39,6 +39,32 @@ module.exports = {
 
         const range = findSectionRange(comments, 'CONSTANTS');
 
+        function isPascalCase(name) {
+            return typeof name === 'string' && /^[A-Z]/.test(name);
+        }
+
+        function isDirectlyInComponent(node) {
+            const parent = node.parent;
+            if (!parent || parent.type !== 'BlockStatement') return false;
+            const grandParent = parent.parent;
+            if (!grandParent) return false;
+
+            if (grandParent.type === 'FunctionDeclaration') {
+                return isPascalCase(grandParent.id?.name);
+            }
+            if (
+                grandParent.type === 'ArrowFunctionExpression' ||
+                grandParent.type === 'FunctionExpression'
+            ) {
+                const ggParent = grandParent.parent;
+                return (
+                    ggParent?.type === 'VariableDeclarator' &&
+                    isPascalCase(ggParent.id?.name)
+                );
+            }
+            return false;
+        }
+
         return {
             VariableDeclaration(node) {
                 if (inRange(node, range)) {
@@ -69,6 +95,7 @@ module.exports = {
                         }
                     }
                 } else {
+                    if (!isDirectlyInComponent(node)) return;
                     if (node.kind !== 'const') return;
 
                     for (const declarator of node.declarations) {
@@ -87,6 +114,7 @@ module.exports = {
             },
 
             TSEnumDeclaration(node) {
+                if (!isDirectlyInComponent(node)) return;
                 if (inRange(node, range)) return;
 
                 context.report({
@@ -97,6 +125,7 @@ module.exports = {
             },
 
             TSTypeAliasDeclaration(node) {
+                if (!isDirectlyInComponent(node)) return;
                 const name = node.id.name;
                 if (name.endsWith('Props')) return;
                 if (inRange(node, range)) return;
