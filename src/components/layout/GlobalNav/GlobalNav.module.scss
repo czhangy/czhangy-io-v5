@@ -2,10 +2,45 @@
 @use '@/styles/mixins' as *;
 
 .global-nav {
+    align-items: flex-start;
+    display: flex;
+    gap: 0.5rem;
     position: fixed;
     right: 1.5rem;
     top: 1.5rem;
     z-index: 100;
+
+    .home-link {
+        align-items: center;
+        background: #252525;
+        border: 1px solid $border-subtle;
+        border-radius: 0.5rem;
+        color: $text-mid;
+        display: flex;
+        height: 3.25rem;
+        justify-content: center;
+        transition:
+            border-color 0.15s ease,
+            color 0.15s ease;
+        width: 3.25rem;
+
+        svg {
+            fill: currentcolor;
+            height: 1.25rem;
+            width: 1.25rem;
+        }
+
+        @media (hover: hover) {
+            &:hover {
+                border-color: $accent;
+                color: $accent;
+            }
+        }
+    }
+
+    .nav-wrapper {
+        position: relative;
+    }
 
     .nav-toggle {
         align-items: center;
@@ -136,6 +171,11 @@
     @media (width <= 768px) {
         right: 1rem;
         top: 1rem;
+
+        .home-link {
+            height: 2.75rem;
+            width: 2.75rem;
+        }
 
         .nav-toggle {
             height: 2.75rem;

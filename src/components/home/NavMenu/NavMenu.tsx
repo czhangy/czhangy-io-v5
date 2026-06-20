@@ -1,10 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useSession } from '@/lib/context/SessionContext';
 import { NAV_ITEMS } from '@/lib/utils';
 import styles from './NavMenu.module.scss';
+
+const LOGIN_ITEM = { href: '/login', label: 'Login' };
 
 const NavMenu: React.FC = () => {
     // -------------------------------------------------------------------------
@@ -12,6 +15,7 @@ const NavMenu: React.FC = () => {
     // -------------------------------------------------------------------------
 
     const router = useRouter();
+    const { isLoggedIn } = useSession();
 
     // -------------------------------------------------------------------------
     // STATE
@@ -20,20 +24,29 @@ const NavMenu: React.FC = () => {
     const [activeIndex, setActiveIndex] = useState<number>(0);
 
     // -------------------------------------------------------------------------
+    // COMPUTATIONS
+    // -------------------------------------------------------------------------
+
+    const allItems = useMemo(
+        () => (isLoggedIn ? NAV_ITEMS : [...NAV_ITEMS, LOGIN_ITEM]),
+        [isLoggedIn]
+    );
+
+    // -------------------------------------------------------------------------
     // EFFECTS
     // -------------------------------------------------------------------------
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Enter') {
-                router.push(NAV_ITEMS[activeIndex].href);
+                router.push(allItems[activeIndex].href);
             } else if (e.key === 'ArrowDown' || e.key === 's') {
                 e.preventDefault();
-                setActiveIndex((prev) => (prev + 1) % NAV_ITEMS.length);
+                setActiveIndex((prev) => (prev + 1) % allItems.length);
             } else if (e.key === 'ArrowUp' || e.key === 'w') {
                 e.preventDefault();
                 setActiveIndex(
-                    (prev) => (prev - 1 + NAV_ITEMS.length) % NAV_ITEMS.length
+                    (prev) => (prev - 1 + allItems.length) % allItems.length
                 );
             }
         };
@@ -41,7 +54,7 @@ const NavMenu: React.FC = () => {
         window.addEventListener('keydown', handleKeyDown);
 
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [activeIndex, router]);
+    }, [activeIndex, router, allItems]);
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -49,7 +62,7 @@ const NavMenu: React.FC = () => {
 
     return (
         <nav className={styles['nav-menu']}>
-            {NAV_ITEMS.map((item, index) => (
+            {allItems.map((item, index) => (
                 <Link
                     key={item.href}
                     href={item.href}

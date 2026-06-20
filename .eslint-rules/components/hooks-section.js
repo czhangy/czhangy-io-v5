@@ -34,6 +34,7 @@ module.exports = {
             'useReducer',
             'useRouter',
             'useSearchParams',
+            'useSession',
         ]);
 
         function getAllowedHookName(node) {

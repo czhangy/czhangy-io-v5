@@ -20,6 +20,7 @@
 
 // Bordered interactive button matching the site's game UI aesthetic.
 @mixin game-button {
+    background: transparent;
     border: 1px solid $border-subtle;
     color: $text-dim;
     font-size: 1rem;

@@ -163,11 +163,11 @@ Only include sections that are actually used. MARKUP is always required. The div
 **What belongs in each section:**
 
 - **CONSTANTS** — `UPPER_SNAKE_CASE` typed consts, non-Props type aliases, and enums. These are values that depend on props/state/refs and cannot be moved to module level.
-- **HOOKS** — `useRef`, `usePathname`, `useReducer`, `useRouter`, and `useSearchParams` only. No other hooks belong here.
+- **HOOKS** — `useRef`, `usePathname`, `useReducer`, `useRouter`, `useSearchParams`, and `useSession` only. No other hooks belong here.
 - **STATE** — `useState` calls only.
 - **HANDLERS** — `handle*`-named arrow functions and `useCallback` calls.
-- **COMPUTATIONS** — Arrow functions and `useMemo` calls that derive values from state/props.
-- **RENDERING** — `render*` arrow functions that return JSX, and typed camelCase consts that hold non-hook values used in the return. No hook calls allowed.
+- **COMPUTATIONS** — Arrow functions and `useMemo` calls that derive values from state/props. Plain `const` derived values (ternaries, expressions) belong in RENDERING, not here.
+- **RENDERING** — `render*` arrow functions that return JSX, and typed camelCase consts that hold non-hook values used in the return (including plain derived consts like `const items: NavItem[] = flag ? A : B`). All consts must have explicit type annotations. No hook calls allowed.
 - **EFFECTS** — `useEffect` calls only.
 - **MARKUP** — The `return` statement.
 

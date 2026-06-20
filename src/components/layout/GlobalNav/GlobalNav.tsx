@@ -2,8 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { NAV_ITEMS } from '@/lib/utils';
+import { useSession } from '@/lib/context/SessionContext';
+import HomeIcon from '@/lib/icons/HomeIcon';
+import { NAV_ITEMS, NavItem } from '@/lib/utils';
 import styles from './GlobalNav.module.scss';
+
+const LOGIN_ITEM = { href: '/login', label: 'Login' };
 
 const GlobalNav: React.FC = () => {
     // -------------------------------------------------------------------------
@@ -11,6 +15,7 @@ const GlobalNav: React.FC = () => {
     // -------------------------------------------------------------------------
 
     const containerRef = useRef<HTMLDivElement>(null);
+    const { isLoggedIn } = useSession();
 
     // -------------------------------------------------------------------------
     // STATE
@@ -25,6 +30,14 @@ const GlobalNav: React.FC = () => {
     const handleToggle = () => setIsOpen((prev) => !prev);
 
     const handleLinkClick = () => setIsOpen(false);
+
+    // -------------------------------------------------------------------------
+    // RENDERING
+    // -------------------------------------------------------------------------
+
+    const allItems: NavItem[] = isLoggedIn
+        ? NAV_ITEMS
+        : [...NAV_ITEMS, LOGIN_ITEM];
 
     // -------------------------------------------------------------------------
     // EFFECTS
@@ -61,29 +74,34 @@ const GlobalNav: React.FC = () => {
 
     return (
         <div ref={containerRef} className={styles['global-nav']}>
-            <button
-                type="button"
-                className={`${styles['nav-toggle']} ${isOpen ? styles['nav-toggle--open'] : ''}`}
-                onClick={handleToggle}
-            >
-                <span className={styles.bar} />
-                <span className={styles.bar} />
-                <span className={styles.bar} />
-            </button>
-            <nav
-                className={`${styles.menu} ${isOpen ? styles['menu--open'] : ''}`}
-            >
-                {NAV_ITEMS.map((item) => (
-                    <Link
-                        key={item.href}
-                        href={item.href}
-                        className={styles['menu-item']}
-                        onClick={handleLinkClick}
-                    >
-                        {item.label.toUpperCase()}
-                    </Link>
-                ))}
-            </nav>
+            <Link href="/" className={styles['home-link']}>
+                <HomeIcon />
+            </Link>
+            <div className={styles['nav-wrapper']}>
+                <button
+                    type="button"
+                    className={`${styles['nav-toggle']} ${isOpen ? styles['nav-toggle--open'] : ''}`}
+                    onClick={handleToggle}
+                >
+                    <span className={styles.bar} />
+                    <span className={styles.bar} />
+                    <span className={styles.bar} />
+                </button>
+                <nav
+                    className={`${styles.menu} ${isOpen ? styles['menu--open'] : ''}`}
+                >
+                    {allItems.map((item) => (
+                        <Link
+                            key={item.href}
+                            href={item.href}
+                            className={styles['menu-item']}
+                            onClick={handleLinkClick}
+                        >
+                            {item.label.toUpperCase()}
+                        </Link>
+                    ))}
+                </nav>
+            </div>
         </div>
     );
 };
