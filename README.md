@@ -1,7 +1,7 @@
 <!-- Header -->
 
 <div align="center">
-    <img src="public/assets/clashpedia.png" alt="logo" width="200" height="auto" />
+    <img src="public/logo.png" alt="logo" width="200" height="auto" />
     <h4>
         <a href="https://github.com/czhangy/clashpedia/issues">New Issue</a>
         <span> · </span>
