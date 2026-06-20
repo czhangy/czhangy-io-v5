@@ -70,20 +70,20 @@ const GlobalNav: React.FC = () => {
                 <span className={styles.bar} />
                 <span className={styles.bar} />
             </button>
-            {isOpen ? (
-                <nav className={styles.menu}>
-                    {NAV_ITEMS.map((item) => (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            className={styles['menu-item']}
-                            onClick={handleLinkClick}
-                        >
-                            {item.label.toUpperCase()}
-                        </Link>
-                    ))}
-                </nav>
-            ) : null}
+            <nav
+                className={`${styles.menu} ${isOpen ? styles['menu--open'] : ''}`}
+            >
+                {NAV_ITEMS.map((item) => (
+                    <Link
+                        key={item.href}
+                        href={item.href}
+                        className={styles['menu-item']}
+                        onClick={handleLinkClick}
+                    >
+                        {item.label.toUpperCase()}
+                    </Link>
+                ))}
+            </nav>
         </div>
     );
 };
