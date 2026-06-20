@@ -22,6 +22,7 @@ npm run format     # Run Prettier
 ```
 
 Code generators (Python-based, run from project root):
+
 ```bash
 npm run gen:component   # Scaffold a new React component
 npm run gen:icon        # Scaffold a new icon component
@@ -35,12 +36,14 @@ Pre-commit hooks via Husky/lint-staged automatically run ESLint, Prettier, and S
 **Stack:** Next.js 16 (App Router), React 19, TypeScript 5 (strict), SCSS modules, Axios
 
 **Path aliases** (defined in `tsconfig.json`, respected by Turbopack for all module types including SCSS):
+
 - `@/*` → `src/*`
 - `@/styles/*` → `src/lib/styles/*`
 
 **Routing:** File-based in `src/app/` using App Router. Root layout (`src/app/layout.tsx`) loads Geist fonts and imports `src/lib/styles/globals.scss` for global styles.
 
 **Global styles** live in `src/lib/styles/`:
+
 - `globals.scss` — body defaults and font-smoothing
 - `_constants.scss` — SCSS variables (`$accent`, `$background`, `$foreground`, `$font-mono`)
 - `_mixins.scss` — reusable declaration blocks (e.g. `fill-parent`)
@@ -49,6 +52,7 @@ Pre-commit hooks via Husky/lint-staged automatically run ESLint, Prettier, and S
 ### Components
 
 **Components** live in `src/components/`. Each component requires three co-located files:
+
 - `ComponentName/ComponentName.tsx`
 - `ComponentName/ComponentName.module.scss`
 - `ComponentName/ComponentName.md`
@@ -93,7 +97,7 @@ A brief description of what the component is — no implementation details, prop
 Only list variables that this component consumes but does not define. Do not list variables that this component defines and passes down to its children.
 ```
 
-**Icons** live in `src/components/icons/` and must be named with the `Icon` suffix (e.g., `ChevronIcon`).
+**Icons** live in `src/lib/icons/` (flat, no subdirectories) and must be named with the `Icon` suffix (e.g., `ChevronIcon`).
 
 ### Classes
 
@@ -180,6 +184,7 @@ const MyComponent: React.FC<MyComponentProps> = ({ value, onChange }) => {
 **Conditional rendering:** Use ternary (`condition ? <A /> : null`). Do not use `&&` short-circuit — falsy values can render unexpectedly.
 
 **Inline styles** are only used for values that are dynamic at runtime (e.g. user-defined colors). CSS custom properties set via inline style use the `as React.CSSProperties` cast:
+
 ```tsx
 style={{ '--color': value } as React.CSSProperties}
 ```
@@ -212,7 +217,8 @@ Nest selectors in `.module.scss` files to mirror the JSX structure of the compon
 ```scss
 // JSX: <div className="card"><span className="card__label" /></div>
 .card {
-    .card__label { }
+    .card__label {
+    }
 }
 ```
 
@@ -220,9 +226,13 @@ Modifier classes (`&--variant`) nest inside their base class. **Base styles must
 
 ```scss
 .card {
-    .card__label { opacity: 0; }   // base first
+    .card__label {
+        opacity: 0;
+    } // base first
     &--active {
-        .card__label { opacity: 1; }  // modifier after
+        .card__label {
+            opacity: 1;
+        } // modifier after
     }
 }
 ```
@@ -232,9 +242,12 @@ Modifier classes (`&--variant`) nest inside their base class. **Base styles must
 **CSS custom properties are scoped to the component that declares them.** Do not declare a variable in a parent component's SCSS intending for a child component to consume it — that creates invisible coupling. Use props instead.
 
 **Hover styles** use `@media (hover: hover)` wrapping `&:hover` to avoid sticky hover states on touch devices:
+
 ```scss
 @media (hover: hover) {
-    .item:hover { color: $accent; }
+    .item:hover {
+        color: $accent;
+    }
 }
 ```
 
