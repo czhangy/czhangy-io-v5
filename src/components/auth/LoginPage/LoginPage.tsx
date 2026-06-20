@@ -39,6 +39,7 @@ const LoginPage: React.FC = () => {
             await axios.post('/api/auth/login', { password });
             const callbackUrl = searchParams.get('callbackUrl') ?? '/';
             router.push(callbackUrl);
+            router.refresh();
         } catch {
             setError('Invalid password.');
         } finally {
@@ -66,7 +67,6 @@ const LoginPage: React.FC = () => {
                         disabled={loading}
                     />
                 </div>
-                {error ? <p className={styles.error}>{error}</p> : null}
                 <button
                     type="submit"
                     className={styles.submit}
@@ -74,6 +74,7 @@ const LoginPage: React.FC = () => {
                 >
                     {loading ? 'VERIFYING...' : 'ENTER'}
                 </button>
+                {error ? <p className={styles.error}>{error}</p> : null}
             </form>
         </div>
     );
