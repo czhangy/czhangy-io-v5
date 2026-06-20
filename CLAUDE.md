@@ -101,9 +101,16 @@ Only list variables that this component consumes but does not define. Do not lis
 
 **Icons** live in `src/lib/icons/` (flat, no subdirectories) and must be named with the `Icon` suffix (e.g., `ChevronIcon`).
 
-### Classes
+### Classes and shared utilities
 
-**Utility classes** live in `src/lib/utils/` (PascalCase TypeScript classes).
+`src/lib/utils/` contains:
+
+- **PascalCase `.ts` class files** — utility classes
+- **`types.ts`** — shared TypeScript types used across multiple components
+- **`constants.ts`** — shared runtime constants (e.g. site nav items)
+- **`index.ts`** — barrel that re-exports everything from the above
+
+Import shared types and constants via `@/lib/utils`.
 
 ## Component Structure
 

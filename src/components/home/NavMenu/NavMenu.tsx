@@ -3,19 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { NAV_ITEMS } from '@/lib/utils';
 import styles from './NavMenu.module.scss';
-
-type NavItem = {
-    href: string;
-    label: string;
-};
-
-const NAV_ITEMS: NavItem[] = [
-    { href: '/logs', label: 'Logs' },
-    { href: '/activity', label: 'Activity' },
-    { href: '/career', label: 'Career' },
-    { href: '/achievements', label: 'Achievements' },
-];
 
 const NavMenu: React.FC = () => {
     // -------------------------------------------------------------------------
