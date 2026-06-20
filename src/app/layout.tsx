@@ -1,10 +1,10 @@
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import { cookies } from 'next/headers';
 import Background from '@/components/layout/Background/Background';
 import Navbar from '@/components/layout/Navbar/Navbar';
 import SessionProvider from '@/lib/context/SessionContext';
 import '@/lib/styles/globals.scss';
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import { cookies } from 'next/headers';
 import { verifyToken } from '@/lib/utils/auth';
 import { SESSION_COOKIE } from '@/lib/utils/constants';
 
@@ -19,7 +19,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: 'czhangy.io',
+    title: {
+        template: '%s • czhangy.io',
+        default: 'czhangy.io',
+    },
     description: "Charles Zhang's personal site",
 };
 
