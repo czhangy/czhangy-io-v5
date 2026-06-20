@@ -163,7 +163,7 @@ Only include sections that are actually used. MARKUP is always required. The div
 **What belongs in each section:**
 
 - **CONSTANTS** — `UPPER_SNAKE_CASE` typed consts, non-Props type aliases, and enums. These are values that depend on props/state/refs and cannot be moved to module level.
-- **HOOKS** — `useRef`, `usePathname`, `useReducer`, and `useRouter` only. No other hooks belong here.
+- **HOOKS** — `useRef`, `usePathname`, `useReducer`, `useRouter`, and `useSearchParams` only. No other hooks belong here.
 - **STATE** — `useState` calls only.
 - **HANDLERS** — `handle*`-named arrow functions and `useCallback` calls.
 - **COMPUTATIONS** — Arrow functions and `useMemo` calls that derive values from state/props.

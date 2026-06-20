@@ -28,7 +28,13 @@ module.exports = {
 
         const range = findSectionRange(comments, 'HOOKS');
 
-        const ALLOWED_HOOKS = new Set(['useRef', 'usePathname', 'useReducer', 'useRouter']);
+        const ALLOWED_HOOKS = new Set([
+            'useRef',
+            'usePathname',
+            'useReducer',
+            'useRouter',
+            'useSearchParams',
+        ]);
 
         function getAllowedHookName(node) {
             if (!node || node.type !== 'CallExpression') return null;

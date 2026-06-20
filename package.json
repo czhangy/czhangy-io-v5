@@ -13,6 +13,10 @@
         "gen:component": "PYTHONPATH=src python3 ./src/lib/scripts/generators/generate_component.py",
         "gen:class": "PYTHONPATH=src python3 ./src/lib/scripts/generators/generate_class.py",
         "gen:icon": "PYTHONPATH=src python3 ./src/lib/scripts/generators/generate_icon.py",
+        "db:generate": "prisma generate",
+        "db:push": "prisma db push",
+        "db:seed": "tsx src/prisma/seed.ts",
+        "postinstall": "prisma generate",
         "prepare": "husky"
     },
     "lint-staged": {
@@ -29,8 +33,13 @@
     },
     "dependencies": {
         "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
+        "@neondatabase/serverless": "^1.1.0",
+        "@prisma/adapter-neon": "^7.8.0",
+        "@prisma/client": "^7.8.0",
         "axios": "^1.18.0",
+        "bcryptjs": "^3.0.3",
         "husky": "^9.1.7",
+        "jose": "^6.2.3",
         "lint-staged": "^17.0.7",
         "next": "16.2.9",
         "prettier": "^3.8.4",
@@ -41,13 +50,17 @@
         "stylelint-order": "^8.1.1"
     },
     "devDependencies": {
+        "@types/bcryptjs": "^2.4.6",
         "@types/node": "^20",
         "@types/react": "^19",
         "@types/react-dom": "^19",
         "babel-plugin-react-compiler": "1.0.0",
+        "dotenv": "^17.4.2",
         "eslint": "^9",
         "eslint-config-next": "16.2.9",
+        "prisma": "^7.8.0",
         "stylelint-config-standard-scss": "^17.0.0",
+        "tsx": "^4.22.4",
         "typescript": "^5"
     }
 }
