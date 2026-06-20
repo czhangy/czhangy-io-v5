@@ -1,4 +1,5 @@
 @use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
 
 .nav-menu {
     display: flex;
@@ -6,12 +7,12 @@
     gap: 2rem;
 
     .nav-item {
+        @include mono-label;
+
         align-items: center;
         color: rgba($foreground, 0.35);
         display: flex;
-        font-family: $font-mono;
         font-size: 1.5rem;
-        font-weight: 700;
         gap: 1rem;
         letter-spacing: 0.15em;
         text-decoration: none;

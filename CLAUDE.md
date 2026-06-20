@@ -45,8 +45,8 @@ Pre-commit hooks via Husky/lint-staged automatically run ESLint, Prettier, and S
 **Global styles** live in `src/lib/styles/`:
 
 - `globals.scss` — body defaults and font-smoothing
-- `_constants.scss` — SCSS variables (`$accent`, `$background`, `$foreground`, `$font-mono`)
-- `_mixins.scss` — reusable declaration blocks (e.g. `fill-parent`)
+- `_constants.scss` — SCSS variables (`$accent`, `$background`, `$foreground`, `$font-mono`, `$border-subtle`, `$text-dim`, `$text-mid`)
+- `_mixins.scss` — reusable declaration blocks (`fill-parent`, `mono-label`, `game-button`)
 - `index.scss` — barrel that forwards constants and mixins
 
 ### Components
@@ -60,6 +60,8 @@ Pre-commit hooks via Husky/lint-staged automatically run ESLint, Prettier, and S
 Shared UI primitives live in `src/components/common/` (Modal, Dropdown, Accordion, Spinner, etc.).
 
 **Component co-location**: If a child component is only used by a single parent component, place its directory inside the parent's directory rather than as a sibling. Components used by multiple parents live at the nearest shared ancestor level.
+
+**Component reuse**: When two components share the same markup structure and styles with only content differing, extract a shared component with props rather than duplicating. Thin wrapper components that only pass fixed props to a shared component do not need a `.module.scss` file.
 
 Each component directory contains a `ComponentName.md` documentation file co-located with the `.tsx` and `.module.scss` files. Whenever a component is modified, its documentation file must be updated to reflect the changes.
 
@@ -209,6 +211,18 @@ When optimizing components:
 ### SCSS mixins and constants
 
 Before writing a raw CSS value in a component SCSS file, check whether it belongs in `_constants.scss` (a reusable token like a color or font) or `_mixins.scss` (a reusable block of declarations like `fill-parent`). When the same property+value combination appears in two or more places, extract it. Mixins live in `src/lib/styles/_mixins.scss` and are imported with `@use '@/styles/mixins' as *`.
+
+**Color tokens** — use named tokens instead of raw `rgba()` calls:
+
+- `$border-subtle` — `rgba($foreground, 0.15)`, for subtle container borders
+- `$text-dim` — `rgba($foreground, 0.4)`, for inactive interactive text (e.g. buttons)
+- `$text-mid` — `rgba($foreground, 0.5)`, for secondary/subtext
+
+**Available mixins:**
+
+- `fill-parent` — `position: absolute; inset: 0`
+- `mono-label` — `font-family: $font-mono; font-weight: 700` — use for all bold monospace text (titles, nav items, button labels)
+- `game-button` — bordered interactive button with hover accent transition — use for any standalone link or action button in the site UI
 
 ### SCSS nesting
 

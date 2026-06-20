@@ -5,3 +5,29 @@
     inset: 0;
     position: absolute;
 }
+
+// Monospace bold text used for labels, titles, and navigation items.
+@mixin mono-label {
+    font-family: $font-mono;
+    font-weight: 700;
+}
+
+// Bordered interactive button matching the site's game UI aesthetic.
+@mixin game-button {
+    border: 1px solid $border-subtle;
+    color: $text-dim;
+    font-size: 1rem;
+    text-decoration: none;
+    transition:
+        border-color 0.15s ease,
+        color 0.15s ease;
+
+    @include mono-label;
+
+    @media (hover: hover) {
+        &:hover {
+            border-color: $accent;
+            color: $foreground;
+        }
+    }
+}

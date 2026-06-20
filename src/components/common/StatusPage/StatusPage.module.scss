@@ -1,6 +1,7 @@
 @use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
 
-.wip-page {
+.status-page {
     align-items: center;
     display: flex;
     justify-content: center;
@@ -15,39 +16,25 @@
     }
 
     .title {
+        @include mono-label;
+
         color: $accent;
-        font-family: $font-mono;
         font-size: 4rem;
-        font-weight: 700;
         letter-spacing: 0.2em;
     }
 
     .subtext {
-        color: rgba($foreground, 0.5);
+        color: $text-mid;
         font-family: $font-mono;
         font-size: 1rem;
         letter-spacing: 0.1em;
     }
 
     .home-link {
-        border: 1px solid rgba($foreground, 0.15);
-        color: rgba($foreground, 0.4);
-        font-family: $font-mono;
-        font-size: 1rem;
-        font-weight: 700;
+        @include game-button;
+
         letter-spacing: 0.2em;
         margin-top: 0.5rem;
         padding: 0.875rem 2.5rem;
-        text-decoration: none;
-        transition:
-            border-color 0.15s ease,
-            color 0.15s ease;
-
-        @media (hover: hover) {
-            &:hover {
-                border-color: $accent;
-                color: $foreground;
-            }
-        }
     }
 }

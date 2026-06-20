@@ -1,13 +1,11 @@
 import StatusPage from '@/components/common/StatusPage/StatusPage';
 
-const WipPage: React.FC = () => {
+const NotFoundPage: React.FC = () => {
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
 
-    return (
-        <StatusPage title="WIP" subtext="This page is under construction." />
-    );
+    return <StatusPage title="404" subtext="How'd you get here?" />;
 };
 
-export default WipPage;
+export default NotFoundPage;
