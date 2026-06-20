@@ -15,11 +15,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
         <span className={styles.dates}>
             {job.startDate}
             {' – '}
-            {job.endDate ? (
-                job.endDate
-            ) : (
-                <span className={styles.present}>Present</span>
-            )}
+            {job.endDate ? job.endDate : 'Present'}
         </span>
     );
 

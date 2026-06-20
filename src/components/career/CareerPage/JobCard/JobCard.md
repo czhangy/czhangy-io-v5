@@ -1,6 +1,6 @@
 # JobCard
 
-A single job entry card showing a company logo (or placeholder with the company's initial), company name, job title, and date range. "Present" is rendered in accent color when the job is current.
+A single job entry card showing a company logo, company name, job title, and date range. "Present" is shown as plain text when the job is current.
 
 ## Props
 
