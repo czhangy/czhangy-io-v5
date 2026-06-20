@@ -1,0 +1,115 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+> Note: If I repeat an instruction more than once, suggest adding it to this file.
+
+## Commands
+
+```bash
+npm run dev        # Start dev server (localhost:3000)
+npm run build      # Production build
+npm run lint       # Run ESLint
+npm run format     # Run Prettier
+```
+
+Code generators (Python-based, run from project root):
+```bash
+npm run gen:component   # Scaffold a new React component
+npm run gen:icon        # Scaffold a new icon component
+npm run gen:class       # Scaffold a new utility class
+```
+
+Pre-commit hooks via Husky/lint-staged automatically run ESLint, Prettier, and Stylelint on staged files.
+
+## Architecture
+
+**Stack:** Next.js 16 (App Router), React 19, TypeScript 5 (strict), Tailwind CSS 4, SCSS modules, Axios
+
+**Path alias:** `@/*` maps to `src/*`
+
+**Routing** File-based in `src/app/` using App Router. Root layout (`src/app/layout.tsx`) loads Geist fonts and global Tailwind styles.
+
+### Components
+
+**Components** live in `src/components/`. Each component requires three co-located files:
+- `ComponentName/ComponentName.tsx`
+- `ComponentName/ComponentName.module.scss`
+- `ComponentName/ComponentName.md`
+
+Shared UI primitives live in `src/components/common/` (Modal, Dropdown, Accordion, Spinner, etc.).
+
+**Component co-location**: If a child component is only used by a single parent component, place its directory inside the parent's directory rather than as a sibling. Components used by multiple parents live at the nearest shared ancestor level.
+
+Each component directory contains a `ComponentName.md` documentation file co-located with the `.tsx` and `.module.scss` files. Whenever a component is modified, its documentation file must be updated to reflect the changes.
+
+Documentation files follow this structure (omit any section that does not apply):
+
+```
+# ComponentName
+
+A brief description of what the component is — no implementation details, prop names, or behavior specifics.
+
+## Props
+
+| Prop       | Type   | Required | Default   | Description |
+| ---------- | ------ | -------- | --------- | ----------- |
+| `propName` | `type` | Yes/No   | `default` | Description |
+
+## State
+
+| State       | Type   | Initial value  | Description |
+| ----------- | ------ | -------------- | ----------- |
+| `stateName` | `type` | `initialValue` | Description |
+
+## Effects
+
+- **On [trigger]** — description of the effect's purpose
+
+## Computations
+
+- `variableName` — description of what it represents and why it is computed
+
+## SCSS Variable Dependencies
+
+- `--variable-name` — description of where it is expected to be set by a parent
+
+Only list variables that this component consumes but does not define. Do not list variables that this component defines and passes down to its children.
+```
+
+**Icons** live in `src/components/icons/` and must be named with the `Icon` suffix (e.g., `ChevronIcon`).
+
+### Classes
+
+**Utility classes** live in `src/lib/utils/` (PascalCase TypeScript classes).
+
+## Component Structure
+
+Custom ESLint rules (in `.eslint-rules/`) enforce a strict section layout inside component functions:
+
+```typescript
+const MyComponent: React.FC = () => {
+    // --------- STATE ---------
+
+    // --------- HOOKS ---------
+
+    // --------- HANDLERS ---------
+
+    // --------- COMPUTATIONS ---------
+
+    // --------- EFFECTS ---------
+
+    // --------- MARKUP ---------
+    return <div></div>;
+};
+
+export default MyComponent;
+```
+
+The exported component name must match the filename.
+
+## Code Style
+
+- **Formatting:** 4-space indentation, 80-char line width, single quotes, trailing commas (ES5)
+- **Import order:** React → Next.js → third-party → components → lib → aliases → relative
+- **CSS variables:** `--background`, `--foreground` with dark mode via `prefers-color-scheme`
