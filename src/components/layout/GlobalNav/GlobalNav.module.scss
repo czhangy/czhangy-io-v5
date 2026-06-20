@@ -1,6 +1,32 @@
 @use '@/styles/constants' as *;
 @use '@/styles/mixins' as *;
 
+.session-badge {
+    @include mono-label;
+
+    align-items: center;
+    background: #252525;
+    border: 1px solid $accent;
+    border-radius: 0.5rem;
+    color: $accent;
+    display: flex;
+    font-size: 0.7rem;
+    height: 3.25rem;
+    left: 1.5rem;
+    letter-spacing: 0.05em;
+    padding: 0 1.25rem;
+    position: fixed;
+    top: 1.5rem;
+    white-space: nowrap;
+    z-index: 100;
+
+    @media (width <= 768px) {
+        height: 2.75rem;
+        left: 1rem;
+        top: 1rem;
+    }
+}
+
 .global-nav {
     align-items: flex-start;
     display: flex;
