@@ -2,6 +2,7 @@
 
 <div align="center">
     <img src="public/logo.png" alt="logo" width="200" height="auto" />
+    <h1>czhangy.io</h1>
     <h4>
         <a href="https://github.com/czhangy/clashpedia/issues">New Issue</a>
         <span> · </span>
