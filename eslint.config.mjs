@@ -53,7 +53,7 @@ const eslintConfig = defineConfig([
         },
     },
     {
-        files: ['src/components/icons/**/*.tsx'],
+        files: ['src/lib/icons/**/*.tsx'],
         plugins: { local: { rules: localIconRules } },
         rules: {
             'local/icons-name-suffix': 'error',

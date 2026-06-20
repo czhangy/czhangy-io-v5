@@ -1,0 +1,35 @@
+@use '@/styles/constants' as *;
+
+.social-link {
+    align-items: center;
+    background: #252525;
+    border: 1px solid rgba($foreground, 0.15);
+    border-radius: 0.5rem;
+    color: rgba($foreground, 0.5);
+    display: flex;
+    height: 3.25rem;
+    justify-content: center;
+    width: 3.25rem;
+
+    svg {
+        height: 1.75rem;
+        width: 1.75rem;
+    }
+
+    @media (hover: hover) {
+        &:hover {
+            border-color: $accent;
+            color: $accent;
+        }
+    }
+
+    @media (width <= 768px) {
+        height: 2.75rem;
+        width: 2.75rem;
+
+        svg {
+            height: 1.5rem;
+            width: 1.5rem;
+        }
+    }
+}

@@ -1,7 +1,8 @@
 import GlitchText from '@/components/common/GlitchText/GlitchText';
-import NavMenu from './NavMenu/NavMenu';
-
+import GithubIcon from '@/lib/icons/GithubIcon';
 import styles from './HomePage.module.scss';
+import NavMenu from './NavMenu/NavMenu';
+import SocialLink from './SocialLink/SocialLink';
 
 const HomePage: React.FC = () => {
     // -------------------------------------------------------------------------
@@ -18,6 +19,12 @@ const HomePage: React.FC = () => {
                     text="CZHANGY.IO"
                     as="h1"
                     className={styles.title}
+                />
+            </div>
+            <div className={styles['social-links']}>
+                <SocialLink
+                    href="https://github.com/czhangy/czhangy-io-v5"
+                    icon={<GithubIcon />}
                 />
             </div>
         </div>
