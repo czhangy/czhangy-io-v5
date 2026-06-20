@@ -9,10 +9,10 @@
 		"lint": "npx eslint",
 		"format": "prettier --write .",
 		"init": "npm install && npm run gen:setup && npm run prisma:generate",
-        "gen:setup": "pip install -r requirements.txt",
-        "gen:component": "PYTHONPATH=src python3 ./src/lib/scripts/generators/generate_component.py",
-        "gen:class": "PYTHONPATH=src python3 ./src/lib/scripts/generators/generate_class.py",
-        "gen:icon": "PYTHONPATH=src python3 ./src/lib/scripts/generators/generate_icon.py"
+		"gen:setup": "pip install -r requirements.txt",
+		"gen:component": "PYTHONPATH=src python3 ./src/lib/scripts/generators/generate_component.py",
+		"gen:class": "PYTHONPATH=src python3 ./src/lib/scripts/generators/generate_class.py",
+		"gen:icon": "PYTHONPATH=src python3 ./src/lib/scripts/generators/generate_icon.py"
 	},
 	"lint-staged": {
 		"*.{js,jsx,ts,tsx}": [
@@ -35,18 +35,17 @@
 		"prettier": "^3.8.4",
 		"react": "19.2.4",
 		"react-dom": "19.2.4",
+		"sass": "^1.101.0",
 		"stylelint": "^17.13.0",
 		"stylelint-order": "^8.1.1"
 	},
 	"devDependencies": {
-		"@tailwindcss/postcss": "^4",
 		"@types/node": "^20",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
 		"babel-plugin-react-compiler": "1.0.0",
 		"eslint": "^9",
 		"eslint-config-next": "16.2.9",
-		"tailwindcss": "^4",
 		"typescript": "^5"
 	}
 }

@@ -4,6 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 > Note: If I repeat an instruction more than once, suggest adding it to this file.
 
+> Build verification is not necessary for any change.
+
+## Project Overview
+
+> This description should be updated as the project is built out further.
+
+czhangy-io is Charles Zhang's personal site, designed with a pseudo-video game aesthetic. Planned pages include a job history/experience page, a blog, and potentially other sections typical of a developer portfolio — all presented through a game-inspired UI theme.
+
 ## Commands
 
 ```bash
@@ -24,11 +32,18 @@ Pre-commit hooks via Husky/lint-staged automatically run ESLint, Prettier, and S
 
 ## Architecture
 
-**Stack:** Next.js 16 (App Router), React 19, TypeScript 5 (strict), Tailwind CSS 4, SCSS modules, Axios
+**Stack:** Next.js 16 (App Router), React 19, TypeScript 5 (strict), SCSS modules, Axios
 
-**Path alias:** `@/*` maps to `src/*`
+**Path aliases** (defined in `tsconfig.json`, respected by Turbopack for all module types including SCSS):
+- `@/*` → `src/*`
+- `@/styles/*` → `src/lib/styles/*`
 
-**Routing** File-based in `src/app/` using App Router. Root layout (`src/app/layout.tsx`) loads Geist fonts and global Tailwind styles.
+**Routing:** File-based in `src/app/` using App Router. Root layout (`src/app/layout.tsx`) loads Geist fonts and imports `src/lib/styles/globals.scss` for global Tailwind styles.
+
+**Global styles** live in `src/lib/styles/`:
+- `globals.scss` — Tailwind import, CSS variables, and body defaults
+- `_constants.scss` — SCSS variables (e.g. `$accent`)
+- `index.scss` — barrel that forwards `_constants.scss`; component SCSS files import directly from `@/styles/constants`
 
 ### Components
 
@@ -89,22 +104,37 @@ Custom ESLint rules (in `.eslint-rules/`) enforce a strict section layout inside
 
 ```typescript
 const MyComponent: React.FC = () => {
-    // --------- STATE ---------
+    // -------------------------------------------------------------------------
+    // STATE
+    // -------------------------------------------------------------------------
 
-    // --------- HOOKS ---------
+    // -------------------------------------------------------------------------
+    // HOOKS
+    // -------------------------------------------------------------------------
 
-    // --------- HANDLERS ---------
+    // -------------------------------------------------------------------------
+    // HANDLERS
+    // -------------------------------------------------------------------------
 
-    // --------- COMPUTATIONS ---------
+    // -------------------------------------------------------------------------
+    // COMPUTATIONS
+    // -------------------------------------------------------------------------
 
-    // --------- EFFECTS ---------
+    // -------------------------------------------------------------------------
+    // EFFECTS
+    // -------------------------------------------------------------------------
 
-    // --------- MARKUP ---------
+    // -------------------------------------------------------------------------
+    // MARKUP
+    // -------------------------------------------------------------------------
+
     return <div></div>;
 };
 
 export default MyComponent;
 ```
+
+Only include sections that are actually used. MARKUP is always required. The divider lines must contain at least 20 dashes (the ESLint rule enforces this).
 
 The exported component name must match the filename.
 
@@ -112,4 +142,27 @@ The exported component name must match the filename.
 
 - **Formatting:** 4-space indentation, 80-char line width, single quotes, trailing commas (ES5)
 - **Import order:** React → Next.js → third-party → components → lib → aliases → relative
-- **CSS variables:** `--background`, `--foreground` with dark mode via `prefers-color-scheme`
+- **SCSS constants:** `$accent`, `$background`, `$foreground` defined in `_constants.scss` — use these in component SCSS files, not CSS `var()` calls. CSS variables are only used where runtime values are unavoidable (e.g. `var(--font-geist-mono)` set by Next.js at runtime).
+- **CSS Modules access:** Use `styles.className` for single-word class names, `styles['hyphenated-name']` for names containing hyphens
+
+### SCSS nesting
+
+Nest selectors in `.module.scss` files to mirror the JSX structure of the component. A class that wraps another class in the markup should wrap it in SCSS too:
+
+```scss
+// JSX: <div className="card"><span className="card__label" /></div>
+.card {
+    .card__label { }
+}
+```
+
+Modifier classes (`&--variant`) nest inside their base class, and any children that change under that modifier nest inside the modifier:
+
+```scss
+.card {
+    &--active {
+        .card__label { color: $accent; }
+    }
+    .card__label { }
+}
+```

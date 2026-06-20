@@ -1,0 +1,33 @@
+@use '@/styles/constants' as *;
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    .nav-item {
+        align-items: center;
+        color: rgba($foreground, 0.35);
+        display: flex;
+        font-family: var(--font-geist-mono);
+        font-size: 1.5rem;
+        gap: 1rem;
+        letter-spacing: 0.15em;
+        text-decoration: none;
+        transition: color 0.15s ease;
+
+        .nav-item__cursor {
+            color: $accent;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        }
+
+        &--active {
+            color: $foreground;
+
+            .nav-item__cursor {
+                opacity: 1;
+            }
+        }
+    }
+}
