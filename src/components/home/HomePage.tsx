@@ -1,5 +1,5 @@
+import GlitchText from '@/components/common/GlitchText/GlitchText';
 import NavMenu from './NavMenu/NavMenu';
-import Title from './Title/Title';
 
 import styles from './HomePage.module.scss';
 
@@ -14,7 +14,11 @@ const HomePage: React.FC = () => {
                 <NavMenu />
             </div>
             <div className={styles['right-panel']}>
-                <Title />
+                <GlitchText
+                    text="CZHANGY.IO"
+                    as="h1"
+                    className={styles.title}
+                />
             </div>
         </div>
     );

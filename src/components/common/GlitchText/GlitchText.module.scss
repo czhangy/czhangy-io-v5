@@ -1,35 +1,33 @@
-@use '@/styles/constants' as *;
-@use '@/styles/mixins' as *;
+.glitch-text {
+    .letter {
+        display: inline-block;
+        position: relative;
 
-.title {
-    color: $accent;
-    font-family: $font-mono;
-    font-size: 3.5rem;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    position: relative;
+        &--active {
+            &::before,
+            &::after {
+                content: attr(data-text);
+                left: 0;
+                pointer-events: none;
+                position: absolute;
+                top: 0;
+            }
 
-    &--glitch {
-        &::before,
-        &::after {
-            left: 0;
-            pointer-events: none;
-            position: absolute;
-            top: 0;
-            width: 100%;
+            &::before {
+                animation: glitch-1 5s var(--glitch-delay, 0s) infinite;
+                color: #cc44ff;
+            }
+
+            &::after {
+                animation: glitch-2 5s calc(var(--glitch-delay, 0s) + 0.15s)
+                    infinite;
+                color: #5533ff;
+            }
         }
+    }
 
-        &::before {
-            animation: glitch-1 5s infinite;
-            color: #00ffff;
-            content: attr(data-text);
-        }
-
-        &::after {
-            animation: glitch-2 5s infinite 0.15s;
-            color: #ff0055;
-            content: attr(data-text);
-        }
+    .space {
+        white-space: pre;
     }
 }
 
@@ -126,7 +124,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .title--glitch {
+    .glitch-text .letter--active {
         &::before,
         &::after {
             display: none;
