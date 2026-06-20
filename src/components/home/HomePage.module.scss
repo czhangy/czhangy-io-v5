@@ -1,4 +1,5 @@
 @use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
 
 .home-page {
     display: flex;
@@ -44,10 +45,10 @@
     }
 
     .title {
+        @include mono-label;
+
         color: $accent;
-        font-family: $font-mono;
         font-size: clamp(2rem, 5vw, 3.5rem);
-        font-weight: 700;
         letter-spacing: 0.2em;
     }
 
