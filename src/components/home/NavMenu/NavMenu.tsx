@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import styles from './NavMenu.module.scss';
 
@@ -22,6 +23,36 @@ const NavMenu: React.FC = () => {
     // -------------------------------------------------------------------------
 
     const [activeIndex, setActiveIndex] = useState<number>(0);
+
+    // -------------------------------------------------------------------------
+    // HOOKS
+    // -------------------------------------------------------------------------
+
+    const router = useRouter();
+
+    // -------------------------------------------------------------------------
+    // EFFECTS
+    // -------------------------------------------------------------------------
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Enter') {
+                router.push(NAV_ITEMS[activeIndex].href);
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                setActiveIndex((prev) => (prev + 1) % NAV_ITEMS.length);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                setActiveIndex(
+                    (prev) => (prev - 1 + NAV_ITEMS.length) % NAV_ITEMS.length,
+                );
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [activeIndex, router]);
 
     // -------------------------------------------------------------------------
     // MARKUP
