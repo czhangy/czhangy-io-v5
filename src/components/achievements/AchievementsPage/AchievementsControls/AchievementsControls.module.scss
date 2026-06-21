@@ -1,0 +1,16 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.achievements-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+
+    .add-button {
+        @include game-button;
+
+        cursor: pointer;
+        letter-spacing: 0.15em;
+        padding: 0.625rem 1.25rem;
+    }
+}

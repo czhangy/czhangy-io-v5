@@ -65,6 +65,8 @@ Shared UI primitives live in `src/components/common/` (Modal, Dropdown, Accordio
 
 **Page-level padding**: All full-page components must include `padding: 1.5rem` (desktop) and `padding: 1rem` (mobile, `width <= 768px`) on their outermost element. This matches the spacing of the GlobalNav and social link icons from the viewport edge. Because `box-sizing: border-box` is set globally, this padding is included within `@include full-height` — no overflow occurs.
 
+**Page stacking order**: The `.page-main` global class (applied in `layout.tsx`) sets `position: relative; z-index: 11`, ensuring all page content renders above the `Background` component (`z-index: 10`). Page components must not set their own `position`/`z-index` for this purpose — `page-main` handles it globally. Modals and overlays rendered within a page must use `ReactDOM.createPortal` to escape `page-main`'s stacking context, so their `z-index` is evaluated at the root level (above the Navbar at `z-index: 100`) rather than being capped at z-index 11.
+
 Each component directory contains a `ComponentName.md` documentation file co-located with the `.tsx` and `.module.scss` files. Whenever a component is modified, its documentation file must be updated to reflect the changes.
 
 Documentation files follow this structure (omit any section that does not apply):
@@ -230,7 +232,7 @@ Before writing a raw CSS value in a component SCSS file, check whether it belong
 **Available mixins:**
 
 - `fill-parent` — `position: absolute; inset: 0`
-- `full-height` — `min-height: 100vh` with `100dvh` override — use instead of bare `min-height: 100vh` so mobile browser chrome is accounted for
+- `full-height` — `flex: 1`, fills the remaining height in the page flex column (`body → .page-main → page component`); use on the outermost element of every full-page component
 - `mono-label` — `font-family: $font-mono; font-weight: 700` — use for all bold monospace text (titles, nav items, button labels)
 - `game-button` — bordered interactive button with hover accent transition — use for any standalone link or action button in the site UI
 

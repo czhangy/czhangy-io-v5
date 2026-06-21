@@ -9,7 +9,7 @@ module.exports = {
         type: 'suggestion',
         docs: {
             description:
-                'Enforce that every component has a MARKUP section containing exactly one return statement that returns JSX',
+                'Enforce that every component has a MARKUP section containing exactly one return statement that returns JSX or a createPortal call',
         },
         schema: [],
         messages: {
@@ -17,7 +17,7 @@ module.exports = {
             onlyReturn:
                 'The MARKUP section may only contain a single return statement.',
             mustReturnJsx:
-                'The MARKUP section must return JSX or a conditional expression.',
+                'The MARKUP section must return JSX, a conditional expression, or a createPortal call.',
             missingReturn:
                 'The MARKUP section must contain a return statement.',
         },
@@ -114,8 +114,13 @@ module.exports = {
                     arg &&
                     (arg.type === 'JSXElement' || arg.type === 'JSXFragment');
                 const isTernary = arg && arg.type === 'ConditionalExpression';
+                const isPortal =
+                    arg &&
+                    arg.type === 'CallExpression' &&
+                    arg.callee.type === 'Identifier' &&
+                    arg.callee.name === 'createPortal';
 
-                if (!isJsx && !isTernary) {
+                if (!isJsx && !isTernary && !isPortal) {
                     context.report({ node: stmt, messageId: 'mustReturnJsx' });
                 }
             },

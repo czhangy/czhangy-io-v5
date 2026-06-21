@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import WipPage from '@/components/wip/WipPage/WipPage';
+import AchievementsPage from '@/components/achievements/AchievementsPage/AchievementsPage';
 
 export const metadata: Metadata = { title: 'Achievements' };
 
 export default function Achievements() {
-    return <WipPage />;
+    return <AchievementsPage />;
 }

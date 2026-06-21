@@ -1,0 +1,55 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.achievement-card {
+    background: $surface;
+    border: 1px solid $border-subtle;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem;
+
+    .header {
+        align-items: baseline;
+        display: flex;
+        justify-content: space-between;
+
+        .name {
+            @include mono-label;
+
+            color: $foreground;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+        }
+
+        .date {
+            color: $text-dim;
+            font-family: $font-mono;
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+        }
+    }
+
+    .category {
+        color: $accent;
+        font-family: $font-mono;
+        font-size: 0.7rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+    }
+
+    .tier {
+        color: $accent;
+        font-size: 1.25rem;
+        letter-spacing: 0.1em;
+        line-height: 1;
+    }
+
+    .description {
+        color: $text-mid;
+        font-family: $font-mono;
+        font-size: 0.8rem;
+        letter-spacing: 0.03em;
+        line-height: 1.5;
+    }
+}
