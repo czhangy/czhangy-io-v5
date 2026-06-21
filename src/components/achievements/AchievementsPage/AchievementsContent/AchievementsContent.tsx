@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useReducer } from 'react';
 import type { Achievement } from '@/generated/prisma/client';
 import AchievementCard from '../AchievementCard/AchievementCard';
 import AchievementsControls from '../AchievementsControls/AchievementsControls';
@@ -21,7 +21,60 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
     type SortField = 'date' | 'name' | 'tier';
     type SortDirection = 'asc' | 'desc';
 
-    const ITEMS_PER_PAGE: number = 18;
+    type State = {
+        sortField: SortField;
+        sortDirection: SortDirection;
+        categoryFilter: string;
+        page: number;
+        itemsPerPage: number;
+    };
+
+    type Action =
+        | { type: 'SET_SORT_FIELD'; field: SortField }
+        | { type: 'TOGGLE_DIRECTION' }
+        | { type: 'SET_CATEGORY'; category: string }
+        | { type: 'PREV_PAGE' }
+        | { type: 'NEXT_PAGE' }
+        | { type: 'RESIZE'; isMobile: boolean };
+
+    const ITEMS_PER_PAGE_DESKTOP: number = 18;
+    const ITEMS_PER_PAGE_MOBILE: number = 6;
+
+    const INITIAL_STATE: State = {
+        sortField: 'date',
+        sortDirection: 'asc',
+        categoryFilter: '',
+        page: 1,
+        itemsPerPage: ITEMS_PER_PAGE_DESKTOP,
+    };
+
+    const REDUCER = (state: State, action: Action): State => {
+        switch (action.type) {
+            case 'SET_SORT_FIELD':
+                return { ...state, sortField: action.field, page: 1 };
+            case 'TOGGLE_DIRECTION':
+                return {
+                    ...state,
+                    sortDirection:
+                        state.sortDirection === 'asc' ? 'desc' : 'asc',
+                    page: 1,
+                };
+            case 'SET_CATEGORY':
+                return { ...state, categoryFilter: action.category, page: 1 };
+            case 'PREV_PAGE':
+                return { ...state, page: state.page - 1 };
+            case 'NEXT_PAGE':
+                return { ...state, page: state.page + 1 };
+            case 'RESIZE':
+                return {
+                    ...state,
+                    itemsPerPage: action.isMobile
+                        ? ITEMS_PER_PAGE_MOBILE
+                        : ITEMS_PER_PAGE_DESKTOP,
+                    page: 1,
+                };
+        }
+    };
 
     const SORT_FIELDS: { value: SortField; label: string }[] = [
         { value: 'date', label: 'Date' },
@@ -34,13 +87,10 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
     ].sort();
 
     // -------------------------------------------------------------------------
-    // STATE
+    // HOOKS
     // -------------------------------------------------------------------------
 
-    const [sortField, setSortField] = useState<SortField>('date');
-    const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
-    const [categoryFilter, setCategoryFilter] = useState<string>('');
-    const [page, setPage] = useState<number>(1);
+    const [state, dispatch] = useReducer(REDUCER, INITIAL_STATE);
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -49,28 +99,28 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
     const handleFieldChange = (
         e: React.ChangeEvent<HTMLSelectElement>
     ): void => {
-        setSortField(e.target.value as SortField);
-        setPage(1);
+        dispatch({
+            type: 'SET_SORT_FIELD',
+            field: e.target.value as SortField,
+        });
     };
 
     const handleDirectionToggle = (): void => {
-        setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-        setPage(1);
+        dispatch({ type: 'TOGGLE_DIRECTION' });
     };
 
     const handleCategoryChange = (
         e: React.ChangeEvent<HTMLSelectElement>
     ): void => {
-        setCategoryFilter(e.target.value);
-        setPage(1);
+        dispatch({ type: 'SET_CATEGORY', category: e.target.value });
     };
 
     const handlePrevPage = (): void => {
-        setPage((prev) => prev - 1);
+        dispatch({ type: 'PREV_PAGE' });
     };
 
     const handleNextPage = (): void => {
-        setPage((prev) => prev + 1);
+        dispatch({ type: 'NEXT_PAGE' });
     };
 
     // -------------------------------------------------------------------------
@@ -86,6 +136,9 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
     // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
+
+    const { sortField, sortDirection, categoryFilter, page, itemsPerPage } =
+        state;
 
     const sortedAchievements: Achievement[] = achievements
         .filter((a) => (categoryFilter ? a.category === categoryFilter : true))
@@ -108,13 +161,27 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
 
     const totalPages: number = Math.max(
         1,
-        Math.ceil(sortedAchievements.length / ITEMS_PER_PAGE)
+        Math.ceil(sortedAchievements.length / itemsPerPage)
     );
 
     const paginatedAchievements: Achievement[] = sortedAchievements.slice(
-        (page - 1) * ITEMS_PER_PAGE,
-        page * ITEMS_PER_PAGE
+        (page - 1) * itemsPerPage,
+        page * itemsPerPage
     );
+
+    // -------------------------------------------------------------------------
+    // EFFECTS
+    // -------------------------------------------------------------------------
+
+    useEffect(() => {
+        const mq = window.matchMedia('(max-width: 768px)');
+        const handleChange = (e: MediaQueryListEvent): void => {
+            dispatch({ type: 'RESIZE', isMobile: e.matches });
+        };
+        dispatch({ type: 'RESIZE', isMobile: mq.matches });
+        mq.addEventListener('change', handleChange);
+        return () => mq.removeEventListener('change', handleChange);
+    }, []);
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -156,13 +223,13 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
                     </button>
                 </div>
                 <div className={styles.right}>
+                    <AchievementsControls />
                     <PaginationControls
                         page={page}
                         totalPages={totalPages}
                         onPrev={handlePrevPage}
                         onNext={handleNextPage}
                     />
-                    <AchievementsControls />
                 </div>
             </div>
             <div className={styles.grid}>

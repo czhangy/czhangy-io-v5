@@ -86,7 +86,11 @@ module.exports = {
                             });
                         }
 
-                        if (!declarator.id.typeAnnotation) {
+                        const isFunctionInit =
+                            declarator.init?.type ===
+                                'ArrowFunctionExpression' ||
+                            declarator.init?.type === 'FunctionExpression';
+                        if (!declarator.id.typeAnnotation && !isFunctionInit) {
                             context.report({
                                 node: declarator.id,
                                 messageId: 'mustBeAnnotated',

@@ -1,6 +1,6 @@
 # AchievementsContent
 
-Client shell for the achievements page. Owns sort, filter, and pagination state, and renders the controls row (category filter + sort field + direction toggle on the left; pagination + admin add button on the right), the paginated achievement grid, and a centered pagination footer.
+Client shell for the achievements page. Owns sort, filter, and pagination state via a reducer, and renders the controls row (category filter + sort field + direction toggle on the left; pagination + admin add button on the right), the paginated achievement grid, and a centered pagination footer.
 
 ## Props
 
@@ -10,17 +10,20 @@ Client shell for the achievements page. Owns sort, filter, and pagination state,
 
 ## State
 
-| State            | Type            | Initial value | Description                              |
-| ---------------- | --------------- | ------------- | ---------------------------------------- |
-| `sortField`      | `SortField`     | `'date'`      | Active sort field                        |
-| `sortDirection`  | `SortDirection` | `'asc'`       | Active sort direction                    |
-| `categoryFilter` | `string`        | `''`          | Active category filter; `''` means "All" |
-| `page`           | `number`        | `1`           | Current page number (1-indexed)          |
+All state is managed by a single `useReducer`. The `State` shape:
+
+| Field            | Type            | Initial value            | Description                                               |
+| ---------------- | --------------- | ------------------------ | --------------------------------------------------------- |
+| `sortField`      | `SortField`     | `'date'`                 | Active sort field                                         |
+| `sortDirection`  | `SortDirection` | `'asc'`                  | Active sort direction                                     |
+| `categoryFilter` | `string`        | `''`                     | Active category filter; `''` means "All"                  |
+| `page`           | `number`        | `1`                      | Current page (1-indexed); resets to 1 on any state change |
+| `itemsPerPage`   | `number`        | `ITEMS_PER_PAGE_DESKTOP` | Items per page; set responsively by `RESIZE` action       |
+
+## Effects
+
+- **On mount** — reads `window.matchMedia('(max-width: 768px)')`, dispatches `RESIZE` with the initial match, then listens for changes to keep `itemsPerPage` in sync with the viewport (`ITEMS_PER_PAGE_MOBILE = 6` on mobile, `ITEMS_PER_PAGE_DESKTOP = 18` on desktop)
 
 ## Computations
 
 - `parseDate` — converts a nullable MM/DD/YYYY string to a timestamp for date comparison
-
-## SCSS Variable Dependencies
-
-None — all tokens are sourced from `_constants.scss` directly.

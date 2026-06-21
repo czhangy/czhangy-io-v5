@@ -35,7 +35,11 @@ module.exports = {
         let componentFunctionNode = null;
 
         function isPascalCase(name) {
-            return typeof name === 'string' && /^[A-Z]/.test(name);
+            return (
+                typeof name === 'string' &&
+                /^[A-Z]/.test(name) &&
+                /[a-z]/.test(name)
+            );
         }
 
         function getFunctionName(node) {
