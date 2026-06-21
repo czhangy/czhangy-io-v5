@@ -41,7 +41,7 @@ const EditAchievementModal: React.FC<EditAchievementModalProps> = ({
     return (
         <Modal title="EDIT ACHIEVEMENT" onClose={onClose}>
             <AchievementForm
-                initialValues={achievement}
+                initialValues={{ ...achievement, date: achievement.date ?? '' }}
                 submitLabel="Save"
                 onSubmit={handleSubmit}
                 onCancel={onClose}
