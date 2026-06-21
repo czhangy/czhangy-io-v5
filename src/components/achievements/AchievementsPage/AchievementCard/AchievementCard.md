@@ -1,12 +1,18 @@
 # AchievementCard
 
-A single achievement card displaying name and date (same row), category, tier (rendered as ★ stars), and description.
+A single achievement card displaying name and date (same row), category, tier (rendered as ★ stars), and description. Shows hover edit and delete buttons for admins — edit opens a pre-populated modal; delete removes the achievement from the database immediately.
 
 ## Props
 
 | Prop          | Type          | Required | Default | Description                 |
 | ------------- | ------------- | -------- | ------- | --------------------------- |
 | `achievement` | `Achievement` | Yes      | —       | Achievement data to display |
+
+## State
+
+| State       | Type      | Initial value | Description                    |
+| ----------- | --------- | ------------- | ------------------------------ |
+| `isEditing` | `boolean` | `false`       | Whether the edit modal is open |
 
 ## Computations
 

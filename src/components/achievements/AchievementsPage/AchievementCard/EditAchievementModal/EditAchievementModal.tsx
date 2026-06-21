@@ -3,14 +3,17 @@
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import Modal from '@/components/common/Modal/Modal';
+import type { Achievement } from '@/generated/prisma/client';
 import AchievementForm from '../../AchievementForm/AchievementForm';
 import type { AchievementFormValues } from '../../AchievementForm/AchievementForm';
 
-type AddAchievementModalProps = {
+type EditAchievementModalProps = {
+    achievement: Achievement;
     onClose: () => void;
 };
 
-const AddAchievementModal: React.FC<AddAchievementModalProps> = ({
+const EditAchievementModal: React.FC<EditAchievementModalProps> = ({
+    achievement,
     onClose,
 }) => {
     // -------------------------------------------------------------------------
@@ -26,7 +29,7 @@ const AddAchievementModal: React.FC<AddAchievementModalProps> = ({
     const handleSubmit = async (
         values: AchievementFormValues
     ): Promise<void> => {
-        await axios.post('/api/achievements', values);
+        await axios.patch(`/api/achievements/${achievement.id}`, values);
         router.refresh();
         onClose();
     };
@@ -36,9 +39,10 @@ const AddAchievementModal: React.FC<AddAchievementModalProps> = ({
     // -------------------------------------------------------------------------
 
     return (
-        <Modal title="ADD ACHIEVEMENT" onClose={onClose}>
+        <Modal title="EDIT ACHIEVEMENT" onClose={onClose}>
             <AchievementForm
-                submitLabel="Add"
+                initialValues={achievement}
+                submitLabel="Save"
                 onSubmit={handleSubmit}
                 onCancel={onClose}
             />
@@ -46,4 +50,4 @@ const AddAchievementModal: React.FC<AddAchievementModalProps> = ({
     );
 };
 
-export default AddAchievementModal;
+export default EditAchievementModal;
