@@ -37,15 +37,6 @@
         padding-top: 10vh;
     }
 
-    .social-links {
-        bottom: 1.5rem;
-        display: flex;
-        gap: 0.75rem;
-        position: absolute;
-        right: 1.5rem;
-        z-index: 11;
-    }
-
     .title {
         @include mono-label;
 
