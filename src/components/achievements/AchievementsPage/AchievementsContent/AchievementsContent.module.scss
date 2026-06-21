@@ -43,6 +43,12 @@
                 padding: 0.5rem 0.75rem;
             }
         }
+
+        .right {
+            align-items: center;
+            display: flex;
+            gap: 0.75rem;
+        }
     }
 
     .grid {
@@ -53,5 +59,10 @@
         @media (width <= 768px) {
             grid-template-columns: 1fr;
         }
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
     }
 }

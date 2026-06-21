@@ -5,6 +5,7 @@ import type { Achievement } from '@/generated/prisma/client';
 import AchievementCard from '../AchievementCard/AchievementCard';
 import AchievementsControls from '../AchievementsControls/AchievementsControls';
 import styles from './AchievementsContent.module.scss';
+import PaginationControls from './PaginationControls/PaginationControls';
 
 type AchievementsContentProps = {
     achievements: Achievement[];
@@ -19,6 +20,8 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
 
     type SortField = 'date' | 'name' | 'tier';
     type SortDirection = 'asc' | 'desc';
+
+    const ITEMS_PER_PAGE: number = 18;
 
     const SORT_FIELDS: { value: SortField; label: string }[] = [
         { value: 'date', label: 'Date' },
@@ -37,6 +40,7 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
     const [sortField, setSortField] = useState<SortField>('date');
     const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
     const [categoryFilter, setCategoryFilter] = useState<string>('');
+    const [page, setPage] = useState<number>(1);
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -46,16 +50,27 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
         e: React.ChangeEvent<HTMLSelectElement>
     ): void => {
         setSortField(e.target.value as SortField);
+        setPage(1);
     };
 
     const handleDirectionToggle = (): void => {
         setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+        setPage(1);
     };
 
     const handleCategoryChange = (
         e: React.ChangeEvent<HTMLSelectElement>
     ): void => {
         setCategoryFilter(e.target.value);
+        setPage(1);
+    };
+
+    const handlePrevPage = (): void => {
+        setPage((prev) => prev - 1);
+    };
+
+    const handleNextPage = (): void => {
+        setPage((prev) => prev + 1);
     };
 
     // -------------------------------------------------------------------------
@@ -90,6 +105,16 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
             }
             return sortDirection === 'asc' ? comparison : -comparison;
         });
+
+    const totalPages: number = Math.max(
+        1,
+        Math.ceil(sortedAchievements.length / ITEMS_PER_PAGE)
+    );
+
+    const paginatedAchievements: Achievement[] = sortedAchievements.slice(
+        (page - 1) * ITEMS_PER_PAGE,
+        page * ITEMS_PER_PAGE
+    );
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -130,15 +155,31 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
                         {sortDirection === 'asc' ? '↑ Asc' : '↓ Desc'}
                     </button>
                 </div>
-                <AchievementsControls />
+                <div className={styles.right}>
+                    <PaginationControls
+                        page={page}
+                        totalPages={totalPages}
+                        onPrev={handlePrevPage}
+                        onNext={handleNextPage}
+                    />
+                    <AchievementsControls />
+                </div>
             </div>
             <div className={styles.grid}>
-                {sortedAchievements.map((achievement) => (
+                {paginatedAchievements.map((achievement) => (
                     <AchievementCard
                         key={achievement.id}
                         achievement={achievement}
                     />
                 ))}
+            </div>
+            <div className={styles.pagination}>
+                <PaginationControls
+                    page={page}
+                    totalPages={totalPages}
+                    onPrev={handlePrevPage}
+                    onNext={handleNextPage}
+                />
             </div>
         </div>
     );

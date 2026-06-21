@@ -1,6 +1,6 @@
 # AchievementsContent
 
-Client shell for the achievements page. Owns sort and filter state, and renders the controls row (category filter + sort field select + direction toggle on the left, admin add button on the right) and the filtered, sorted achievement grid.
+Client shell for the achievements page. Owns sort, filter, and pagination state, and renders the controls row (category filter + sort field + direction toggle on the left; pagination + admin add button on the right), the paginated achievement grid, and a centered pagination footer.
 
 ## Props
 
@@ -15,9 +15,12 @@ Client shell for the achievements page. Owns sort and filter state, and renders 
 | `sortField`      | `SortField`     | `'date'`      | Active sort field                        |
 | `sortDirection`  | `SortDirection` | `'asc'`       | Active sort direction                    |
 | `categoryFilter` | `string`        | `''`          | Active category filter; `''` means "All" |
+| `page`           | `number`        | `1`           | Current page number (1-indexed)          |
 
 ## Computations
 
-- `CATEGORIES` — unique sorted list of categories present in `achievements`
 - `parseDate` — converts a nullable MM/DD/YYYY string to a timestamp for date comparison
-- `sortedAchievements` — filtered by `categoryFilter` then sorted by `sortField`/`sortDirection`
+
+## SCSS Variable Dependencies
+
+None — all tokens are sourced from `_constants.scss` directly.
