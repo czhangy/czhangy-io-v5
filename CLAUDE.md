@@ -59,6 +59,33 @@ Pre-commit hooks via Husky/lint-staged automatically run ESLint, Prettier, and S
 
 Shared UI primitives live in `src/components/common/` (Modal, Dropdown, Accordion, Spinner, etc.).
 
+**Domain directories** (`src/components/career/`, `src/components/achievements/`, etc.) group related components by feature area. When a domain contains exactly one page component, that page lives directly in the domain directory — not in a named subdirectory — alongside its `.module.scss` and `.md` files:
+
+```
+src/components/career/
+  CareerPage.tsx          ← page component at domain root (only page in this domain)
+  CareerPage.module.scss
+  CareerPage.md
+  JobCard/                ← child components in subdirectories as normal
+    JobCard.tsx
+    ...
+```
+
+Do **not** create a `CareerPage/` subdirectory inside `career/` just to hold `CareerPage.tsx`. The domain directory itself serves as that container.
+
+When a domain contains **multiple distinct page components** (e.g. `auth/` has both `LoginPage` and `RegisterPage`), each page gets its own subdirectory as usual:
+
+```
+src/components/auth/
+  LoginPage/
+    LoginPage.tsx
+    LoginPage.module.scss
+    LoginPage.md
+  RegisterPage/
+    RegisterPage.tsx
+    ...
+```
+
 **Component co-location**: If a child component is only used by a single parent component, place its directory inside the parent's directory rather than as a sibling. Components used by multiple parents live at the nearest shared ancestor level.
 
 **Component reuse**: When two components share the same markup structure and styles with only content differing, extract a shared component with props rather than duplicating. Thin wrapper components that only pass fixed props to a shared component do not need a `.module.scss` file.
