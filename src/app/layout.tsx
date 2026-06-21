@@ -1,4 +1,5 @@
 import Background from '@/components/layout/Background/Background';
+import Footer from '@/components/layout/Footer/Footer';
 import Navbar from '@/components/layout/Navbar/Navbar';
 import SessionProvider from '@/lib/context/SessionContext';
 import '@/lib/styles/globals.scss';
@@ -48,6 +49,7 @@ export default async function RootLayout({
                     <Background />
                     <Navbar />
                     <main className="page-main">{children}</main>
+                    <Footer />
                 </SessionProvider>
             </body>
         </html>

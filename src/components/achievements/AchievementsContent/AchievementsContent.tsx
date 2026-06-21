@@ -42,7 +42,7 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
 
     const INITIAL_STATE: State = {
         sortField: 'date',
-        sortDirection: 'asc',
+        sortDirection: 'desc',
         categoryFilter: '',
         page: 1,
         itemsPerPage: ITEMS_PER_PAGE_DESKTOP,

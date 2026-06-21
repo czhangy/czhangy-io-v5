@@ -31,6 +31,15 @@
         padding-left: 0.2em;
     }
 
+    .subtitle {
+        color: $text-dim;
+        font-family: $font-mono;
+        font-size: 0.8rem;
+        letter-spacing: 0.05em;
+        margin-top: -0.75rem;
+        text-align: center;
+    }
+
     .field {
         width: 100%;
     }

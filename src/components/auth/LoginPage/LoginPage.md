@@ -1,6 +1,6 @@
 # LoginPage
 
-A password-only login form. Reads an optional `callbackUrl` query parameter to redirect after successful authentication.
+A password-only login form with a "Log In" title and subtitle. Reads an optional `callbackUrl` query parameter to redirect after successful authentication.
 
 ## State
 

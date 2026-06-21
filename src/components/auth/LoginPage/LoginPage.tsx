@@ -54,7 +54,10 @@ const LoginPage: React.FC = () => {
     return (
         <div className={styles['login-page']}>
             <form className={styles.form} onSubmit={handleSubmit}>
-                <h1 className={styles.title}>LOGIN</h1>
+                <h1 className={styles.title}>LOG IN</h1>
+                <p className={styles.subtitle}>
+                    If I know you, ask me for a login.
+                </p>
                 <div className={styles.field}>
                     <input
                         id="password"
