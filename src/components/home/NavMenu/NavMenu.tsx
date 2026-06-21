@@ -28,7 +28,7 @@ const NavMenu: React.FC = () => {
 
     const allItems = useMemo<NavItem[]>(() => {
         if (!isLoggedIn)
-            return [...NAV_ITEMS, { href: '/login', label: 'Login' }];
+            return [...NAV_ITEMS, { href: '/login', label: 'Log In' }];
         if (role === 'ADMIN')
             return [...NAV_ITEMS, { href: '/register', label: 'Register' }];
         return NAV_ITEMS;

@@ -12,7 +12,7 @@ const Navbar: React.FC = () => {
     // CONSTANTS
     // -------------------------------------------------------------------------
 
-    const LOGIN_ITEM: NavItem = { href: '/login', label: 'Login' };
+    const LOGIN_ITEM: NavItem = { href: '/login', label: 'Log In' };
     const REGISTER_ITEM: NavItem = { href: '/register', label: 'Register' };
 
     // -------------------------------------------------------------------------
