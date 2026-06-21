@@ -1,8 +1,7 @@
 import GlitchText from '@/components/common/GlitchText/GlitchText';
 import { prisma } from '@/lib/utils/prisma';
 import type { Achievement } from '@/generated/prisma/client';
-import AchievementCard from './AchievementCard/AchievementCard';
-import AchievementsControls from './AchievementsControls/AchievementsControls';
+import AchievementsContent from './AchievementsContent/AchievementsContent';
 import styles from './AchievementsPage.module.scss';
 
 const AchievementsPage = async () => {
@@ -26,15 +25,7 @@ const AchievementsPage = async () => {
                     as="h1"
                     className={styles.title}
                 />
-                <AchievementsControls />
-                <div className={styles.grid}>
-                    {achievements.map((achievement) => (
-                        <AchievementCard
-                            key={achievement.id}
-                            achievement={achievement}
-                        />
-                    ))}
-                </div>
+                <AchievementsContent achievements={achievements} />
             </div>
         </div>
     );

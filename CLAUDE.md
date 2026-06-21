@@ -164,14 +164,14 @@ Only include sections that are actually used. MARKUP is always required. The div
 
 **What belongs in each section:**
 
-- **CONSTANTS** — `UPPER_SNAKE_CASE` typed consts, non-Props type aliases, and enums. These are values that depend on props/state/refs and cannot be moved to module level.
+- **CONSTANTS** — `UPPER_SNAKE_CASE` typed consts, non-Props type aliases, and enums. Examples: `const ITEMS: string[] = [...]`, `type SortField = 'date' | 'name'`. Everything inside the component function must live in a section, including static values that don't depend on state or props.
 - **HOOKS** — `useRef`, `usePathname`, `useReducer`, `useRouter`, `useSearchParams`, and `useSession` only. No other hooks belong here.
 - **STATE** — `useState` calls only.
-- **HANDLERS** — `handle*`-named arrow functions and `useCallback` calls.
-- **COMPUTATIONS** — Arrow functions and `useMemo` calls that derive values from state/props. Plain `const` derived values (ternaries, expressions) belong in RENDERING, not here.
-- **RENDERING** — `render*` arrow functions that return JSX, and typed camelCase consts that hold non-hook values used in the return (including plain derived consts like `const items: NavItem[] = flag ? A : B`). All consts must have explicit type annotations. No hook calls allowed.
+- **HANDLERS** — `handle*`-named arrow functions and `useCallback` calls. Handlers may call functions defined later in COMPUTATIONS — closures resolve at call time, not definition time, so forward references are safe.
+- **COMPUTATIONS** — Arrow functions (`const fn = () => ...`) and `useMemo` calls only. These are reusable helpers called by handlers or used in RENDERING. **The ESLint rule enforces this strictly — only arrow functions and `useMemo` are valid here.** Plain derived values that are not reusable functions do not belong here.
+- **RENDERING** — Everything else that derives a value for use in the return: plain `const` expressions, ternaries, array operations (`.filter()`, `.sort()`, `.map()`), and `render*` arrow functions that return JSX. All consts must have explicit type annotations. No hook calls allowed. When in doubt whether something belongs in COMPUTATIONS or RENDERING, ask: is it a reusable function (`const fn = () => ...`)? If yes → COMPUTATIONS. If it's a plain derived value → RENDERING.
 - **EFFECTS** — `useEffect` calls only.
-- **MARKUP** — The `return` statement.
+- **MARKUP** — The `return` statement. May return JSX, a ternary expression, or a `createPortal(...)` call.
 
 The exported component name must match the filename.
 

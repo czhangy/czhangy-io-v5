@@ -28,17 +28,24 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
     // CONSTANTS
     // -------------------------------------------------------------------------
 
-    const CATEGORIES: string[] = ['Life', 'Career', 'Gaming'];
+    const CATEGORIES: string[] = [
+        'Career',
+        'Gaming',
+        'Hobbies',
+        'Life',
+        'Misc',
+        'Travel',
+    ];
     const TIER_OPTIONS: number[] = [1, 2, 3];
 
     // -------------------------------------------------------------------------
     // STATE
     // -------------------------------------------------------------------------
 
-    const [tier, setTier] = useState<number>(initialValues?.tier ?? 1);
+    const [tier, setTier] = useState<number>(initialValues?.tier ?? 0);
     const [name, setName] = useState<string>(initialValues?.name ?? '');
     const [category, setCategory] = useState<string>(
-        initialValues?.category ?? 'Life'
+        initialValues?.category ?? ''
     );
     const [description, setDescription] = useState<string>(
         initialValues?.description ?? ''
@@ -81,10 +88,18 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
     const validate = (): Record<string, string> => {
         const newErrors: Record<string, string> = {};
 
+        if (tier === 0) {
+            newErrors.tier = 'Tier is required.';
+        }
+
+        if (!category) {
+            newErrors.category = 'Category is required.';
+        }
+
         if (!name.trim()) {
             newErrors.name = 'Name is required.';
-        } else if (!/^[A-Z]/.test(name.trim())) {
-            newErrors.name = 'Name must start with a capital letter.';
+        } else if (name.trim().length > 24) {
+            newErrors.name = 'Name must be 24 characters or fewer.';
         }
 
         if (!description.trim()) {
@@ -114,45 +129,12 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
 
     return (
         <form className={styles.form} onSubmit={handleSubmit}>
-            <div className={styles.row}>
-                <div className={styles.field}>
-                    <span className={styles.label}>Tier</span>
-                    <select
-                        className={styles.select}
-                        value={tier}
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                            setTier(Number(e.target.value))
-                        }
-                    >
-                        {TIER_OPTIONS.map((t) => (
-                            <option key={t} value={t}>
-                                {t}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className={styles.field}>
-                    <span className={styles.label}>Category</span>
-                    <select
-                        className={styles.select}
-                        value={category}
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                            setCategory(e.target.value)
-                        }
-                    >
-                        {CATEGORIES.map((cat) => (
-                            <option key={cat} value={cat}>
-                                {cat}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            </div>
             <div className={`${styles.row} ${styles['row--wide-first']}`}>
                 <div className={styles.field}>
                     <span className={styles.label}>Name</span>
                     <input
                         className={styles.input}
+                        maxLength={24}
                         value={name}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                             setName(e.target.value)
@@ -174,6 +156,52 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
                     />
                     {errors.date ? (
                         <span className={styles.error}>{errors.date}</span>
+                    ) : null}
+                </div>
+            </div>
+            <div className={styles.row}>
+                <div className={styles.field}>
+                    <span className={styles.label}>Tier</span>
+                    <select
+                        className={styles.select}
+                        value={tier}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                            setTier(Number(e.target.value))
+                        }
+                    >
+                        <option value={0} disabled>
+                            —
+                        </option>
+                        {TIER_OPTIONS.map((t) => (
+                            <option key={t} value={t}>
+                                {t}
+                            </option>
+                        ))}
+                    </select>
+                    {errors.tier ? (
+                        <span className={styles.error}>{errors.tier}</span>
+                    ) : null}
+                </div>
+                <div className={styles.field}>
+                    <span className={styles.label}>Category</span>
+                    <select
+                        className={styles.select}
+                        value={category}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                            setCategory(e.target.value)
+                        }
+                    >
+                        <option value="" disabled>
+                            —
+                        </option>
+                        {CATEGORIES.map((cat) => (
+                            <option key={cat} value={cat}>
+                                {cat}
+                            </option>
+                        ))}
+                    </select>
+                    {errors.category ? (
+                        <span className={styles.error}>{errors.category}</span>
                     ) : null}
                 </div>
             </div>
