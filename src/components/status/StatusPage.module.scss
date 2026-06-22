@@ -38,11 +38,13 @@
             }
 
             @media (width <= 480px) {
+                grid-auto-rows: 8rem;
                 grid-template-columns: 1fr;
             }
 
             .cols-4 {
                 grid-column: span 4;
+                min-width: 0;
 
                 @media (width <= 480px) {
                     grid-column: span 1;
@@ -51,6 +53,7 @@
 
             .cols-5 {
                 grid-column: span 5;
+                min-width: 0;
 
                 @media (width <= 1024px) {
                     grid-column: span 4;
@@ -63,6 +66,7 @@
 
             .cols-6 {
                 grid-column: span 6;
+                min-width: 0;
 
                 @media (width <= 1024px) {
                     grid-column: span 4;
@@ -86,6 +90,10 @@
 
                 @media (width <= 768px) {
                     grid-row: span 1;
+                }
+
+                @media (width <= 480px) {
+                    grid-row: span 3;
                 }
             }
         }
