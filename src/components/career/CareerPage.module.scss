@@ -18,17 +18,7 @@
         width: 100%;
 
         .title {
-            @include mono-label;
-
-            color: $accent;
-            display: block;
-            font-size: 2.5rem;
-            letter-spacing: 0.2em;
-            text-align: center;
-
-            @media (width <= 768px) {
-                font-size: 1.75rem;
-            }
+            @include page-title;
         }
 
         .timeline {
