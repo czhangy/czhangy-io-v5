@@ -1,0 +1,41 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.panel {
+    border: 1px solid $border-subtle;
+    display: flex;
+    flex-direction: column;
+
+    .header {
+        align-items: center;
+        background: rgba($foreground, 0.05);
+        border-bottom: 1px solid $border-subtle;
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0.75rem;
+
+        .label {
+            @include mono-label;
+
+            color: $text-dim;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+        }
+
+        .header-action {
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        }
+    }
+
+    @media (hover: hover) {
+        &:hover .header-action {
+            opacity: 1;
+        }
+    }
+
+    .body {
+        flex: 1;
+        padding: 0.75rem;
+    }
+}
