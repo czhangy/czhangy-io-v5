@@ -2,15 +2,19 @@
 
 import { useState } from 'react';
 import { useSession } from '@/lib/context/SessionContext';
-import EditIcon from '@/lib/icons/EditIcon';
+import PanelEditButton from '../PanelEditButton/PanelEditButton';
 import StatusPanel from '../StatusPanel/StatusPanel';
 import styles from './LocationPanel.module.scss';
 
 type LocationPanelProps = {
     initialLocation: string;
+    className?: string;
 };
 
-const LocationPanel: React.FC<LocationPanelProps> = ({ initialLocation }) => {
+const LocationPanel: React.FC<LocationPanelProps> = ({
+    initialLocation,
+    className,
+}) => {
     // -------------------------------------------------------------------------
     // HOOKS
     // -------------------------------------------------------------------------
@@ -62,22 +66,18 @@ const LocationPanel: React.FC<LocationPanelProps> = ({ initialLocation }) => {
     const isAdmin: boolean = role === 'ADMIN';
 
     const editButton: React.ReactNode =
-        isAdmin && !isEditing ? (
-            <button
-                type="button"
-                className={styles['edit-button']}
-                onClick={handleEdit}
-            >
-                <EditIcon />
-            </button>
-        ) : null;
+        isAdmin && !isEditing ? <PanelEditButton onClick={handleEdit} /> : null;
 
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
 
     return (
-        <StatusPanel label="LOCATION" headerAction={editButton}>
+        <StatusPanel
+            label="LOCATION"
+            headerAction={editButton}
+            className={className}
+        >
             {isEditing ? (
                 <div className={styles['edit-form']}>
                     <input

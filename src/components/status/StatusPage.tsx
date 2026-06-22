@@ -1,6 +1,7 @@
 import GlitchText from '@/components/common/GlitchText/GlitchText';
 import { prisma } from '@/lib/utils/prisma';
 import LocationPanel from './LocationPanel/LocationPanel';
+import SpotifyPanel from './SpotifyPanel/SpotifyPanel';
 import styles from './StatusPage.module.scss';
 
 const StatusPage = async () => {
@@ -24,7 +25,11 @@ const StatusPage = async () => {
             <div className={styles.content}>
                 <GlitchText text="STATUS" as="h1" className={styles.title} />
                 <div className={styles.grid}>
-                    <LocationPanel initialLocation={location} />
+                    <LocationPanel
+                        initialLocation={location}
+                        className={styles['span-2']}
+                    />
+                    <SpotifyPanel className={styles['span-3']} />
                 </div>
             </div>
         </div>

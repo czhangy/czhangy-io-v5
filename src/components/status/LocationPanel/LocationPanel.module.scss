@@ -7,27 +7,6 @@
     font-size: 1.1rem;
 }
 
-.edit-button {
-    background: transparent;
-    border: none;
-    color: $text-dim;
-    cursor: pointer;
-    display: flex;
-    padding: 0;
-    transition: color 0.15s ease;
-
-    svg {
-        height: 0.9rem;
-        width: 0.9rem;
-    }
-
-    @media (hover: hover) {
-        &:hover {
-            color: $foreground;
-        }
-    }
-}
-
 .edit-form {
     display: flex;
     flex-direction: column;

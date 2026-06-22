@@ -1,0 +1,56 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+$spotify-green: #1db954;
+
+.track {
+    align-items: center;
+    color: inherit;
+    display: flex;
+    gap: 0.75rem;
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+
+    @media (hover: hover) {
+        &:hover {
+            opacity: 0.75;
+        }
+    }
+
+    .album-art {
+        border-radius: 2px;
+        flex-shrink: 0;
+    }
+
+    .info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        min-width: 0;
+
+        .name {
+            @include mono-label;
+
+            color: $spotify-green;
+            font-size: 0.9rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .artist {
+            @include mono-label;
+
+            color: $text-mid;
+            font-size: 0.75rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+}
+
+.empty {
+    color: $text-dim;
+    font-size: 0.85rem;
+}

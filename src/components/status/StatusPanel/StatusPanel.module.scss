@@ -2,6 +2,7 @@
 @use '@/styles/mixins' as *;
 
 .panel {
+    background: $background;
     border: 1px solid $border-subtle;
     display: flex;
     flex-direction: column;
@@ -23,18 +24,13 @@
         }
 
         .header-action {
-            opacity: 0;
-            transition: opacity 0.15s ease;
-        }
-    }
-
-    @media (hover: hover) {
-        &:hover .header-action {
-            opacity: 1;
+            display: flex;
         }
     }
 
     .body {
+        align-items: center;
+        display: flex;
         flex: 1;
         padding: 0.75rem;
     }

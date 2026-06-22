@@ -24,15 +24,39 @@
         .grid {
             display: grid;
             gap: 1rem;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(7, 1fr);
             margin-top: 2rem;
 
             @media (width <= 1024px) {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(4, 1fr);
             }
 
             @media (width <= 768px) {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            @media (width <= 480px) {
                 grid-template-columns: 1fr;
+            }
+
+            .span-2 {
+                grid-column: span 2;
+
+                @media (width <= 480px) {
+                    grid-column: span 1;
+                }
+            }
+
+            .span-3 {
+                grid-column: span 3;
+
+                @media (width <= 1024px) {
+                    grid-column: span 2;
+                }
+
+                @media (width <= 480px) {
+                    grid-column: span 1;
+                }
             }
         }
     }
