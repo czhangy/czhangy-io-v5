@@ -17,6 +17,21 @@
     font-weight: 700;
 }
 
+// Accent-colored page title used at the top of every full-page component.
+@mixin page-title {
+    @include mono-label;
+
+    color: $accent;
+    display: block;
+    font-size: 2.5rem;
+    letter-spacing: 0.2em;
+    text-align: center;
+
+    @media (width <= 768px) {
+        font-size: 1.75rem;
+    }
+}
+
 // Bordered interactive button matching the site's game UI aesthetic.
 @mixin game-button {
     background: transparent;

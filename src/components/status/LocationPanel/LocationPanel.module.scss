@@ -1,0 +1,53 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.location {
+    @include mono-label;
+
+    font-size: 1.7rem;
+    text-align: center;
+    width: 100%;
+}
+
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .input {
+        @include mono-label;
+
+        background: transparent;
+        border: 1px solid $border-subtle;
+        color: $foreground;
+        font-size: 1.1rem;
+        outline: none;
+        padding: 0.25rem 0.4rem;
+        transition: border-color 0.15s ease;
+        width: 100%;
+
+        &:focus {
+            border-color: $accent;
+        }
+    }
+
+    .actions {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: flex-end;
+
+        .action-button {
+            @include game-button;
+
+            cursor: pointer;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            padding: 0.25rem 0.6rem;
+
+            &--save {
+                border-color: $accent;
+                color: $foreground;
+            }
+        }
+    }
+}

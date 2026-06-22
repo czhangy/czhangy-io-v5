@@ -16,6 +16,10 @@
 
 - `DATABASE_URL`
 - `JWT_SECRET`
+- `SPOTIFY_CLIENT_ID`
+- `SPOTIFY_CLIENT_SECRET`
+- `SPOTIFY_REFRESH_TOKEN`
+- `RAWG_API_KEY`
 
 ## Tech Stack
 
@@ -36,3 +40,9 @@
 <a href="https://www.postgresql.org/">
     <img src="https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white" alt="Postgres" />
 </a>
+
+## External Resources
+
+- [Vercel](https://vercel.com/czhangys-projects/czhangy-io-v5)
+- [Spotify Developers](https://developer.spotify.com/dashboard)
+- [RAWG](https://rawg.io/@czhangy/apikey)

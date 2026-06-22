@@ -1,7 +1,6 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import Modal from '@/components/common/Modal/Modal';
 import type { Achievement } from '@/generated/prisma/client';
 import AchievementForm from '../../AchievementForm/AchievementForm';
@@ -29,7 +28,11 @@ const EditAchievementModal: React.FC<EditAchievementModalProps> = ({
     const handleSubmit = async (
         values: AchievementFormValues
     ): Promise<void> => {
-        await axios.patch(`/api/achievements/${achievement.id}`, values);
+        await fetch(`/api/achievements/${achievement.id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(values),
+        });
         router.refresh();
         onClose();
     };

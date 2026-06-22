@@ -3,6 +3,23 @@ export type NavItem = {
     label: string;
 };
 
+export type SkillCategory = 'Coding' | 'Cardistry' | 'Magic';
+
+export type SkillEntry = {
+    name: string;
+    category: SkillCategory;
+};
+
+export type GameEntry = {
+    name: string;
+    rawgId: number;
+};
+
+export type ShowEntry = {
+    name: string;
+    tvmazeId: number;
+};
+
 export type UserRole = 'ADMIN' | 'USER';
 
 export type Session = {

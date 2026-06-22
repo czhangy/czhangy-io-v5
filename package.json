@@ -36,7 +36,6 @@
         "@neondatabase/serverless": "^1.1.0",
         "@prisma/adapter-neon": "^7.8.0",
         "@prisma/client": "^7.8.0",
-        "axios": "^1.18.0",
         "bcryptjs": "^3.0.3",
         "husky": "^9.1.7",
         "jose": "^6.2.3",
