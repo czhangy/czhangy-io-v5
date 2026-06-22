@@ -1,7 +1,6 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import Modal from '@/components/common/Modal/Modal';
 import AchievementForm from '../../AchievementForm/AchievementForm';
 import type { AchievementFormValues } from '../../AchievementForm/AchievementForm';
@@ -26,7 +25,11 @@ const AddAchievementModal: React.FC<AddAchievementModalProps> = ({
     const handleSubmit = async (
         values: AchievementFormValues
     ): Promise<void> => {
-        await axios.post('/api/achievements', values);
+        await fetch('/api/achievements', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(values),
+        });
         router.refresh();
         onClose();
     };

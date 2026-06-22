@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import axios from 'axios';
 import styles from './LoginPage.module.scss';
 
 const LoginPage: React.FC = () => {
@@ -36,7 +35,12 @@ const LoginPage: React.FC = () => {
         setError('');
 
         try {
-            await axios.post('/api/auth/login', { password });
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password }),
+            });
+            if (!res.ok) throw new Error();
             const callbackUrl = searchParams.get('callbackUrl') ?? '/';
             router.push(callbackUrl);
             router.refresh();

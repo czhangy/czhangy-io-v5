@@ -14,6 +14,10 @@ const nextConfig: NextConfig = {
                 protocol: 'https',
                 hostname: 'static.tvmaze.com',
             },
+            {
+                protocol: 'https',
+                hostname: 'media.rawg.io',
+            },
         ],
     },
 };

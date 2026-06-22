@@ -1,0 +1,61 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.content {
+    align-items: center;
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+
+    .cover {
+        border-radius: 2px;
+        flex-shrink: 0;
+        object-fit: cover;
+
+        &--fallback {
+            border-radius: 2px;
+            flex-shrink: 0;
+            object-fit: contain;
+        }
+    }
+
+    .info {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: 0.3rem;
+        min-width: 0;
+
+        .name {
+            @include mono-label;
+
+            font-size: 0.95rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .genres {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+
+            .genre-tag {
+                @include mono-label;
+
+                border: 1px solid $border-subtle;
+                color: $text-dim;
+                flex-shrink: 0;
+                font-size: 0.6rem;
+                letter-spacing: 0.05em;
+                padding: 0.1rem 0.3rem;
+            }
+        }
+    }
+}
+
+.edit-form {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+}

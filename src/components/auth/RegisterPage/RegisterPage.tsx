@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import axios from 'axios';
 import styles from './RegisterPage.module.scss';
 
 const RegisterPage: React.FC = () => {
@@ -31,15 +30,20 @@ const RegisterPage: React.FC = () => {
         setSuccess(false);
 
         try {
-            await axios.post('/api/auth/register', { password });
+            const res = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password }),
+            });
+            if (!res.ok) {
+                const data = await res.json();
+                setError(data.error ?? 'Failed to create user.');
+                return;
+            }
             setSuccess(true);
             setPassword('');
-        } catch (err) {
-            if (axios.isAxiosError(err) && err.response?.data?.error) {
-                setError(err.response.data.error);
-            } else {
-                setError('Failed to create user.');
-            }
+        } catch {
+            setError('Failed to create user.');
         } finally {
             setLoading(false);
         }

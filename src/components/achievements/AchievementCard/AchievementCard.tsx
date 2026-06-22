@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import { useSession } from '@/lib/context/SessionContext';
 import DeleteIcon from '@/lib/icons/DeleteIcon';
 import EditIcon from '@/lib/icons/EditIcon';
@@ -36,7 +35,9 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement }) => {
     const handleEditClose = (): void => setIsEditing(false);
 
     const handleDelete = async (): Promise<void> => {
-        await axios.delete(`/api/achievements/${achievement.id}`);
+        await fetch(`/api/achievements/${achievement.id}`, {
+            method: 'DELETE',
+        });
         router.refresh();
     };
 

@@ -19,7 +19,7 @@ const SpotifyPanel = async ({ className }: SpotifyPanelProps) => {
     // -------------------------------------------------------------------------
 
     return (
-        <StatusPanel label="LISTENING TO" className={className}>
+        <StatusPanel label="BLASTING" className={className}>
             {track ? (
                 <a
                     className={styles.track}

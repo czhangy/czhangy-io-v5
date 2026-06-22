@@ -3,6 +3,11 @@ export type NavItem = {
     label: string;
 };
 
+export type GameEntry = {
+    name: string;
+    rawgId: number;
+};
+
 export type ShowEntry = {
     name: string;
     tvmazeId: number;
