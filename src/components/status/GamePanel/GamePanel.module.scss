@@ -5,7 +5,6 @@
     align-items: center;
     display: flex;
     gap: 0.75rem;
-    width: 100%;
 
     .cover {
         border-radius: 2px;
@@ -21,7 +20,6 @@
 
     .info {
         display: flex;
-        flex: 1;
         flex-direction: column;
         gap: 0.3rem;
         min-width: 0;
@@ -29,7 +27,7 @@
         .name {
             @include mono-label;
 
-            font-size: 0.95rem;
+            font-size: 1.4rem;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;

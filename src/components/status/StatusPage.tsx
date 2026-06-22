@@ -1,5 +1,5 @@
 import GlitchText from '@/components/common/GlitchText/GlitchText';
-import { GameEntry, ShowEntry } from '@/lib/utils';
+import { GameEntry, ShowEntry, SkillEntry } from '@/lib/utils';
 import { prisma } from '@/lib/utils/prisma';
 import { getGameById, RAWGGame } from '@/lib/utils/rawg';
 import { getShowById, TVmazeShow } from '@/lib/utils/tvmaze';
@@ -7,6 +7,7 @@ import type { StatusItem } from '@/generated/prisma/client';
 import GamePanel from './GamePanel/GamePanel';
 import LocationPanel from './LocationPanel/LocationPanel';
 import ShowsPanel from './ShowsPanel/ShowsPanel';
+import SkillPanel from './SkillPanel/SkillPanel';
 import SpotifyPanel from './SpotifyPanel/SpotifyPanel';
 import styles from './StatusPage.module.scss';
 
@@ -16,6 +17,10 @@ const StatusPage = async () => {
     // -------------------------------------------------------------------------
 
     const DEFAULT_GAME_ENTRY: GameEntry = { name: 'Something', rawgId: -1 };
+    const DEFAULT_SKILL_ENTRY: SkillEntry = {
+        name: 'Something',
+        category: 'Coding',
+    };
     const DEFAULT_SHOW_ENTRIES: ShowEntry[] = [
         { name: '???', tvmazeId: -1 },
         { name: '???', tvmazeId: -1 },
@@ -27,7 +32,8 @@ const StatusPage = async () => {
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const [locationItem, gameItem, showsItem]: [
+    const [locationItem, gameItem, showsItem, skillItem]: [
+        StatusItem | null,
         StatusItem | null,
         StatusItem | null,
         StatusItem | null,
@@ -35,6 +41,7 @@ const StatusPage = async () => {
         prisma.statusItem.findUnique({ where: { key: 'location' } }),
         prisma.statusItem.findUnique({ where: { key: 'game' } }),
         prisma.statusItem.findUnique({ where: { key: 'shows' } }),
+        prisma.statusItem.findUnique({ where: { key: 'skill' } }),
     ]);
 
     const location: string = locationItem?.value ?? 'Somewhere';
@@ -44,6 +51,9 @@ const StatusPage = async () => {
     const showEntries: ShowEntry[] = showsItem
         ? JSON.parse(showsItem.value)
         : DEFAULT_SHOW_ENTRIES;
+    const skillEntry: SkillEntry = skillItem
+        ? JSON.parse(skillItem.value)
+        : DEFAULT_SKILL_ENTRY;
 
     const [gameMeta, showsMeta]: [RAWGGame | null, (TVmazeShow | null)[]] =
         await Promise.all([
@@ -73,6 +83,10 @@ const StatusPage = async () => {
                     <GamePanel
                         initialEntry={gameEntry}
                         initialMeta={gameMeta}
+                        className={styles['cols-5']}
+                    />
+                    <SkillPanel
+                        initialEntry={skillEntry}
                         className={styles['cols-5']}
                     />
                 </div>

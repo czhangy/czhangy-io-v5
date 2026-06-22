@@ -73,11 +73,7 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
     // -------------------------------------------------------------------------
 
     return (
-        <StatusPanel
-            label="LOCATION"
-            headerAction={editButton}
-            className={className}
-        >
+        <StatusPanel label="@" headerAction={editButton} className={className}>
             {isEditing ? (
                 <div className={styles['edit-form']}>
                     <input
