@@ -1,4 +1,4 @@
-import EditIcon from '@/lib/icons/EditIcon';
+import EditButton from '@/components/common/EditButton/EditButton';
 import styles from './PanelEditButton.module.scss';
 
 type PanelEditButtonProps = {
@@ -10,11 +10,7 @@ const PanelEditButton: React.FC<PanelEditButtonProps> = ({ onClick }) => {
     // MARKUP
     // -------------------------------------------------------------------------
 
-    return (
-        <button type="button" className={styles.button} onClick={onClick}>
-            <EditIcon />
-        </button>
-    );
+    return <EditButton onClick={onClick} className={styles.button} />;
 };
 
 export default PanelEditButton;
