@@ -1,0 +1,164 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.list {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+
+    .item {
+        align-items: center;
+        display: flex;
+        gap: 0.6rem;
+        padding-right: 0.35rem;
+
+        .poster {
+            border-radius: 2px;
+            flex-shrink: 0;
+            object-fit: cover;
+        }
+
+        .poster-placeholder {
+            background: rgba($foreground, 0.08);
+            border-radius: 2px;
+            flex-shrink: 0;
+            height: 60px;
+            width: 43px;
+        }
+
+        .info {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            gap: 0.25rem;
+            min-width: 0;
+
+            .title {
+                @include mono-label;
+
+                font-size: 0.85rem;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .metadata {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.25rem;
+
+                .genre-tag {
+                    @include mono-label;
+
+                    border: 1px solid $border-subtle;
+                    color: $text-dim;
+                    flex-shrink: 0;
+                    font-size: 0.6rem;
+                    letter-spacing: 0.05em;
+                    padding: 0.1rem 0.3rem;
+                }
+            }
+        }
+
+        .edit-form {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            gap: 0.25rem;
+            min-width: 0;
+
+            .search-wrapper {
+                position: relative;
+                width: 100%;
+            }
+
+            .input {
+                @include mono-label;
+
+                background: transparent;
+                border: 1px solid $border-subtle;
+                color: $foreground;
+                font-size: 0.85rem;
+                outline: none;
+                padding: 0.2rem 0.4rem;
+                transition: border-color 0.15s ease;
+                width: 100%;
+
+                &:focus {
+                    border-color: $accent;
+                }
+            }
+
+            .dropdown {
+                background: $background;
+                border: 1px solid $border-subtle;
+                left: 0;
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                position: absolute;
+                right: 0;
+                top: 100%;
+                z-index: 10;
+
+                .dropdown-item {
+                    align-items: center;
+                    cursor: pointer;
+                    display: flex;
+                    gap: 0.5rem;
+                    justify-content: space-between;
+                    padding: 0.3rem 0.5rem;
+                    transition: background 0.1s ease;
+
+                    @media (hover: hover) {
+                        &:hover {
+                            background: rgba($foreground, 0.05);
+                        }
+                    }
+
+                    .result-name {
+                        @include mono-label;
+
+                        font-size: 0.75rem;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                    }
+
+                    .result-year {
+                        @include mono-label;
+
+                        color: $text-dim;
+                        flex-shrink: 0;
+                        font-size: 0.65rem;
+                    }
+                }
+            }
+
+            .cancel {
+                @include mono-label;
+
+                background: none;
+                border: none;
+                color: $text-dim;
+                cursor: pointer;
+                font-size: 0.65rem;
+                letter-spacing: 0.1em;
+                padding: 0;
+                text-align: right;
+                transition: color 0.15s ease;
+
+                @media (hover: hover) {
+                    &:hover {
+                        color: $foreground;
+                    }
+                }
+            }
+        }
+    }
+}
