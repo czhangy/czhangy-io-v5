@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import WipPage from '@/components/wip/WipPage';
 
-export const metadata: Metadata = { title: 'Activity' };
+export const metadata: Metadata = { title: 'Status' };
 
-export default function Activity() {
+export default function Status() {
     return <WipPage />;
 }
