@@ -6,6 +6,7 @@
     border: 1px solid $border-subtle;
     display: flex;
     flex-direction: column;
+    transition: border-color 0.3s ease;
 
     .header {
         align-items: center;
@@ -34,5 +35,48 @@
         flex: 1;
         justify-content: center;
         padding: 0.75rem;
+
+        .loading-rule {
+            animation: rule-pulse 2s ease-in-out infinite;
+            background: $text-dim;
+            height: 1px;
+            width: 30%;
+        }
+    }
+
+    &--loading {
+        animation: border-pulse 2s ease-in-out infinite;
+    }
+}
+
+@keyframes border-pulse {
+    0%,
+    100% {
+        border-color: $border-subtle;
+    }
+
+    50% {
+        border-color: rgba($accent, 0.5);
+    }
+}
+
+@keyframes rule-pulse {
+    0%,
+    100% {
+        opacity: 0.2;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .panel--loading {
+        animation: none;
+    }
+
+    .loading-rule {
+        animation: none;
     }
 }
