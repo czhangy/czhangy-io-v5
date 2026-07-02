@@ -1,13 +1,20 @@
 import { Suspense } from 'react';
+import HeadphonesIcon from '@/lib/icons/HeadphonesIcon';
 import StatusPanel from '../StatusPanel/StatusPanel';
 import SpotifyPanelData from './SpotifyPanelData/SpotifyPanelData';
 
 type SpotifyPanelProps = {
-    icon?: React.ReactNode;
     className?: string;
 };
 
-const SpotifyPanel: React.FC<SpotifyPanelProps> = ({ icon, className }) => {
+const SpotifyPanel: React.FC<SpotifyPanelProps> = ({ className }) => {
+    // -------------------------------------------------------------------------
+    // CONSTANTS
+    // -------------------------------------------------------------------------
+
+    const LABEL: string = 'BLASTING';
+    const ICON: React.ReactNode = <HeadphonesIcon />;
+
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
@@ -16,14 +23,14 @@ const SpotifyPanel: React.FC<SpotifyPanelProps> = ({ icon, className }) => {
         <Suspense
             fallback={
                 <StatusPanel
-                    label="BLASTING"
-                    icon={icon}
+                    label={LABEL}
+                    icon={ICON}
                     isLoading
                     className={className}
                 />
             }
         >
-            <SpotifyPanelData icon={icon} className={className} />
+            <SpotifyPanelData label={LABEL} icon={ICON} className={className} />
         </Suspense>
     );
 };

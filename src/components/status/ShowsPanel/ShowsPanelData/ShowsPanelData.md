@@ -6,5 +6,6 @@ Async server component that fetches show entries from the database and their met
 
 | Prop        | Type              | Required | Default | Description             |
 | ----------- | ----------------- | -------- | ------- | ----------------------- |
-| `icon`      | `React.ReactNode` | No       | —       | Forwarded to ShowsPanel |
+| `label`     | `string`          | Yes      | —       | Forwarded to ShowsPanel |
+| `icon`      | `React.ReactNode` | Yes      | —       | Forwarded to ShowsPanel |
 | `className` | `string`          | No       | —       | Forwarded to ShowsPanel |

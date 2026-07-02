@@ -2,11 +2,13 @@ import { prisma } from '@/lib/utils/shared/prisma';
 import LocationPanel from '../LocationPanel';
 
 type LocationPanelDataProps = {
-    icon?: React.ReactNode;
+    label: string;
+    icon: React.ReactNode;
     className?: string;
 };
 
 const LocationPanelData = async ({
+    label,
     icon,
     className,
 }: LocationPanelDataProps) => {
@@ -43,6 +45,7 @@ const LocationPanelData = async ({
     return (
         <LocationPanel
             initialLocation={location}
+            label={label}
             icon={icon}
             className={className}
         />

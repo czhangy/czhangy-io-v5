@@ -4,11 +4,16 @@ import TVmazeHelpers from '@/lib/utils/TVmazeHelpers';
 import ShowsPanel from '../ShowsPanel';
 
 type ShowsPanelDataProps = {
-    icon?: React.ReactNode;
+    label: string;
+    icon: React.ReactNode;
     className?: string;
 };
 
-const ShowsPanelData = async ({ icon, className }: ShowsPanelDataProps) => {
+const ShowsPanelData = async ({
+    label,
+    icon,
+    className,
+}: ShowsPanelDataProps) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
@@ -60,6 +65,7 @@ const ShowsPanelData = async ({ icon, className }: ShowsPanelDataProps) => {
         <ShowsPanel
             initialEntries={showEntries}
             initialMeta={showsMeta}
+            label={label}
             icon={icon}
             className={className}
         />

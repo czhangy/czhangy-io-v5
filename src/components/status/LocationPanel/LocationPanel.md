@@ -7,7 +7,9 @@ A Status page panel displaying the user's current general location. Admins see a
 | Prop              | Type              | Required | Default | Description                         |
 | ----------------- | ----------------- | -------- | ------- | ----------------------------------- |
 | `initialLocation` | `string`          | Yes      | —       | Location string fetched server-side |
-| `icon`            | `React.ReactNode` | No       | —       | Forwarded to the StatusPanel icon   |
+| `label`           | `string`          | Yes      | —       | Panel header label                  |
+| `icon`            | `React.ReactNode` | Yes      | —       | Panel header icon                   |
+| `className`       | `string`          | No       | —       | Class forwarded to the StatusPanel  |
 
 ## State
 

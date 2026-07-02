@@ -4,11 +4,16 @@ import { GameEntry, RAWGGame } from '@/lib/utils/shared/types';
 import GamePanel from '../GamePanel';
 
 type GamePanelDataProps = {
-    icon?: React.ReactNode;
+    label: string;
+    icon: React.ReactNode;
     className?: string;
 };
 
-const GamePanelData = async ({ icon, className }: GamePanelDataProps) => {
+const GamePanelData = async ({
+    label,
+    icon,
+    className,
+}: GamePanelDataProps) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
@@ -53,6 +58,7 @@ const GamePanelData = async ({ icon, className }: GamePanelDataProps) => {
         <GamePanel
             initialEntry={gameEntry}
             initialMeta={gameMeta}
+            label={label}
             icon={icon}
             className={className}
         />

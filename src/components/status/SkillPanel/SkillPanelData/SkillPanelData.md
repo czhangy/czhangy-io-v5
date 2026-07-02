@@ -6,5 +6,6 @@ Async server component that fetches the current skill entry from the database, t
 
 | Prop        | Type              | Required | Default | Description             |
 | ----------- | ----------------- | -------- | ------- | ----------------------- |
-| `icon`      | `React.ReactNode` | No       | —       | Forwarded to SkillPanel |
+| `label`     | `string`          | Yes      | —       | Forwarded to SkillPanel |
+| `icon`      | `React.ReactNode` | Yes      | —       | Forwarded to SkillPanel |
 | `className` | `string`          | No       | —       | Forwarded to SkillPanel |

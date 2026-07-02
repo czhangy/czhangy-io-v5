@@ -12,12 +12,14 @@ import styles from './SkillPanel.module.scss';
 
 type SkillPanelProps = {
     initialEntry: SkillEntry;
-    icon?: React.ReactNode;
+    label: string;
+    icon: React.ReactNode;
     className?: string;
 };
 
 const SkillPanel: React.FC<SkillPanelProps> = ({
     initialEntry,
+    label,
     icon,
     className,
 }) => {
@@ -120,7 +122,7 @@ const SkillPanel: React.FC<SkillPanelProps> = ({
 
     return (
         <StatusPanel
-            label="LEARNING"
+            label={label}
             icon={icon}
             headerAction={editButton}
             className={className}

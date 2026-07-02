@@ -6,5 +6,6 @@ Async server component that fetches the current location from the database, then
 
 | Prop        | Type              | Required | Default | Description                |
 | ----------- | ----------------- | -------- | ------- | -------------------------- |
-| `icon`      | `React.ReactNode` | No       | —       | Forwarded to LocationPanel |
+| `label`     | `string`          | Yes      | —       | Forwarded to LocationPanel |
+| `icon`      | `React.ReactNode` | Yes      | —       | Forwarded to LocationPanel |
 | `className` | `string`          | No       | —       | Forwarded to LocationPanel |

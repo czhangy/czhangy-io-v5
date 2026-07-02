@@ -1,16 +1,20 @@
 import { Suspense } from 'react';
+import JoystickIcon from '@/lib/icons/JoystickIcon';
 import StatusPanel from '../../StatusPanel/StatusPanel';
 import GamePanelData from '../GamePanelData/GamePanelData';
 
 type GamePanelLoaderProps = {
-    icon?: React.ReactNode;
     className?: string;
 };
 
-const GamePanelLoader: React.FC<GamePanelLoaderProps> = ({
-    icon,
-    className,
-}) => {
+const GamePanelLoader: React.FC<GamePanelLoaderProps> = ({ className }) => {
+    // -------------------------------------------------------------------------
+    // CONSTANTS
+    // -------------------------------------------------------------------------
+
+    const LABEL: string = 'GRINDING';
+    const ICON: React.ReactNode = <JoystickIcon />;
+
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
@@ -19,14 +23,14 @@ const GamePanelLoader: React.FC<GamePanelLoaderProps> = ({
         <Suspense
             fallback={
                 <StatusPanel
-                    label="GRINDING"
-                    icon={icon}
+                    label={LABEL}
+                    icon={ICON}
                     isLoading
                     className={className}
                 />
             }
         >
-            <GamePanelData icon={icon} className={className} />
+            <GamePanelData label={LABEL} icon={ICON} className={className} />
         </Suspense>
     );
 };

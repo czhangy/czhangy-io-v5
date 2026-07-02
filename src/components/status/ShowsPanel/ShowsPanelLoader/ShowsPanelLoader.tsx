@@ -1,16 +1,20 @@
 import { Suspense } from 'react';
+import TVIcon from '@/lib/icons/TVIcon';
 import StatusPanel from '../../StatusPanel/StatusPanel';
 import ShowsPanelData from '../ShowsPanelData/ShowsPanelData';
 
 type ShowsPanelLoaderProps = {
-    icon?: React.ReactNode;
     className?: string;
 };
 
-const ShowsPanelLoader: React.FC<ShowsPanelLoaderProps> = ({
-    icon,
-    className,
-}) => {
+const ShowsPanelLoader: React.FC<ShowsPanelLoaderProps> = ({ className }) => {
+    // -------------------------------------------------------------------------
+    // CONSTANTS
+    // -------------------------------------------------------------------------
+
+    const LABEL: string = 'WATCHING';
+    const ICON: React.ReactNode = <TVIcon />;
+
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
@@ -19,14 +23,14 @@ const ShowsPanelLoader: React.FC<ShowsPanelLoaderProps> = ({
         <Suspense
             fallback={
                 <StatusPanel
-                    label="BINGING"
-                    icon={icon}
+                    label={LABEL}
+                    icon={ICON}
                     isLoading
                     className={className}
                 />
             }
         >
-            <ShowsPanelData icon={icon} className={className} />
+            <ShowsPanelData label={LABEL} icon={ICON} className={className} />
         </Suspense>
     );
 };

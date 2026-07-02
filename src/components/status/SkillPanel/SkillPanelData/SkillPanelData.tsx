@@ -3,11 +3,16 @@ import { SkillEntry } from '@/lib/utils/shared/types';
 import SkillPanel from '../SkillPanel';
 
 type SkillPanelDataProps = {
-    icon?: React.ReactNode;
+    label: string;
+    icon: React.ReactNode;
     className?: string;
 };
 
-const SkillPanelData = async ({ icon, className }: SkillPanelDataProps) => {
+const SkillPanelData = async ({
+    label,
+    icon,
+    className,
+}: SkillPanelDataProps) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
@@ -44,6 +49,7 @@ const SkillPanelData = async ({ icon, className }: SkillPanelDataProps) => {
     return (
         <SkillPanel
             initialEntry={skillEntry}
+            label={label}
             icon={icon}
             className={className}
         />

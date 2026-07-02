@@ -8,7 +8,8 @@ A status panel displaying the shows currently being watched, with admin-only inl
 | ---------------- | ------------------------ | -------- | ------- | ------------------------------------- |
 | `initialEntries` | `ShowEntry[]`            | Yes      | —       | Show names and TVmaze IDs from the DB |
 | `initialMeta`    | `(TVmazeShow \| null)[]` | Yes      | —       | Poster and genre data from TVmaze     |
-| `icon`           | `React.ReactNode`        | No       | —       | Forwarded to the StatusPanel icon     |
+| `label`          | `string`                 | Yes      | —       | Panel header label                    |
+| `icon`           | `React.ReactNode`        | Yes      | —       | Panel header icon                     |
 | `className`      | `string`                 | No       | —       | Class forwarded to the StatusPanel    |
 
 ## State

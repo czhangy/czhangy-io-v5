@@ -6,5 +6,6 @@ Async server component that fetches the current game entry from the database and
 
 | Prop        | Type              | Required | Default | Description            |
 | ----------- | ----------------- | -------- | ------- | ---------------------- |
-| `icon`      | `React.ReactNode` | No       | —       | Forwarded to GamePanel |
+| `label`     | `string`          | Yes      | —       | Forwarded to GamePanel |
+| `icon`      | `React.ReactNode` | Yes      | —       | Forwarded to GamePanel |
 | `className` | `string`          | No       | —       | Forwarded to GamePanel |

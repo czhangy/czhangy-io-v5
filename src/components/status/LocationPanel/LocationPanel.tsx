@@ -8,12 +8,14 @@ import styles from './LocationPanel.module.scss';
 
 type LocationPanelProps = {
     initialLocation: string;
-    icon?: React.ReactNode;
+    label: string;
+    icon: React.ReactNode;
     className?: string;
 };
 
 const LocationPanel: React.FC<LocationPanelProps> = ({
     initialLocation,
+    label,
     icon,
     className,
 }) => {
@@ -76,7 +78,7 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
 
     return (
         <StatusPanel
-            label="LOCATION"
+            label={label}
             icon={icon}
             headerAction={editButton}
             className={className}

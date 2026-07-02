@@ -1,16 +1,22 @@
 import { Suspense } from 'react';
+import LocationIcon from '@/lib/icons/LocationIcon';
 import StatusPanel from '../../StatusPanel/StatusPanel';
 import LocationPanelData from '../LocationPanelData/LocationPanelData';
 
 type LocationPanelLoaderProps = {
-    icon?: React.ReactNode;
     className?: string;
 };
 
 const LocationPanelLoader: React.FC<LocationPanelLoaderProps> = ({
-    icon,
     className,
 }) => {
+    // -------------------------------------------------------------------------
+    // CONSTANTS
+    // -------------------------------------------------------------------------
+
+    const LABEL: string = 'LOCATION';
+    const ICON: React.ReactNode = <LocationIcon />;
+
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
@@ -19,14 +25,18 @@ const LocationPanelLoader: React.FC<LocationPanelLoaderProps> = ({
         <Suspense
             fallback={
                 <StatusPanel
-                    label="LOCATION"
-                    icon={icon}
+                    label={LABEL}
+                    icon={ICON}
                     isLoading
                     className={className}
                 />
             }
         >
-            <LocationPanelData icon={icon} className={className} />
+            <LocationPanelData
+                label={LABEL}
+                icon={ICON}
+                className={className}
+            />
         </Suspense>
     );
 };

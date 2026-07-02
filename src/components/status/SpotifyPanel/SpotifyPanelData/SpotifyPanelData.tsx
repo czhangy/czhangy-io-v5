@@ -5,11 +5,16 @@ import StatusPanel from '../../StatusPanel/StatusPanel';
 import styles from './SpotifyPanelData.module.scss';
 
 type SpotifyPanelDataProps = {
-    icon?: React.ReactNode;
+    label: string;
+    icon: React.ReactNode;
     className?: string;
 };
 
-const SpotifyPanelData = async ({ icon, className }: SpotifyPanelDataProps) => {
+const SpotifyPanelData = async ({
+    label,
+    icon,
+    className,
+}: SpotifyPanelDataProps) => {
     // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
@@ -21,7 +26,7 @@ const SpotifyPanelData = async ({ icon, className }: SpotifyPanelDataProps) => {
     // -------------------------------------------------------------------------
 
     return (
-        <StatusPanel label="BLASTING" icon={icon} className={className}>
+        <StatusPanel label={label} icon={icon} className={className}>
             {track ? (
                 <a
                     className={styles.track}
