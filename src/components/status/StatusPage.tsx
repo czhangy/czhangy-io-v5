@@ -1,11 +1,12 @@
 import GlitchText from '@/components/common/GlitchText/GlitchText';
-import GamePanelLoader from './GamePanel/GamePanelLoader';
-import LocationPanelLoader from './LocationPanel/LocationPanelLoader';
-import ShowsPanelLoader from './ShowsPanel/ShowsPanelLoader';
-import SkillPanelLoader from './SkillPanel/SkillPanelLoader';
+import CardistryIcon from '@/lib/icons/CardistryIcon';
+import LocationIcon from '@/lib/icons/LocationIcon';
+import GamePanelLoader from './GamePanel/GamePanelLoader/GamePanelLoader';
+import LocationPanelLoader from './LocationPanel/LocationPanelLoader/LocationPanelLoader';
+import ShowsPanelLoader from './ShowsPanel/ShowsPanelLoader/ShowsPanelLoader';
+import SkillPanelLoader from './SkillPanel/SkillPanelLoader/SkillPanelLoader';
 import SpotifyPanel from './SpotifyPanel/SpotifyPanel';
 import styles from './StatusPage.module.scss';
-import SuspendedPanel from './SuspendedPanel/SuspendedPanel';
 
 const StatusPage: React.FC = () => {
     // -------------------------------------------------------------------------
@@ -17,35 +18,26 @@ const StatusPage: React.FC = () => {
             <div className={styles.content}>
                 <GlitchText text="STATUS" as="h1" className={styles.title} />
                 <div className={styles.grid}>
-                    <SuspendedPanel label="@" className={styles['cols-4']}>
-                        <LocationPanelLoader className={styles['cols-4']} />
-                    </SuspendedPanel>
-                    <SuspendedPanel
-                        label="BLASTING"
+                    <LocationPanelLoader
+                        icon={<LocationIcon />}
+                        className={styles['cols-4']}
+                    />
+                    <SpotifyPanel
+                        icon={<CardistryIcon />}
                         className={styles['cols-6']}
-                    >
-                        <SpotifyPanel className={styles['cols-6']} />
-                    </SuspendedPanel>
-                    <SuspendedPanel
-                        label="BINGING"
+                    />
+                    <ShowsPanelLoader
+                        icon={<CardistryIcon />}
                         className={`${styles['cols-6']} ${styles['rows-3']}`}
-                    >
-                        <ShowsPanelLoader
-                            className={`${styles['cols-6']} ${styles['rows-3']}`}
-                        />
-                    </SuspendedPanel>
-                    <SuspendedPanel
-                        label="GRINDING"
+                    />
+                    <GamePanelLoader
+                        icon={<CardistryIcon />}
                         className={styles['cols-5']}
-                    >
-                        <GamePanelLoader className={styles['cols-5']} />
-                    </SuspendedPanel>
-                    <SuspendedPanel
-                        label="LEARNING"
+                    />
+                    <SkillPanelLoader
+                        icon={<CardistryIcon />}
                         className={styles['cols-5']}
-                    >
-                        <SkillPanelLoader className={styles['cols-5']} />
-                    </SuspendedPanel>
+                    />
                 </div>
             </div>
         </div>

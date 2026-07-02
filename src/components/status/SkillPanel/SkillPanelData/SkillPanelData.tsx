@@ -1,12 +1,13 @@
 import { prisma } from '@/lib/utils/shared/prisma';
 import { SkillEntry } from '@/lib/utils/shared/types';
-import SkillPanel from './SkillPanel';
+import SkillPanel from '../SkillPanel';
 
-type SkillPanelLoaderProps = {
+type SkillPanelDataProps = {
+    icon?: React.ReactNode;
     className?: string;
 };
 
-const SkillPanelLoader = async ({ className }: SkillPanelLoaderProps) => {
+const SkillPanelData = async ({ icon, className }: SkillPanelDataProps) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
@@ -40,7 +41,13 @@ const SkillPanelLoader = async ({ className }: SkillPanelLoaderProps) => {
     // MARKUP
     // -------------------------------------------------------------------------
 
-    return <SkillPanel initialEntry={skillEntry} className={className} />;
+    return (
+        <SkillPanel
+            initialEntry={skillEntry}
+            icon={icon}
+            className={className}
+        />
+    );
 };
 
-export default SkillPanelLoader;
+export default SkillPanelData;

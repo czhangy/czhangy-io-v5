@@ -8,11 +8,13 @@ import styles from './LocationPanel.module.scss';
 
 type LocationPanelProps = {
     initialLocation: string;
+    icon?: React.ReactNode;
     className?: string;
 };
 
 const LocationPanel: React.FC<LocationPanelProps> = ({
     initialLocation,
+    icon,
     className,
 }) => {
     // -------------------------------------------------------------------------
@@ -73,7 +75,12 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
     // -------------------------------------------------------------------------
 
     return (
-        <StatusPanel label="@" headerAction={editButton} className={className}>
+        <StatusPanel
+            label="LOCATION"
+            icon={icon}
+            headerAction={editButton}
+            className={className}
+        >
             {isEditing ? (
                 <div className={styles['edit-form']}>
                     <input

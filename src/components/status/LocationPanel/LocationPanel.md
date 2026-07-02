@@ -4,9 +4,10 @@ A Status page panel displaying the user's current general location. Admins see a
 
 ## Props
 
-| Prop              | Type     | Required | Default | Description                         |
-| ----------------- | -------- | -------- | ------- | ----------------------------------- |
-| `initialLocation` | `string` | Yes      | —       | Location string fetched server-side |
+| Prop              | Type              | Required | Default | Description                         |
+| ----------------- | ----------------- | -------- | ------- | ----------------------------------- |
+| `initialLocation` | `string`          | Yes      | —       | Location string fetched server-side |
+| `icon`            | `React.ReactNode` | No       | —       | Forwarded to the StatusPanel icon   |
 
 ## State
 

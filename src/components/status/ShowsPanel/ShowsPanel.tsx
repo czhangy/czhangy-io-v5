@@ -17,12 +17,14 @@ import styles from './ShowsPanel.module.scss';
 type ShowsPanelProps = {
     initialEntries: ShowEntry[];
     initialMeta: (TVmazeShow | null)[];
+    icon?: React.ReactNode;
     className?: string;
 };
 
 const ShowsPanel: React.FC<ShowsPanelProps> = ({
     initialEntries,
     initialMeta,
+    icon,
     className,
 }) => {
     // -------------------------------------------------------------------------
@@ -125,7 +127,7 @@ const ShowsPanel: React.FC<ShowsPanelProps> = ({
     // -------------------------------------------------------------------------
 
     return (
-        <StatusPanel label="BINGING" className={className}>
+        <StatusPanel label="BINGING" icon={icon} className={className}>
             <ul className={styles.list}>
                 {entries.map((entry, i) => (
                     <li key={i} className={styles.item}>

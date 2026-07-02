@@ -16,12 +16,14 @@ import styles from './GamePanel.module.scss';
 type GamePanelProps = {
     initialEntry: GameEntry;
     initialMeta: RAWGGame | null;
+    icon?: React.ReactNode;
     className?: string;
 };
 
 const GamePanel: React.FC<GamePanelProps> = ({
     initialEntry,
     initialMeta,
+    icon,
     className,
 }) => {
     // -------------------------------------------------------------------------
@@ -140,6 +142,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
     return (
         <StatusPanel
             label="GRINDING"
+            icon={icon}
             headerAction={editButton}
             className={className}
         >

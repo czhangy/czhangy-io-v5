@@ -8,6 +8,7 @@ A status panel displaying the game currently being played, with admin-only inlin
 | -------------- | ------------------ | -------- | ------- | ---------------------------------- |
 | `initialEntry` | `GameEntry`        | Yes      | —       | Game name and RAWG ID from the DB  |
 | `initialMeta`  | `RAWGGame \| null` | Yes      | —       | Cover image and genres from RAWG   |
+| `icon`         | `React.ReactNode`  | No       | —       | Forwarded to the StatusPanel icon  |
 | `className`    | `string`           | No       | —       | Class forwarded to the StatusPanel |
 
 ## State

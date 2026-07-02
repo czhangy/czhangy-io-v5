@@ -2,6 +2,7 @@ import styles from './StatusPanel.module.scss';
 
 type StatusPanelProps = {
     label: string;
+    icon?: React.ReactNode;
     children?: React.ReactNode;
     headerAction?: React.ReactNode;
     className?: string;
@@ -10,6 +11,7 @@ type StatusPanelProps = {
 
 const StatusPanel: React.FC<StatusPanelProps> = ({
     label,
+    icon,
     children,
     headerAction,
     className,
@@ -24,7 +26,10 @@ const StatusPanel: React.FC<StatusPanelProps> = ({
             className={`${styles.panel}${isLoading ? ` ${styles['panel--loading']}` : ''} ${className ?? ''}`}
         >
             <div className={styles.header}>
-                <span className={styles.label}>{label}</span>
+                <div className={styles['header-left']}>
+                    {icon ? <span className={styles.icon}>{icon}</span> : null}
+                    <span className={styles.label}>{label}</span>
+                </div>
                 {headerAction ? (
                     <div className={styles['header-action']}>
                         {headerAction}

@@ -1,13 +1,16 @@
 import { Suspense } from 'react';
-import StatusPanel from '../StatusPanel/StatusPanel';
-import SpotifyPanelData from './SpotifyPanelData/SpotifyPanelData';
+import StatusPanel from '../../StatusPanel/StatusPanel';
+import SkillPanelData from '../SkillPanelData/SkillPanelData';
 
-type SpotifyPanelProps = {
+type SkillPanelLoaderProps = {
     icon?: React.ReactNode;
     className?: string;
 };
 
-const SpotifyPanel: React.FC<SpotifyPanelProps> = ({ icon, className }) => {
+const SkillPanelLoader: React.FC<SkillPanelLoaderProps> = ({
+    icon,
+    className,
+}) => {
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
@@ -16,16 +19,16 @@ const SpotifyPanel: React.FC<SpotifyPanelProps> = ({ icon, className }) => {
         <Suspense
             fallback={
                 <StatusPanel
-                    label="BLASTING"
+                    label="LEARNING"
                     icon={icon}
                     isLoading
                     className={className}
                 />
             }
         >
-            <SpotifyPanelData icon={icon} className={className} />
+            <SkillPanelData icon={icon} className={className} />
         </Suspense>
     );
 };
 
-export default SpotifyPanel;
+export default SkillPanelLoader;

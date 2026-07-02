@@ -4,10 +4,11 @@ A status panel displaying the skill currently being learned, with admin-only inl
 
 ## Props
 
-| Prop           | Type         | Required | Default | Description                         |
-| -------------- | ------------ | -------- | ------- | ----------------------------------- |
-| `initialEntry` | `SkillEntry` | Yes      | —       | Skill name and category from the DB |
-| `className`    | `string`     | No       | —       | Class forwarded to the StatusPanel  |
+| Prop           | Type              | Required | Default | Description                         |
+| -------------- | ----------------- | -------- | ------- | ----------------------------------- |
+| `initialEntry` | `SkillEntry`      | Yes      | —       | Skill name and category from the DB |
+| `icon`         | `React.ReactNode` | No       | —       | Forwarded to the StatusPanel icon   |
+| `className`    | `string`          | No       | —       | Class forwarded to the StatusPanel  |
 
 ## State
 

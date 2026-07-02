@@ -7,6 +7,8 @@ A uniform panel shell used across the Status page dashboard. Renders a labeled h
 | Prop           | Type              | Required | Default | Description                                                             |
 | -------------- | ----------------- | -------- | ------- | ----------------------------------------------------------------------- |
 | `label`        | `string`          | Yes      | —       | Header label displayed in small mono caps                               |
-| `children`     | `React.ReactNode` | Yes      | —       | Panel body content                                                      |
+| `icon`         | `React.ReactNode` | No       | —       | Icon rendered left of the label in the header                           |
+| `children`     | `React.ReactNode` | No       | —       | Panel body content                                                      |
 | `headerAction` | `React.ReactNode` | No       | —       | Element rendered right-aligned in the header; revealed on hover via CSS |
 | `className`    | `string`          | No       | —       | Additional class for grid placement from parent                         |
+| `isLoading`    | `boolean`         | No       | `false` | When true, shows loading animations and suppresses children             |

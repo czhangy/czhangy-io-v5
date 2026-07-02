@@ -1,11 +1,15 @@
 import { prisma } from '@/lib/utils/shared/prisma';
-import LocationPanel from './LocationPanel';
+import LocationPanel from '../LocationPanel';
 
-type LocationPanelLoaderProps = {
+type LocationPanelDataProps = {
+    icon?: React.ReactNode;
     className?: string;
 };
 
-const LocationPanelLoader = async ({ className }: LocationPanelLoaderProps) => {
+const LocationPanelData = async ({
+    icon,
+    className,
+}: LocationPanelDataProps) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
@@ -36,7 +40,13 @@ const LocationPanelLoader = async ({ className }: LocationPanelLoaderProps) => {
     // MARKUP
     // -------------------------------------------------------------------------
 
-    return <LocationPanel initialLocation={location} className={className} />;
+    return (
+        <LocationPanel
+            initialLocation={location}
+            icon={icon}
+            className={className}
+        />
+    );
 };
 
-export default LocationPanelLoader;
+export default LocationPanelData;
