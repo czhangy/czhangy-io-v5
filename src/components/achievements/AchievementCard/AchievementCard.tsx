@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import EditButton from '@/components/common/EditButton/EditButton';
 import { useSession } from '@/lib/context/SessionContext';
@@ -20,17 +20,20 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement }) => {
 
     const router = useRouter();
     const { role } = useSession();
+    const cardRef = useRef<HTMLDivElement>(null);
 
     // -------------------------------------------------------------------------
     // STATE
     // -------------------------------------------------------------------------
 
     const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [isSelected, setIsSelected] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
     // HANDLERS
     // -------------------------------------------------------------------------
 
+    const handleCardClick = (): void => setIsSelected(true);
     const handleEditOpen = (): void => setIsEditing(true);
     const handleEditClose = (): void => setIsEditing(false);
 
@@ -49,11 +52,29 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement }) => {
         '★'.repeat(4 - achievement.tier) + '☆'.repeat(achievement.tier - 1);
 
     // -------------------------------------------------------------------------
+    // EFFECTS
+    // -------------------------------------------------------------------------
+
+    useEffect(() => {
+        const handleDocumentClick = (e: MouseEvent): void => {
+            if (!cardRef.current?.contains(e.target as Node)) {
+                setIsSelected(false);
+            }
+        };
+        document.addEventListener('click', handleDocumentClick);
+        return () => document.removeEventListener('click', handleDocumentClick);
+    }, []);
+
+    // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
 
     return (
-        <div className={styles['achievement-card']}>
+        <div
+            ref={cardRef}
+            className={`${styles['achievement-card']}${isSelected ? ` ${styles['achievement-card--selected']}` : ''}`}
+            onClick={handleCardClick}
+        >
             {role === 'ADMIN' ? (
                 <div className={styles.buttons}>
                     <EditButton
