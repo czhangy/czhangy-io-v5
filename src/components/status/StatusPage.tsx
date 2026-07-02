@@ -1,8 +1,14 @@
 import GlitchText from '@/components/common/GlitchText/GlitchText';
-import { GameEntry, ShowEntry, SkillEntry } from '@/lib/utils';
-import { prisma } from '@/lib/utils/prisma';
-import { getGameById, RAWGGame } from '@/lib/utils/rawg';
-import { getShowById, TVmazeShow } from '@/lib/utils/tvmaze';
+import RAWGHelpers from '@/lib/utils/RAWGHelpers';
+import { prisma } from '@/lib/utils/shared/prisma';
+import {
+    GameEntry,
+    RAWGGame,
+    ShowEntry,
+    SkillEntry,
+    TVmazeShow,
+} from '@/lib/utils/shared/types';
+import TVmazeHelpers from '@/lib/utils/TVmazeHelpers';
 import type { StatusItem } from '@/generated/prisma/client';
 import GamePanel from './GamePanel/GamePanel';
 import LocationPanel from './LocationPanel/LocationPanel';
@@ -57,8 +63,10 @@ const StatusPage = async () => {
 
     const [gameMeta, showsMeta]: [RAWGGame | null, (TVmazeShow | null)[]] =
         await Promise.all([
-            getGameById(gameEntry.rawgId),
-            Promise.all(showEntries.map((e) => getShowById(e.tvmazeId))),
+            RAWGHelpers.getGameById(gameEntry.rawgId),
+            Promise.all(
+                showEntries.map((e) => TVmazeHelpers.getShowById(e.tvmazeId))
+            ),
         ]);
 
     // -------------------------------------------------------------------------

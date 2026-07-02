@@ -44,5 +44,6 @@
 ## External Resources
 
 - [Vercel](https://vercel.com/czhangys-projects/czhangy-io-v5)
+- [Neon](https://console.neon.tech/app/projects/solitary-salad-65474249?database=neondb)
 - [Spotify Developers](https://developer.spotify.com/dashboard)
 - [RAWG](https://rawg.io/@czhangy/apikey)

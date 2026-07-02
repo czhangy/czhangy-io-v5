@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { RAWGSearchResult } from '@/lib/utils/rawg';
+import { RAWGSearchResult } from '@/lib/utils/shared/types';
 
 type RAWGSearchResponse = {
     results: {

@@ -33,12 +33,13 @@ def create_class(args):
     file_path = get_path(args)
 
     file_contents = [
-        '/**\n',
-        ' * Document me!\n',
-        ' */\n'
         f'export default class {args.klass[0]} {{\n',
         DIVIDER_STRING,
-        f'\t// HELPER METHODS\n',
+        f'\t// PRIVATE\n',
+        DIVIDER_STRING,
+        '\n',
+        DIVIDER_STRING,
+        f'\t// PUBLIC\n',
         DIVIDER_STRING,
         '}',
     ]

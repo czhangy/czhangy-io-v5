@@ -3,8 +3,11 @@
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useSession } from '@/lib/context/SessionContext';
-import { GameEntry } from '@/lib/utils';
-import { RAWGGame, RAWGSearchResult } from '@/lib/utils/rawg';
+import {
+    GameEntry,
+    RAWGGame,
+    RAWGSearchResult,
+} from '@/lib/utils/shared/types';
 import PanelEditButton from '../PanelEditButton/PanelEditButton';
 import SearchInput from '../SearchInput/SearchInput';
 import StatusPanel from '../StatusPanel/StatusPanel';

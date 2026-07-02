@@ -5,7 +5,7 @@ import { useSession } from '@/lib/context/SessionContext';
 import CardistryIcon from '@/lib/icons/CardistryIcon';
 import CodingIcon from '@/lib/icons/CodingIcon';
 import MagicIcon from '@/lib/icons/MagicIcon';
-import { SkillCategory, SkillEntry } from '@/lib/utils';
+import { SkillCategory, SkillEntry } from '@/lib/utils/shared/types';
 import PanelEditButton from '../PanelEditButton/PanelEditButton';
 import StatusPanel from '../StatusPanel/StatusPanel';
 import styles from './SkillPanel.module.scss';

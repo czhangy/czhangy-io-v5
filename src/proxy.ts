@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from '@/lib/utils/auth';
+import AuthHelpers from '@/lib/utils/AuthHelpers';
 import {
     ADMIN_ROUTES,
     AUTH_ROUTES,
     SESSION_COOKIE,
-} from '@/lib/utils/constants';
+} from '@/lib/utils/shared/constants';
 
 export const proxy = async (request: NextRequest) => {
     const { pathname } = request.nextUrl;
@@ -16,7 +16,7 @@ export const proxy = async (request: NextRequest) => {
     if (!isAuthRoute && !isAdminRoute) return NextResponse.next();
 
     const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await verifyToken(token) : null;
+    const session = token ? await AuthHelpers.verifyToken(token) : null;
 
     if (isAuthRoute && !session) {
         const loginUrl = new URL('/login', request.url);

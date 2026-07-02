@@ -25,11 +25,17 @@ const AddAchievementModal: React.FC<AddAchievementModalProps> = ({
     const handleSubmit = async (
         values: AchievementFormValues
     ): Promise<void> => {
-        await fetch('/api/achievements', {
+        const res = await fetch('/api/achievements', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(values),
         });
+        if (!res.ok) {
+            const data = (await res.json().catch(() => ({}))) as {
+                error?: string;
+            };
+            throw new Error(data.error ?? 'Failed to create achievement.');
+        }
         router.refresh();
         onClose();
     };

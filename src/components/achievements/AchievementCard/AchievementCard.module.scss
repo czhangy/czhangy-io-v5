@@ -45,6 +45,16 @@
         }
     }
 
+    @media (hover: none) {
+        &--selected .buttons {
+            opacity: 1;
+        }
+
+        .button:active {
+            color: $foreground;
+        }
+    }
+
     .header {
         align-items: baseline;
         display: flex;
