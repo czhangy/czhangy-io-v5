@@ -44,11 +44,15 @@ module.exports = {
 
                 for (const found of scssFiles) {
                     if (found !== expected) {
-                        context.report({
-                            node,
-                            messageId: 'wrongScssName',
-                            data: { found, expected },
-                        });
+                        const scssBase = found.replace('.module.scss', '');
+                        const ownerTsx = path.join(dir, `${scssBase}.tsx`);
+                        if (!fs.existsSync(ownerTsx)) {
+                            context.report({
+                                node,
+                                messageId: 'wrongScssName',
+                                data: { found, expected },
+                            });
+                        }
                     }
                 }
             },
