@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useSession } from '@/lib/context/SessionContext';
 import HomeIcon from '@/lib/icons/HomeIcon';
-import { AUTH_ROUTES, NAV_ITEMS, NavItem } from '@/lib/utils';
+import { AUTH_ROUTES, NAV_ITEMS } from '@/lib/utils/shared/constants';
+import { NavItem } from '@/lib/utils/shared/types';
 import styles from './Navbar.module.scss';
 
 const Navbar: React.FC = () => {

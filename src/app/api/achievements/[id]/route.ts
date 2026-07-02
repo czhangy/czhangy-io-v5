@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from '@/lib/utils/auth';
-import { SESSION_COOKIE } from '@/lib/utils/constants';
-import { prisma } from '@/lib/utils/prisma';
+import AuthHelpers from '@/lib/utils/AuthHelpers';
+import { SESSION_COOKIE } from '@/lib/utils/shared/constants';
+import { prisma } from '@/lib/utils/shared/prisma';
 
 type Params = { params: Promise<{ id: string }> };
 
 export const PATCH = async (request: NextRequest, { params }: Params) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await verifyToken(token) : null;
+    const session = token ? await AuthHelpers.verifyToken(token) : null;
 
     if (!session || session.role !== 'ADMIN') {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -59,7 +59,7 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
 
 export const DELETE = async (request: NextRequest, { params }: Params) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await verifyToken(token) : null;
+    const session = token ? await AuthHelpers.verifyToken(token) : null;
 
     if (!session || session.role !== 'ADMIN') {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

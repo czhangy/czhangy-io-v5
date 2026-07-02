@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import DateHelpers from '@/lib/utils/DateHelpers';
 import styles from './AchievementForm.module.scss';
 
 export type AchievementFormValues = {
@@ -28,6 +29,8 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
     // CONSTANTS
     // -------------------------------------------------------------------------
 
+    const TODAY: string = DateHelpers.getTodayString();
+
     const CATEGORIES: string[] = [
         'Career',
         'Gaming',
@@ -50,7 +53,7 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
     const [description, setDescription] = useState<string>(
         initialValues?.description ?? ''
     );
-    const [date, setDate] = useState<string>(initialValues?.date ?? '');
+    const [date, setDate] = useState<string>(initialValues?.date ?? TODAY);
     const [error, setError] = useState<string>('');
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
@@ -72,7 +75,13 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
         setIsSubmitting(true);
         setError('');
         try {
-            await onSubmit({ tier, name, category, description, date });
+            await onSubmit({
+                tier,
+                name,
+                category,
+                description,
+                date: DateHelpers.normalizeDate(date.trim()),
+            });
         } catch (err) {
             setError(err instanceof Error ? err.message : String(err));
             setIsSubmitting(false);
@@ -87,11 +96,16 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
         if (!name.trim()) return 'Name is required.';
         if (name.trim().length > 24)
             return 'Name must be 24 characters or fewer.';
-        if (!date.trim()) return 'Date is required.';
-        if (
-            !/^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/\d{4}$/.test(date.trim())
-        )
-            return 'Date must be in MM/DD/YYYY format.';
+
+        const dateStr = date.trim();
+        if (!dateStr) return 'Date is required.';
+        const parsed = DateHelpers.parseLooseDate(dateStr);
+        if (!parsed) return 'Date has incorrect format.';
+        if (parsed.getFullYear() < 2019) return 'Date is too early.';
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (parsed > today) return 'Date is in the future.';
+
         if (tier === 0) return 'Tier is required.';
         if (!category) return 'Category is required.';
         if (!description.trim()) return 'Description is required.';

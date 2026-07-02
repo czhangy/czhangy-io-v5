@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import { getRecentlyPlayed, SpotifyTrack } from '@/lib/utils/spotify';
+import { SpotifyTrack } from '@/lib/utils/shared/types';
+import SpotifyHelpers from '@/lib/utils/SpotifyHelpers';
 import StatusPanel from '../StatusPanel/StatusPanel';
 import styles from './SpotifyPanel.module.scss';
 
@@ -12,7 +13,7 @@ const SpotifyPanel = async ({ className }: SpotifyPanelProps) => {
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const track: SpotifyTrack | null = await getRecentlyPlayed();
+    const track: SpotifyTrack | null = await SpotifyHelpers.getRecentlyPlayed();
 
     // -------------------------------------------------------------------------
     // MARKUP

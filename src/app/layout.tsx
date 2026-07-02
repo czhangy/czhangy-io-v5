@@ -6,8 +6,8 @@ import '@/lib/styles/globals.scss';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { cookies } from 'next/headers';
-import { verifyToken } from '@/lib/utils/auth';
-import { SESSION_COOKIE } from '@/lib/utils/constants';
+import AuthHelpers from '@/lib/utils/AuthHelpers';
+import { SESSION_COOKIE } from '@/lib/utils/shared/constants';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -34,7 +34,7 @@ export default async function RootLayout({
 }>) {
     const cookieStore = await cookies();
     const token = cookieStore.get(SESSION_COOKIE)?.value;
-    const session = token ? await verifyToken(token) : null;
+    const session = token ? await AuthHelpers.verifyToken(token) : null;
 
     return (
         <html

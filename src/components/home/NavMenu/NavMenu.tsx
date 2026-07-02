@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSession } from '@/lib/context/SessionContext';
 import LockIcon from '@/lib/icons/LockIcon';
-import { AUTH_ROUTES, NAV_ITEMS, NavItem } from '@/lib/utils';
+import { AUTH_ROUTES, NAV_ITEMS } from '@/lib/utils/shared/constants';
+import { NavItem } from '@/lib/utils/shared/types';
 import styles from './NavMenu.module.scss';
 
 const NavMenu: React.FC = () => {

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { signToken, verifyPassword } from '@/lib/utils/auth';
-import { SESSION_COOKIE } from '@/lib/utils/constants';
-import { prisma } from '@/lib/utils/prisma';
+import AuthHelpers from '@/lib/utils/AuthHelpers';
+import { SESSION_COOKIE } from '@/lib/utils/shared/constants';
+import { prisma } from '@/lib/utils/shared/prisma';
 
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 
@@ -18,10 +18,16 @@ export const POST = async (request: NextRequest) => {
     const users = await prisma.user.findMany();
 
     for (const user of users) {
-        const match = await verifyPassword(password, user.hashedPassword);
+        const match = await AuthHelpers.verifyPassword(
+            password,
+            user.hashedPassword
+        );
 
         if (match) {
-            const token = await signToken({ id: user.id, role: user.role });
+            const token = await AuthHelpers.signToken({
+                id: user.id,
+                role: user.role,
+            });
             const response = NextResponse.json({ role: user.role });
 
             response.cookies.set(SESSION_COOKIE, token, {

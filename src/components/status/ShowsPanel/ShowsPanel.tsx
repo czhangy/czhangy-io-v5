@@ -3,13 +3,12 @@
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useSession } from '@/lib/context/SessionContext';
-import { ShowEntry } from '@/lib/utils';
 import {
-    getShowById,
-    searchShows,
+    ShowEntry,
     TVmazeSearchResult,
     TVmazeShow,
-} from '@/lib/utils/tvmaze';
+} from '@/lib/utils/shared/types';
+import TVmazeHelpers from '@/lib/utils/TVmazeHelpers';
 import PanelEditButton from '../PanelEditButton/PanelEditButton';
 import SearchInput from '../SearchInput/SearchInput';
 import StatusPanel from '../StatusPanel/StatusPanel';
@@ -86,7 +85,7 @@ const ShowsPanel: React.FC<ShowsPanelProps> = ({
         const newEntries = entries.map((e, i) =>
             i === editingIndex ? newEntry : e
         );
-        const newShowMeta = await getShowById(result.id);
+        const newShowMeta = await TVmazeHelpers.getShowById(result.id);
         await fetch('/api/status/shows', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
@@ -110,7 +109,7 @@ const ShowsPanel: React.FC<ShowsPanelProps> = ({
     const performSearch = async (q: string): Promise<void> => {
         setIsSearching(true);
         setSearchResults([]);
-        const results = await searchShows(q);
+        const results = await TVmazeHelpers.searchShows(q);
         setSearchResults(results);
         setIsSearching(false);
     };
