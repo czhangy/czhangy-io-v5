@@ -1,19 +1,19 @@
 import Link from 'next/link';
 import GlitchText from '@/components/common/GlitchText/GlitchText';
-import styles from './StatusPage.module.scss';
+import styles from './InfoPage.module.scss';
 
-type StatusPageProps = {
+type InfoPageProps = {
     title: string;
     subtext: string;
 };
 
-const StatusPage: React.FC<StatusPageProps> = ({ title, subtext }) => {
+const InfoPage: React.FC<InfoPageProps> = ({ title, subtext }) => {
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
 
     return (
-        <div className={styles['status-page']}>
+        <div className={styles['info-page']}>
             <div className={styles.content}>
                 <GlitchText text={title} as="h1" className={styles.title} />
                 <p className={styles.subtext}>{subtext}</p>
@@ -25,4 +25,4 @@ const StatusPage: React.FC<StatusPageProps> = ({ title, subtext }) => {
     );
 };
 
-export default StatusPage;
+export default InfoPage;

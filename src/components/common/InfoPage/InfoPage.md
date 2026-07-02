@@ -1,4 +1,4 @@
-# StatusPage
+# InfoPage
 
 A shared layout for informational full-screen pages — centered title with glitch effect, subtext, and a home link button.
 
