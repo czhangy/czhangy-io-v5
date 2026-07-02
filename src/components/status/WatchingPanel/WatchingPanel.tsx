@@ -12,17 +12,21 @@ import TVmazeHelpers from '@/lib/utils/TVmazeHelpers';
 import PanelEditButton from '../PanelEditButton/PanelEditButton';
 import SearchInput from '../SearchInput/SearchInput';
 import StatusPanel from '../StatusPanel/StatusPanel';
-import styles from './ShowsPanel.module.scss';
+import styles from './WatchingPanel.module.scss';
 
-type ShowsPanelProps = {
+type WatchingPanelProps = {
     initialEntries: ShowEntry[];
     initialMeta: (TVmazeShow | null)[];
+    label: string;
+    icon: React.ReactNode;
     className?: string;
 };
 
-const ShowsPanel: React.FC<ShowsPanelProps> = ({
+const WatchingPanel: React.FC<WatchingPanelProps> = ({
     initialEntries,
     initialMeta,
+    label,
+    icon,
     className,
 }) => {
     // -------------------------------------------------------------------------
@@ -125,7 +129,7 @@ const ShowsPanel: React.FC<ShowsPanelProps> = ({
     // -------------------------------------------------------------------------
 
     return (
-        <StatusPanel label="BINGING" className={className}>
+        <StatusPanel label={label} icon={icon} className={className}>
             <ul className={styles.list}>
                 {entries.map((entry, i) => (
                     <li key={i} className={styles.item}>
@@ -187,4 +191,4 @@ const ShowsPanel: React.FC<ShowsPanelProps> = ({
     );
 };
 
-export default ShowsPanel;
+export default WatchingPanel;

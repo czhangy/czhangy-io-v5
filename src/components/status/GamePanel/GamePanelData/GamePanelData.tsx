@@ -1,13 +1,19 @@
 import RAWGHelpers from '@/lib/utils/RAWGHelpers';
 import { prisma } from '@/lib/utils/shared/prisma';
 import { GameEntry, RAWGGame } from '@/lib/utils/shared/types';
-import GamePanel from './GamePanel';
+import GamePanel from '../GamePanel';
 
-type GamePanelLoaderProps = {
+type GamePanelDataProps = {
+    label: string;
+    icon: React.ReactNode;
     className?: string;
 };
 
-const GamePanelLoader = async ({ className }: GamePanelLoaderProps) => {
+const GamePanelData = async ({
+    label,
+    icon,
+    className,
+}: GamePanelDataProps) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
@@ -52,9 +58,11 @@ const GamePanelLoader = async ({ className }: GamePanelLoaderProps) => {
         <GamePanel
             initialEntry={gameEntry}
             initialMeta={gameMeta}
+            label={label}
+            icon={icon}
             className={className}
         />
     );
 };
 
-export default GamePanelLoader;
+export default GamePanelData;

@@ -1,42 +1,59 @@
 import { prisma } from '@/lib/utils/shared/prisma';
-import LocationPanel from './LocationPanel';
+import { SkillEntry } from '@/lib/utils/shared/types';
+import SkillPanel from '../SkillPanel';
 
-type LocationPanelLoaderProps = {
+type SkillPanelDataProps = {
+    label: string;
+    icon: React.ReactNode;
     className?: string;
 };
 
-const LocationPanelLoader = async ({ className }: LocationPanelLoaderProps) => {
+const SkillPanelData = async ({
+    label,
+    icon,
+    className,
+}: SkillPanelDataProps) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
 
-    const DEFAULT_LOCATION: string = 'Somewhere';
+    const DEFAULT_SKILL_ENTRY: SkillEntry = {
+        name: 'Something',
+        category: 'Coding',
+    };
 
     // -------------------------------------------------------------------------
     // COMPUTATIONS
     // -------------------------------------------------------------------------
 
-    const fetchLocation = async (): Promise<string> => {
+    const fetchSkillEntry = async (): Promise<SkillEntry> => {
         try {
             const item = await prisma.statusItem.findUnique({
-                where: { key: 'location' },
+                where: { key: 'skill' },
             });
-            if (item) return item.value;
+            if (item) return JSON.parse(item.value) as SkillEntry;
         } catch {}
-        return DEFAULT_LOCATION;
+        return DEFAULT_SKILL_ENTRY;
     };
 
     // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const location: string = await fetchLocation();
+    const skillEntry: SkillEntry = await fetchSkillEntry();
 
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
 
-    return <LocationPanel initialLocation={location} className={className} />;
+    return (
+        <SkillPanel
+            initialEntry={skillEntry}
+            label={label}
+            icon={icon}
+            className={className}
+        />
+    );
 };
 
-export default LocationPanelLoader;
+export default SkillPanelData;

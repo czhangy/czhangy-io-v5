@@ -1,3 +1,9 @@
 # SpotifyPanel
 
-A Status page panel that displays the most recently played Spotify track, fetched server-side via the Spotify Web API. Clicking the track opens it in Spotify.
+Suspense boundary for the Spotify panel. Defines the panel label and icon, passes them to both the loading fallback and SpotifyPanelData so they only need to be specified in one place.
+
+## Props
+
+| Prop        | Type     | Required | Default | Description                                        |
+| ----------- | -------- | -------- | ------- | -------------------------------------------------- |
+| `className` | `string` | No       | —       | Forwarded to both the fallback and the track panel |
