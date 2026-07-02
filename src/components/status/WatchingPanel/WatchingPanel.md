@@ -1,6 +1,6 @@
-# ShowsPanel
+# WatchingPanel
 
-A status panel displaying the shows currently being watched, with admin-only inline search per entry to update them via TVmaze.
+A status panel displaying the shows/movies currently being watched, with admin-only inline search per entry to update them via TVmaze.
 
 ## Props
 

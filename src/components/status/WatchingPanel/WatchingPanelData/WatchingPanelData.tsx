@@ -1,19 +1,19 @@
 import { prisma } from '@/lib/utils/shared/prisma';
 import { ShowEntry, TVmazeShow } from '@/lib/utils/shared/types';
 import TVmazeHelpers from '@/lib/utils/TVmazeHelpers';
-import ShowsPanel from '../ShowsPanel';
+import WatchingPanel from '../WatchingPanel';
 
-type ShowsPanelDataProps = {
+type WatchingPanelDataProps = {
     label: string;
     icon: React.ReactNode;
     className?: string;
 };
 
-const ShowsPanelData = async ({
+const WatchingPanelData = async ({
     label,
     icon,
     className,
-}: ShowsPanelDataProps) => {
+}: WatchingPanelDataProps) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
@@ -62,7 +62,7 @@ const ShowsPanelData = async ({
     // -------------------------------------------------------------------------
 
     return (
-        <ShowsPanel
+        <WatchingPanel
             initialEntries={showEntries}
             initialMeta={showsMeta}
             label={label}
@@ -72,4 +72,4 @@ const ShowsPanelData = async ({
     );
 };
 
-export default ShowsPanelData;
+export default WatchingPanelData;

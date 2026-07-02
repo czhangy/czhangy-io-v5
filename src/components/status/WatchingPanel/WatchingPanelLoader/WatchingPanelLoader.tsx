@@ -1,13 +1,15 @@
 import { Suspense } from 'react';
+import WatchingPanelData from '@/components/status/WatchingPanel/WatchingPanelData/WatchingPanelData';
 import TVIcon from '@/lib/icons/TVIcon';
 import StatusPanel from '../../StatusPanel/StatusPanel';
-import ShowsPanelData from '../ShowsPanelData/ShowsPanelData';
 
-type ShowsPanelLoaderProps = {
+type WatchingPanelLoaderProps = {
     className?: string;
 };
 
-const ShowsPanelLoader: React.FC<ShowsPanelLoaderProps> = ({ className }) => {
+const WatchingPanelLoader: React.FC<WatchingPanelLoaderProps> = ({
+    className,
+}) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
@@ -30,9 +32,13 @@ const ShowsPanelLoader: React.FC<ShowsPanelLoaderProps> = ({ className }) => {
                 />
             }
         >
-            <ShowsPanelData label={LABEL} icon={ICON} className={className} />
+            <WatchingPanelData
+                label={LABEL}
+                icon={ICON}
+                className={className}
+            />
         </Suspense>
     );
 };
 
-export default ShowsPanelLoader;
+export default WatchingPanelLoader;
