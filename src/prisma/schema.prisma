@@ -28,7 +28,7 @@ model StatusItem {
 model Achievement {
     id          Int      @id @default(autoincrement())
     tier        Int      @default(1)
-    name        String
+    name        String   @unique
     category    String
     description String
     date        String?

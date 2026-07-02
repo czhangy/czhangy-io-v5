@@ -36,10 +36,23 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
         );
     }
 
-    await prisma.achievement.update({
-        where: { id: parseInt(id) },
-        data: { tier, name, category, description, date },
-    });
+    try {
+        await prisma.achievement.update({
+            where: { id: parseInt(id) },
+            data: { tier, name, category, description, date },
+        });
+    } catch (e) {
+        if (
+            (e as { code?: string }).code === 'P2002' ||
+            (e as { code?: string }).code === '23505'
+        ) {
+            return NextResponse.json(
+                { error: 'An achievement with that name already exists.' },
+                { status: 409 }
+            );
+        }
+        throw e;
+    }
 
     return NextResponse.json({ success: true });
 };

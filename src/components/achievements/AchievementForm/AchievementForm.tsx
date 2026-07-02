@@ -51,7 +51,7 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
         initialValues?.description ?? ''
     );
     const [date, setDate] = useState<string>(initialValues?.date ?? '');
-    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [error, setError] = useState<string>('');
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
@@ -63,20 +63,18 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
     ): Promise<void> => {
         e.preventDefault();
 
-        const newErrors = validate();
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
+        const validationError = validate();
+        if (validationError) {
+            setError(validationError);
             return;
         }
 
         setIsSubmitting(true);
-        setErrors({});
+        setError('');
         try {
             await onSubmit({ tier, name, category, description, date });
-        } catch {
-            setErrors({
-                form: 'Failed to save achievement. Please try again.',
-            });
+        } catch (err) {
+            setError(err instanceof Error ? err.message : String(err));
             setIsSubmitting(false);
         }
     };
@@ -85,42 +83,23 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
     // COMPUTATIONS
     // -------------------------------------------------------------------------
 
-    const validate = (): Record<string, string> => {
-        const newErrors: Record<string, string> = {};
-
-        if (tier === 0) {
-            newErrors.tier = 'Tier is required.';
-        }
-
-        if (!category) {
-            newErrors.category = 'Category is required.';
-        }
-
-        if (!name.trim()) {
-            newErrors.name = 'Name is required.';
-        } else if (name.trim().length > 24) {
-            newErrors.name = 'Name must be 24 characters or fewer.';
-        }
-
-        if (!description.trim()) {
-            newErrors.description = 'Description is required.';
-        } else if (!/^[A-Z]/.test(description.trim())) {
-            newErrors.description =
-                'Description must start with a capital letter.';
-        } else if (!/[.!?]$/.test(description.trim())) {
-            newErrors.description =
-                'Description must end with punctuation (., !, or ?).';
-        }
-
-        if (!date.trim()) {
-            newErrors.date = 'Date is required.';
-        } else if (
+    const validate = (): string => {
+        if (!name.trim()) return 'Name is required.';
+        if (name.trim().length > 24)
+            return 'Name must be 24 characters or fewer.';
+        if (!date.trim()) return 'Date is required.';
+        if (
             !/^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/\d{4}$/.test(date.trim())
-        ) {
-            newErrors.date = 'Date must be in MM/DD/YYYY format.';
-        }
-
-        return newErrors;
+        )
+            return 'Date must be in MM/DD/YYYY format.';
+        if (tier === 0) return 'Tier is required.';
+        if (!category) return 'Category is required.';
+        if (!description.trim()) return 'Description is required.';
+        if (!/^[A-Z]/.test(description.trim()))
+            return 'Description must start with a capital letter.';
+        if (!/[.!?]$/.test(description.trim()))
+            return 'Description must end with punctuation (., !, or ?).';
+        return '';
     };
 
     // -------------------------------------------------------------------------
@@ -140,9 +119,6 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
                             setName(e.target.value)
                         }
                     />
-                    {errors.name ? (
-                        <span className={styles.error}>{errors.name}</span>
-                    ) : null}
                 </div>
                 <div className={styles.field}>
                     <span className={styles.label}>Date</span>
@@ -154,9 +130,6 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
                             setDate(e.target.value)
                         }
                     />
-                    {errors.date ? (
-                        <span className={styles.error}>{errors.date}</span>
-                    ) : null}
                 </div>
             </div>
             <div className={styles.row}>
@@ -178,9 +151,6 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
                             </option>
                         ))}
                     </select>
-                    {errors.tier ? (
-                        <span className={styles.error}>{errors.tier}</span>
-                    ) : null}
                 </div>
                 <div className={styles.field}>
                     <span className={styles.label}>Category</span>
@@ -200,9 +170,6 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
                             </option>
                         ))}
                     </select>
-                    {errors.category ? (
-                        <span className={styles.error}>{errors.category}</span>
-                    ) : null}
                 </div>
             </div>
             <div className={styles.field}>
@@ -214,13 +181,8 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
                         setDescription(e.target.value)
                     }
                 />
-                {errors.description ? (
-                    <span className={styles.error}>{errors.description}</span>
-                ) : null}
             </div>
-            {errors.form ? (
-                <span className={styles.error}>{errors.form}</span>
-            ) : null}
+            {error ? <span className={styles.error}>{error}</span> : null}
             <div className={styles.actions}>
                 <button
                     className={styles['cancel-button']}
