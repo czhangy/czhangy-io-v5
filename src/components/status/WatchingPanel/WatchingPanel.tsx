@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useSession } from '@/lib/context/SessionContext';
+import { Key } from '@/lib/utils/shared/enums';
 import {
     ShowEntry,
     TVmazeSearchResult,
@@ -103,7 +104,7 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Escape') handleCancel();
+        if (e.key === Key.Escape) handleCancel();
     };
 
     // -------------------------------------------------------------------------

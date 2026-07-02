@@ -5,6 +5,7 @@ import { useSession } from '@/lib/context/SessionContext';
 import CardistryIcon from '@/lib/icons/CardistryIcon';
 import CodingIcon from '@/lib/icons/CodingIcon';
 import MagicIcon from '@/lib/icons/MagicIcon';
+import { Key } from '@/lib/utils/shared/enums';
 import { SkillCategory, SkillEntry } from '@/lib/utils/shared/types';
 import PanelEditButton from '../PanelEditButton/PanelEditButton';
 import StatusPanel from '../StatusPanel/StatusPanel';
@@ -83,8 +84,8 @@ const SkillPanel: React.FC<SkillPanelProps> = ({
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') handleSave();
-        if (e.key === 'Escape') handleCancel();
+        if (e.key === Key.Enter) handleSave();
+        if (e.key === Key.Escape) handleCancel();
     };
 
     // -------------------------------------------------------------------------

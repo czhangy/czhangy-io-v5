@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useSession } from '@/lib/context/SessionContext';
+import { Key } from '@/lib/utils/shared/enums';
 import {
     GameEntry,
     RAWGGame,
@@ -112,8 +113,8 @@ const GamePanel: React.FC<GamePanelProps> = ({
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Escape') handleCancel();
-        if (e.key === 'Enter') handleSaveAsTyped();
+        if (e.key === Key.Escape) handleCancel();
+        if (e.key === Key.Enter) handleSaveAsTyped();
     };
 
     // -------------------------------------------------------------------------

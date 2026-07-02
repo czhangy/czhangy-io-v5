@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useSession } from '@/lib/context/SessionContext';
 import HomeIcon from '@/lib/icons/HomeIcon';
 import { AUTH_ROUTES, NAV_ITEMS } from '@/lib/utils/shared/constants';
+import { Key } from '@/lib/utils/shared/enums';
 import { NavItem } from '@/lib/utils/shared/types';
 import styles from './Navbar.module.scss';
 
@@ -75,7 +76,7 @@ const Navbar: React.FC = () => {
         };
 
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') setIsOpen(false);
+            if (e.key === Key.Escape) setIsOpen(false);
         };
 
         document.addEventListener('mousedown', handleOutsideClick);

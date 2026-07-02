@@ -2,10 +2,9 @@ import { NavItem } from './types';
 
 export const SESSION_COOKIE = 'session';
 
+// Routes
 export const AUTH_ROUTES = ['/logs'];
-
 export const ADMIN_ROUTES = ['/register'];
-
 export const NAV_ITEMS: NavItem[] = [
     { href: '/status', label: 'Status' },
     { href: '/career', label: 'Career' },

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from '@/lib/context/SessionContext';
 import LockIcon from '@/lib/icons/LockIcon';
 import { AUTH_ROUTES, NAV_ITEMS } from '@/lib/utils/shared/constants';
+import { Key } from '@/lib/utils/shared/enums';
 import { NavItem } from '@/lib/utils/shared/types';
 import styles from './NavMenu.module.scss';
 
@@ -57,13 +58,13 @@ const NavMenu: React.FC = () => {
         };
 
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Enter') {
+            if (e.key === Key.Enter) {
                 const { href } = allItems[activeIndex];
                 if (!checkProtected(href)) router.push(href);
-            } else if (e.key === 'ArrowDown' || e.key === 's') {
+            } else if (e.key === Key.Down || e.key === Key.S) {
                 e.preventDefault();
                 step(1);
-            } else if (e.key === 'ArrowUp' || e.key === 'w') {
+            } else if (e.key === Key.Up || e.key === Key.W) {
                 e.preventDefault();
                 step(-1);
             }

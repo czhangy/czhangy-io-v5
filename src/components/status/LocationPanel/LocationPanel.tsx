@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useSession } from '@/lib/context/SessionContext';
+import { Key } from '@/lib/utils/shared/enums';
 import PanelEditButton from '../PanelEditButton/PanelEditButton';
 import StatusPanel from '../StatusPanel/StatusPanel';
 import styles from './LocationPanel.module.scss';
@@ -59,8 +60,8 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') handleSave();
-        if (e.key === 'Escape') handleCancel();
+        if (e.key === Key.Enter) handleSave();
+        if (e.key === Key.Escape) handleCancel();
     };
 
     // -------------------------------------------------------------------------
