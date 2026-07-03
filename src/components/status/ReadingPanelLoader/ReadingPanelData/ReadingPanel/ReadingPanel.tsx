@@ -6,6 +6,7 @@ import PanelButton from '@/components/status/PanelButton/PanelButton';
 import SearchInput from '@/components/status/SearchInput/SearchInput';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { useSession } from '@/lib/context/SessionContext';
+import LinkIcon from '@/lib/icons/LinkIcon';
 import PlusIcon from '@/lib/icons/PlusIcon';
 import { Key } from '@/lib/static/enums';
 import { BookSearchResult, ReadMediaEntry } from '@/lib/static/types';
@@ -125,10 +126,14 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
 
     const isAdmin: boolean = role === 'ADMIN';
 
-    const headerActions: React.ReactNode =
-        isAdmin && !isAdding ? (
-            <PanelButton onClick={handleStartAdd} icon={<PlusIcon />} />
-        ) : null;
+    const headerActions: React.ReactNode = (
+        <>
+            <PanelButton href="/status/library" icon={<LinkIcon />} />
+            {isAdmin && !isAdding ? (
+                <PanelButton onClick={handleStartAdd} icon={<PlusIcon />} />
+            ) : null}
+        </>
+    );
 
     // -------------------------------------------------------------------------
     // MARKUP

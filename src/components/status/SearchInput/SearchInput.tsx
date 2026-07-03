@@ -16,6 +16,7 @@ type SearchInputProps = {
     onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     onClear: () => void;
     onSelectResult: (id: string | number) => void;
+    hideClear?: boolean;
 };
 
 const SearchInput: React.FC<SearchInputProps> = ({
@@ -27,6 +28,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
     onKeyDown,
     onClear,
     onSelectResult,
+    hideClear,
 }) => {
     // -------------------------------------------------------------------------
     // HOOKS
@@ -68,7 +70,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
             />
             {isSearching ? (
                 <span className={styles.spinner} />
-            ) : (
+            ) : !hideClear ? (
                 <button
                     type="button"
                     className={styles.clear}
@@ -76,7 +78,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
                 >
                     ✕
                 </button>
-            )}
+            ) : null}
             {results.length > 0 ? (
                 <ul className={styles.dropdown}>
                     {results.map((result) => (
