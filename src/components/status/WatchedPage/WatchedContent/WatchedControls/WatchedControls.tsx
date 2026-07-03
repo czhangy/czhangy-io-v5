@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import PaginationControls from '@/components/common/PaginationControls/PaginationControls';
 import { WatchedMediaEntry } from '@/lib/static/types';
 import AddContentModal from './AddContentModal/AddContentModal';
@@ -36,6 +37,11 @@ const WatchedControls: React.FC<WatchedControlsProps> = ({
     return (
         <div className={styles['watched-controls']}>
             <div className={styles.left}>
+                <Link className={styles['back-button']} href="/status">
+                    ← Back to Status
+                </Link>
+            </div>
+            <div className={styles.right}>
                 {isAdmin ? (
                     <button
                         className={styles['add-button']}
@@ -51,8 +57,6 @@ const WatchedControls: React.FC<WatchedControlsProps> = ({
                         onAdd={onAdd}
                     />
                 ) : null}
-            </div>
-            <div className={styles.right}>
                 <PaginationControls
                     page={page}
                     totalPages={totalPages}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import PaginationControls from '@/components/common/PaginationControls/PaginationControls';
 import { ReadMediaEntry } from '@/lib/static/types';
 import AddBookModal from './AddBookModal/AddBookModal';
@@ -36,6 +37,11 @@ const LibraryControls: React.FC<LibraryControlsProps> = ({
     return (
         <div className={styles['library-controls']}>
             <div className={styles.left}>
+                <Link className={styles['back-button']} href="/status">
+                    ← Back to Status
+                </Link>
+            </div>
+            <div className={styles.right}>
                 {isAdmin ? (
                     <button
                         className={styles['add-button']}
@@ -51,8 +57,6 @@ const LibraryControls: React.FC<LibraryControlsProps> = ({
                         onAdd={onAdd}
                     />
                 ) : null}
-            </div>
-            <div className={styles.right}>
                 <PaginationControls
                     page={page}
                     totalPages={totalPages}
