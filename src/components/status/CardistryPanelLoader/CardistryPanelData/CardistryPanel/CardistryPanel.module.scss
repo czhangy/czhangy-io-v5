@@ -10,6 +10,23 @@
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+
+    .metadata {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+
+        .type-tag {
+            @include mono-label;
+
+            border: 1px solid $border-subtle;
+            color: $text-dim;
+            flex-shrink: 0;
+            font-size: 0.6rem;
+            letter-spacing: 0.05em;
+            padding: 0.1rem 0.3rem;
+        }
+    }
 }
 
 .edit-form {

@@ -143,6 +143,13 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
                     <span className={styles.name}>
                         {activeMove?.name ?? '—'}
                     </span>
+                    {activeMove?.type ? (
+                        <div className={styles.metadata}>
+                            <span className={styles['type-tag']}>
+                                {activeMove.type}
+                            </span>
+                        </div>
+                    ) : null}
                 </div>
             )}
         </StatusPanel>

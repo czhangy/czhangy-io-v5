@@ -91,6 +91,11 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                 {paginatedMoves.map((move) => (
                     <li key={move.id} className={styles.item}>
                         <span className={styles.name}>{move.name}</span>
+                        <div className={styles.metadata}>
+                            <span className={styles['type-tag']}>
+                                {move.type}
+                            </span>
+                        </div>
                     </li>
                 ))}
             </ul>
