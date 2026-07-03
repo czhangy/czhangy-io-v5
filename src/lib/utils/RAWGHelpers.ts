@@ -1,4 +1,4 @@
-import { RAWGGame } from './shared/types';
+import { RAWGGame } from '@/lib/static/types';
 
 type RAWGGameResponse = {
     background_image: string | null;

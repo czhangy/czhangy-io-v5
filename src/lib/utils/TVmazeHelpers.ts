@@ -1,4 +1,4 @@
-import { TVmazeSearchResult, TVmazeShow } from './shared/types';
+import { TVmazeSearchResult, TVmazeShow } from '@/lib/static/types';
 
 type TVmazeShowResponse = {
     url: string;

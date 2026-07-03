@@ -6,7 +6,7 @@ import {
     LOGGED_OUT_NAV_ITEMS,
     NAV_ITEMS,
 } from '@/lib/static/constants';
-import { NavItem, Session, UserRole } from './shared/types';
+import { NavItem, Session, UserRole } from '@/lib/static/types';
 
 export default class AuthHelpers {
     // -------------------------------------------------------------------------
