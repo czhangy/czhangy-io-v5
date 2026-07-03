@@ -2,6 +2,12 @@ import { NavItem } from './types';
 
 export const SESSION_COOKIE = 'session';
 
+export const WATCHED_MILESTONES = [
+    { count: 50, name: 'Amateur Watcher', tier: 1 },
+    { count: 250, name: 'Dedicated Watcher', tier: 2 },
+    { count: 500, name: 'Professional Watcher', tier: 3 },
+];
+
 // Routes
 export const AUTH_ROUTES = ['/logs'];
 export const ADMIN_ROUTES = ['/register'];
