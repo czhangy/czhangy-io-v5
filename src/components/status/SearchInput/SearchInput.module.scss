@@ -14,7 +14,7 @@
     .input {
         @include mono-label;
 
-        background: transparent;
+        background: $background;
         border: 1px solid $border-subtle;
         color: $foreground;
         font-size: 0.85rem;
@@ -25,6 +25,7 @@
 
         &:focus {
             border-color: $accent;
+            box-shadow: 0 0 6px rgba($accent, 0.35);
         }
     }
 
