@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import Image from 'next/image';
-import PanelEditButton from '@/components/status/PanelEditButton/PanelEditButton';
+import PanelButton from '@/components/status/PanelButton/PanelButton';
 import SearchInput from '@/components/status/SearchInput/SearchInput';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { useSession } from '@/lib/context/SessionContext';
@@ -134,7 +134,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
     const isAdmin: boolean = role === 'ADMIN';
 
     const editButton: React.ReactNode =
-        isAdmin && !isEditing ? <PanelEditButton onClick={handleEdit} /> : null;
+        isAdmin && !isEditing ? <PanelButton onClick={handleEdit} /> : null;
 
     // -------------------------------------------------------------------------
     // MARKUP

@@ -2,10 +2,11 @@
 
 import { useRef, useState } from 'react';
 import Image from 'next/image';
-import PanelEditButton from '@/components/status/PanelEditButton/PanelEditButton';
+import PanelButton from '@/components/status/PanelButton/PanelButton';
 import SearchInput from '@/components/status/SearchInput/SearchInput';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { useSession } from '@/lib/context/SessionContext';
+import PlusIcon from '@/lib/icons/PlusIcon';
 import { Key } from '@/lib/static/enums';
 import { ShowEntry, TVmazeSearchResult, TVmazeShow } from '@/lib/static/types';
 import TVmazeHelpers from '@/lib/utils/TVmazeHelpers';
@@ -36,12 +37,18 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     const { role } = useSession();
 
     // -------------------------------------------------------------------------
+    // CONSTANTS
+    // -------------------------------------------------------------------------
+
+    const MAX_SHOWS = 5;
+
+    // -------------------------------------------------------------------------
     // STATE
     // -------------------------------------------------------------------------
 
     const [entries, setEntries] = useState<ShowEntry[]>(initialEntries);
     const [meta, setMeta] = useState<(TVmazeShow | null)[]>(initialMeta);
-    const [editingIndex, setEditingIndex] = useState<number | null>(null);
+    const [isAdding, setIsAdding] = useState<boolean>(false);
     const [query, setQuery] = useState<string>('');
     const [searchResults, setSearchResults] = useState<TVmazeSearchResult[]>(
         []
@@ -52,15 +59,15 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     // HANDLERS
     // -------------------------------------------------------------------------
 
-    const handleEdit = (index: number) => {
-        setEditingIndex(index);
-        setQuery(entries[index].name === '???' ? '' : entries[index].name);
+    const handleStartAdd = () => {
+        setIsAdding(true);
+        setQuery('');
         setSearchResults([]);
     };
 
     const handleCancel = () => {
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        setEditingIndex(null);
+        setIsAdding(false);
         setQuery('');
         setSearchResults([]);
         setIsSearching(false);
@@ -80,14 +87,11 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     };
 
     const handleSelectResult = async (id: number) => {
-        if (editingIndex === null) return;
         const result = searchResults.find((r) => r.id === id);
         if (!result) return;
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
         const newEntry: ShowEntry = { name: result.name, tvmazeId: result.id };
-        const newEntries = entries.map((e, i) =>
-            i === editingIndex ? newEntry : e
-        );
+        const newEntries = [newEntry, ...entries].slice(0, MAX_SHOWS);
         const newShowMeta = await TVmazeHelpers.getShowById(result.id);
         await fetch('/api/status/shows', {
             method: 'PATCH',
@@ -95,8 +99,8 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
             body: JSON.stringify({ value: JSON.stringify(newEntries) }),
         });
         setEntries(newEntries);
-        setMeta(meta.map((m, i) => (i === editingIndex ? newShowMeta : m)));
-        setEditingIndex(null);
+        setMeta([newShowMeta, ...meta].slice(0, MAX_SHOWS));
+        setIsAdding(false);
         setQuery('');
         setSearchResults([]);
     };
@@ -123,40 +127,52 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
 
     const isAdmin: boolean = role === 'ADMIN';
 
+    const addButton: React.ReactNode =
+        isAdmin && !isAdding ? (
+            <PanelButton onClick={handleStartAdd} icon={<PlusIcon />} />
+        ) : null;
+
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
 
     return (
-        <StatusPanel label={label} icon={icon} cols={cols} rows={rows}>
-            <ul className={styles.list}>
-                {entries.map((entry, i) => (
-                    <li key={i} className={styles.item}>
-                        {meta[i]?.poster ? (
-                            <Image
-                                className={styles.poster}
-                                src={meta[i]!.poster!}
-                                alt={`${entry.name} poster`}
-                                width={43}
-                                height={60}
-                            />
-                        ) : (
-                            <div className={styles['poster-placeholder']} />
-                        )}
-                        {editingIndex === i ? (
-                            <div className={styles['edit-form']}>
-                                <SearchInput
-                                    value={query}
-                                    placeholder="Search shows..."
-                                    isSearching={isSearching}
-                                    results={searchResults}
-                                    onChange={handleQueryChange}
-                                    onKeyDown={handleKeyDown}
-                                    onClear={handleCancel}
-                                    onSelectResult={handleSelectResult}
+        <StatusPanel
+            label={label}
+            icon={icon}
+            cols={cols}
+            rows={rows}
+            headerAction={addButton}
+        >
+            <div className={styles.content}>
+                {isAdding ? (
+                    <div className={styles['add-form']}>
+                        <SearchInput
+                            value={query}
+                            placeholder="Search shows..."
+                            isSearching={isSearching}
+                            results={searchResults}
+                            onChange={handleQueryChange}
+                            onKeyDown={handleKeyDown}
+                            onClear={handleCancel}
+                            onSelectResult={handleSelectResult}
+                        />
+                    </div>
+                ) : null}
+                <ul className={styles.list}>
+                    {entries.map((entry, i) => (
+                        <li key={i} className={styles.item}>
+                            {meta[i]?.poster ? (
+                                <Image
+                                    className={styles.poster}
+                                    src={meta[i]!.poster!}
+                                    alt={`${entry.name} poster`}
+                                    width={43}
+                                    height={60}
                                 />
-                            </div>
-                        ) : (
+                            ) : (
+                                <div className={styles['poster-placeholder']} />
+                            )}
                             <div className={styles.info}>
                                 <span className={styles.title}>
                                     {entry.name}
@@ -179,13 +195,10 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
                                     </div>
                                 ) : null}
                             </div>
-                        )}
-                        {isAdmin && editingIndex !== i ? (
-                            <PanelEditButton onClick={() => handleEdit(i)} />
-                        ) : null}
-                    </li>
-                ))}
-            </ul>
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </StatusPanel>
     );
 };

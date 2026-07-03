@@ -1,20 +1,21 @@
 import EditIcon from '@/lib/icons/EditIcon';
-import styles from './PanelEditButton.module.scss';
+import styles from './PanelButton.module.scss';
 
-type PanelEditButtonProps = {
+type PanelButtonProps = {
     onClick: () => void;
+    icon?: React.ReactNode;
 };
 
-const PanelEditButton: React.FC<PanelEditButtonProps> = ({ onClick }) => {
+const PanelButton: React.FC<PanelButtonProps> = ({ onClick, icon }) => {
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
 
     return (
         <button type="button" className={styles.button} onClick={onClick}>
-            <EditIcon />
+            {icon ?? <EditIcon />}
         </button>
     );
 };
 
-export default PanelEditButton;
+export default PanelButton;

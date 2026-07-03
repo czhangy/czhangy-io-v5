@@ -1,6 +1,6 @@
 # WatchingPanel
 
-A status panel displaying the shows/movies currently being watched, with admin-only inline search per entry to update them via TVmaze.
+A status panel displaying the 5 most recently added shows, with an admin-only "+" button in the header to add a new show via TVmaze search. Adding a show prepends it to the list and drops the oldest entry, keeping the list at 5.
 
 ## Props
 
@@ -15,14 +15,14 @@ A status panel displaying the shows/movies currently being watched, with admin-o
 
 ## State
 
-| State           | Type                     | Initial value    | Description                             |
-| --------------- | ------------------------ | ---------------- | --------------------------------------- |
-| `entries`       | `ShowEntry[]`            | `initialEntries` | Currently displayed shows               |
-| `meta`          | `(TVmazeShow \| null)[]` | `initialMeta`    | Poster and genre data for each show     |
-| `editingIndex`  | `number \| null`         | `null`           | Index of the row currently being edited |
-| `query`         | `string`                 | `''`             | Controlled search input value           |
-| `searchResults` | `TVmazeSearchResult[]`   | `[]`             | Results from the TVmaze search          |
-| `isSearching`   | `boolean`                | `false`          | Whether a search fetch is in progress   |
+| State           | Type                     | Initial value    | Description                                   |
+| --------------- | ------------------------ | ---------------- | --------------------------------------------- |
+| `entries`       | `ShowEntry[]`            | `initialEntries` | Currently displayed shows (most recent first) |
+| `meta`          | `(TVmazeShow \| null)[]` | `initialMeta`    | Poster and genre data for each show           |
+| `isAdding`      | `boolean`                | `false`          | Whether the add search form is visible        |
+| `query`         | `string`                 | `''`             | Controlled search input value                 |
+| `searchResults` | `TVmazeSearchResult[]`   | `[]`             | Results from the TVmaze search                |
+| `isSearching`   | `boolean`                | `false`          | Whether a search fetch is in progress         |
 
 ## Effects
 
@@ -30,4 +30,7 @@ A status panel displaying the shows/movies currently being watched, with admin-o
 
 ## Computations
 
-- `performSearch` — calls `searchShows` from tvmaze.ts and updates `searchResults`
+- `MAX_SHOWS` — maximum number of shows to display (5)
+- `isAdmin` — whether the current session role is `ADMIN`
+- `addButton` — the `PanelButton` with a `PlusIcon` passed as `headerAction`, rendered only when admin and not currently adding
+- `performSearch` — calls `searchShows` from TVmazeHelpers and updates `searchResults`

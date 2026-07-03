@@ -1,74 +1,80 @@
 @use '@/styles/constants' as *;
 @use '@/styles/mixins' as *;
 
-.list {
+.content {
     align-self: stretch;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    gap: 0.5rem;
     width: 100%;
 
-    .item {
-        align-items: center;
+    .add-form {
+        flex-shrink: 0;
+    }
+
+    .list {
         display: flex;
-        gap: 0.6rem;
-        padding-right: 0.35rem;
+        flex: 1;
+        flex-direction: column;
+        justify-content: space-between;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
 
-        .poster {
-            border-radius: 2px;
-            flex-shrink: 0;
-            object-fit: cover;
-        }
-
-        .poster-placeholder {
-            background: rgba($foreground, 0.08);
-            border-radius: 2px;
-            flex-shrink: 0;
-            height: 60px;
-            width: 43px;
-        }
-
-        .info {
+        .item {
+            align-items: center;
             display: flex;
-            flex: 1;
-            flex-direction: column;
-            gap: 0.25rem;
-            min-width: 0;
+            gap: 0.6rem;
+            padding-right: 0.35rem;
 
-            .title {
-                @include mono-label;
-
-                font-size: 0.85rem;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
+            .poster {
+                border-radius: 2px;
+                flex-shrink: 0;
+                object-fit: cover;
             }
 
-            .metadata {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 0.25rem;
+            .poster-placeholder {
+                background: rgba($foreground, 0.08);
+                border-radius: 2px;
+                flex-shrink: 0;
+                height: 60px;
+                width: 43px;
+            }
 
-                .genre-tag {
+            .info {
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+                gap: 0.25rem;
+                min-width: 0;
+
+                .title {
                     @include mono-label;
 
-                    border: 1px solid $border-subtle;
-                    color: $text-dim;
-                    flex-shrink: 0;
-                    font-size: 0.6rem;
-                    letter-spacing: 0.05em;
-                    padding: 0.1rem 0.3rem;
+                    font-size: 0.85rem;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+
+                .metadata {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 0.25rem;
+
+                    .genre-tag {
+                        @include mono-label;
+
+                        border: 1px solid $border-subtle;
+                        color: $text-dim;
+                        flex-shrink: 0;
+                        font-size: 0.6rem;
+                        letter-spacing: 0.05em;
+                        padding: 0.1rem 0.3rem;
+                    }
                 }
             }
-        }
-
-        .edit-form {
-            display: flex;
-            flex: 1;
-            min-width: 0;
         }
     }
 }

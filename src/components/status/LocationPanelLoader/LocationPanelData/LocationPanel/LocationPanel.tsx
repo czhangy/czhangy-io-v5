@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import PanelEditButton from '@/components/status/PanelEditButton/PanelEditButton';
+import PanelButton from '@/components/status/PanelButton/PanelButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { useSession } from '@/lib/context/SessionContext';
 import { Key } from '@/lib/static/enums';
@@ -71,7 +71,7 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
     const isAdmin: boolean = role === 'ADMIN';
 
     const editButton: React.ReactNode =
-        isAdmin && !isEditing ? <PanelEditButton onClick={handleEdit} /> : null;
+        isAdmin && !isEditing ? <PanelButton onClick={handleEdit} /> : null;
 
     // -------------------------------------------------------------------------
     // MARKUP
