@@ -2,6 +2,7 @@ import { NavItem } from './types';
 
 export const SESSION_COOKIE = 'session';
 
+// Milestones
 export const WATCHED_MILESTONES = [
     { count: 50, name: 'Amateur Watcher', tier: 1 },
     { count: 250, name: 'Dedicated Watcher', tier: 2 },
