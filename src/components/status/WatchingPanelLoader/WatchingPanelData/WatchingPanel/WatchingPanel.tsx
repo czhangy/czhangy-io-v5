@@ -6,6 +6,7 @@ import PanelButton from '@/components/status/PanelButton/PanelButton';
 import SearchInput from '@/components/status/SearchInput/SearchInput';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { useSession } from '@/lib/context/SessionContext';
+import LinkIcon from '@/lib/icons/LinkIcon';
 import PlusIcon from '@/lib/icons/PlusIcon';
 import { Key } from '@/lib/static/enums';
 import { TMDBSearchResult, WatchedMediaEntry } from '@/lib/static/types';
@@ -127,10 +128,14 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
 
     const isAdmin: boolean = role === 'ADMIN';
 
-    const addButton: React.ReactNode =
-        isAdmin && !isAdding ? (
-            <PanelButton onClick={handleStartAdd} icon={<PlusIcon />} />
-        ) : null;
+    const headerActions: React.ReactNode = (
+        <>
+            <PanelButton href="/status/watched" icon={<LinkIcon />} />
+            {isAdmin && !isAdding ? (
+                <PanelButton onClick={handleStartAdd} icon={<PlusIcon />} />
+            ) : null}
+        </>
+    );
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -142,7 +147,7 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
             icon={icon}
             cols={cols}
             rows={rows}
-            headerAction={addButton}
+            headerAction={headerActions}
         >
             <div className={styles.content}>
                 {isAdding ? (

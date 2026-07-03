@@ -75,7 +75,7 @@ src/components/career/
 
 Do **not** create a `CareerPage/` subdirectory inside `career/` just to hold `CareerPage.tsx`. The domain directory itself serves as that container.
 
-When a domain contains **multiple distinct page components** (e.g. `auth/` has both `LoginPage` and `RegisterPage`), each page gets its own subdirectory as usual:
+When a domain contains **multiple distinct page components at the same route level** (e.g. `auth/` has both `LoginPage` at `/auth/login` and `RegisterPage` at `/auth/register`), each page gets its own subdirectory as usual:
 
 ```
 src/components/auth/
@@ -86,6 +86,19 @@ src/components/auth/
   RegisterPage/
     RegisterPage.tsx
     ...
+```
+
+Pages at **different route levels** within the same domain do not trigger this rule. If `StatusPage` lives at `/status` and `WatchedPage` lives at `/status/watched`, `StatusPage` stays at the domain root and `WatchedPage` gets its own subdirectory — the domain root is not reorganized just because a subroute page was added:
+
+```
+src/components/status/
+  StatusPage.tsx          ← domain root, page for /status
+  StatusPage.module.scss
+  StatusPage.md
+  WatchedPage/            ← subroute page for /status/watched
+    WatchedPage.tsx
+    WatchedPage.module.scss
+    WatchedPage.md
 ```
 
 **Component co-location**: If a child component is only used by a single parent component, place its directory inside the parent's directory rather than as a sibling. Components used by multiple parents live at the nearest shared ancestor level.

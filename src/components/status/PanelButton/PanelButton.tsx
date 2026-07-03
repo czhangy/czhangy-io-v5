@@ -1,19 +1,35 @@
+import Link from 'next/link';
 import EditIcon from '@/lib/icons/EditIcon';
 import styles from './PanelButton.module.scss';
 
 type PanelButtonProps = {
-    onClick: () => void;
     icon?: React.ReactNode;
+    href?: string;
+    onClick?: () => void;
 };
 
-const PanelButton: React.FC<PanelButtonProps> = ({ onClick, icon }) => {
+const PanelButton: React.FC<PanelButtonProps> = ({ icon, href, onClick }) => {
+    // -------------------------------------------------------------------------
+    // RENDERING
+    // -------------------------------------------------------------------------
+
+    const content = icon ?? <EditIcon />;
+
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
 
+    if (href) {
+        return (
+            <Link href={href} className={styles.button}>
+                {content}
+            </Link>
+        );
+    }
+
     return (
         <button type="button" className={styles.button} onClick={onClick}>
-            {icon ?? <EditIcon />}
+            {content}
         </button>
     );
 };
