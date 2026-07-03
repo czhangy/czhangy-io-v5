@@ -1,6 +1,7 @@
 import GlitchText from '@/components/common/GlitchText/GlitchText';
 import GamePanelLoader from './GamePanelLoader/GamePanelLoader';
 import LocationPanelLoader from './LocationPanelLoader/LocationPanelLoader';
+import ReadingPanelLoader from './ReadingPanelLoader/ReadingPanelLoader';
 import SkillPanelLoader from './SkillPanelLoader/SkillPanelLoader';
 import SpotifyPanel from './SpotifyPanel/SpotifyPanel';
 import styles from './StatusPage.module.scss';
@@ -21,6 +22,7 @@ const StatusPage: React.FC = () => {
                     <WatchingPanelLoader cols={6} rows={3} />
                     <GamePanelLoader cols={5} />
                     <SkillPanelLoader cols={5} />
+                    <ReadingPanelLoader cols={6} rows={2} />
                 </div>
             </div>
         </div>

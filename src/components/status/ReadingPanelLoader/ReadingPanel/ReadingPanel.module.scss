@@ -1,0 +1,50 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.list {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-between;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+
+    .item {
+        align-items: center;
+        display: flex;
+        gap: 0.6rem;
+        padding-right: 0.35rem;
+
+        .cover-placeholder {
+            background: rgba($foreground, 0.08);
+            border-radius: 2px;
+            flex-shrink: 0;
+            height: 60px;
+            width: 43px;
+        }
+
+        .info {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            gap: 0.35rem;
+            min-width: 0;
+
+            .name-placeholder {
+                background: rgba($foreground, 0.08);
+                border-radius: 2px;
+                height: 0.75rem;
+                width: 70%;
+            }
+
+            .genre-placeholder {
+                background: rgba($foreground, 0.05);
+                border-radius: 2px;
+                height: 0.5rem;
+                width: 40%;
+            }
+        }
+    }
+}
