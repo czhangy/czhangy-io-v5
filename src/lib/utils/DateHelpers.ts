@@ -3,7 +3,7 @@ export default class DateHelpers {
     // PUBLIC
     // -------------------------------------------------------------------------
 
-    static getTodayStrin = (): string => {
+    static getTodayString = (): string => {
         const d = new Date();
         return [
             String(d.getMonth() + 1).padStart(2, '0'),

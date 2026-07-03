@@ -3,9 +3,9 @@
 import { useEffect, useReducer } from 'react';
 import DateHelpers from '@/lib/utils/DateHelpers';
 import type { Achievement } from '@/generated/prisma/client';
-import AchievementCard from '../AchievementCard/AchievementCard';
-import AchievementsControls from '../AchievementsControls/AchievementsControls';
+import AchievementCard from './AchievementCard/AchievementCard';
 import styles from './AchievementsContent.module.scss';
+import AchievementsControls from './AchievementsControls/AchievementsControls';
 import PaginationControls from './PaginationControls/PaginationControls';
 
 type AchievementsContentProps = {

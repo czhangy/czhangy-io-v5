@@ -33,10 +33,6 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement }) => {
     // HANDLERS
     // -------------------------------------------------------------------------
 
-    const handleCardClick = (): void => setIsSelected(true);
-    const handleEditOpen = (): void => setIsEditing(true);
-    const handleEditClose = (): void => setIsEditing(false);
-
     const handleDelete = async (): Promise<void> => {
         await fetch(`/api/achievements/${achievement.id}`, {
             method: 'DELETE',
@@ -73,14 +69,14 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement }) => {
         <div
             ref={cardRef}
             className={`${styles['achievement-card']}${isSelected ? ` ${styles['achievement-card--selected']}` : ''}`}
-            onClick={handleCardClick}
+            onClick={() => setIsSelected(true)}
         >
             {role === 'ADMIN' ? (
                 <div className={styles.buttons}>
                     <button
                         type="button"
                         className={styles.button}
-                        onClick={handleEditOpen}
+                        onClick={() => setIsEditing(true)}
                     >
                         <EditIcon />
                     </button>
@@ -103,7 +99,7 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement }) => {
             {isEditing ? (
                 <EditAchievementModal
                     achievement={achievement}
-                    onClose={handleEditClose}
+                    onClose={() => setIsEditing(false)}
                 />
             ) : null}
         </div>

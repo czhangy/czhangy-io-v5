@@ -19,25 +19,22 @@ const AchievementsControls: React.FC = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
-    // HANDLERS
-    // -------------------------------------------------------------------------
-
-    const handleOpen = (): void => setIsOpen(true);
-
-    const handleClose = (): void => setIsOpen(false);
-
-    // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
 
     return (
         <div className={styles['achievements-controls']}>
             {role === 'ADMIN' ? (
-                <button className={styles['add-button']} onClick={handleOpen}>
+                <button
+                    className={styles['add-button']}
+                    onClick={() => setIsOpen(true)}
+                >
                     Add Achievement
                 </button>
             ) : null}
-            {isOpen ? <AddAchievementModal onClose={handleClose} /> : null}
+            {isOpen ? (
+                <AddAchievementModal onClose={() => setIsOpen(false)} />
+            ) : null}
         </div>
     );
 };

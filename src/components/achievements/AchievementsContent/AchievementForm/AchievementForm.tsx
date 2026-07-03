@@ -2,15 +2,8 @@
 
 import { useState } from 'react';
 import DateHelpers from '@/lib/utils/DateHelpers';
+import { AchievementFormValues } from '@/lib/utils/shared/types';
 import styles from './AchievementForm.module.scss';
-
-export type AchievementFormValues = {
-    tier: number;
-    name: string;
-    category: string;
-    description: string;
-    date: string;
-};
 
 type AchievementFormProps = {
     submitLabel: string;

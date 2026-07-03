@@ -1,15 +1,18 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import AchievementForm from '@/components/achievements/AchievementsContent/AchievementForm/AchievementForm';
 import Modal from '@/components/common/Modal/Modal';
-import AchievementForm from '../../AchievementForm/AchievementForm';
-import type { AchievementFormValues } from '../../AchievementForm/AchievementForm';
+import { AchievementFormValues } from '@/lib/utils/shared/types';
+import type { Achievement } from '@/generated/prisma/client';
 
-type AddAchievementModalProps = {
+type EditAchievementModalProps = {
+    achievement: Achievement;
     onClose: () => void;
 };
 
-const AddAchievementModal: React.FC<AddAchievementModalProps> = ({
+const EditAchievementModal: React.FC<EditAchievementModalProps> = ({
+    achievement,
     onClose,
 }) => {
     // -------------------------------------------------------------------------
@@ -25,8 +28,8 @@ const AddAchievementModal: React.FC<AddAchievementModalProps> = ({
     const handleSubmit = async (
         values: AchievementFormValues
     ): Promise<void> => {
-        const res = await fetch('/api/achievements', {
-            method: 'POST',
+        const res = await fetch(`/api/achievements/${achievement.id}`, {
+            method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(values),
         });
@@ -34,7 +37,7 @@ const AddAchievementModal: React.FC<AddAchievementModalProps> = ({
             const data = (await res.json().catch(() => ({}))) as {
                 error?: string;
             };
-            throw new Error(data.error ?? 'Failed to create achievement.');
+            throw new Error(data.error ?? 'Failed to save achievement.');
         }
         router.refresh();
         onClose();
@@ -45,9 +48,10 @@ const AddAchievementModal: React.FC<AddAchievementModalProps> = ({
     // -------------------------------------------------------------------------
 
     return (
-        <Modal title="ADD ACHIEVEMENT" onClose={onClose}>
+        <Modal title="EDIT ACHIEVEMENT" onClose={onClose}>
             <AchievementForm
-                submitLabel="Add"
+                initialValues={{ ...achievement, date: achievement.date ?? '' }}
+                submitLabel="Save"
                 onSubmit={handleSubmit}
                 onCancel={onClose}
             />
@@ -55,4 +59,4 @@ const AddAchievementModal: React.FC<AddAchievementModalProps> = ({
     );
 };
 
-export default AddAchievementModal;
+export default EditAchievementModal;

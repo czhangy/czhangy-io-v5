@@ -58,3 +58,11 @@ export type Session = {
     id: string;
     role: UserRole;
 };
+
+export type AchievementFormValues = {
+    tier: number;
+    name: string;
+    category: string;
+    description: string;
+    date: string;
+};
