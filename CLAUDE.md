@@ -222,10 +222,6 @@ Modifier classes (`&--variant`) nest inside their base class. **Base styles must
 
 **Transitions** are declared on the base element, not inside the `:hover` block.
 
-## ESLint Rules
+## Verification
 
-Custom rules live in `.eslint-rules/` and are registered in `eslint.config.mjs`. Active rules:
-
-- **`no-parent-imports`** (`code-style/`) — Bans any import whose path starts with `../`. Use the `@/` alias or a path relative to a subdirectory.
-- **`no-export-type`** (`code-style/`) — Bans `export type` in all files except `src/lib/utils/shared/types.ts`. Type exports belong only in the shared types file.
-- **`@typescript-eslint/no-unused-vars`** — Unused variables are errors (not warnings).
+After completing any implementation task, run `npm run lint` and fix all errors before reporting the work as done.
