@@ -4,21 +4,28 @@ import { prisma } from '@/lib/static/prisma';
 import { CardistryMoveEntry } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
 
+const authorize = async (request: NextRequest) => {
+    const token = request.cookies.get(SESSION_COOKIE)?.value;
+    const session = token ? await AuthHelpers.verifyToken(token) : null;
+    return session?.role === 'ADMIN' ? session : null;
+};
+
+const parseId = (id: string) => {
+    const n = parseInt(id, 10);
+    return isNaN(n) ? null : n;
+};
+
 export const PATCH = async (
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) => {
-    const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await AuthHelpers.verifyToken(token) : null;
-
-    if (!session || session.role !== 'ADMIN') {
+    if (!(await authorize(request))) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { id } = await params;
-    const numericId = parseInt(id, 10);
-
-    if (isNaN(numericId)) {
+    const numericId = parseId(id);
+    if (numericId === null) {
         return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
     }
 
@@ -49,4 +56,79 @@ export const PATCH = async (
         ...move,
         createdAt: move.createdAt.toISOString(),
     } as CardistryMoveEntry);
+};
+
+export const PUT = async (
+    request: NextRequest,
+    { params }: { params: Promise<{ id: string }> }
+) => {
+    if (!(await authorize(request))) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { id } = await params;
+    const numericId = parseId(id);
+    if (numericId === null) {
+        return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
+    }
+
+    const { name, type, count } = (await request.json()) as {
+        name: string;
+        type: string;
+        count: number;
+    };
+
+    if (!name?.trim()) {
+        return NextResponse.json(
+            { error: 'Name is required' },
+            { status: 400 }
+        );
+    }
+    if (!type?.trim()) {
+        return NextResponse.json(
+            { error: 'Type is required' },
+            { status: 400 }
+        );
+    }
+    if (typeof count !== 'number' || count < 0) {
+        return NextResponse.json({ error: 'Invalid count' }, { status: 400 });
+    }
+
+    const conflict = await prisma.cardistryMove.findUnique({
+        where: { name: name.trim() },
+    });
+    if (conflict && conflict.id !== numericId) {
+        return NextResponse.json(
+            { error: 'Move already exists' },
+            { status: 409 }
+        );
+    }
+
+    const move = await prisma.cardistryMove.update({
+        where: { id: numericId },
+        data: { name: name.trim(), type: type.trim(), count },
+    });
+
+    return NextResponse.json({
+        ...move,
+        createdAt: move.createdAt.toISOString(),
+    } as CardistryMoveEntry);
+};
+
+export const DELETE = async (
+    request: NextRequest,
+    { params }: { params: Promise<{ id: string }> }
+) => {
+    if (!(await authorize(request))) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { id } = await params;
+    const numericId = parseId(id);
+    if (numericId === null) {
+        return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
+    }
+
+    await prisma.cardistryMove.delete({ where: { id: numericId } });
+    return NextResponse.json({ success: true });
 };

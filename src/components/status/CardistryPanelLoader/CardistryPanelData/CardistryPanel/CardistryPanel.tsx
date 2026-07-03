@@ -6,6 +6,7 @@ import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { useSession } from '@/lib/context/SessionContext';
 import LinkIcon from '@/lib/icons/LinkIcon';
 import { CardistryMoveEntry } from '@/lib/static/types';
+import CardistryHelpers from '@/lib/utils/CardistryHelpers';
 import styles from './CardistryPanel.module.scss';
 
 type CardistryPanelProps = {
@@ -93,25 +94,14 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
     }, [isEditing]);
 
     // -------------------------------------------------------------------------
-    // COMPUTATIONS
-    // -------------------------------------------------------------------------
-
-    const getProficiency = (
-        count: number
-    ): { display: string; tier: number } => {
-        if (count >= 10000) return { display: '10000/10000', tier: 3 };
-        if (count >= 1000) return { display: `${count}/10000`, tier: 2 };
-        if (count >= 100) return { display: `${count}/1000`, tier: 1 };
-        return { display: `${count}/100`, tier: 0 };
-    };
-
-    // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
 
     const isAdmin: boolean = role === 'ADMIN';
 
-    const proficiency = activeMove ? getProficiency(activeMove.count) : null;
+    const proficiency = activeMove
+        ? CardistryHelpers.getProficiency(activeMove.count)
+        : null;
 
     const headerActions: React.ReactNode = (
         <>

@@ -3,9 +3,13 @@
 import { useState } from 'react';
 import PaginationControls from '@/components/common/PaginationControls/PaginationControls';
 import { useSession } from '@/lib/context/SessionContext';
+import DeleteIcon from '@/lib/icons/DeleteIcon';
+import EditIcon from '@/lib/icons/EditIcon';
 import { CardistryMoveEntry } from '@/lib/static/types';
+import CardistryHelpers from '@/lib/utils/CardistryHelpers';
 import styles from './CardistryContent.module.scss';
 import CardistryControls from './CardistryControls/CardistryControls';
+import EditMoveModal from './EditMoveModal/EditMoveModal';
 
 type CardistryContentProps = {
     initialMoves: CardistryMoveEntry[];
@@ -32,19 +36,9 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
 
     const [moves, setMoves] = useState<CardistryMoveEntry[]>(initialMoves);
     const [page, setPage] = useState<number>(1);
-
-    // -------------------------------------------------------------------------
-    // COMPUTATIONS
-    // -------------------------------------------------------------------------
-
-    const getProficiency = (
-        count: number
-    ): { display: string; tier: number } => {
-        if (count >= 10000) return { display: '10000/10000', tier: 3 };
-        if (count >= 1000) return { display: `${count}/10000`, tier: 2 };
-        if (count >= 100) return { display: `${count}/1000`, tier: 1 };
-        return { display: `${count}/100`, tier: 0 };
-    };
+    const [editingMove, setEditingMove] = useState<CardistryMoveEntry | null>(
+        null
+    );
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -60,6 +54,25 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
             );
         });
         setPage(1);
+    };
+
+    const handleUpdate = (updated: CardistryMoveEntry): void => {
+        setMoves((prev) =>
+            prev.map((m) => (m.id === updated.id ? updated : m))
+        );
+        setEditingMove(null);
+    };
+
+    const handleDelete = async (id: number): Promise<void> => {
+        const res = await fetch(`/api/cardistry/${id}`, { method: 'DELETE' });
+        if (!res.ok) return;
+        const nextMoves = moves.filter((m) => m.id !== id);
+        const newTotalPages = Math.max(
+            1,
+            Math.ceil(nextMoves.length / ITEMS_PER_PAGE)
+        );
+        setMoves(nextMoves);
+        setPage((p) => Math.min(p, newTotalPages));
     };
 
     const handlePrevPage = (): void => {
@@ -102,17 +115,11 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
             />
             <ul className={styles.list}>
                 {paginatedMoves.map((move) => {
-                    const proficiency = getProficiency(move.count);
+                    const proficiency = CardistryHelpers.getProficiency(
+                        move.count
+                    );
                     return (
                         <li key={move.id} className={styles.item}>
-                            <div className={styles.left}>
-                                <span className={styles.name}>{move.name}</span>
-                                <div className={styles.metadata}>
-                                    <span className={styles['type-tag']}>
-                                        {move.type}
-                                    </span>
-                                </div>
-                            </div>
                             <div className={styles.proficiency}>
                                 <div className={styles.pips}>
                                     {[0, 1, 2].map((i) => (
@@ -126,6 +133,32 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                                     {proficiency.display}
                                 </span>
                             </div>
+                            <div className={styles.details}>
+                                <span className={styles.name}>{move.name}</span>
+                                <div className={styles.metadata}>
+                                    <span className={styles['type-tag']}>
+                                        {move.type}
+                                    </span>
+                                </div>
+                            </div>
+                            {isAdmin ? (
+                                <div className={styles['admin-actions']}>
+                                    <button
+                                        type="button"
+                                        className={styles['action-button']}
+                                        onClick={() => setEditingMove(move)}
+                                    >
+                                        <EditIcon />
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={styles['action-button']}
+                                        onClick={() => handleDelete(move.id)}
+                                    >
+                                        <DeleteIcon />
+                                    </button>
+                                </div>
+                            ) : null}
                         </li>
                     );
                 })}
@@ -138,6 +171,13 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                     onNext={handleNextPage}
                 />
             </div>
+            {editingMove ? (
+                <EditMoveModal
+                    move={editingMove}
+                    onClose={() => setEditingMove(null)}
+                    onEdit={handleUpdate}
+                />
+            ) : null}
         </div>
     );
 };
