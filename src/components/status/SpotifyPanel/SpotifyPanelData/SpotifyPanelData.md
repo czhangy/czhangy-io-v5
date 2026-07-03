@@ -4,8 +4,9 @@ Async server component that fetches the most recently played track from the Spot
 
 ## Props
 
-| Prop        | Type              | Required | Default | Description                  |
-| ----------- | ----------------- | -------- | ------- | ---------------------------- |
-| `label`     | `string`          | Yes      | —       | Forwarded to the StatusPanel |
-| `icon`      | `React.ReactNode` | Yes      | —       | Forwarded to the StatusPanel |
-| `className` | `string`          | No       | —       | Forwarded to the StatusPanel |
+| Prop    | Type              | Required | Default | Description                  |
+| ------- | ----------------- | -------- | ------- | ---------------------------- |
+| `label` | `string`          | Yes      | —       | Forwarded to the StatusPanel |
+| `icon`  | `React.ReactNode` | Yes      | —       | Forwarded to the StatusPanel |
+| `cols`  | `number`          | Yes      | —       | Forwarded to the StatusPanel |
+| `rows`  | `number`          | No       | —       | Forwarded to the StatusPanel |

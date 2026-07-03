@@ -1,3 +1,3 @@
 # NotFoundPage
 
-A thin wrapper around StatusPage for the 404 route.
+A thin wrapper around InfoPage for the 404 route.

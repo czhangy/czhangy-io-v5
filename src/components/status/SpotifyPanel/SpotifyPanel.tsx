@@ -1,13 +1,14 @@
 import { Suspense } from 'react';
+import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import HeadphonesIcon from '@/lib/icons/HeadphonesIcon';
-import StatusPanel from '../StatusPanel/StatusPanel';
 import SpotifyPanelData from './SpotifyPanelData/SpotifyPanelData';
 
 type SpotifyPanelProps = {
-    className?: string;
+    cols: number;
+    rows?: number;
 };
 
-const SpotifyPanel: React.FC<SpotifyPanelProps> = ({ className }) => {
+const SpotifyPanel: React.FC<SpotifyPanelProps> = ({ cols, rows }) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
@@ -25,12 +26,18 @@ const SpotifyPanel: React.FC<SpotifyPanelProps> = ({ className }) => {
                 <StatusPanel
                     label={LABEL}
                     icon={ICON}
+                    cols={cols}
+                    rows={rows}
                     isLoading
-                    className={className}
                 />
             }
         >
-            <SpotifyPanelData label={LABEL} icon={ICON} className={className} />
+            <SpotifyPanelData
+                label={LABEL}
+                icon={ICON}
+                cols={cols}
+                rows={rows}
+            />
         </Suspense>
     );
 };

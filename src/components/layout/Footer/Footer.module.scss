@@ -12,4 +12,42 @@
         bottom: 0.75rem;
         right: 0.75rem;
     }
+
+    .github {
+        align-items: center;
+        background: $surface;
+        border: 1px solid $border-subtle;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 16px rgb(0 0 0 / 50%);
+        color: $text-mid;
+        display: flex;
+        height: 3.25rem;
+        justify-content: center;
+        transition:
+            border-color 0.15s ease,
+            color 0.15s ease;
+        width: 3.25rem;
+
+        svg {
+            height: 1.75rem;
+            width: 1.75rem;
+        }
+
+        @media (hover: hover) {
+            &:hover {
+                border-color: $accent;
+                color: $accent;
+            }
+        }
+
+        @media (width <= 768px) {
+            height: 2.75rem;
+            width: 2.75rem;
+
+            svg {
+                height: 1.5rem;
+                width: 1.5rem;
+            }
+        }
+    }
 }

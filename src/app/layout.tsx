@@ -1,13 +1,12 @@
-import Background from '@/components/layout/Background/Background';
 import Footer from '@/components/layout/Footer/Footer';
 import Navbar from '@/components/layout/Navbar/Navbar';
 import SessionProvider from '@/lib/context/SessionContext';
+import { SESSION_COOKIE } from '@/lib/static/constants';
 import '@/lib/styles/globals.scss';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { cookies } from 'next/headers';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
-import { SESSION_COOKIE } from '@/lib/utils/shared/constants';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -46,7 +45,7 @@ export default async function RootLayout({
                     isLoggedIn={!!session}
                     role={session?.role ?? null}
                 >
-                    <Background />
+                    <div className="page-bg" />
                     <Navbar />
                     <main className="page-main">{children}</main>
                     <Footer />

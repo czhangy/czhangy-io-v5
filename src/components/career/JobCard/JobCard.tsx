@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Job } from '@/lib/static/jobs';
+import { Job } from '@/lib/static/types';
 import styles from './JobCard.module.scss';
 
 type JobCardProps = {
@@ -7,18 +7,6 @@ type JobCardProps = {
 };
 
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
-    // -------------------------------------------------------------------------
-    // RENDERING
-    // -------------------------------------------------------------------------
-
-    const renderDates = (): React.ReactNode => (
-        <span className={styles.dates}>
-            {job.startDate}
-            {' – '}
-            {job.endDate ? job.endDate : 'Present'}
-        </span>
-    );
-
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
@@ -37,7 +25,11 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
             <div className={styles.content}>
                 <span className={styles.company}>{job.company}</span>
                 <span className={styles.role}>{job.title}</span>
-                {renderDates()}
+                <span className={styles.dates}>
+                    {job.startDate}
+                    {' – '}
+                    {job.endDate ? job.endDate : 'Present'}
+                </span>
             </div>
         </div>
     );

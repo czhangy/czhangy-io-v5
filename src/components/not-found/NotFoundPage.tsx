@@ -1,11 +1,11 @@
-import StatusPage from '@/components/common/StatusPage/StatusPage';
+import InfoPage from '@/components/layout/InfoPage/InfoPage';
 
 const NotFoundPage: React.FC = () => {
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
 
-    return <StatusPage title="404" subtext="How'd you get here?" />;
+    return <InfoPage title="404" subtext="How'd you get here?" />;
 };
 
 export default NotFoundPage;

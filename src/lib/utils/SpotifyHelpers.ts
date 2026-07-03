@@ -1,4 +1,4 @@
-import { SpotifyTrack } from './shared/types';
+import { SpotifyTrack } from '@/lib/static/types';
 
 export default class SpotifyHelpers {
     // -------------------------------------------------------------------------

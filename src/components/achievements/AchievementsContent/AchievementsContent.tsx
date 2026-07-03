@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useReducer } from 'react';
+import DateHelpers from '@/lib/utils/DateHelpers';
 import type { Achievement } from '@/generated/prisma/client';
-import AchievementCard from '../AchievementCard/AchievementCard';
-import AchievementsControls from '../AchievementsControls/AchievementsControls';
+import AchievementCard from './AchievementCard/AchievementCard';
 import styles from './AchievementsContent.module.scss';
+import AchievementsControls from './AchievementsControls/AchievementsControls';
 import PaginationControls from './PaginationControls/PaginationControls';
 
 type AchievementsContentProps = {
@@ -48,34 +49,6 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
         itemsPerPage: ITEMS_PER_PAGE_DESKTOP,
     };
 
-    const REDUCER = (state: State, action: Action): State => {
-        switch (action.type) {
-            case 'SET_SORT_FIELD':
-                return { ...state, sortField: action.field, page: 1 };
-            case 'TOGGLE_DIRECTION':
-                return {
-                    ...state,
-                    sortDirection:
-                        state.sortDirection === 'asc' ? 'desc' : 'asc',
-                    page: 1,
-                };
-            case 'SET_CATEGORY':
-                return { ...state, categoryFilter: action.category, page: 1 };
-            case 'PREV_PAGE':
-                return { ...state, page: state.page - 1 };
-            case 'NEXT_PAGE':
-                return { ...state, page: state.page + 1 };
-            case 'RESIZE':
-                return {
-                    ...state,
-                    itemsPerPage: action.isMobile
-                        ? ITEMS_PER_PAGE_MOBILE
-                        : ITEMS_PER_PAGE_DESKTOP,
-                    page: 1,
-                };
-        }
-    };
-
     const SORT_FIELDS: { value: SortField; label: string }[] = [
         { value: 'date', label: 'Date' },
         { value: 'name', label: 'Name' },
@@ -90,7 +63,40 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
     // HOOKS
     // -------------------------------------------------------------------------
 
-    const [state, dispatch] = useReducer(REDUCER, INITIAL_STATE);
+    const [state, dispatch] = useReducer(
+        (state: State, action: Action): State => {
+            switch (action.type) {
+                case 'SET_SORT_FIELD':
+                    return { ...state, sortField: action.field, page: 1 };
+                case 'TOGGLE_DIRECTION':
+                    return {
+                        ...state,
+                        sortDirection:
+                            state.sortDirection === 'asc' ? 'desc' : 'asc',
+                        page: 1,
+                    };
+                case 'SET_CATEGORY':
+                    return {
+                        ...state,
+                        categoryFilter: action.category,
+                        page: 1,
+                    };
+                case 'PREV_PAGE':
+                    return { ...state, page: state.page - 1 };
+                case 'NEXT_PAGE':
+                    return { ...state, page: state.page + 1 };
+                case 'RESIZE':
+                    return {
+                        ...state,
+                        itemsPerPage: action.isMobile
+                            ? ITEMS_PER_PAGE_MOBILE
+                            : ITEMS_PER_PAGE_DESKTOP,
+                        page: 1,
+                    };
+            }
+        },
+        INITIAL_STATE
+    );
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -124,16 +130,6 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
     };
 
     // -------------------------------------------------------------------------
-    // COMPUTATIONS
-    // -------------------------------------------------------------------------
-
-    const parseDate = (dateStr: string | null): number => {
-        if (!dateStr) return 0;
-        const [month, day, year] = dateStr.split('/').map(Number);
-        return new Date(year, month - 1, day).getTime();
-    };
-
-    // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
 
@@ -148,13 +144,18 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
                 if (tierDiff !== 0) {
                     return sortDirection === 'asc' ? tierDiff : -tierDiff;
                 }
-                return parseDate(b.date) - parseDate(a.date);
+                return (
+                    DateHelpers.parseDateNumber(b.date) -
+                    DateHelpers.parseDateNumber(a.date)
+                );
             }
             let comparison = 0;
             if (sortField === 'name') {
                 comparison = a.name.localeCompare(b.name);
             } else {
-                comparison = parseDate(a.date) - parseDate(b.date);
+                comparison =
+                    DateHelpers.parseDateNumber(a.date) -
+                    DateHelpers.parseDateNumber(b.date);
             }
             return sortDirection === 'asc' ? comparison : -comparison;
         });

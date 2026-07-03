@@ -4,18 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useSession } from '@/lib/context/SessionContext';
 import HomeIcon from '@/lib/icons/HomeIcon';
-import { AUTH_ROUTES, NAV_ITEMS } from '@/lib/utils/shared/constants';
-import { NavItem } from '@/lib/utils/shared/types';
+import { Key } from '@/lib/static/enums';
+import { NavItem } from '@/lib/static/types';
+import AuthHelpers from '@/lib/utils/AuthHelpers';
 import styles from './Navbar.module.scss';
 
 const Navbar: React.FC = () => {
-    // -------------------------------------------------------------------------
-    // CONSTANTS
-    // -------------------------------------------------------------------------
-
-    const LOGIN_ITEM: NavItem = { href: '/login', label: 'Log In' };
-    const REGISTER_ITEM: NavItem = { href: '/register', label: 'Register' };
-
     // -------------------------------------------------------------------------
     // HOOKS
     // -------------------------------------------------------------------------
@@ -30,29 +24,10 @@ const Navbar: React.FC = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
-    // HANDLERS
-    // -------------------------------------------------------------------------
-
-    const handleToggle = () => setIsOpen((prev) => !prev);
-
-    const handleLinkClick = () => setIsOpen(false);
-
-    // -------------------------------------------------------------------------
-    // COMPUTATIONS
-    // -------------------------------------------------------------------------
-
-    const isProtected = (href: string): boolean =>
-        !isLoggedIn && AUTH_ROUTES.some((route) => href.startsWith(route));
-
-    // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const allItems: NavItem[] = isLoggedIn
-        ? role === 'ADMIN'
-            ? [...NAV_ITEMS, REGISTER_ITEM]
-            : NAV_ITEMS
-        : [...NAV_ITEMS, LOGIN_ITEM];
+    const allItems: NavItem[] = AuthHelpers.computeNavItems(isLoggedIn, role);
 
     const badgeLabel: string | null = isLoggedIn
         ? `Logged in as: ${role === 'ADMIN' ? 'ADMIN' : 'USER'}`
@@ -75,7 +50,7 @@ const Navbar: React.FC = () => {
         };
 
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') setIsOpen(false);
+            if (e.key === Key.Escape) setIsOpen(false);
         };
 
         document.addEventListener('mousedown', handleOutsideClick);
@@ -104,7 +79,7 @@ const Navbar: React.FC = () => {
                     <button
                         type="button"
                         className={`${styles['nav-toggle']} ${isOpen ? styles['nav-toggle--open'] : ''}`}
-                        onClick={handleToggle}
+                        onClick={() => setIsOpen((prev) => !prev)}
                     >
                         <span className={styles.bar} />
                         <span className={styles.bar} />
@@ -117,8 +92,8 @@ const Navbar: React.FC = () => {
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={`${styles['menu-item']} ${isProtected(item.href) ? styles['menu-item--disabled'] : ''}`}
-                                onClick={handleLinkClick}
+                                className={`${styles['menu-item']} ${!isLoggedIn && AuthHelpers.isProtectedRoute(item.href) ? styles['menu-item--disabled'] : ''}`}
+                                onClick={() => setIsOpen(false)}
                             >
                                 {item.label.toUpperCase()}
                             </Link>

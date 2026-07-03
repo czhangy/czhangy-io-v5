@@ -1,0 +1,47 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.info-page {
+    @include full-height;
+
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem;
+
+    @media (width <= 768px) {
+        padding: 1rem;
+    }
+
+    .content {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+    }
+
+    .title {
+        @include mono-label;
+
+        color: $accent;
+        font-size: 4rem;
+        letter-spacing: 0.2em;
+        padding-left: 0.2em;
+    }
+
+    .subtext {
+        color: $text-mid;
+        font-family: $font-mono;
+        font-size: 1rem;
+        letter-spacing: 0.1em;
+    }
+
+    .home-link {
+        @include game-button;
+
+        letter-spacing: 0.2em;
+        margin-top: 0.5rem;
+        padding: 0.875rem 2.5rem;
+    }
+}

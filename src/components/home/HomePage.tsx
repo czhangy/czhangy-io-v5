@@ -13,11 +13,7 @@ const HomePage: React.FC = () => {
                 <NavMenu />
             </div>
             <div className={styles['right-panel']}>
-                <GlitchText
-                    text="CZHANGY.IO"
-                    as="h1"
-                    className={styles.title}
-                />
+                <GlitchText text="CZHANGY.IO" className={styles.title} />
             </div>
         </div>
     );

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { SESSION_COOKIE } from '@/lib/static/constants';
+import { prisma } from '@/lib/static/prisma';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
-import { SESSION_COOKIE } from '@/lib/utils/shared/constants';
-import { prisma } from '@/lib/utils/shared/prisma';
 
 export const POST = async (request: NextRequest) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;

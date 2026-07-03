@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext } from 'react';
-import { UserRole } from '@/lib/utils/shared/types';
+import { UserRole } from '@/lib/static/types';
 
 type SessionContextValue = {
     isLoggedIn: boolean;

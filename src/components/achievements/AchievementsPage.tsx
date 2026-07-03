@@ -1,5 +1,5 @@
 import GlitchText from '@/components/common/GlitchText/GlitchText';
-import { prisma } from '@/lib/utils/shared/prisma';
+import { prisma } from '@/lib/static/prisma';
 import type { Achievement } from '@/generated/prisma/client';
 import AchievementsContent from './AchievementsContent/AchievementsContent';
 import styles from './AchievementsPage.module.scss';
@@ -20,11 +20,7 @@ const AchievementsPage = async () => {
     return (
         <div className={styles['achievements-page']}>
             <div className={styles.content}>
-                <GlitchText
-                    text="ACHIEVEMENTS"
-                    as="h1"
-                    className={styles.title}
-                />
+                <GlitchText text="ACHIEVEMENTS" className={styles.title} />
                 <AchievementsContent achievements={achievements} />
             </div>
         </div>

@@ -3,17 +3,15 @@
 import { useEffect, useRef } from 'react';
 import styles from './SearchInput.module.scss';
 
-export type SearchResult = {
-    id: number;
-    name: string;
-    year: string | null;
-};
-
 type SearchInputProps = {
     value: string;
     placeholder: string;
     isSearching: boolean;
-    results: SearchResult[];
+    results: {
+        id: number;
+        name: string;
+        year: string | null;
+    }[];
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     onClear: () => void;

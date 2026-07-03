@@ -1,13 +1,11 @@
-import StatusPage from '@/components/common/StatusPage/StatusPage';
+import InfoPage from '@/components/layout/InfoPage/InfoPage';
 
 const WipPage: React.FC = () => {
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
 
-    return (
-        <StatusPage title="WIP" subtext="This page is under construction." />
-    );
+    return <InfoPage title="WIP" subtext="This page is under construction." />;
 };
 
 export default WipPage;

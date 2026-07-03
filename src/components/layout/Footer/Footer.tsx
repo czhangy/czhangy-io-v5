@@ -1,6 +1,5 @@
 import GithubIcon from '@/lib/icons/GithubIcon';
 import styles from './Footer.module.scss';
-import SocialLink from './SocialLink/SocialLink';
 
 const Footer: React.FC = () => {
     // -------------------------------------------------------------------------
@@ -9,10 +8,14 @@ const Footer: React.FC = () => {
 
     return (
         <footer className={styles.footer}>
-            <SocialLink
+            <a
+                className={styles.github}
                 href="https://github.com/czhangy/czhangy-io-v5"
-                icon={<GithubIcon />}
-            />
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <GithubIcon />
+            </a>
         </footer>
     );
 };

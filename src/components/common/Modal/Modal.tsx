@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
+import MediaHelpers from '@/lib/utils/MediaHelpers';
 import styles from './Modal.module.scss';
 
 type ModalProps = {
@@ -22,7 +23,7 @@ const Modal: React.FC<ModalProps> = ({ title, children, onClose }) => {
     // -------------------------------------------------------------------------
 
     const handleStartClose = (): void => {
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        if (MediaHelpers.prefersReducedMotion()) {
             onClose();
         } else {
             setIsClosing(true);
@@ -45,7 +46,7 @@ const Modal: React.FC<ModalProps> = ({ title, children, onClose }) => {
 
     return createPortal(
         <div
-            className={`${styles.overlay}${isClosing ? ` ${styles['overlay--closing']}` : ''}`}
+            className={`${styles.overlay} ${isClosing ? `${styles['overlay--closing']}` : ''}`}
             onClick={handleOverlayClick}
             onAnimationEnd={handleAnimationEnd}
         >

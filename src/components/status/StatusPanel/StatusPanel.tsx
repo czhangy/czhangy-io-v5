@@ -2,19 +2,21 @@ import styles from './StatusPanel.module.scss';
 
 type StatusPanelProps = {
     label: string;
+    cols: number;
     icon?: React.ReactNode;
     children?: React.ReactNode;
     headerAction?: React.ReactNode;
-    className?: string;
+    rows?: number;
     isLoading?: boolean;
 };
 
 const StatusPanel: React.FC<StatusPanelProps> = ({
     label,
+    cols,
     icon,
     children,
     headerAction,
-    className,
+    rows = 1,
     isLoading = false,
 }) => {
     // -------------------------------------------------------------------------
@@ -23,7 +25,14 @@ const StatusPanel: React.FC<StatusPanelProps> = ({
 
     return (
         <div
-            className={`${styles.panel}${isLoading ? ` ${styles['panel--loading']}` : ''} ${className ?? ''}`}
+            className={`${styles.panel}${isLoading ? ` ${styles['panel--loading']}` : ''}`}
+            style={
+                {
+                    '--cols': cols,
+                    '--cols-tablet': Math.min(cols, 4),
+                    '--rows': rows,
+                } as React.CSSProperties
+            }
         >
             <div className={styles.header}>
                 <div className={styles['header-left']}>

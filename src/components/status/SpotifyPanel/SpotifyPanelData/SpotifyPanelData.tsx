@@ -1,19 +1,21 @@
 import Image from 'next/image';
-import { SpotifyTrack } from '@/lib/utils/shared/types';
+import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
+import { SpotifyTrack } from '@/lib/static/types';
 import SpotifyHelpers from '@/lib/utils/SpotifyHelpers';
-import StatusPanel from '../../StatusPanel/StatusPanel';
 import styles from './SpotifyPanelData.module.scss';
 
 type SpotifyPanelDataProps = {
     label: string;
     icon: React.ReactNode;
-    className?: string;
+    cols: number;
+    rows?: number;
 };
 
 const SpotifyPanelData = async ({
     label,
     icon,
-    className,
+    cols,
+    rows,
 }: SpotifyPanelDataProps) => {
     // -------------------------------------------------------------------------
     // RENDERING
@@ -26,7 +28,7 @@ const SpotifyPanelData = async ({
     // -------------------------------------------------------------------------
 
     return (
-        <StatusPanel label={label} icon={icon} className={className}>
+        <StatusPanel label={label} icon={icon} cols={cols} rows={rows}>
             {track ? (
                 <a
                     className={styles.track}
