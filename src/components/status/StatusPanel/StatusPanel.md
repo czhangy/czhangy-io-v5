@@ -13,3 +13,4 @@ A uniform panel shell used across the Status page dashboard. Renders a labeled h
 | `headerAction` | `React.ReactNode` | No       | —       | Element rendered right-aligned in the header; revealed on hover via CSS |
 | `rows`         | `number`          | No       | `1`     | Number of grid rows the panel spans                                     |
 | `isLoading`    | `boolean`         | No       | `false` | When true, shows loading animations and suppresses children             |
+| `noPadding`    | `boolean`         | No       | `false` | When true, removes body padding so children can fill edge-to-edge       |

@@ -8,6 +8,7 @@ type StatusPanelProps = {
     headerAction?: React.ReactNode;
     rows?: number;
     isLoading?: boolean;
+    noPadding?: boolean;
 };
 
 const StatusPanel: React.FC<StatusPanelProps> = ({
@@ -18,6 +19,7 @@ const StatusPanel: React.FC<StatusPanelProps> = ({
     headerAction,
     rows = 1,
     isLoading = false,
+    noPadding = false,
 }) => {
     // -------------------------------------------------------------------------
     // MARKUP
@@ -45,7 +47,9 @@ const StatusPanel: React.FC<StatusPanelProps> = ({
                     </div>
                 ) : null}
             </div>
-            <div className={styles.body}>
+            <div
+                className={`${styles.body}${noPadding ? ` ${styles['body--no-padding']}` : ''}`}
+            >
                 {isLoading ? (
                     <div className={styles['loading-rule']} />
                 ) : (

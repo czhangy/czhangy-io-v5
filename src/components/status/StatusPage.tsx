@@ -5,6 +5,7 @@ import ReadingPanelLoader from './ReadingPanelLoader/ReadingPanelLoader';
 import SkillPanelLoader from './SkillPanelLoader/SkillPanelLoader';
 import SpotifyPanel from './SpotifyPanel/SpotifyPanel';
 import styles from './StatusPage.module.scss';
+import VickyPanel from './VickyPanel/VickyPanel';
 import WatchingPanelLoader from './WatchingPanelLoader/WatchingPanelLoader';
 
 const StatusPage: React.FC = () => {
@@ -23,6 +24,7 @@ const StatusPage: React.FC = () => {
                     <GamePanelLoader cols={5} />
                     <SkillPanelLoader cols={5} />
                     <ReadingPanelLoader cols={6} rows={2} />
+                    <VickyPanel cols={4} rows={2} />
                 </div>
             </div>
         </div>
