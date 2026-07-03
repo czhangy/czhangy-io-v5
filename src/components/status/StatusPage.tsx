@@ -14,7 +14,7 @@ const StatusPage: React.FC = () => {
     return (
         <div className={styles['status-page']}>
             <div className={styles.content}>
-                <GlitchText text="STATUS" as="h1" className={styles.title} />
+                <GlitchText text="STATUS" className={styles.title} />
                 <div className={styles.grid}>
                     <LocationPanelLoader className={styles['cols-4']} />
                     <SpotifyPanel className={styles['cols-6']} />

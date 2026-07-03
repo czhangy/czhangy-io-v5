@@ -20,11 +20,7 @@ const AchievementsPage = async () => {
     return (
         <div className={styles['achievements-page']}>
             <div className={styles.content}>
-                <GlitchText
-                    text="ACHIEVEMENTS"
-                    as="h1"
-                    className={styles.title}
-                />
+                <GlitchText text="ACHIEVEMENTS" className={styles.title} />
                 <AchievementsContent achievements={achievements} />
             </div>
         </div>

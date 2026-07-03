@@ -15,7 +15,7 @@ const InfoPage: React.FC<InfoPageProps> = ({ title, subtext }) => {
     return (
         <div className={styles['info-page']}>
             <div className={styles.content}>
-                <GlitchText text={title} as="h1" className={styles.title} />
+                <GlitchText text={title} className={styles.title} />
                 <p className={styles.subtext}>{subtext}</p>
                 <Link href="/" className={styles['home-link']}>
                     HOME

@@ -11,7 +11,7 @@ const CareerPage: React.FC = () => {
     return (
         <div className={styles['career-page']}>
             <div className={styles.content}>
-                <GlitchText text="CAREER" as="h1" className={styles.title} />
+                <GlitchText text="CAREER" className={styles.title} />
                 <div className={styles.timeline}>
                     {JOBS.map((job) => (
                         <div

@@ -6,28 +6,23 @@ import styles from './GlitchText.module.scss';
 type GlitchTextProps = {
     text: string;
     className?: string;
-    as?: React.ElementType;
 };
 
-type GlitchTextState = {
-    displayText: string;
-    isResolved: boolean;
-    letterDelays: number[];
-};
-
-type GlitchTextAction =
-    | { type: 'TICK'; text: string }
-    | { type: 'RESOLVE'; text: string }
-    | { type: 'RESET'; text: string };
-
-const GlitchText: React.FC<GlitchTextProps> = ({
-    text,
-    className,
-    as: Tag = 'span',
-}) => {
+const GlitchText: React.FC<GlitchTextProps> = ({ text, className }) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
+
+    type GlitchTextState = {
+        displayText: string;
+        isResolved: boolean;
+        letterDelays: number[];
+    };
+
+    type GlitchTextAction =
+        | { type: 'TICK'; text: string }
+        | { type: 'RESOLVE'; text: string }
+        | { type: 'RESET'; text: string };
 
     const CHARS: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?@#$%&*<>|';
     const SCRAMBLE_DURATION: number = 400;
@@ -109,7 +104,7 @@ const GlitchText: React.FC<GlitchTextProps> = ({
     // -------------------------------------------------------------------------
 
     return (
-        <Tag className={`${styles['glitch-text']} ${className ?? ''}`}>
+        <h1 className={`${styles['glitch-text']} ${className ?? ''}`}>
             {displayText.split('').map((char, i) =>
                 char === ' ' ? (
                     <span key={i} className={styles.space}>
@@ -130,7 +125,7 @@ const GlitchText: React.FC<GlitchTextProps> = ({
                     </span>
                 )
             )}
-        </Tag>
+        </h1>
     );
 };
 
