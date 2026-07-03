@@ -65,7 +65,6 @@ const RegisterPage: React.FC = () => {
                         value={password}
                         onChange={handlePasswordChange}
                         placeholder="Password"
-                        autoComplete="new-password"
                         disabled={loading}
                     />
                 </div>

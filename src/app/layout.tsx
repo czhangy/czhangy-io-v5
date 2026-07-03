@@ -1,4 +1,3 @@
-import Background from '@/components/layout/Background/Background';
 import Footer from '@/components/layout/Footer/Footer';
 import Navbar from '@/components/layout/Navbar/Navbar';
 import SessionProvider from '@/lib/context/SessionContext';
@@ -46,7 +45,7 @@ export default async function RootLayout({
                     isLoggedIn={!!session}
                     role={session?.role ?? null}
                 >
-                    <Background />
+                    <div className="page-bg" />
                     <Navbar />
                     <main className="page-main">{children}</main>
                     <Footer />
