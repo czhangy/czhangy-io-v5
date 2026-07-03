@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import PanelButton from '@/components/status/PanelButton/PanelButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { useSession } from '@/lib/context/SessionContext';
+import LinkIcon from '@/lib/icons/LinkIcon';
 import { Key } from '@/lib/static/enums';
 import { CardistryMoveEntry } from '@/lib/static/types';
 import styles from './CardistryPanel.module.scss';
@@ -111,8 +112,14 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
 
     const isAdmin: boolean = role === 'ADMIN';
 
-    const editButton: React.ReactNode =
-        isAdmin && !isEditing ? <PanelButton onClick={handleEdit} /> : null;
+    const headerActions: React.ReactNode = (
+        <>
+            <PanelButton href="/status/cardistry" icon={<LinkIcon />} />
+            {isAdmin && !isEditing ? (
+                <PanelButton onClick={handleEdit} />
+            ) : null}
+        </>
+    );
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -124,7 +131,7 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
             icon={icon}
             cols={cols}
             rows={rows}
-            headerAction={editButton}
+            headerAction={headerActions}
         >
             {isEditing ? (
                 <div ref={editFormRef} className={styles['edit-form']}>
