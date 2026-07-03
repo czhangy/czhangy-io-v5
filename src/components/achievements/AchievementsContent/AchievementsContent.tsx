@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useReducer } from 'react';
+import PaginationControls from '@/components/common/PaginationControls/PaginationControls';
 import DateHelpers from '@/lib/utils/DateHelpers';
 import type { Achievement } from '@/generated/prisma/client';
 import AchievementCard from './AchievementCard/AchievementCard';
 import styles from './AchievementsContent.module.scss';
 import AchievementsControls from './AchievementsControls/AchievementsControls';
-import PaginationControls from './PaginationControls/PaginationControls';
 
 type AchievementsContentProps = {
     achievements: Achievement[];

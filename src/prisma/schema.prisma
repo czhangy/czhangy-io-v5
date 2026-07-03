@@ -25,6 +25,16 @@ model StatusItem {
     updatedAt DateTime @updatedAt
 }
 
+model WatchedMedia {
+    id        Int      @id @default(autoincrement())
+    name      String
+    tmdbId    Int      @unique
+    mediaType String
+    poster    String?
+    genres    String[]
+    addedAt   DateTime @default(now())
+}
+
 model Achievement {
     id          Int      @id @default(autoincrement())
     tier        Int      @default(1)

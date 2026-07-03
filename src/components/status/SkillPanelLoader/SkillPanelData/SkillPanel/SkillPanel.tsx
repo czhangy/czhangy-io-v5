@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import PanelEditButton from '@/components/status/PanelEditButton/PanelEditButton';
+import PanelButton from '@/components/status/PanelButton/PanelButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { useSession } from '@/lib/context/SessionContext';
 import CardistryIcon from '@/lib/icons/CardistryIcon';
@@ -97,7 +97,7 @@ const SkillPanel: React.FC<SkillPanelProps> = ({
     const isAdmin: boolean = role === 'ADMIN';
 
     const editButton: React.ReactNode =
-        isAdmin && !isEditing ? <PanelEditButton onClick={handleEdit} /> : null;
+        isAdmin && !isEditing ? <PanelButton onClick={handleEdit} /> : null;
 
     // -------------------------------------------------------------------------
     // EFFECTS
