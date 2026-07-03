@@ -63,6 +63,26 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
         setEditingMove(null);
     };
 
+    const handleIncrement = async (
+        move: CardistryMoveEntry,
+        amount: number
+    ): Promise<void> => {
+        const res = await fetch(`/api/cardistry/${move.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: move.name,
+                type: move.type,
+                count: move.count + amount,
+            }),
+        });
+        if (!res.ok) return;
+        const updated = (await res.json()) as CardistryMoveEntry;
+        setMoves((prev) =>
+            prev.map((m) => (m.id === updated.id ? updated : m))
+        );
+    };
+
     const handleDelete = async (id: number): Promise<void> => {
         const res = await fetch(`/api/cardistry/${id}`, { method: 'DELETE' });
         if (!res.ok) return;
@@ -142,22 +162,47 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                                 </div>
                             </div>
                             {isAdmin ? (
-                                <div className={styles['admin-actions']}>
-                                    <button
-                                        type="button"
-                                        className={styles['action-button']}
-                                        onClick={() => setEditingMove(move)}
+                                <>
+                                    <div
+                                        className={styles['increment-buttons']}
                                     >
-                                        <EditIcon />
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className={styles['action-button']}
-                                        onClick={() => handleDelete(move.id)}
-                                    >
-                                        <DeleteIcon />
-                                    </button>
-                                </div>
+                                        {[1, 10, 25, 50].map((amount) => (
+                                            <button
+                                                key={amount}
+                                                type="button"
+                                                className={
+                                                    styles['increment-btn']
+                                                }
+                                                onClick={() =>
+                                                    handleIncrement(
+                                                        move,
+                                                        amount
+                                                    )
+                                                }
+                                            >
+                                                +{amount}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <div className={styles['admin-actions']}>
+                                        <button
+                                            type="button"
+                                            className={styles['action-button']}
+                                            onClick={() => setEditingMove(move)}
+                                        >
+                                            <EditIcon />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className={styles['action-button']}
+                                            onClick={() =>
+                                                handleDelete(move.id)
+                                            }
+                                        >
+                                            <DeleteIcon />
+                                        </button>
+                                    </div>
+                                </>
                             ) : null}
                         </li>
                     );
