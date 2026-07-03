@@ -1,27 +1,26 @@
 import { prisma } from '@/lib/static/prisma';
 import { SkillEntry } from '@/lib/static/types';
-import SkillPanel from './SkillPanel/SkillPanel';
+import CardistryPanel from './CardistryPanel/CardistryPanel';
 
-type SkillPanelDataProps = {
+type CardistryPanelDataProps = {
     label: string;
     icon: React.ReactNode;
     cols: number;
     rows?: number;
 };
 
-const SkillPanelData = async ({
+const CardistryPanelData = async ({
     label,
     icon,
     cols,
     rows,
-}: SkillPanelDataProps) => {
+}: CardistryPanelDataProps) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
 
     const DEFAULT_SKILL_ENTRY: SkillEntry = {
         name: 'Something',
-        category: 'Coding',
     };
 
     // -------------------------------------------------------------------------
@@ -49,7 +48,7 @@ const SkillPanelData = async ({
     // -------------------------------------------------------------------------
 
     return (
-        <SkillPanel
+        <CardistryPanel
             initialEntry={skillEntry}
             label={label}
             icon={icon}
@@ -59,4 +58,4 @@ const SkillPanelData = async ({
     );
 };
 
-export default SkillPanelData;
+export default CardistryPanelData;

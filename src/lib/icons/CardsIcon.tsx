@@ -1,4 +1,4 @@
-const CardistryIcon: React.FC = () => {
+const CardsIcon: React.FC = () => {
     return (
         <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none">
             <path
@@ -23,4 +23,4 @@ const CardistryIcon: React.FC = () => {
     );
 };
 
-export default CardistryIcon;
+export default CardsIcon;

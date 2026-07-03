@@ -4,14 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import PanelButton from '@/components/status/PanelButton/PanelButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { useSession } from '@/lib/context/SessionContext';
-import CardistryIcon from '@/lib/icons/CardistryIcon';
-import CodingIcon from '@/lib/icons/CodingIcon';
-import MagicIcon from '@/lib/icons/MagicIcon';
+import CardsIcon from '@/lib/icons/CardsIcon';
 import { Key } from '@/lib/static/enums';
-import { SkillCategory, SkillEntry } from '@/lib/static/types';
-import styles from './SkillPanel.module.scss';
+import { SkillEntry } from '@/lib/static/types';
+import styles from './CardistryPanel.module.scss';
 
-type SkillPanelProps = {
+type CardistryPanelProps = {
     initialEntry: SkillEntry;
     label: string;
     icon: React.ReactNode;
@@ -19,25 +17,13 @@ type SkillPanelProps = {
     rows?: number;
 };
 
-const SkillPanel: React.FC<SkillPanelProps> = ({
+const CardistryPanel: React.FC<CardistryPanelProps> = ({
     initialEntry,
     label,
     icon,
     cols,
     rows,
 }) => {
-    // -------------------------------------------------------------------------
-    // CONSTANTS
-    // -------------------------------------------------------------------------
-
-    const CATEGORIES: SkillCategory[] = ['Coding', 'Cardistry', 'Magic'];
-
-    const CATEGORY_ICONS: Record<SkillCategory, React.ReactNode> = {
-        Coding: <CodingIcon />,
-        Cardistry: <CardistryIcon />,
-        Magic: <MagicIcon />,
-    };
-
     // -------------------------------------------------------------------------
     // HOOKS
     // -------------------------------------------------------------------------
@@ -52,29 +38,25 @@ const SkillPanel: React.FC<SkillPanelProps> = ({
     const [entry, setEntry] = useState<SkillEntry>(initialEntry);
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [draft, setDraft] = useState<string>('');
-    const [draftCategory, setDraftCategory] = useState<SkillCategory>(
-        initialEntry.category
-    );
 
     // -------------------------------------------------------------------------
     // HANDLERS
     // -------------------------------------------------------------------------
 
-    const handleEdit = () => {
+    const handleEdit = (): void => {
         setDraft(entry.name);
-        setDraftCategory(entry.category);
         setIsEditing(true);
     };
 
-    const handleCancel = () => {
+    const handleCancel = (): void => {
         setIsEditing(false);
         setDraft('');
     };
 
-    const handleSave = async () => {
+    const handleSave = async (): Promise<void> => {
         const trimmed = draft.trim();
         if (!trimmed) return;
-        const newEntry: SkillEntry = { name: trimmed, category: draftCategory };
+        const newEntry: SkillEntry = { name: trimmed };
         await fetch('/api/status/skill', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
@@ -85,7 +67,7 @@ const SkillPanel: React.FC<SkillPanelProps> = ({
         setDraft('');
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
         if (e.key === Key.Enter) handleSave();
         if (e.key === Key.Escape) handleCancel();
     };
@@ -141,7 +123,7 @@ const SkillPanel: React.FC<SkillPanelProps> = ({
                                 e: React.ChangeEvent<HTMLInputElement>
                             ) => setDraft(e.target.value)}
                             onKeyDown={handleKeyDown}
-                            placeholder="What are you learning?"
+                            placeholder="What are you practicing?"
                             autoFocus
                         />
                         <button
@@ -152,28 +134,11 @@ const SkillPanel: React.FC<SkillPanelProps> = ({
                             ✕
                         </button>
                     </div>
-                    <div className={styles.categories}>
-                        {CATEGORIES.map((cat) => (
-                            <button
-                                key={cat}
-                                type="button"
-                                className={`${styles.category}${draftCategory === cat ? ` ${styles['category--active']}` : ''}`}
-                                onClick={() => setDraftCategory(cat)}
-                            >
-                                <span className={styles['category-icon']}>
-                                    {CATEGORY_ICONS[cat]}
-                                </span>
-                                <span className={styles['category-name']}>
-                                    {cat}
-                                </span>
-                            </button>
-                        ))}
-                    </div>
                 </div>
             ) : (
                 <div className={styles.content}>
                     <span className={styles.icon}>
-                        {CATEGORY_ICONS[entry.category]}
+                        <CardsIcon />
                     </span>
                     <span className={styles.name}>{entry.name}</span>
                 </div>
@@ -182,4 +147,4 @@ const SkillPanel: React.FC<SkillPanelProps> = ({
     );
 };
 
-export default SkillPanel;
+export default CardistryPanel;

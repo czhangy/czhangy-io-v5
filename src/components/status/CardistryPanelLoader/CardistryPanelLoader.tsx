@@ -1,20 +1,23 @@
 import { Suspense } from 'react';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
-import LearnIcon from '@/lib/icons/LearnIcon';
-import SkillPanelData from './SkillPanelData/SkillPanelData';
+import CardsIcon from '@/lib/icons/CardsIcon';
+import CardistryPanelData from './CardistryPanelData/CardistryPanelData';
 
-type SkillPanelLoaderProps = {
+type CardistryPanelLoaderProps = {
     cols: number;
     rows?: number;
 };
 
-const SkillPanelLoader: React.FC<SkillPanelLoaderProps> = ({ cols, rows }) => {
+const CardistryPanelLoader: React.FC<CardistryPanelLoaderProps> = ({
+    cols,
+    rows,
+}) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
 
-    const LABEL: string = 'LEARNING';
-    const ICON: React.ReactNode = <LearnIcon />;
+    const LABEL: string = 'PRACTICING';
+    const ICON: React.ReactNode = <CardsIcon />;
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -32,9 +35,14 @@ const SkillPanelLoader: React.FC<SkillPanelLoaderProps> = ({ cols, rows }) => {
                 />
             }
         >
-            <SkillPanelData label={LABEL} icon={ICON} cols={cols} rows={rows} />
+            <CardistryPanelData
+                label={LABEL}
+                icon={ICON}
+                cols={cols}
+                rows={rows}
+            />
         </Suspense>
     );
 };
 
-export default SkillPanelLoader;
+export default CardistryPanelLoader;

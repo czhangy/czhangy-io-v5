@@ -31,7 +31,6 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    gap: 0.4rem;
     min-width: 0;
 
     .input-row {
@@ -76,57 +75,6 @@
             @media (hover: hover) {
                 &:hover {
                     color: $foreground;
-                }
-            }
-        }
-    }
-
-    .categories {
-        display: flex;
-        gap: 0.35rem;
-
-        .category {
-            @include mono-label;
-
-            align-items: center;
-            background: none;
-            border: 1px solid $border-subtle;
-            color: $text-dim;
-            cursor: pointer;
-            display: flex;
-            flex: 1;
-            font-size: 0.6rem;
-            gap: 0.3rem;
-            justify-content: center;
-            letter-spacing: 0.05em;
-            padding: 0.25rem 0.3rem;
-            transition:
-                border-color 0.15s ease,
-                color 0.15s ease;
-
-            .category-icon {
-                display: flex;
-
-                svg {
-                    height: 14px;
-                    width: 14px;
-                }
-            }
-
-            &--active {
-                border-color: $accent;
-                color: $accent;
-            }
-
-            @media (hover: hover) {
-                &:hover {
-                    border-color: $foreground;
-                    color: $foreground;
-                }
-
-                &--active:hover {
-                    border-color: $accent;
-                    color: $accent;
                 }
             }
         }
