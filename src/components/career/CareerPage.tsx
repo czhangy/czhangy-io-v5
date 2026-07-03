@@ -1,5 +1,5 @@
 import GlitchText from '@/components/common/GlitchText/GlitchText';
-import { JOBS } from '@/lib/static/jobs';
+import { JOBS } from '@/lib/static/job-data';
 import styles from './CareerPage.module.scss';
 import JobCard from './JobCard/JobCard';
 

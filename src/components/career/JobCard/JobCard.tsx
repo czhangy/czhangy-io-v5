@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Job } from '@/lib/static/jobs';
+import { Job } from '@/lib/static/types';
 import styles from './JobCard.module.scss';
 
 type JobCardProps = {
