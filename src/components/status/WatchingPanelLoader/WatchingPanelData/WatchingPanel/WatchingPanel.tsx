@@ -130,7 +130,7 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
 
     const headerActions: React.ReactNode = (
         <>
-            <PanelButton href="/status/watched" icon={<LinkIcon />} />
+            <PanelButton href="/status/archives" icon={<LinkIcon />} />
             {isAdmin && !isAdding ? (
                 <PanelButton onClick={handleStartAdd} icon={<PlusIcon />} />
             ) : null}

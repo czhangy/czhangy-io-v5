@@ -6,14 +6,16 @@ import PaginationControls from '@/components/common/PaginationControls/Paginatio
 import { useSession } from '@/lib/context/SessionContext';
 import DeleteIcon from '@/lib/icons/DeleteIcon';
 import { WatchedMediaEntry } from '@/lib/static/types';
-import styles from './WatchedContent.module.scss';
-import WatchedControls from './WatchedControls/WatchedControls';
+import styles from './ArchivesContent.module.scss';
+import ArchivesControls from './ArchivesControls/ArchivesControls';
 
-type WatchedContentProps = {
+type ArchivesContentProps = {
     initialEntries: WatchedMediaEntry[];
 };
 
-const WatchedContent: React.FC<WatchedContentProps> = ({ initialEntries }) => {
+const ArchivesContent: React.FC<ArchivesContentProps> = ({
+    initialEntries,
+}) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
@@ -86,8 +88,8 @@ const WatchedContent: React.FC<WatchedContentProps> = ({ initialEntries }) => {
     // -------------------------------------------------------------------------
 
     return (
-        <div className={styles['watched-content']}>
-            <WatchedControls
+        <div className={styles['archives-content']}>
+            <ArchivesControls
                 page={page}
                 totalPages={totalPages}
                 onPrev={handlePrevPage}
@@ -144,4 +146,4 @@ const WatchedContent: React.FC<WatchedContentProps> = ({ initialEntries }) => {
     );
 };
 
-export default WatchedContent;
+export default ArchivesContent;
