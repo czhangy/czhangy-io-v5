@@ -39,8 +39,10 @@ export type NavItem = {
 export type CardistryMoveEntry = {
     id: number;
     name: string;
+    type: string;
     count: number;
     isActive: boolean;
+    createdAt: string;
 };
 
 export type GameEntry = {

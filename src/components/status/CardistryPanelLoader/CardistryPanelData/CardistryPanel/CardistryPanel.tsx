@@ -5,6 +5,7 @@ import PanelButton from '@/components/status/PanelButton/PanelButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { useSession } from '@/lib/context/SessionContext';
 import LinkIcon from '@/lib/icons/LinkIcon';
+import { CARDISTRY_MOVE_TYPES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
 import { CardistryMoveEntry } from '@/lib/static/types';
 import styles from './CardistryPanel.module.scss';
@@ -40,6 +41,7 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
     );
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [draft, setDraft] = useState<string>('');
+    const [draftType, setDraftType] = useState<string>('');
     const [moves, setMoves] = useState<CardistryMoveEntry[]>([]);
 
     // -------------------------------------------------------------------------
@@ -48,6 +50,7 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
 
     const handleEdit = async (): Promise<void> => {
         setDraft('');
+        setDraftType('');
         setIsEditing(true);
         const res = await fetch('/api/cardistry');
         if (res.ok) setMoves((await res.json()) as CardistryMoveEntry[]);
@@ -56,16 +59,17 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
     const handleCancel = (): void => {
         setIsEditing(false);
         setDraft('');
+        setDraftType('');
         setMoves([]);
     };
 
     const handleAdd = async (): Promise<void> => {
         const trimmed = draft.trim();
-        if (!trimmed) return;
+        if (!trimmed || !draftType) return;
         const res = await fetch('/api/cardistry', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: trimmed }),
+            body: JSON.stringify({ name: trimmed, type: draftType }),
         });
         if (!res.ok) return;
         setActiveMove((await res.json()) as CardistryMoveEntry);
@@ -154,6 +158,20 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
                             ✕
                         </button>
                     </div>
+                    <select
+                        className={styles.select}
+                        value={draftType}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                            setDraftType(e.target.value)
+                        }
+                    >
+                        <option value="">Type...</option>
+                        {CARDISTRY_MOVE_TYPES.map((t) => (
+                            <option key={t} value={t}>
+                                {t}
+                            </option>
+                        ))}
+                    </select>
                     {moves.length > 0 ? (
                         <ul className={styles['moves-list']}>
                             {moves.map((move) => (

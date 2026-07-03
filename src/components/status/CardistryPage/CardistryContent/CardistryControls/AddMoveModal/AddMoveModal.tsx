@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Modal from '@/components/common/Modal/Modal';
+import { CARDISTRY_MOVE_TYPES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
 import { CardistryMoveEntry } from '@/lib/static/types';
 import styles from './AddMoveModal.module.scss';
@@ -17,6 +18,7 @@ const AddMoveModal: React.FC<AddMoveModalProps> = ({ onClose, onAdd }) => {
     // -------------------------------------------------------------------------
 
     const [name, setName] = useState<string>('');
+    const [type, setType] = useState<string>('');
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -28,7 +30,7 @@ const AddMoveModal: React.FC<AddMoveModalProps> = ({ onClose, onAdd }) => {
         const res = await fetch('/api/cardistry', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: trimmed }),
+            body: JSON.stringify({ name: trimmed, type }),
         });
         if (!res.ok) return;
         onAdd((await res.json()) as CardistryMoveEntry);
@@ -57,11 +59,25 @@ const AddMoveModal: React.FC<AddMoveModalProps> = ({ onClose, onAdd }) => {
                     placeholder="Move name..."
                     autoFocus
                 />
+                <select
+                    className={styles.select}
+                    value={type}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                        setType(e.target.value)
+                    }
+                >
+                    <option value="">Select type...</option>
+                    {CARDISTRY_MOVE_TYPES.map((t) => (
+                        <option key={t} value={t}>
+                            {t}
+                        </option>
+                    ))}
+                </select>
                 <button
                     type="button"
                     className={styles.submit}
                     onClick={handleSubmit}
-                    disabled={!name.trim()}
+                    disabled={!name.trim() || !type}
                 >
                     Add
                 </button>

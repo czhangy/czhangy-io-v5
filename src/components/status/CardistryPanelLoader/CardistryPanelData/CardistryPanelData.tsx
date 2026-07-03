@@ -24,7 +24,9 @@ const CardistryPanelData = async ({
             const move = await prisma.cardistryMove.findFirst({
                 where: { isActive: true },
             });
-            return move ?? null;
+            if (move) {
+                return { ...move, createdAt: move.createdAt.toISOString() };
+            }
         } catch {}
         return null;
     };

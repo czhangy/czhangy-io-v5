@@ -19,7 +19,10 @@ export const POST = async (request: NextRequest) => {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { name } = (await request.json()) as { name: string };
+    const { name, type } = (await request.json()) as {
+        name: string;
+        type: string;
+    };
 
     if (!name?.trim()) {
         return NextResponse.json(
@@ -28,11 +31,18 @@ export const POST = async (request: NextRequest) => {
         );
     }
 
+    if (!type?.trim()) {
+        return NextResponse.json(
+            { error: 'Type is required' },
+            { status: 400 }
+        );
+    }
+
     const [, move] = await prisma.$transaction([
         prisma.cardistryMove.updateMany({ data: { isActive: false } }),
         prisma.cardistryMove.upsert({
             where: { name: name.trim() },
-            create: { name: name.trim(), isActive: true },
+            create: { name: name.trim(), type: type.trim(), isActive: true },
             update: { isActive: true },
         }),
     ]);
