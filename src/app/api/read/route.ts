@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SESSION_COOKIE } from '@/lib/static/constants';
+import { READ_MILESTONES, SESSION_COOKIE } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
 import { ReadMediaEntry } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
+import DateHelpers from '@/lib/utils/DateHelpers';
 import GoogleBooksHelpers from '@/lib/utils/GoogleBooksHelpers';
 
 export const POST = async (request: NextRequest) => {
@@ -17,6 +18,8 @@ export const POST = async (request: NextRequest) => {
         name: string;
         bookId: string;
     };
+
+    const existing = await prisma.readMedia.findUnique({ where: { bookId } });
 
     const bookData = await GoogleBooksHelpers.getBookById(bookId);
     const author = bookData?.author;
@@ -39,6 +42,24 @@ export const POST = async (request: NextRequest) => {
         },
         update: { addedAt: new Date() },
     });
+
+    if (!existing) {
+        const count = await prisma.readMedia.count();
+        const milestone = READ_MILESTONES.find((m) => m.count === count);
+        if (milestone) {
+            await prisma.achievement
+                .create({
+                    data: {
+                        tier: milestone.tier,
+                        name: milestone.name,
+                        category: 'hobbies',
+                        description: `Recorded ${milestone.count} read books.`,
+                        date: DateHelpers.getTodayString(),
+                    },
+                })
+                .catch(() => {});
+        }
+    }
 
     const entry: ReadMediaEntry = {
         ...record,
