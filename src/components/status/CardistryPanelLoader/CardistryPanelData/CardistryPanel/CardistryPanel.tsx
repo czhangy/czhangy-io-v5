@@ -4,13 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import PanelButton from '@/components/status/PanelButton/PanelButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { useSession } from '@/lib/context/SessionContext';
-import CardsIcon from '@/lib/icons/CardsIcon';
 import { Key } from '@/lib/static/enums';
-import { SkillEntry } from '@/lib/static/types';
+import { CardistryMoveEntry } from '@/lib/static/types';
 import styles from './CardistryPanel.module.scss';
 
 type CardistryPanelProps = {
-    initialEntry: SkillEntry;
+    initialMove: CardistryMoveEntry | null;
     label: string;
     icon: React.ReactNode;
     cols: number;
@@ -18,7 +17,7 @@ type CardistryPanelProps = {
 };
 
 const CardistryPanel: React.FC<CardistryPanelProps> = ({
-    initialEntry,
+    initialMove,
     label,
     icon,
     cols,
@@ -35,51 +34,56 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
     // STATE
     // -------------------------------------------------------------------------
 
-    const [entry, setEntry] = useState<SkillEntry>(initialEntry);
+    const [activeMove, setActiveMove] = useState<CardistryMoveEntry | null>(
+        initialMove
+    );
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [draft, setDraft] = useState<string>('');
+    const [moves, setMoves] = useState<CardistryMoveEntry[]>([]);
 
     // -------------------------------------------------------------------------
     // HANDLERS
     // -------------------------------------------------------------------------
 
-    const handleEdit = (): void => {
-        setDraft(entry.name);
+    const handleEdit = async (): Promise<void> => {
+        setDraft('');
         setIsEditing(true);
+        const res = await fetch('/api/cardistry');
+        if (res.ok) setMoves((await res.json()) as CardistryMoveEntry[]);
     };
 
     const handleCancel = (): void => {
         setIsEditing(false);
         setDraft('');
+        setMoves([]);
     };
 
-    const handleSave = async (): Promise<void> => {
+    const handleAdd = async (): Promise<void> => {
         const trimmed = draft.trim();
         if (!trimmed) return;
-        const newEntry: SkillEntry = { name: trimmed };
-        await fetch('/api/status/skill', {
-            method: 'PATCH',
+        const res = await fetch('/api/cardistry', {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ value: JSON.stringify(newEntry) }),
+            body: JSON.stringify({ name: trimmed }),
         });
-        setEntry(newEntry);
-        setIsEditing(false);
-        setDraft('');
+        if (!res.ok) return;
+        setActiveMove((await res.json()) as CardistryMoveEntry);
+        handleCancel();
+    };
+
+    const handleSelect = async (move: CardistryMoveEntry): Promise<void> => {
+        const res = await fetch(`/api/cardistry/${move.id}`, {
+            method: 'PATCH',
+        });
+        if (!res.ok) return;
+        setActiveMove((await res.json()) as CardistryMoveEntry);
+        handleCancel();
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-        if (e.key === Key.Enter) handleSave();
+        if (e.key === Key.Enter) handleAdd();
         if (e.key === Key.Escape) handleCancel();
     };
-
-    // -------------------------------------------------------------------------
-    // RENDERING
-    // -------------------------------------------------------------------------
-
-    const isAdmin: boolean = role === 'ADMIN';
-
-    const editButton: React.ReactNode =
-        isAdmin && !isEditing ? <PanelButton onClick={handleEdit} /> : null;
 
     // -------------------------------------------------------------------------
     // EFFECTS
@@ -100,6 +104,15 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
         return () =>
             document.removeEventListener('mousedown', handleClickOutside);
     }, [isEditing]);
+
+    // -------------------------------------------------------------------------
+    // RENDERING
+    // -------------------------------------------------------------------------
+
+    const isAdmin: boolean = role === 'ADMIN';
+
+    const editButton: React.ReactNode =
+        isAdmin && !isEditing ? <PanelButton onClick={handleEdit} /> : null;
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -123,7 +136,7 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
                                 e: React.ChangeEvent<HTMLInputElement>
                             ) => setDraft(e.target.value)}
                             onKeyDown={handleKeyDown}
-                            placeholder="What are you practicing?"
+                            placeholder="New move..."
                             autoFocus
                         />
                         <button
@@ -134,13 +147,27 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
                             ✕
                         </button>
                     </div>
+                    {moves.length > 0 ? (
+                        <ul className={styles['moves-list']}>
+                            {moves.map((move) => (
+                                <li key={move.id}>
+                                    <button
+                                        type="button"
+                                        className={`${styles.move}${move.id === activeMove?.id ? ` ${styles['move--active']}` : ''}`}
+                                        onClick={() => handleSelect(move)}
+                                    >
+                                        {move.name}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : null}
                 </div>
             ) : (
                 <div className={styles.content}>
-                    <span className={styles.icon}>
-                        <CardsIcon />
+                    <span className={styles.name}>
+                        {activeMove?.name ?? '—'}
                     </span>
-                    <span className={styles.name}>{entry.name}</span>
                 </div>
             )}
         </StatusPanel>

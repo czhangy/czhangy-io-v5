@@ -36,8 +36,11 @@ export type NavItem = {
     label: string;
 };
 
-export type SkillEntry = {
+export type CardistryMoveEntry = {
+    id: number;
     name: string;
+    count: number;
+    isActive: boolean;
 };
 
 export type GameEntry = {

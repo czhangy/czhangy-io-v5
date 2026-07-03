@@ -1,6 +1,6 @@
 # CardistryPanelData
 
-Async server component that fetches the current skill entry from the database, then renders CardistryPanel with the resolved data.
+Async server component that fetches the currently active `CardistryMove` from the database, then renders CardistryPanel with the resolved data.
 
 ## Props
 

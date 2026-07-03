@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/static/prisma';
-import { SkillEntry } from '@/lib/static/types';
+import { CardistryMoveEntry } from '@/lib/static/types';
 import CardistryPanel from './CardistryPanel/CardistryPanel';
 
 type CardistryPanelDataProps = {
@@ -16,32 +16,24 @@ const CardistryPanelData = async ({
     rows,
 }: CardistryPanelDataProps) => {
     // -------------------------------------------------------------------------
-    // CONSTANTS
-    // -------------------------------------------------------------------------
-
-    const DEFAULT_SKILL_ENTRY: SkillEntry = {
-        name: 'Something',
-    };
-
-    // -------------------------------------------------------------------------
     // COMPUTATIONS
     // -------------------------------------------------------------------------
 
-    const fetchSkillEntry = async (): Promise<SkillEntry> => {
+    const fetchActiveMove = async (): Promise<CardistryMoveEntry | null> => {
         try {
-            const item = await prisma.statusItem.findUnique({
-                where: { key: 'skill' },
+            const move = await prisma.cardistryMove.findFirst({
+                where: { isActive: true },
             });
-            if (item) return JSON.parse(item.value) as SkillEntry;
+            return move ?? null;
         } catch {}
-        return DEFAULT_SKILL_ENTRY;
+        return null;
     };
 
     // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const skillEntry: SkillEntry = await fetchSkillEntry();
+    const activeMove: CardistryMoveEntry | null = await fetchActiveMove();
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -49,7 +41,7 @@ const CardistryPanelData = async ({
 
     return (
         <CardistryPanel
-            initialEntry={skillEntry}
+            initialMove={activeMove}
             label={label}
             icon={icon}
             cols={cols}
