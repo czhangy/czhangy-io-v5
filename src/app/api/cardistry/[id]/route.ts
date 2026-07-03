@@ -22,13 +22,31 @@ export const PATCH = async (
         return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
     }
 
-    const [, move] = await prisma.$transaction([
-        prisma.cardistryMove.updateMany({ data: { isActive: false } }),
-        prisma.cardistryMove.update({
-            where: { id: numericId },
-            data: { isActive: true },
-        }),
-    ]);
+    const existingItem = await prisma.statusItem.findUnique({
+        where: { key: 'cardistryMove' },
+    });
 
-    return NextResponse.json(move as CardistryMoveEntry);
+    if (existingItem) {
+        await prisma.statusItem.update({
+            where: { key: 'cardistryMove' },
+            data: { value: String(numericId) },
+        });
+    } else {
+        await prisma.statusItem.create({
+            data: { key: 'cardistryMove', value: String(numericId) },
+        });
+    }
+
+    const move = await prisma.cardistryMove.findUnique({
+        where: { id: numericId },
+    });
+
+    if (!move) {
+        return NextResponse.json({ error: 'Move not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({
+        ...move,
+        createdAt: move.createdAt.toISOString(),
+    } as CardistryMoveEntry);
 };

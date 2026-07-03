@@ -41,7 +41,6 @@ export type CardistryMoveEntry = {
     name: string;
     type: string;
     count: number;
-    isActive: boolean;
     createdAt: string;
 };
 

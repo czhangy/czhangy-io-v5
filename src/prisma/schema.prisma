@@ -61,6 +61,5 @@ model CardistryMove {
     name      String   @unique
     type      String
     count     Int      @default(0)
-    isActive  Boolean  @default(false)
     createdAt DateTime @default(now())
 }

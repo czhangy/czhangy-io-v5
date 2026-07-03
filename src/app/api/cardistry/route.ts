@@ -8,7 +8,12 @@ export const GET = async () => {
     const moves = await prisma.cardistryMove.findMany({
         orderBy: { name: 'asc' },
     });
-    return NextResponse.json(moves as CardistryMoveEntry[]);
+    return NextResponse.json(
+        moves.map((m) => ({
+            ...m,
+            createdAt: m.createdAt.toISOString(),
+        })) as CardistryMoveEntry[]
+    );
 };
 
 export const POST = async (request: NextRequest) => {
@@ -38,14 +43,38 @@ export const POST = async (request: NextRequest) => {
         );
     }
 
-    const [, move] = await prisma.$transaction([
-        prisma.cardistryMove.updateMany({ data: { isActive: false } }),
-        prisma.cardistryMove.upsert({
-            where: { name: name.trim() },
-            create: { name: name.trim(), type: type.trim(), isActive: true },
-            update: { isActive: true },
-        }),
-    ]);
+    const existing = await prisma.cardistryMove.findUnique({
+        where: { name: name.trim() },
+    });
 
-    return NextResponse.json(move as CardistryMoveEntry);
+    if (existing) {
+        return NextResponse.json(
+            { error: 'Move already exists' },
+            { status: 409 }
+        );
+    }
+
+    const move = await prisma.cardistryMove.create({
+        data: { name: name.trim(), type: type.trim() },
+    });
+
+    const existingItem = await prisma.statusItem.findUnique({
+        where: { key: 'cardistryMove' },
+    });
+
+    if (existingItem) {
+        await prisma.statusItem.update({
+            where: { key: 'cardistryMove' },
+            data: { value: String(move.id) },
+        });
+    } else {
+        await prisma.statusItem.create({
+            data: { key: 'cardistryMove', value: String(move.id) },
+        });
+    }
+
+    return NextResponse.json({
+        ...move,
+        createdAt: move.createdAt.toISOString(),
+    } as CardistryMoveEntry);
 };

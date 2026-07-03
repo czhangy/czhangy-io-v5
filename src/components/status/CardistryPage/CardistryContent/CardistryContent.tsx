@@ -40,8 +40,10 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
     const handleAdd = (move: CardistryMoveEntry): void => {
         setMoves((prev) => {
             const filtered = prev.filter((m) => m.id !== move.id);
-            return [...filtered, move].sort((a, b) =>
-                a.name.localeCompare(b.name)
+            return [...filtered, move].sort(
+                (a, b) =>
+                    new Date(a.createdAt).getTime() -
+                    new Date(b.createdAt).getTime()
             );
         });
         setPage(1);
