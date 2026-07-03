@@ -1,4 +1,23 @@
+@use '@/styles/mixins' as *;
+
 .watched-controls {
+    align-items: center;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+
+    .left {
+        display: flex;
+
+        .add-button {
+            @include game-button;
+
+            cursor: pointer;
+            letter-spacing: 0.15em;
+            padding: 0.625rem 1.25rem;
+        }
+    }
+
+    .right {
+        display: flex;
+    }
 }

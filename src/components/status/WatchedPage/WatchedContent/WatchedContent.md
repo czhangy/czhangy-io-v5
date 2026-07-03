@@ -15,6 +15,11 @@ Client component rendered by WatchedPage. Displays a paginated list of watched m
 | `entries` | `WatchedMediaEntry[]` | `initialEntries` | Currently displayed entries  |
 | `page`    | `number`              | `1`              | Current page index (1-based) |
 
+## Handlers
+
+- `handleAdd` — prepends a newly added entry (deduplicating by `tmdbId`) and resets to page 1
+- `handleDelete` — removes an entry by id and clamps the page if necessary
+
 ## Computations
 
 - `totalPages` — total page count derived from `entries.length` and `ITEMS_PER_PAGE`

@@ -37,6 +37,14 @@ const WatchedContent: React.FC<WatchedContentProps> = ({ initialEntries }) => {
     // HANDLERS
     // -------------------------------------------------------------------------
 
+    const handleAdd = (entry: WatchedMediaEntry): void => {
+        setEntries((prev) => {
+            const filtered = prev.filter((e) => e.tmdbId !== entry.tmdbId);
+            return [entry, ...filtered];
+        });
+        setPage(1);
+    };
+
     const handleDelete = async (id: number): Promise<void> => {
         const res = await fetch(`/api/watched/${id}`, { method: 'DELETE' });
         if (!res.ok) return;
@@ -84,6 +92,8 @@ const WatchedContent: React.FC<WatchedContentProps> = ({ initialEntries }) => {
                 totalPages={totalPages}
                 onPrev={handlePrevPage}
                 onNext={handleNextPage}
+                isAdmin={isAdmin}
+                onAdd={handleAdd}
             />
             <ul className={styles.list}>
                 {paginatedEntries.map((entry) => (
