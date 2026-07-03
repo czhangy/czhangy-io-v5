@@ -1,0 +1,10 @@
+.image-wrapper {
+    align-self: stretch;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+.image {
+    object-fit: cover;
+}
