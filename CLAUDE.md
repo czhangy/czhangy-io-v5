@@ -141,89 +141,12 @@ Only list variables that this component consumes but does not define. Do not lis
 - **PascalCase `.ts` class files** — utility classes
 - **`types.ts`** — shared TypeScript types used across multiple components
 - **`constants.ts`** — shared runtime constants (e.g. site nav items)
-- **`index.ts`** — barrel that re-exports everything from the above
-
-Import shared types and constants via `@/lib/utils`.
-
-## Component Structure
-
-Custom ESLint rules (in `.eslint-rules/`) enforce a strict section layout inside component functions:
-
-```typescript
-const MyComponent: React.FC = () => {
-    // -------------------------------------------------------------------------
-    // CONSTANTS
-    // -------------------------------------------------------------------------
-
-    // -------------------------------------------------------------------------
-    // HOOKS
-    // -------------------------------------------------------------------------
-
-    // -------------------------------------------------------------------------
-    // STATE
-    // -------------------------------------------------------------------------
-
-    // -------------------------------------------------------------------------
-    // HANDLERS
-    // -------------------------------------------------------------------------
-
-    // -------------------------------------------------------------------------
-    // COMPUTATIONS
-    // -------------------------------------------------------------------------
-
-    // -------------------------------------------------------------------------
-    // RENDERING
-    // -------------------------------------------------------------------------
-
-    // -------------------------------------------------------------------------
-    // EFFECTS
-    // -------------------------------------------------------------------------
-
-    // -------------------------------------------------------------------------
-    // MARKUP
-    // -------------------------------------------------------------------------
-
-    return <div></div>;
-};
-
-export default MyComponent;
-```
-
-Only include sections that are actually used. MARKUP is always required. The divider lines must contain at least 20 dashes (the ESLint rule enforces this).
-
-**What belongs in each section:**
-
-- **CONSTANTS** — `UPPER_SNAKE_CASE` typed consts, non-Props type aliases, and enums. Examples: `const ITEMS: string[] = [...]`, `type SortField = 'date' | 'name'`. Everything inside the component function must live in a section, including static values that don't depend on state or props.
-- **HOOKS** — `useRef`, `usePathname`, `useReducer`, `useRouter`, `useSearchParams`, and `useSession` only. No other hooks belong here.
-- **STATE** — `useState` calls only.
-- **HANDLERS** — `handle*`-named arrow functions and `useCallback` calls. Handlers may call functions defined later in COMPUTATIONS — closures resolve at call time, not definition time, so forward references are safe.
-- **COMPUTATIONS** — Arrow functions (`const fn = () => ...`) and `useMemo` calls only. These are reusable helpers called by handlers or used in RENDERING. **The ESLint rule enforces this strictly — only arrow functions and `useMemo` are valid here.** Plain derived values that are not reusable functions do not belong here.
-- **RENDERING** — Everything else that derives a value for use in the return: plain `const` expressions, ternaries, array operations (`.filter()`, `.sort()`, `.map()`), and `render*` arrow functions that return JSX. All consts must have explicit type annotations. No hook calls allowed. When in doubt whether something belongs in COMPUTATIONS or RENDERING, ask: is it a reusable function (`const fn = () => ...`)? If yes → COMPUTATIONS. If it's a plain derived value → RENDERING.
-- **EFFECTS** — `useEffect` calls only.
-- **MARKUP** — The `return` statement. May return JSX, a ternary expression, or a `createPortal(...)` call.
-
-The exported component name must match the filename.
-
-**`'use client'`** must appear at the top of any component that uses React hooks (`useState`, `useEffect`, etc.), browser APIs, or Next.js client hooks (`useRouter`, `usePathname`, etc.).
 
 **All definitions belong inside the component function** in the appropriate section — including static constants that do not depend on state or props. The only things permitted at module level are imports, the component function declaration itself, and the default export.
-
-**Props** use `type` (not `interface`), named `ComponentNameProps`. Optional props use `?`. The component signature destructures props inline:
-
-```typescript
-type MyComponentProps = {
-    value: string;
-    onChange?: (value: string) => void;
-};
-
-const MyComponent: React.FC<MyComponentProps> = ({ value, onChange }) => {
-```
 
 **Functions:** Always use arrow functions (`const fn = () => ...`). Never use the `function` keyword — this applies to component helpers, callbacks, and module-level functions.
 
 **Event handlers** are prefixed with `handle`, named after event + subject: `handleClick`, `handleKeyDown`, `handleMenuSelect`. Callback parameters are always explicitly typed even when TypeScript can infer them.
-
-**Conditional rendering:** Use ternary (`condition ? <A /> : null`). Do not use `&&` short-circuit — falsy values can render unexpectedly.
 
 **Inline styles** are only used for values that are dynamic at runtime (e.g. user-defined colors). CSS custom properties set via inline style use the `as React.CSSProperties` cast:
 
@@ -233,18 +156,9 @@ style={{ '--color': value } as React.CSSProperties}
 
 **Avoid `setState` inside `useEffect` bodies.** If multiple state values transition together, use `useReducer` and dispatch from the effect instead. If a value must persist after a nullable prop clears (e.g. during a close animation), split into a non-nullable data prop + a separate `open: boolean` controlled by the parent.
 
-### Component optimization
-
-When optimizing components:
-
-**Do:** remove unused variables/props/refs, simplify logic, fix missing effect dependencies, improve type safety, convert arrays to Maps/Records for O(1) lookups when frequently searched.
-
-**Don't:** change `condition ? <X /> : null` to `condition && <X />`, add ARIA attributes unprompted, use array filter/join for className construction, remove redundant type annotations.
-
 ## Code Style
 
 - **Formatting:** 4-space indentation, 80-char line width, single quotes, trailing commas (ES5)
-- **Import order:** React → Next.js → third-party → components → lib → aliases → relative
 - **SCSS constants:** `$accent`, `$background`, `$foreground` defined in `_constants.scss` — use these in component SCSS files, not CSS `var()` calls. CSS variables are only used where runtime values are unavoidable (e.g. `var(--font-geist-mono)` set by Next.js at runtime).
 - **CSS Modules access:** Use `styles.className` for single-word class names, `styles['hyphenated-name']` for names containing hyphens
 
@@ -307,3 +221,11 @@ Modifier classes (`&--variant`) nest inside their base class. **Base styles must
 ```
 
 **Transitions** are declared on the base element, not inside the `:hover` block.
+
+## ESLint Rules
+
+Custom rules live in `.eslint-rules/` and are registered in `eslint.config.mjs`. Active rules:
+
+- **`no-parent-imports`** (`code-style/`) — Bans any import whose path starts with `../`. Use the `@/` alias or a path relative to a subdirectory.
+- **`no-export-type`** (`code-style/`) — Bans `export type` in all files except `src/lib/utils/shared/types.ts`. Type exports belong only in the shared types file.
+- **`@typescript-eslint/no-unused-vars`** — Unused variables are errors (not warnings).
