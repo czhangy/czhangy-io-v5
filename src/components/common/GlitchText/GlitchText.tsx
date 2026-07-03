@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useReducer } from 'react';
-
 import styles from './GlitchText.module.scss';
 
 type GlitchTextProps = {
@@ -21,44 +20,49 @@ type GlitchTextAction =
     | { type: 'RESOLVE'; text: string }
     | { type: 'RESET'; text: string };
 
-const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?@#$%&*<>|';
-const SCRAMBLE_DURATION = 400;
-const STAGGER = 100;
-
-const glitchTextReducer = (
-    state: GlitchTextState,
-    action: GlitchTextAction,
-): GlitchTextState => {
-    switch (action.type) {
-        case 'TICK':
-            return { ...state, displayText: action.text };
-        case 'RESOLVE':
-            return { ...state, displayText: action.text, isResolved: true };
-        case 'RESET':
-            return {
-                displayText: action.text,
-                isResolved: false,
-                letterDelays: action.text.split('').map(() => -(Math.random() * 5)),
-            };
-    }
-};
-
 const GlitchText: React.FC<GlitchTextProps> = ({
     text,
     className,
     as: Tag = 'span',
 }) => {
     // -------------------------------------------------------------------------
+    // CONSTANTS
+    // -------------------------------------------------------------------------
+
+    const CHARS: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?@#$%&*<>|';
+    const SCRAMBLE_DURATION: number = 400;
+    const STAGGER: number = 100;
+
+    // -------------------------------------------------------------------------
     // HOOKS
     // -------------------------------------------------------------------------
 
     const [{ displayText, isResolved, letterDelays }, dispatch] = useReducer(
-        glitchTextReducer,
+        (state: GlitchTextState, action: GlitchTextAction): GlitchTextState => {
+            switch (action.type) {
+                case 'TICK':
+                    return { ...state, displayText: action.text };
+                case 'RESOLVE':
+                    return {
+                        ...state,
+                        displayText: action.text,
+                        isResolved: true,
+                    };
+                case 'RESET':
+                    return {
+                        displayText: action.text,
+                        isResolved: false,
+                        letterDelays: action.text
+                            .split('')
+                            .map(() => -(Math.random() * 5)),
+                    };
+            }
+        },
         {
             displayText: text,
             isResolved: false,
             letterDelays: text.split('').map(() => 0),
-        },
+        }
     );
 
     // -------------------------------------------------------------------------
@@ -124,7 +128,7 @@ const GlitchText: React.FC<GlitchTextProps> = ({
                     >
                         {char}
                     </span>
-                ),
+                )
             )}
         </Tag>
     );

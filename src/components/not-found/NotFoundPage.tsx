@@ -1,4 +1,4 @@
-import InfoPage from '@/components/common/InfoPage/InfoPage';
+import InfoPage from '@/components/layout/InfoPage/InfoPage';
 
 const NotFoundPage: React.FC = () => {
     // -------------------------------------------------------------------------

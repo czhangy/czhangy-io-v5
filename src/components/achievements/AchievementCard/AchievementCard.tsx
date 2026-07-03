@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import EditButton from '@/components/common/EditButton/EditButton';
 import { useSession } from '@/lib/context/SessionContext';
 import DeleteIcon from '@/lib/icons/DeleteIcon';
+import EditIcon from '@/lib/icons/EditIcon';
 import type { Achievement } from '@/generated/prisma/client';
 import styles from './AchievementCard.module.scss';
 import EditAchievementModal from './EditAchievementModal/EditAchievementModal';
@@ -77,10 +77,13 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement }) => {
         >
             {role === 'ADMIN' ? (
                 <div className={styles.buttons}>
-                    <EditButton
+                    <button
+                        type="button"
                         className={styles.button}
                         onClick={handleEditOpen}
-                    />
+                    >
+                        <EditIcon />
+                    </button>
                     <button
                         className={styles.button}
                         type="button"
