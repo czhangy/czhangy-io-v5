@@ -13,6 +13,10 @@ const localCodeStyleRules = {
 
 const localComponentRules = {
     'filename-export-match': require('./.eslint-rules/components/filename-export-match.js'),
+    'component-structure': require('./.eslint-rules/components/component-structure.js'),
+    'props-convention': require('./.eslint-rules/components/props-convention.js'),
+    'no-module-level-code': require('./.eslint-rules/components/no-module-level-code.js'),
+    'component-sections': require('./.eslint-rules/components/component-sections.js'),
 };
 
 const localLibRules = {
@@ -50,6 +54,10 @@ const eslintConfig = defineConfig([
         plugins: { component: { rules: localComponentRules } },
         rules: {
             'component/filename-export-match': 'error',
+            'component/component-structure': 'error',
+            'component/props-convention': 'error',
+            'component/no-module-level-code': 'error',
+            'component/component-sections': 'error',
         },
     },
     {
