@@ -18,16 +18,17 @@ export type SpotifyTrack = {
     url: string;
 };
 
-export type TVmazeShow = {
+export type TMDBMedia = {
     poster: string | null;
-    url: string;
     genres: string[];
 };
 
-export type TVmazeSearchResult = {
+export type TMDBSearchResult = {
     id: number;
     name: string;
     year: string | null;
+    mediaType: 'movie' | 'tv';
+    poster: string | null;
 };
 
 export type NavItem = {
@@ -47,9 +48,14 @@ export type GameEntry = {
     rawgId: number;
 };
 
-export type ShowEntry = {
+export type WatchedMediaEntry = {
+    id: number;
     name: string;
-    tvmazeId: number;
+    tmdbId: number;
+    mediaType: 'movie' | 'tv';
+    poster: string | null;
+    genres: string[];
+    addedAt: string;
 };
 
 export type UserRole = 'ADMIN' | 'USER';

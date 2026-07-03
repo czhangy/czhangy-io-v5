@@ -1,6 +1,5 @@
 import { prisma } from '@/lib/static/prisma';
-import { ShowEntry, TVmazeShow } from '@/lib/static/types';
-import TVmazeHelpers from '@/lib/utils/TVmazeHelpers';
+import { WatchedMediaEntry } from '@/lib/static/types';
 import WatchingPanel from './WatchingPanel/WatchingPanel';
 
 type WatchingPanelDataProps = {
@@ -17,48 +16,29 @@ const WatchingPanelData = async ({
     rows,
 }: WatchingPanelDataProps) => {
     // -------------------------------------------------------------------------
-    // CONSTANTS
-    // -------------------------------------------------------------------------
-
-    const DEFAULT_SHOW_ENTRIES: ShowEntry[] = [
-        { name: '???', tvmazeId: -1 },
-        { name: '???', tvmazeId: -1 },
-        { name: '???', tvmazeId: -1 },
-        { name: '???', tvmazeId: -1 },
-        { name: '???', tvmazeId: -1 },
-    ];
-
-    // -------------------------------------------------------------------------
     // COMPUTATIONS
     // -------------------------------------------------------------------------
 
-    const fetchShowEntries = async (): Promise<ShowEntry[]> => {
+    const fetchRecentEntries = async (): Promise<WatchedMediaEntry[]> => {
         try {
-            const item = await prisma.statusItem.findUnique({
-                where: { key: 'shows' },
+            const records = await prisma.watchedMedia.findMany({
+                orderBy: { addedAt: 'desc' },
+                take: 5,
             });
-            if (item) return JSON.parse(item.value) as ShowEntry[];
+            return records.map((r) => ({
+                ...r,
+                mediaType: r.mediaType as 'movie' | 'tv',
+                addedAt: r.addedAt.toISOString(),
+            }));
         } catch {}
-        return DEFAULT_SHOW_ENTRIES;
-    };
-
-    const fetchShowsMeta = async (
-        entries: ShowEntry[]
-    ): Promise<(TVmazeShow | null)[]> => {
-        try {
-            return await Promise.all(
-                entries.map((e) => TVmazeHelpers.getShowById(e.tvmazeId))
-            );
-        } catch {}
-        return entries.map(() => null);
+        return [];
     };
 
     // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const showEntries: ShowEntry[] = await fetchShowEntries();
-    const showsMeta: (TVmazeShow | null)[] = await fetchShowsMeta(showEntries);
+    const entries: WatchedMediaEntry[] = await fetchRecentEntries();
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -66,8 +46,7 @@ const WatchingPanelData = async ({
 
     return (
         <WatchingPanel
-            initialEntries={showEntries}
-            initialMeta={showsMeta}
+            initialEntries={entries}
             label={label}
             icon={icon}
             cols={cols}

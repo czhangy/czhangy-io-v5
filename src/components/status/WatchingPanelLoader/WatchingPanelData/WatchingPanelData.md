@@ -1,6 +1,6 @@
 # WatchingPanelData
 
-Async server component that fetches show entries from the database and their metadata from the TVmaze API, then renders WatchingPanel with the resolved data.
+Async server component that fetches the 5 most recently added entries from the `WatchedMedia` table and renders WatchingPanel with the resolved data. No external API calls are made at read time.
 
 ## Props
 

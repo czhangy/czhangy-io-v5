@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
             },
             {
                 protocol: 'https',
-                hostname: 'static.tvmaze.com',
+                hostname: 'image.tmdb.org',
             },
             {
                 protocol: 'https',

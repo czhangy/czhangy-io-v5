@@ -8,13 +8,11 @@ import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { useSession } from '@/lib/context/SessionContext';
 import PlusIcon from '@/lib/icons/PlusIcon';
 import { Key } from '@/lib/static/enums';
-import { ShowEntry, TVmazeSearchResult, TVmazeShow } from '@/lib/static/types';
-import TVmazeHelpers from '@/lib/utils/TVmazeHelpers';
+import { TMDBSearchResult, WatchedMediaEntry } from '@/lib/static/types';
 import styles from './WatchingPanel.module.scss';
 
 type WatchingPanelProps = {
-    initialEntries: ShowEntry[];
-    initialMeta: (TVmazeShow | null)[];
+    initialEntries: WatchedMediaEntry[];
     label: string;
     icon: React.ReactNode;
     cols: number;
@@ -23,7 +21,6 @@ type WatchingPanelProps = {
 
 const WatchingPanel: React.FC<WatchingPanelProps> = ({
     initialEntries,
-    initialMeta,
     label,
     icon,
     cols,
@@ -40,19 +37,16 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     // CONSTANTS
     // -------------------------------------------------------------------------
 
-    const MAX_SHOWS = 5;
+    const MAX_ENTRIES = 5;
 
     // -------------------------------------------------------------------------
     // STATE
     // -------------------------------------------------------------------------
 
-    const [entries, setEntries] = useState<ShowEntry[]>(initialEntries);
-    const [meta, setMeta] = useState<(TVmazeShow | null)[]>(initialMeta);
+    const [entries, setEntries] = useState<WatchedMediaEntry[]>(initialEntries);
     const [isAdding, setIsAdding] = useState<boolean>(false);
     const [query, setQuery] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<TVmazeSearchResult[]>(
-        []
-    );
+    const [searchResults, setSearchResults] = useState<TMDBSearchResult[]>([]);
     const [isSearching, setIsSearching] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
@@ -90,16 +84,19 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
         const result = searchResults.find((r) => r.id === id);
         if (!result) return;
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        const newEntry: ShowEntry = { name: result.name, tvmazeId: result.id };
-        const newEntries = [newEntry, ...entries].slice(0, MAX_SHOWS);
-        const newShowMeta = await TVmazeHelpers.getShowById(result.id);
-        await fetch('/api/status/shows', {
-            method: 'PATCH',
+        const res = await fetch('/api/watched', {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ value: JSON.stringify(newEntries) }),
+            body: JSON.stringify({
+                name: result.name,
+                tmdbId: result.id,
+                mediaType: result.mediaType,
+            }),
         });
-        setEntries(newEntries);
-        setMeta([newShowMeta, ...meta].slice(0, MAX_SHOWS));
+        if (!res.ok) return;
+        const saved = (await res.json()) as WatchedMediaEntry;
+        const filtered = entries.filter((e) => e.tmdbId !== saved.tmdbId);
+        setEntries([saved, ...filtered].slice(0, MAX_ENTRIES));
         setIsAdding(false);
         setQuery('');
         setSearchResults([]);
@@ -116,7 +113,10 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     const performSearch = async (q: string): Promise<void> => {
         setIsSearching(true);
         setSearchResults([]);
-        const results = await TVmazeHelpers.searchShows(q);
+        const res = await fetch(`/api/media/search?q=${encodeURIComponent(q)}`);
+        const results: TMDBSearchResult[] = res.ok
+            ? ((await res.json()) as TMDBSearchResult[])
+            : [];
         setSearchResults(results);
         setIsSearching(false);
     };
@@ -149,7 +149,7 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
                     <div className={styles['add-form']}>
                         <SearchInput
                             value={query}
-                            placeholder="Search shows..."
+                            placeholder="Search movies & shows..."
                             isSearching={isSearching}
                             results={searchResults}
                             onChange={handleQueryChange}
@@ -160,12 +160,12 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
                     </div>
                 ) : null}
                 <ul className={styles.list}>
-                    {entries.map((entry, i) => (
-                        <li key={i} className={styles.item}>
-                            {meta[i]?.poster ? (
+                    {entries.map((entry) => (
+                        <li key={entry.id} className={styles.item}>
+                            {entry.poster ? (
                                 <Image
                                     className={styles.poster}
-                                    src={meta[i]!.poster!}
+                                    src={entry.poster}
                                     alt={`${entry.name} poster`}
                                     width={43}
                                     height={60}
@@ -177,21 +177,16 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
                                 <span className={styles.title}>
                                     {entry.name}
                                 </span>
-                                {meta[i]?.genres &&
-                                meta[i]!.genres.length > 0 ? (
+                                {entry.genres.length > 0 ? (
                                     <div className={styles.metadata}>
-                                        {meta[i]!.genres.slice(0, 2).map(
-                                            (g) => (
-                                                <span
-                                                    key={g}
-                                                    className={
-                                                        styles['genre-tag']
-                                                    }
-                                                >
-                                                    {g}
-                                                </span>
-                                            )
-                                        )}
+                                        {entry.genres.slice(0, 2).map((g) => (
+                                            <span
+                                                key={g}
+                                                className={styles['genre-tag']}
+                                            >
+                                                {g}
+                                            </span>
+                                        ))}
                                     </div>
                                 ) : null}
                             </div>
