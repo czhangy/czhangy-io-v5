@@ -34,6 +34,19 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
     const [page, setPage] = useState<number>(1);
 
     // -------------------------------------------------------------------------
+    // COMPUTATIONS
+    // -------------------------------------------------------------------------
+
+    const getProficiency = (
+        count: number
+    ): { display: string; tier: number } => {
+        if (count >= 10000) return { display: '10000/10000', tier: 3 };
+        if (count >= 1000) return { display: `${count}/10000`, tier: 2 };
+        if (count >= 100) return { display: `${count}/1000`, tier: 1 };
+        return { display: `${count}/100`, tier: 0 };
+    };
+
+    // -------------------------------------------------------------------------
     // HANDLERS
     // -------------------------------------------------------------------------
 
@@ -88,16 +101,34 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                 onAdd={handleAdd}
             />
             <ul className={styles.list}>
-                {paginatedMoves.map((move) => (
-                    <li key={move.id} className={styles.item}>
-                        <span className={styles.name}>{move.name}</span>
-                        <div className={styles.metadata}>
-                            <span className={styles['type-tag']}>
-                                {move.type}
-                            </span>
-                        </div>
-                    </li>
-                ))}
+                {paginatedMoves.map((move) => {
+                    const proficiency = getProficiency(move.count);
+                    return (
+                        <li key={move.id} className={styles.item}>
+                            <div className={styles.left}>
+                                <span className={styles.name}>{move.name}</span>
+                                <div className={styles.metadata}>
+                                    <span className={styles['type-tag']}>
+                                        {move.type}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className={styles.proficiency}>
+                                <div className={styles.pips}>
+                                    {[0, 1, 2].map((i) => (
+                                        <span
+                                            key={i}
+                                            className={`${styles.pip}${i < proficiency.tier ? ` ${styles['pip--filled']}` : ''}`}
+                                        />
+                                    ))}
+                                </div>
+                                <span className={styles.count}>
+                                    {proficiency.display}
+                                </span>
+                            </div>
+                        </li>
+                    );
+                })}
             </ul>
             <div className={styles.pagination}>
                 <PaginationControls
