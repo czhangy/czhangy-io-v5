@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SESSION_COOKIE, WATCHED_MILESTONES } from '@/lib/static/constants';
+import { READ_MILESTONES, SESSION_COOKIE } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
-import { WatchedMediaEntry } from '@/lib/static/types';
+import { ReadMediaEntry } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
 import DateHelpers from '@/lib/utils/DateHelpers';
-import TMDBHelpers from '@/lib/utils/TMDBHelpers';
+import GoogleBooksHelpers from '@/lib/utils/GoogleBooksHelpers';
 
 export const POST = async (request: NextRequest) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
@@ -14,40 +14,38 @@ export const POST = async (request: NextRequest) => {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { name, tmdbId, mediaType } = (await request.json()) as {
+    const { name, bookId } = (await request.json()) as {
         name: string;
-        tmdbId: number;
-        mediaType: 'movie' | 'tv';
+        bookId: string;
     };
 
-    const existing = await prisma.watchedMedia.findUnique({
-        where: { tmdbId },
-    });
+    const existing = await prisma.readMedia.findUnique({ where: { bookId } });
 
-    const tmdbData = await TMDBHelpers.getMediaById(tmdbId, mediaType);
-    const poster = tmdbData?.poster;
-    if (!poster) {
+    const bookData = await GoogleBooksHelpers.getBookById(bookId);
+    const author = bookData?.author;
+    const cover = bookData?.cover;
+    if (!author || !cover) {
         return NextResponse.json(
-            { error: 'Poster not available' },
+            { error: 'Book details incomplete' },
             { status: 422 }
         );
     }
 
-    const record = await prisma.watchedMedia.upsert({
-        where: { tmdbId },
+    const record = await prisma.readMedia.upsert({
+        where: { bookId },
         create: {
             name,
-            tmdbId,
-            mediaType,
-            poster,
-            genres: tmdbData?.genres ?? [],
+            bookId,
+            author,
+            cover,
+            genres: bookData?.genres ?? [],
         },
         update: { addedAt: new Date() },
     });
 
     if (!existing) {
-        const count = await prisma.watchedMedia.count();
-        const milestone = WATCHED_MILESTONES.find((m) => m.count === count);
+        const count = await prisma.readMedia.count();
+        const milestone = READ_MILESTONES.find((m) => m.count === count);
         if (milestone) {
             await prisma.achievement
                 .create({
@@ -55,7 +53,7 @@ export const POST = async (request: NextRequest) => {
                         tier: milestone.tier,
                         name: milestone.name,
                         category: 'hobbies',
-                        description: `Recorded ${milestone.count} watched TV shows/movies.`,
+                        description: `Recorded ${milestone.count} read books.`,
                         date: DateHelpers.getTodayString(),
                     },
                 })
@@ -63,9 +61,8 @@ export const POST = async (request: NextRequest) => {
         }
     }
 
-    const entry: WatchedMediaEntry = {
+    const entry: ReadMediaEntry = {
         ...record,
-        mediaType: record.mediaType as 'movie' | 'tv',
         addedAt: record.addedAt.toISOString(),
     };
 

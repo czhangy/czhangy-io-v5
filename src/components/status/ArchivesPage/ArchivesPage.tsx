@@ -1,10 +1,10 @@
 import GlitchText from '@/components/common/GlitchText/GlitchText';
 import { prisma } from '@/lib/static/prisma';
 import { WatchedMediaEntry } from '@/lib/static/types';
-import WatchedContent from './WatchedContent/WatchedContent';
-import styles from './WatchedPage.module.scss';
+import ArchivesContent from './ArchivesContent/ArchivesContent';
+import styles from './ArchivesPage.module.scss';
 
-const WatchedPage = async () => {
+const ArchivesPage = async () => {
     // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
@@ -24,13 +24,13 @@ const WatchedPage = async () => {
     // -------------------------------------------------------------------------
 
     return (
-        <div className={styles['watched-page']}>
+        <div className={styles['archives-page']}>
             <div className={styles.content}>
-                <GlitchText text="WATCHED" className={styles.title} />
-                <WatchedContent initialEntries={entries} />
+                <GlitchText text="ARCHIVES" className={styles.title} />
+                <ArchivesContent initialEntries={entries} />
             </div>
         </div>
     );
 };
 
-export default WatchedPage;
+export default ArchivesPage;

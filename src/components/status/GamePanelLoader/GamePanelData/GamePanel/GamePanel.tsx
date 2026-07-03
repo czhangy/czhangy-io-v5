@@ -76,7 +76,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
         }, 1000);
     };
 
-    const handleSelectResult = async (id: number) => {
+    const handleSelectResult = async (id: string | number) => {
         const result = searchResults.find((r) => r.id === id);
         if (!result) return;
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);

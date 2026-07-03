@@ -43,6 +43,8 @@ export default class TMDBHelpers {
         const data = (await res.json()) as TMDBMultiResponse;
         return data.results
             .filter((r) => r.media_type === 'movie' || r.media_type === 'tv')
+            .filter((r) => (r.release_date ?? r.first_air_date)?.slice(0, 4))
+            .filter((r) => r.poster_path)
             .slice(0, 5)
             .map((r) => ({
                 id: r.id,

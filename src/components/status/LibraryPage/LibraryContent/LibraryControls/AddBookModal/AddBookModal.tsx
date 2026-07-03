@@ -4,17 +4,14 @@ import { useRef, useState } from 'react';
 import Modal from '@/components/common/Modal/Modal';
 import SearchInput from '@/components/status/SearchInput/SearchInput';
 import { Key } from '@/lib/static/enums';
-import { TMDBSearchResult, WatchedMediaEntry } from '@/lib/static/types';
+import { BookSearchResult, ReadMediaEntry } from '@/lib/static/types';
 
-type AddContentModalProps = {
+type AddBookModalProps = {
     onClose: () => void;
-    onAdd: (entry: WatchedMediaEntry) => void;
+    onAdd: (entry: ReadMediaEntry) => void;
 };
 
-const AddContentModal: React.FC<AddContentModalProps> = ({
-    onClose,
-    onAdd,
-}) => {
+const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
     // -------------------------------------------------------------------------
     // HOOKS
     // -------------------------------------------------------------------------
@@ -26,7 +23,7 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
     // -------------------------------------------------------------------------
 
     const [query, setQuery] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<TMDBSearchResult[]>([]);
+    const [searchResults, setSearchResults] = useState<BookSearchResult[]>([]);
     const [isSearching, setIsSearching] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
@@ -36,9 +33,9 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
     const performSearch = async (q: string): Promise<void> => {
         setIsSearching(true);
         setSearchResults([]);
-        const res = await fetch(`/api/media/search?q=${encodeURIComponent(q)}`);
-        const results: TMDBSearchResult[] = res.ok
-            ? ((await res.json()) as TMDBSearchResult[])
+        const res = await fetch(`/api/books/search?q=${encodeURIComponent(q)}`);
+        const results: BookSearchResult[] = res.ok
+            ? ((await res.json()) as BookSearchResult[])
             : [];
         setSearchResults(results);
         setIsSearching(false);
@@ -63,21 +60,17 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
         }, 1000);
     };
 
-    const handleSelectResult = async (id: number): Promise<void> => {
+    const handleSelectResult = async (id: string | number): Promise<void> => {
         const result = searchResults.find((r) => r.id === id);
         if (!result) return;
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        const res = await fetch('/api/watched', {
+        const res = await fetch('/api/read', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: result.name,
-                tmdbId: result.id,
-                mediaType: result.mediaType,
-            }),
+            body: JSON.stringify({ name: result.name, bookId: result.id }),
         });
         if (!res.ok) return;
-        const saved = (await res.json()) as WatchedMediaEntry;
+        const saved = (await res.json()) as ReadMediaEntry;
         onAdd(saved);
         onClose();
     };
@@ -98,19 +91,20 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
     // -------------------------------------------------------------------------
 
     return (
-        <Modal title="ADD CONTENT" onClose={onClose}>
+        <Modal title="ADD BOOK" onClose={onClose}>
             <SearchInput
                 value={query}
-                placeholder="Search movies & shows..."
+                placeholder="Search books..."
                 isSearching={isSearching}
                 results={searchResults}
                 onChange={handleQueryChange}
                 onKeyDown={handleKeyDown}
                 onClear={handleClear}
                 onSelectResult={handleSelectResult}
+                hideClear
             />
         </Modal>
     );
 };
 
-export default AddContentModal;
+export default AddBookModal;

@@ -4,9 +4,14 @@ export const SESSION_COOKIE = 'session';
 
 // Milestones
 export const WATCHED_MILESTONES = [
-    { count: 50, name: 'Amateur Watcher', tier: 1 },
-    { count: 250, name: 'Dedicated Watcher', tier: 2 },
-    { count: 500, name: 'Professional Watcher', tier: 3 },
+    { count: 50, name: 'Amateur Critic', tier: 1 },
+    { count: 250, name: 'Dedicated Critic', tier: 2 },
+    { count: 500, name: 'Professional Critic', tier: 3 },
+];
+export const READ_MILESTONES = [
+    { count: 50, name: 'Amateur Reader', tier: 1 },
+    { count: 250, name: 'Dedicated Reader', tier: 2 },
+    { count: 500, name: 'Professional Reader', tier: 3 },
 ];
 
 // Routes

@@ -21,6 +21,7 @@
 - `SPOTIFY_REFRESH_TOKEN`
 - `RAWG_API_KEY`
 - `TMDB_API_KEY`
+- `GOOGLE_BOOKS_API_KEY`
 
 ## Tech Stack
 
@@ -44,8 +45,9 @@
 
 ## External Resources
 
-- [Vercel](https://vercel.com/czhangys-projects/czhangy-io-v5)
-- [Neon](https://console.neon.tech/app/projects/solitary-salad-65474249?database=neondb)
-- [Spotify Developers](https://developer.spotify.com/dashboard)
-- [RAWG](https://rawg.io/@czhangy/apikey)
-- [TMDB](https://www.themoviedb.org/settings/api)
+- [Vercel](https://vercel.com/)
+- [Neon](https://neon.com/)
+- [Spotify Developers](https://developer.spotify.com/)
+- [RAWG](https://rawg.io/)
+- [TMDB](https://www.themoviedb.org/)
+- [Google Cloud](https://cloud.google.com/)

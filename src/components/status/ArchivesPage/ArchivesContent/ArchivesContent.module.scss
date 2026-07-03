@@ -1,7 +1,7 @@
 @use '@/styles/constants' as *;
 @use '@/styles/mixins' as *;
 
-.watched-content {
+.archives-content {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -26,14 +26,6 @@
                 border-radius: 2px;
                 flex-shrink: 0;
                 object-fit: cover;
-            }
-
-            .poster-placeholder {
-                background: rgba($foreground, 0.08);
-                border-radius: 2px;
-                flex-shrink: 0;
-                height: 60px;
-                width: 43px;
             }
 
             .info {

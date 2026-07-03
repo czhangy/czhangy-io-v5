@@ -1,0 +1,33 @@
+@use '@/styles/mixins' as *;
+
+.library-controls {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+
+    .left {
+        display: flex;
+
+        .back-button {
+            @include game-button;
+
+            cursor: pointer;
+            letter-spacing: 0.15em;
+            padding: 0.625rem 1.25rem;
+        }
+    }
+
+    .right {
+        align-items: center;
+        display: flex;
+        gap: 0.75rem;
+
+        .add-button {
+            @include game-button;
+
+            cursor: pointer;
+            letter-spacing: 0.15em;
+            padding: 0.625rem 1.25rem;
+        }
+    }
+}

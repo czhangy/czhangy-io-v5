@@ -30,7 +30,17 @@ model WatchedMedia {
     name      String
     tmdbId    Int      @unique
     mediaType String
-    poster    String?
+    poster    String
+    genres    String[]
+    addedAt   DateTime @default(now())
+}
+
+model ReadMedia {
+    id        Int      @id @default(autoincrement())
+    name      String
+    author    String
+    bookId    String   @unique
+    cover     String
     genres    String[]
     addedAt   DateTime @default(now())
 }
