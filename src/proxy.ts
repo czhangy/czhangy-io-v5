@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import AuthHelpers from '@/lib/utils/AuthHelpers';
 import {
     ADMIN_ROUTES,
     AUTH_ROUTES,
     SESSION_COOKIE,
-} from '@/lib/utils/shared/constants';
+} from '@/lib/static/constants';
+import AuthHelpers from '@/lib/utils/AuthHelpers';
 
 export const proxy = async (request: NextRequest) => {
     const { pathname } = request.nextUrl;

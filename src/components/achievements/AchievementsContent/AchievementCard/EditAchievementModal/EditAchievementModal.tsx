@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import AchievementForm from '@/components/achievements/AchievementsContent/AchievementForm/AchievementForm';
 import Modal from '@/components/common/Modal/Modal';
-import { AchievementFormValues } from '@/lib/utils/shared/types';
+import { AchievementFormValues } from '@/lib/static/types';
 import type { Achievement } from '@/generated/prisma/client';
 
 type EditAchievementModalProps = {

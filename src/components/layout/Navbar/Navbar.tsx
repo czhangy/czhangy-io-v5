@@ -4,19 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useSession } from '@/lib/context/SessionContext';
 import HomeIcon from '@/lib/icons/HomeIcon';
+import { Key } from '@/lib/static/enums';
+import { NavItem } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
-import { Key } from '@/lib/utils/shared/enums';
-import { NavItem } from '@/lib/utils/shared/types';
 import styles from './Navbar.module.scss';
 
 const Navbar: React.FC = () => {
-    // -------------------------------------------------------------------------
-    // CONSTANTS
-    // -------------------------------------------------------------------------
-
-    const LOGIN_ITEM: NavItem = { href: '/login', label: 'Log In' };
-    const REGISTER_ITEM: NavItem = { href: '/register', label: 'Register' };
-
     // -------------------------------------------------------------------------
     // HOOKS
     // -------------------------------------------------------------------------

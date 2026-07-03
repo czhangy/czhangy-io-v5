@@ -1,19 +1,19 @@
 import { Suspense } from 'react';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
-import HeadphonesIcon from '@/lib/icons/HeadphonesIcon';
-import SpotifyPanelData from './SpotifyPanelData/SpotifyPanelData';
+import LearnIcon from '@/lib/icons/LearnIcon';
+import SkillPanelData from './SkillPanelData/SkillPanelData';
 
-type SpotifyPanelProps = {
+type SkillPanelLoaderProps = {
     className?: string;
 };
 
-const SpotifyPanel: React.FC<SpotifyPanelProps> = ({ className }) => {
+const SkillPanelLoader: React.FC<SkillPanelLoaderProps> = ({ className }) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
 
-    const LABEL: string = 'BLASTING';
-    const ICON: React.ReactNode = <HeadphonesIcon />;
+    const LABEL: string = 'LEARNING';
+    const ICON: React.ReactNode = <LearnIcon />;
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -30,9 +30,9 @@ const SpotifyPanel: React.FC<SpotifyPanelProps> = ({ className }) => {
                 />
             }
         >
-            <SpotifyPanelData label={LABEL} icon={ICON} className={className} />
+            <SkillPanelData label={LABEL} icon={ICON} className={className} />
         </Suspense>
     );
 };
 
-export default SpotifyPanel;
+export default SkillPanelLoader;

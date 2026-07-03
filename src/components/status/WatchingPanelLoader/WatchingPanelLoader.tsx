@@ -1,19 +1,21 @@
 import { Suspense } from 'react';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
-import HeadphonesIcon from '@/lib/icons/HeadphonesIcon';
-import SpotifyPanelData from './SpotifyPanelData/SpotifyPanelData';
+import TVIcon from '@/lib/icons/TVIcon';
+import WatchingPanelData from './WatchingPanelData/WatchingPanelData';
 
-type SpotifyPanelProps = {
+type WatchingPanelLoaderProps = {
     className?: string;
 };
 
-const SpotifyPanel: React.FC<SpotifyPanelProps> = ({ className }) => {
+const WatchingPanelLoader: React.FC<WatchingPanelLoaderProps> = ({
+    className,
+}) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
 
-    const LABEL: string = 'BLASTING';
-    const ICON: React.ReactNode = <HeadphonesIcon />;
+    const LABEL: string = 'WATCHING';
+    const ICON: React.ReactNode = <TVIcon />;
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -30,9 +32,13 @@ const SpotifyPanel: React.FC<SpotifyPanelProps> = ({ className }) => {
                 />
             }
         >
-            <SpotifyPanelData label={LABEL} icon={ICON} className={className} />
+            <WatchingPanelData
+                label={LABEL}
+                icon={ICON}
+                className={className}
+            />
         </Suspense>
     );
 };
 
-export default SpotifyPanel;
+export default WatchingPanelLoader;

@@ -1,10 +1,4 @@
-export type Job = {
-    company: string;
-    title: string;
-    startDate: string;
-    endDate: string | null; // null = Present
-    logo: string; // path relative to /public, e.g. '/logos/company.png'
-};
+import { Job } from './types';
 
 // Replace with actual job history — most recent first
 export const JOBS: Job[] = [

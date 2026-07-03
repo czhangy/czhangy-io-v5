@@ -1,19 +1,19 @@
 import { Suspense } from 'react';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
-import HeadphonesIcon from '@/lib/icons/HeadphonesIcon';
-import SpotifyPanelData from './SpotifyPanelData/SpotifyPanelData';
+import JoystickIcon from '@/lib/icons/JoystickIcon';
+import GamePanelData from './GamePanelData/GamePanelData';
 
-type SpotifyPanelProps = {
+type GamePanelLoaderProps = {
     className?: string;
 };
 
-const SpotifyPanel: React.FC<SpotifyPanelProps> = ({ className }) => {
+const GamePanelLoader: React.FC<GamePanelLoaderProps> = ({ className }) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
 
-    const LABEL: string = 'BLASTING';
-    const ICON: React.ReactNode = <HeadphonesIcon />;
+    const LABEL: string = 'GRINDING';
+    const ICON: React.ReactNode = <JoystickIcon />;
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -30,9 +30,9 @@ const SpotifyPanel: React.FC<SpotifyPanelProps> = ({ className }) => {
                 />
             }
         >
-            <SpotifyPanelData label={LABEL} icon={ICON} className={className} />
+            <GamePanelData label={LABEL} icon={ICON} className={className} />
         </Suspense>
     );
 };
 
-export default SpotifyPanel;
+export default GamePanelLoader;

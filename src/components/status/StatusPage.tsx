@@ -1,10 +1,10 @@
 import GlitchText from '@/components/common/GlitchText/GlitchText';
-import WatchingPanelLoader from '@/components/status/WatchingPanel/WatchingPanelLoader/WatchingPanelLoader';
-import GamePanelLoader from './GamePanel/GamePanelLoader/GamePanelLoader';
-import LocationPanelLoader from './LocationPanel/LocationPanelLoader/LocationPanelLoader';
-import SkillPanelLoader from './SkillPanel/SkillPanelLoader/SkillPanelLoader';
+import GamePanelLoader from './GamePanelLoader/GamePanelLoader';
+import LocationPanelLoader from './LocationPanelLoader/LocationPanelLoader';
+import SkillPanelLoader from './SkillPanelLoader/SkillPanelLoader';
 import SpotifyPanel from './SpotifyPanel/SpotifyPanel';
 import styles from './StatusPage.module.scss';
+import WatchingPanelLoader from './WatchingPanelLoader/WatchingPanelLoader';
 
 const StatusPage: React.FC = () => {
     // -------------------------------------------------------------------------

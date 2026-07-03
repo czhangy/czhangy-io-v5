@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { AchievementFormValues } from '@/lib/static/types';
 import DateHelpers from '@/lib/utils/DateHelpers';
-import { AchievementFormValues } from '@/lib/utils/shared/types';
 import styles from './AchievementForm.module.scss';
 
 type AchievementFormProps = {

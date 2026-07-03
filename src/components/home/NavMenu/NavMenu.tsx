@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { useSession } from '@/lib/context/SessionContext';
 import LockIcon from '@/lib/icons/LockIcon';
+import { NavItem } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
-import { NavItem } from '@/lib/utils/shared/types';
 import styles from './NavMenu.module.scss';
 
 const NavMenu: React.FC = () => {

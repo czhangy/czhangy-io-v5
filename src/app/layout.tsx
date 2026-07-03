@@ -1,12 +1,12 @@
 import Footer from '@/components/layout/Footer/Footer';
 import Navbar from '@/components/layout/Navbar/Navbar';
 import SessionProvider from '@/lib/context/SessionContext';
+import { SESSION_COOKIE } from '@/lib/static/constants';
 import '@/lib/styles/globals.scss';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { cookies } from 'next/headers';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
-import { SESSION_COOKIE } from '@/lib/utils/shared/constants';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',

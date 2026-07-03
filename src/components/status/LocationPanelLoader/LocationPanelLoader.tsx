@@ -1,19 +1,21 @@
 import { Suspense } from 'react';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
-import HeadphonesIcon from '@/lib/icons/HeadphonesIcon';
-import SpotifyPanelData from './SpotifyPanelData/SpotifyPanelData';
+import LocationIcon from '@/lib/icons/LocationIcon';
+import LocationPanelData from './LocationPanelData/LocationPanelData';
 
-type SpotifyPanelProps = {
+type LocationPanelLoaderProps = {
     className?: string;
 };
 
-const SpotifyPanel: React.FC<SpotifyPanelProps> = ({ className }) => {
+const LocationPanelLoader: React.FC<LocationPanelLoaderProps> = ({
+    className,
+}) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
 
-    const LABEL: string = 'BLASTING';
-    const ICON: React.ReactNode = <HeadphonesIcon />;
+    const LABEL: string = 'LOCATION';
+    const ICON: React.ReactNode = <LocationIcon />;
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -30,9 +32,13 @@ const SpotifyPanel: React.FC<SpotifyPanelProps> = ({ className }) => {
                 />
             }
         >
-            <SpotifyPanelData label={LABEL} icon={ICON} className={className} />
+            <LocationPanelData
+                label={LABEL}
+                icon={ICON}
+                className={className}
+            />
         </Suspense>
     );
 };
 
-export default SpotifyPanel;
+export default LocationPanelLoader;

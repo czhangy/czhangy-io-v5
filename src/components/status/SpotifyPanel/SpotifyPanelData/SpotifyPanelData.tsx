@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import { SpotifyTrack } from '@/lib/utils/shared/types';
+import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
+import { SpotifyTrack } from '@/lib/static/types';
 import SpotifyHelpers from '@/lib/utils/SpotifyHelpers';
-import StatusPanel from '../../StatusPanel/StatusPanel';
 import styles from './SpotifyPanelData.module.scss';
 
 type SpotifyPanelDataProps = {

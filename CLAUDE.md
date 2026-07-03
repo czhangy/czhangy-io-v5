@@ -4,6 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 > Note: If I repeat an instruction more than once, suggest adding it to this file.
 
+> If a code style change is requested multiple times, recommend writing a new ESLint rule in `.eslint-rules/` to enforce the convention automatically, if appropriate.
+
 > Build verification is not necessary for any change.
 
 ## Project Overview
