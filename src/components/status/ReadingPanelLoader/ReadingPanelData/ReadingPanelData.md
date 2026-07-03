@@ -1,6 +1,6 @@
-# ReadingPanel
+# ReadingPanelData
 
-Status panel displaying the currently reading books. Renders three placeholder rows shaped like future book entries while functionality is pending.
+Async server component that fetches the 3 most recently added ReadMedia records and passes them to ReadingPanel.
 
 ## Props
 

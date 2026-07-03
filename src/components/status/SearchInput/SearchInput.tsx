@@ -8,14 +8,14 @@ type SearchInputProps = {
     placeholder: string;
     isSearching: boolean;
     results: {
-        id: number;
+        id: string | number;
         name: string;
         year: string | null;
     }[];
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     onClear: () => void;
-    onSelectResult: (id: number) => void;
+    onSelectResult: (id: string | number) => void;
 };
 
 const SearchInput: React.FC<SearchInputProps> = ({

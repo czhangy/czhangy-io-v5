@@ -28,14 +28,6 @@
                 object-fit: cover;
             }
 
-            .poster-placeholder {
-                background: rgba($foreground, 0.08);
-                border-radius: 2px;
-                flex-shrink: 0;
-                height: 60px;
-                width: 43px;
-            }
-
             .info {
                 display: flex;
                 flex: 1;

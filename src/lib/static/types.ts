@@ -48,12 +48,30 @@ export type GameEntry = {
     rawgId: number;
 };
 
+export type BookSearchResult = {
+    id: string;
+    name: string;
+    author: string | null;
+    year: string | null;
+    cover: string | null;
+};
+
+export type ReadMediaEntry = {
+    id: number;
+    name: string;
+    author: string;
+    bookId: string;
+    cover: string;
+    genres: string[];
+    addedAt: string;
+};
+
 export type WatchedMediaEntry = {
     id: number;
     name: string;
     tmdbId: number;
     mediaType: 'movie' | 'tv';
-    poster: string | null;
+    poster: string;
     genres: string[];
     addedAt: string;
 };

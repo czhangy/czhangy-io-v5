@@ -1,5 +1,7 @@
+import { Suspense } from 'react';
+import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import BookIcon from '@/lib/icons/BookIcon';
-import ReadingPanel from './ReadingPanel/ReadingPanel';
+import ReadingPanelData from './ReadingPanelData/ReadingPanelData';
 
 type ReadingPanelLoaderProps = {
     cols: number;
@@ -21,7 +23,26 @@ const ReadingPanelLoader: React.FC<ReadingPanelLoaderProps> = ({
     // MARKUP
     // -------------------------------------------------------------------------
 
-    return <ReadingPanel label={LABEL} icon={ICON} cols={cols} rows={rows} />;
+    return (
+        <Suspense
+            fallback={
+                <StatusPanel
+                    label={LABEL}
+                    icon={ICON}
+                    cols={cols}
+                    rows={rows}
+                    isLoading
+                />
+            }
+        >
+            <ReadingPanelData
+                label={LABEL}
+                icon={ICON}
+                cols={cols}
+                rows={rows}
+            />
+        </Suspense>
+    );
 };
 
 export default ReadingPanelLoader;

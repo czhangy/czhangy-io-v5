@@ -98,17 +98,13 @@ const WatchedContent: React.FC<WatchedContentProps> = ({ initialEntries }) => {
             <ul className={styles.list}>
                 {paginatedEntries.map((entry) => (
                     <li key={entry.id} className={styles.item}>
-                        {entry.poster ? (
-                            <Image
-                                className={styles.poster}
-                                src={entry.poster}
-                                alt={`${entry.name} poster`}
-                                width={43}
-                                height={60}
-                            />
-                        ) : (
-                            <div className={styles['poster-placeholder']} />
-                        )}
+                        <Image
+                            className={styles.poster}
+                            src={entry.poster}
+                            alt={`${entry.name} poster`}
+                            width={43}
+                            height={60}
+                        />
                         <div className={styles.info}>
                             <span className={styles.name}>{entry.name}</span>
                             {entry.genres.length > 0 ? (

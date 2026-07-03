@@ -6,21 +6,20 @@ import PanelButton from '@/components/status/PanelButton/PanelButton';
 import SearchInput from '@/components/status/SearchInput/SearchInput';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { useSession } from '@/lib/context/SessionContext';
-import LinkIcon from '@/lib/icons/LinkIcon';
 import PlusIcon from '@/lib/icons/PlusIcon';
 import { Key } from '@/lib/static/enums';
-import { TMDBSearchResult, WatchedMediaEntry } from '@/lib/static/types';
-import styles from './WatchingPanel.module.scss';
+import { BookSearchResult, ReadMediaEntry } from '@/lib/static/types';
+import styles from './ReadingPanel.module.scss';
 
-type WatchingPanelProps = {
-    initialEntries: WatchedMediaEntry[];
+type ReadingPanelProps = {
+    initialEntries: ReadMediaEntry[];
     label: string;
     icon: React.ReactNode;
     cols: number;
     rows?: number;
 };
 
-const WatchingPanel: React.FC<WatchingPanelProps> = ({
+const ReadingPanel: React.FC<ReadingPanelProps> = ({
     initialEntries,
     label,
     icon,
@@ -38,29 +37,29 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     // CONSTANTS
     // -------------------------------------------------------------------------
 
-    const MAX_ENTRIES = 5;
+    const MAX_ENTRIES: number = 3;
 
     // -------------------------------------------------------------------------
     // STATE
     // -------------------------------------------------------------------------
 
-    const [entries, setEntries] = useState<WatchedMediaEntry[]>(initialEntries);
+    const [entries, setEntries] = useState<ReadMediaEntry[]>(initialEntries);
     const [isAdding, setIsAdding] = useState<boolean>(false);
     const [query, setQuery] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<TMDBSearchResult[]>([]);
+    const [searchResults, setSearchResults] = useState<BookSearchResult[]>([]);
     const [isSearching, setIsSearching] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
     // HANDLERS
     // -------------------------------------------------------------------------
 
-    const handleStartAdd = () => {
+    const handleStartAdd = (): void => {
         setIsAdding(true);
         setQuery('');
         setSearchResults([]);
     };
 
-    const handleCancel = () => {
+    const handleCancel = (): void => {
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
         setIsAdding(false);
         setQuery('');
@@ -68,7 +67,9 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
         setIsSearching(false);
     };
 
-    const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleQueryChange = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ): void => {
         const value = e.target.value;
         setQuery(value);
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
@@ -81,29 +82,25 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
         }, 1000);
     };
 
-    const handleSelectResult = async (id: string | number) => {
+    const handleSelectResult = async (id: string | number): Promise<void> => {
         const result = searchResults.find((r) => r.id === id);
         if (!result) return;
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        const res = await fetch('/api/watched', {
+        const res = await fetch('/api/read', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: result.name,
-                tmdbId: result.id,
-                mediaType: result.mediaType,
-            }),
+            body: JSON.stringify({ name: result.name, bookId: result.id }),
         });
         if (!res.ok) return;
-        const saved = (await res.json()) as WatchedMediaEntry;
-        const filtered = entries.filter((e) => e.tmdbId !== saved.tmdbId);
+        const saved = (await res.json()) as ReadMediaEntry;
+        const filtered = entries.filter((e) => e.bookId !== saved.bookId);
         setEntries([saved, ...filtered].slice(0, MAX_ENTRIES));
         setIsAdding(false);
         setQuery('');
         setSearchResults([]);
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
         if (e.key === Key.Escape) handleCancel();
     };
 
@@ -114,9 +111,9 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     const performSearch = async (q: string): Promise<void> => {
         setIsSearching(true);
         setSearchResults([]);
-        const res = await fetch(`/api/media/search?q=${encodeURIComponent(q)}`);
-        const results: TMDBSearchResult[] = res.ok
-            ? ((await res.json()) as TMDBSearchResult[])
+        const res = await fetch(`/api/books/search?q=${encodeURIComponent(q)}`);
+        const results: BookSearchResult[] = res.ok
+            ? ((await res.json()) as BookSearchResult[])
             : [];
         setSearchResults(results);
         setIsSearching(false);
@@ -128,14 +125,10 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
 
     const isAdmin: boolean = role === 'ADMIN';
 
-    const headerActions: React.ReactNode = (
-        <>
-            <PanelButton href="/status/watched" icon={<LinkIcon />} />
-            {isAdmin && !isAdding ? (
-                <PanelButton onClick={handleStartAdd} icon={<PlusIcon />} />
-            ) : null}
-        </>
-    );
+    const headerActions: React.ReactNode =
+        isAdmin && !isAdding ? (
+            <PanelButton onClick={handleStartAdd} icon={<PlusIcon />} />
+        ) : null;
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -154,7 +147,7 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
                     <div className={styles['add-form']}>
                         <SearchInput
                             value={query}
-                            placeholder="Search movies & shows..."
+                            placeholder="Search books..."
                             isSearching={isSearching}
                             results={searchResults}
                             onChange={handleQueryChange}
@@ -168,15 +161,18 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
                     {entries.map((entry) => (
                         <li key={entry.id} className={styles.item}>
                             <Image
-                                className={styles.poster}
-                                src={entry.poster}
-                                alt={`${entry.name} poster`}
+                                className={styles.cover}
+                                src={entry.cover}
+                                alt={`${entry.name} cover`}
                                 width={43}
                                 height={60}
                             />
                             <div className={styles.info}>
                                 <span className={styles.title}>
                                     {entry.name}
+                                </span>
+                                <span className={styles.author}>
+                                    {entry.author}
                                 </span>
                                 {entry.genres.length > 0 ? (
                                     <div className={styles.metadata}>
@@ -199,4 +195,4 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     );
 };
 
-export default WatchingPanel;
+export default ReadingPanel;

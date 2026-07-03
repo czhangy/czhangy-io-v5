@@ -25,6 +25,13 @@ export const POST = async (request: NextRequest) => {
     });
 
     const tmdbData = await TMDBHelpers.getMediaById(tmdbId, mediaType);
+    const poster = tmdbData?.poster;
+    if (!poster) {
+        return NextResponse.json(
+            { error: 'Poster not available' },
+            { status: 422 }
+        );
+    }
 
     const record = await prisma.watchedMedia.upsert({
         where: { tmdbId },
@@ -32,7 +39,7 @@ export const POST = async (request: NextRequest) => {
             name,
             tmdbId,
             mediaType,
-            poster: tmdbData?.poster ?? null,
+            poster,
             genres: tmdbData?.genres ?? [],
         },
         update: { addedAt: new Date() },
