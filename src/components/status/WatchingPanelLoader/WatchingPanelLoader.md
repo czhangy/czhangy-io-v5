@@ -4,6 +4,7 @@ Suspense boundary for the shows panel. Defines the panel label and icon, passes 
 
 ## Props
 
-| Prop        | Type     | Required | Default | Description                                          |
-| ----------- | -------- | -------- | ------- | ---------------------------------------------------- |
-| `className` | `string` | No       | —       | Forwarded to both the fallback and WatchingPanelData |
+| Prop   | Type     | Required | Default | Description                                          |
+| ------ | -------- | -------- | ------- | ---------------------------------------------------- |
+| `cols` | `number` | Yes      | —       | Forwarded to both the fallback and WatchingPanelData |
+| `rows` | `number` | No       | —       | Forwarded to both the fallback and WatchingPanelData |

@@ -4,6 +4,7 @@ Suspense boundary for the skill panel. Defines the panel label and icon, passes 
 
 ## Props
 
-| Prop        | Type     | Required | Default | Description                                       |
-| ----------- | -------- | -------- | ------- | ------------------------------------------------- |
-| `className` | `string` | No       | —       | Forwarded to both the fallback and SkillPanelData |
+| Prop   | Type     | Required | Default | Description                                       |
+| ------ | -------- | -------- | ------- | ------------------------------------------------- |
+| `cols` | `number` | Yes      | —       | Forwarded to both the fallback and SkillPanelData |
+| `rows` | `number` | No       | —       | Forwarded to both the fallback and SkillPanelData |

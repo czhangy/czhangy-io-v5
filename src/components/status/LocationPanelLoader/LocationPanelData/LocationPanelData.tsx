@@ -4,13 +4,15 @@ import LocationPanel from './LocationPanel/LocationPanel';
 type LocationPanelDataProps = {
     label: string;
     icon: React.ReactNode;
-    className?: string;
+    cols: number;
+    rows?: number;
 };
 
 const LocationPanelData = async ({
     label,
     icon,
-    className,
+    cols,
+    rows,
 }: LocationPanelDataProps) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
@@ -47,7 +49,8 @@ const LocationPanelData = async ({
             initialLocation={location}
             label={label}
             icon={icon}
-            className={className}
+            cols={cols}
+            rows={rows}
         />
     );
 };

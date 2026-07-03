@@ -4,8 +4,9 @@ Async server component that fetches show entries from the database and their met
 
 ## Props
 
-| Prop        | Type              | Required | Default | Description                |
-| ----------- | ----------------- | -------- | ------- | -------------------------- |
-| `label`     | `string`          | Yes      | —       | Forwarded to WatchingPanel |
-| `icon`      | `React.ReactNode` | Yes      | —       | Forwarded to WatchingPanel |
-| `className` | `string`          | No       | —       | Forwarded to WatchingPanel |
+| Prop    | Type              | Required | Default | Description                |
+| ------- | ----------------- | -------- | ------- | -------------------------- |
+| `label` | `string`          | Yes      | —       | Forwarded to WatchingPanel |
+| `icon`  | `React.ReactNode` | Yes      | —       | Forwarded to WatchingPanel |
+| `cols`  | `number`          | Yes      | —       | Forwarded to WatchingPanel |
+| `rows`  | `number`          | No       | —       | Forwarded to WatchingPanel |

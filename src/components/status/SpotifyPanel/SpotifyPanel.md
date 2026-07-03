@@ -4,6 +4,7 @@ Suspense boundary for the Spotify panel. Defines the panel label and icon, passe
 
 ## Props
 
-| Prop        | Type     | Required | Default | Description                                        |
-| ----------- | -------- | -------- | ------- | -------------------------------------------------- |
-| `className` | `string` | No       | —       | Forwarded to both the fallback and the track panel |
+| Prop   | Type     | Required | Default | Description                                        |
+| ------ | -------- | -------- | ------- | -------------------------------------------------- |
+| `cols` | `number` | Yes      | —       | Forwarded to both the fallback and the track panel |
+| `rows` | `number` | No       | —       | Forwarded to both the fallback and the track panel |

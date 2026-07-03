@@ -6,6 +6,9 @@
     border: 1px solid $border-subtle;
     display: flex;
     flex-direction: column;
+    grid-column: span var(--cols);
+    grid-row: span var(--rows);
+    min-width: 0;
     transition: border-color 0.3s ease;
 
     .header {
@@ -62,6 +65,19 @@
 
     &--loading {
         animation: border-pulse 2s ease-in-out infinite;
+    }
+
+    @media (width <= 1024px) {
+        grid-column: span var(--cols-tablet);
+    }
+
+    @media (width <= 768px) {
+        grid-row: span 1;
+    }
+
+    @media (width <= 480px) {
+        grid-column: span 1;
+        grid-row: span var(--rows);
     }
 }
 

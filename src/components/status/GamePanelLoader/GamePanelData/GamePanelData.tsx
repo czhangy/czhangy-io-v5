@@ -6,13 +6,15 @@ import GamePanel from './GamePanel/GamePanel';
 type GamePanelDataProps = {
     label: string;
     icon: React.ReactNode;
-    className?: string;
+    cols: number;
+    rows?: number;
 };
 
 const GamePanelData = async ({
     label,
     icon,
-    className,
+    cols,
+    rows,
 }: GamePanelDataProps) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
@@ -60,7 +62,8 @@ const GamePanelData = async ({
             initialMeta={gameMeta}
             label={label}
             icon={icon}
-            className={className}
+            cols={cols}
+            rows={rows}
         />
     );
 };

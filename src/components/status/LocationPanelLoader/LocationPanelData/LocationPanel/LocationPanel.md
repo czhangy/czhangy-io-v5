@@ -4,12 +4,13 @@ A Status page panel displaying the user's current general location. Admins see a
 
 ## Props
 
-| Prop              | Type              | Required | Default | Description                         |
-| ----------------- | ----------------- | -------- | ------- | ----------------------------------- |
-| `initialLocation` | `string`          | Yes      | —       | Location string fetched server-side |
-| `label`           | `string`          | Yes      | —       | Panel header label                  |
-| `icon`            | `React.ReactNode` | Yes      | —       | Panel header icon                   |
-| `className`       | `string`          | No       | —       | Class forwarded to the StatusPanel  |
+| Prop              | Type              | Required | Default | Description                                     |
+| ----------------- | ----------------- | -------- | ------- | ----------------------------------------------- |
+| `initialLocation` | `string`          | Yes      | —       | Location string fetched server-side             |
+| `label`           | `string`          | Yes      | —       | Panel header label                              |
+| `icon`            | `React.ReactNode` | Yes      | —       | Panel header icon                               |
+| `cols`            | `number`          | Yes      | —       | Forwarded to the StatusPanel for grid placement |
+| `rows`            | `number`          | No       | —       | Forwarded to the StatusPanel for grid placement |
 
 ## State
 

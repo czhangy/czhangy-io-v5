@@ -5,13 +5,15 @@ import SkillPanel from './SkillPanel/SkillPanel';
 type SkillPanelDataProps = {
     label: string;
     icon: React.ReactNode;
-    className?: string;
+    cols: number;
+    rows?: number;
 };
 
 const SkillPanelData = async ({
     label,
     icon,
-    className,
+    cols,
+    rows,
 }: SkillPanelDataProps) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
@@ -51,7 +53,8 @@ const SkillPanelData = async ({
             initialEntry={skillEntry}
             label={label}
             icon={icon}
-            className={className}
+            cols={cols}
+            rows={rows}
         />
     );
 };

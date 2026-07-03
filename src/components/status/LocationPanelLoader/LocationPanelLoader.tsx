@@ -4,11 +4,13 @@ import LocationIcon from '@/lib/icons/LocationIcon';
 import LocationPanelData from './LocationPanelData/LocationPanelData';
 
 type LocationPanelLoaderProps = {
-    className?: string;
+    cols: number;
+    rows?: number;
 };
 
 const LocationPanelLoader: React.FC<LocationPanelLoaderProps> = ({
-    className,
+    cols,
+    rows,
 }) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
@@ -27,15 +29,17 @@ const LocationPanelLoader: React.FC<LocationPanelLoaderProps> = ({
                 <StatusPanel
                     label={LABEL}
                     icon={ICON}
+                    cols={cols}
+                    rows={rows}
                     isLoading
-                    className={className}
                 />
             }
         >
             <LocationPanelData
                 label={LABEL}
                 icon={ICON}
-                className={className}
+                cols={cols}
+                rows={rows}
             />
         </Suspense>
     );

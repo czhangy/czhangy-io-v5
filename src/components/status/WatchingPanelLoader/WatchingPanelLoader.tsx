@@ -4,11 +4,13 @@ import TVIcon from '@/lib/icons/TVIcon';
 import WatchingPanelData from './WatchingPanelData/WatchingPanelData';
 
 type WatchingPanelLoaderProps = {
-    className?: string;
+    cols: number;
+    rows?: number;
 };
 
 const WatchingPanelLoader: React.FC<WatchingPanelLoaderProps> = ({
-    className,
+    cols,
+    rows,
 }) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
@@ -27,15 +29,17 @@ const WatchingPanelLoader: React.FC<WatchingPanelLoaderProps> = ({
                 <StatusPanel
                     label={LABEL}
                     icon={ICON}
+                    cols={cols}
+                    rows={rows}
                     isLoading
-                    className={className}
                 />
             }
         >
             <WatchingPanelData
                 label={LABEL}
                 icon={ICON}
-                className={className}
+                cols={cols}
+                rows={rows}
             />
         </Suspense>
     );

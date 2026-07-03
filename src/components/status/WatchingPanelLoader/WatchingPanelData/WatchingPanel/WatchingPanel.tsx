@@ -16,7 +16,8 @@ type WatchingPanelProps = {
     initialMeta: (TVmazeShow | null)[];
     label: string;
     icon: React.ReactNode;
-    className?: string;
+    cols: number;
+    rows?: number;
 };
 
 const WatchingPanel: React.FC<WatchingPanelProps> = ({
@@ -24,7 +25,8 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     initialMeta,
     label,
     icon,
-    className,
+    cols,
+    rows,
 }) => {
     // -------------------------------------------------------------------------
     // HOOKS
@@ -126,7 +128,7 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     // -------------------------------------------------------------------------
 
     return (
-        <StatusPanel label={label} icon={icon} className={className}>
+        <StatusPanel label={label} icon={icon} cols={cols} rows={rows}>
             <ul className={styles.list}>
                 {entries.map((entry, i) => (
                     <li key={i} className={styles.item}>

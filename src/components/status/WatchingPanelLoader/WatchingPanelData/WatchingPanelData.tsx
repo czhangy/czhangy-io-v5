@@ -6,13 +6,15 @@ import WatchingPanel from './WatchingPanel/WatchingPanel';
 type WatchingPanelDataProps = {
     label: string;
     icon: React.ReactNode;
-    className?: string;
+    cols: number;
+    rows?: number;
 };
 
 const WatchingPanelData = async ({
     label,
     icon,
-    className,
+    cols,
+    rows,
 }: WatchingPanelDataProps) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
@@ -67,7 +69,8 @@ const WatchingPanelData = async ({
             initialMeta={showsMeta}
             label={label}
             icon={icon}
-            className={className}
+            cols={cols}
+            rows={rows}
         />
     );
 };

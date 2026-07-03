@@ -4,6 +4,7 @@ Suspense boundary for the location panel. Defines the panel label and icon, pass
 
 ## Props
 
-| Prop        | Type     | Required | Default | Description                                          |
-| ----------- | -------- | -------- | ------- | ---------------------------------------------------- |
-| `className` | `string` | No       | —       | Forwarded to both the fallback and LocationPanelData |
+| Prop   | Type     | Required | Default | Description                                          |
+| ------ | -------- | -------- | ------- | ---------------------------------------------------- |
+| `cols` | `number` | Yes      | —       | Forwarded to both the fallback and LocationPanelData |
+| `rows` | `number` | No       | —       | Forwarded to both the fallback and LocationPanelData |

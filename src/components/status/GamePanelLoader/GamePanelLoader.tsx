@@ -4,10 +4,11 @@ import JoystickIcon from '@/lib/icons/JoystickIcon';
 import GamePanelData from './GamePanelData/GamePanelData';
 
 type GamePanelLoaderProps = {
-    className?: string;
+    cols: number;
+    rows?: number;
 };
 
-const GamePanelLoader: React.FC<GamePanelLoaderProps> = ({ className }) => {
+const GamePanelLoader: React.FC<GamePanelLoaderProps> = ({ cols, rows }) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
@@ -25,12 +26,13 @@ const GamePanelLoader: React.FC<GamePanelLoaderProps> = ({ className }) => {
                 <StatusPanel
                     label={LABEL}
                     icon={ICON}
+                    cols={cols}
+                    rows={rows}
                     isLoading
-                    className={className}
                 />
             }
         >
-            <GamePanelData label={LABEL} icon={ICON} className={className} />
+            <GamePanelData label={LABEL} icon={ICON} cols={cols} rows={rows} />
         </Suspense>
     );
 };

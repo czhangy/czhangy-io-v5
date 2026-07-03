@@ -4,10 +4,11 @@ import LearnIcon from '@/lib/icons/LearnIcon';
 import SkillPanelData from './SkillPanelData/SkillPanelData';
 
 type SkillPanelLoaderProps = {
-    className?: string;
+    cols: number;
+    rows?: number;
 };
 
-const SkillPanelLoader: React.FC<SkillPanelLoaderProps> = ({ className }) => {
+const SkillPanelLoader: React.FC<SkillPanelLoaderProps> = ({ cols, rows }) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
@@ -25,12 +26,13 @@ const SkillPanelLoader: React.FC<SkillPanelLoaderProps> = ({ className }) => {
                 <StatusPanel
                     label={LABEL}
                     icon={ICON}
+                    cols={cols}
+                    rows={rows}
                     isLoading
-                    className={className}
                 />
             }
         >
-            <SkillPanelData label={LABEL} icon={ICON} className={className} />
+            <SkillPanelData label={LABEL} icon={ICON} cols={cols} rows={rows} />
         </Suspense>
     );
 };

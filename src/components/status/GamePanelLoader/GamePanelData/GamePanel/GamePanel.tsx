@@ -15,7 +15,8 @@ type GamePanelProps = {
     initialMeta: RAWGGame | null;
     label: string;
     icon: React.ReactNode;
-    className?: string;
+    cols: number;
+    rows?: number;
 };
 
 const GamePanel: React.FC<GamePanelProps> = ({
@@ -23,7 +24,8 @@ const GamePanel: React.FC<GamePanelProps> = ({
     initialMeta,
     label,
     icon,
-    className,
+    cols,
+    rows,
 }) => {
     // -------------------------------------------------------------------------
     // HOOKS
@@ -142,8 +144,9 @@ const GamePanel: React.FC<GamePanelProps> = ({
         <StatusPanel
             label={label}
             icon={icon}
+            cols={cols}
+            rows={rows}
             headerAction={editButton}
-            className={className}
         >
             {isEditing ? (
                 <div className={styles['edit-form']}>

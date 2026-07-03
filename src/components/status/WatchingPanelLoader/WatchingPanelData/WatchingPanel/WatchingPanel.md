@@ -4,13 +4,14 @@ A status panel displaying the shows/movies currently being watched, with admin-o
 
 ## Props
 
-| Prop             | Type                     | Required | Default | Description                           |
-| ---------------- | ------------------------ | -------- | ------- | ------------------------------------- |
-| `initialEntries` | `ShowEntry[]`            | Yes      | —       | Show names and TVmaze IDs from the DB |
-| `initialMeta`    | `(TVmazeShow \| null)[]` | Yes      | —       | Poster and genre data from TVmaze     |
-| `label`          | `string`                 | Yes      | —       | Panel header label                    |
-| `icon`           | `React.ReactNode`        | Yes      | —       | Panel header icon                     |
-| `className`      | `string`                 | No       | —       | Class forwarded to the StatusPanel    |
+| Prop             | Type                     | Required | Default | Description                                     |
+| ---------------- | ------------------------ | -------- | ------- | ----------------------------------------------- |
+| `initialEntries` | `ShowEntry[]`            | Yes      | —       | Show names and TVmaze IDs from the DB           |
+| `initialMeta`    | `(TVmazeShow \| null)[]` | Yes      | —       | Poster and genre data from TVmaze               |
+| `label`          | `string`                 | Yes      | —       | Panel header label                              |
+| `icon`           | `React.ReactNode`        | Yes      | —       | Panel header icon                               |
+| `cols`           | `number`                 | Yes      | —       | Forwarded to the StatusPanel for grid placement |
+| `rows`           | `number`                 | No       | —       | Forwarded to the StatusPanel for grid placement |
 
 ## State
 

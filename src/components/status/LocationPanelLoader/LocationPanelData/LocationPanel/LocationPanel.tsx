@@ -11,14 +11,16 @@ type LocationPanelProps = {
     initialLocation: string;
     label: string;
     icon: React.ReactNode;
-    className?: string;
+    cols: number;
+    rows?: number;
 };
 
 const LocationPanel: React.FC<LocationPanelProps> = ({
     initialLocation,
     label,
     icon,
-    className,
+    cols,
+    rows,
 }) => {
     // -------------------------------------------------------------------------
     // HOOKS
@@ -79,8 +81,9 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
         <StatusPanel
             label={label}
             icon={icon}
+            cols={cols}
+            rows={rows}
             headerAction={editButton}
-            className={className}
         >
             {isEditing ? (
                 <div className={styles['edit-form']}>

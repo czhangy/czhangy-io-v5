@@ -15,14 +15,16 @@ type SkillPanelProps = {
     initialEntry: SkillEntry;
     label: string;
     icon: React.ReactNode;
-    className?: string;
+    cols: number;
+    rows?: number;
 };
 
 const SkillPanel: React.FC<SkillPanelProps> = ({
     initialEntry,
     label,
     icon,
-    className,
+    cols,
+    rows,
 }) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
@@ -125,8 +127,9 @@ const SkillPanel: React.FC<SkillPanelProps> = ({
         <StatusPanel
             label={label}
             icon={icon}
+            cols={cols}
+            rows={rows}
             headerAction={editButton}
-            className={className}
         >
             {isEditing ? (
                 <div ref={editFormRef} className={styles['edit-form']}>
