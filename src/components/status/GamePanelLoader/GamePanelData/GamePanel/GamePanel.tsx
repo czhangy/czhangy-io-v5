@@ -219,11 +219,6 @@ const GamePanel: React.FC<GamePanelProps> = ({
                                             >
                                                 {g.name}
                                             </span>
-                                            <span
-                                                className={styles['item-genre']}
-                                            >
-                                                {g.genre}
-                                            </span>
                                         </li>
                                     ))}
                                 </ul>

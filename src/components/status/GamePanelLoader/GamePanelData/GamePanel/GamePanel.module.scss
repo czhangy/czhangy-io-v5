@@ -29,8 +29,6 @@
 
             font-size: 1.25rem;
             overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }
 
         .genre-tag {
@@ -126,11 +124,8 @@
             z-index: 20;
 
             .dropdown-item {
-                align-items: center;
                 cursor: pointer;
                 display: flex;
-                gap: 0.4rem;
-                justify-content: space-between;
                 padding: 0.25rem 0.4rem;
                 transition: background 0.1s ease;
 
@@ -147,14 +142,6 @@
                     overflow: hidden;
                     text-overflow: ellipsis;
                     white-space: nowrap;
-                }
-
-                .item-genre {
-                    @include mono-label;
-
-                    color: $text-dim;
-                    flex-shrink: 0;
-                    font-size: 0.62rem;
                 }
             }
         }
