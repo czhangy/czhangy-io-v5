@@ -14,16 +14,17 @@ A status panel displaying the game currently being played, with admin-only edit 
 
 ## State
 
-| State        | Type           | Initial value | Description                                                 |
-| ------------ | -------------- | ------------- | ----------------------------------------------------------- |
-| `game`       | `Game \| null` | `initialGame` | Currently displayed game                                    |
-| `isEditing`  | `boolean`      | `false`       | Whether the edit form is open                               |
-| `games`      | `Game[]`       | `[]`          | All games fetched from the DB when edit opens               |
-| `isFetching` | `boolean`      | `false`       | Whether the initial games fetch is in progress              |
-| `newName`    | `string`       | `''`          | Name input; also used to filter the existing games dropdown |
-| `newGenre`   | `string`       | `''`          | Genre dropdown selection for creating a new game            |
-| `newIcon`    | `string`       | `''`          | Icon URL input for creating a new game                      |
-| `isSaving`   | `boolean`      | `false`       | Whether the new game POST request is in progress            |
+| State          | Type           | Initial value | Description                                                 |
+| -------------- | -------------- | ------------- | ----------------------------------------------------------- |
+| `game`         | `Game \| null` | `initialGame` | Currently displayed game                                    |
+| `isEditing`    | `boolean`      | `false`       | Whether the edit form is open                               |
+| `games`        | `Game[]`       | `[]`          | All games fetched from the DB when edit opens               |
+| `isFetching`   | `boolean`      | `false`       | Whether the initial games fetch is in progress              |
+| `newName`      | `string`       | `''`          | Name input; also used to filter the existing games dropdown |
+| `newGenre`     | `string`       | `''`          | Genre dropdown selection for creating a new game            |
+| `newIcon`      | `string`       | `''`          | Icon URL input for creating a new game                      |
+| `isSaving`     | `boolean`      | `false`       | Whether the new game POST request is in progress            |
+| `showDropdown` | `boolean`      | `false`       | Whether the game name autocomplete dropdown is visible      |
 
 ## Computations
 

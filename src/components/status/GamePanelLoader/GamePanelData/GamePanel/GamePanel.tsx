@@ -52,6 +52,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
     const [newIcon, setNewIcon] = useState<string>('');
     const [newRating, setNewRating] = useState<string>('1');
     const [isSaving, setIsSaving] = useState<boolean>(false);
+    const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -133,6 +134,14 @@ const GamePanel: React.FC<GamePanelProps> = ({
         setNewName(e.target.value);
     };
 
+    const handleNameFocus = (): void => {
+        setShowDropdown(true);
+    };
+
+    const handleNameBlur = (): void => {
+        setShowDropdown(false);
+    };
+
     const handleGenreChange = (
         e: React.ChangeEvent<HTMLSelectElement>
     ): void => {
@@ -150,7 +159,13 @@ const GamePanel: React.FC<GamePanelProps> = ({
     };
 
     const handleKeyDown = (e: React.KeyboardEvent): void => {
-        if (e.key === Key.Escape) handleCancel();
+        if (e.key === Key.Escape) {
+            if (showDropdown) {
+                setShowDropdown(false);
+                return;
+            }
+            handleCancel();
+        }
         if (e.key === Key.Enter) handleSaveNew();
     };
 
@@ -200,12 +215,14 @@ const GamePanel: React.FC<GamePanelProps> = ({
                                 className={styles['name-input']}
                                 value={newName}
                                 onChange={handleNameChange}
+                                onFocus={handleNameFocus}
+                                onBlur={handleNameBlur}
                                 placeholder="Game name..."
                                 autoFocus
                             />
                             {isFetching ? (
                                 <span className={styles.spinner} />
-                            ) : filteredGames.length > 0 ? (
+                            ) : showDropdown && filteredGames.length > 0 ? (
                                 <ul className={styles.dropdown}>
                                     {filteredGames.map((g) => (
                                         <li
