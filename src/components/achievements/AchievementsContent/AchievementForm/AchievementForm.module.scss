@@ -96,14 +96,6 @@
         justify-content: flex-end;
         margin-top: 0.25rem;
 
-        .cancel-button {
-            @include game-button;
-
-            cursor: pointer;
-            letter-spacing: 0.15em;
-            padding: 0.625rem 1.25rem;
-        }
-
         .submit-button {
             @include mono-label;
 

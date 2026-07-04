@@ -4,14 +4,19 @@ export const SESSION_COOKIE = 'session';
 
 // Milestones
 export const WATCHED_MILESTONES = [
-    { count: 50, name: 'Amateur Critic', tier: 1 },
+    { count: 50, name: 'Amateur Critic', tier: 3 },
     { count: 250, name: 'Dedicated Critic', tier: 2 },
-    { count: 500, name: 'Professional Critic', tier: 3 },
+    { count: 500, name: 'Professional Critic', tier: 1 },
 ];
 export const READ_MILESTONES = [
-    { count: 50, name: 'Amateur Reader', tier: 1 },
+    { count: 50, name: 'Amateur Reader', tier: 3 },
     { count: 250, name: 'Dedicated Reader', tier: 2 },
-    { count: 500, name: 'Professional Reader', tier: 3 },
+    { count: 500, name: 'Professional Reader', tier: 1 },
+];
+export const GAME_MILESTONES = [
+    { count: 50, name: 'Amateur Gamer', tier: 3 },
+    { count: 250, name: 'Dedicated Gamer', tier: 2 },
+    { count: 500, name: 'Professional Gamer', tier: 1 },
 ];
 
 // Cardistry

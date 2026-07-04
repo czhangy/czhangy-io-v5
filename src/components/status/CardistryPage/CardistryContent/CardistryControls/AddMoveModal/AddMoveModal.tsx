@@ -49,38 +49,49 @@ const AddMoveModal: React.FC<AddMoveModalProps> = ({ onClose, onAdd }) => {
     return (
         <Modal title="ADD MOVE" onClose={onClose}>
             <div className={styles['add-move-modal']}>
-                <input
-                    className={styles.input}
-                    value={name}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setName(e.target.value)
-                    }
-                    onKeyDown={handleKeyDown}
-                    placeholder="Move name..."
-                    autoFocus
-                />
-                <select
-                    className={styles.select}
-                    value={type}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                        setType(e.target.value)
-                    }
-                >
-                    <option value="">Select type...</option>
-                    {CARDISTRY_MOVE_TYPES.map((t) => (
-                        <option key={t} value={t}>
-                            {t}
-                        </option>
-                    ))}
-                </select>
-                <button
-                    type="button"
-                    className={styles.submit}
-                    onClick={handleSubmit}
-                    disabled={!name.trim() || !type}
-                >
-                    Add
-                </button>
+                <div className={styles.row}>
+                    <div className={styles.field}>
+                        <span className={styles.label}>Name</span>
+                        <input
+                            className={styles.input}
+                            value={name}
+                            onChange={(
+                                e: React.ChangeEvent<HTMLInputElement>
+                            ) => setName(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            autoFocus
+                        />
+                    </div>
+                    <div className={styles.field}>
+                        <span className={styles.label}>Type</span>
+                        <select
+                            className={styles.select}
+                            value={type}
+                            onChange={(
+                                e: React.ChangeEvent<HTMLSelectElement>
+                            ) => setType(e.target.value)}
+                        >
+                            <option value="" disabled>
+                                —
+                            </option>
+                            {CARDISTRY_MOVE_TYPES.map((t) => (
+                                <option key={t} value={t}>
+                                    {t}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+                <div className={styles.actions}>
+                    <button
+                        type="button"
+                        className={styles.submit}
+                        onClick={handleSubmit}
+                        disabled={!name.trim() || !type}
+                    >
+                        Add
+                    </button>
+                </div>
             </div>
         </Modal>
     );
