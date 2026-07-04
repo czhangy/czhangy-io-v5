@@ -4,7 +4,8 @@ Entry point for the Reading status panel. Passes the READING label and BookIcon 
 
 ## Props
 
-| Prop   | Type     | Required | Default | Description      |
-| ------ | -------- | -------- | ------- | ---------------- |
-| `cols` | `number` | Yes      | —       | Grid column span |
-| `rows` | `number` | No       | `1`     | Grid row span    |
+| Prop          | Type     | Required | Default | Description                   |
+| ------------- | -------- | -------- | ------- | ----------------------------- |
+| `cols`        | `number` | Yes      | —       | Grid column span              |
+| `rows`        | `number` | No       | `1`     | Grid row span                 |
+| `mobileOrder` | `number` | No       | —       | Forwarded for mobile ordering |

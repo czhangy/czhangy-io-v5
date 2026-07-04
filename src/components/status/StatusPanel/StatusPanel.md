@@ -14,3 +14,4 @@ A uniform panel shell used across the Status page dashboard. Renders a labeled h
 | `rows`         | `number`          | No       | `1`     | Number of grid rows the panel spans                                     |
 | `isLoading`    | `boolean`         | No       | `false` | When true, shows loading animations and suppresses children             |
 | `noPadding`    | `boolean`         | No       | `false` | When true, removes body padding so children can fill edge-to-edge       |
+| `mobileOrder`  | `number`          | No       | —       | CSS `order` value applied at `≤768px` to control mobile grid sequence   |

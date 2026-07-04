@@ -4,13 +4,14 @@ Client component for the Reading status panel. Displays up to 3 recently-added b
 
 ## Props
 
-| Prop             | Type               | Required | Default | Description                           |
-| ---------------- | ------------------ | -------- | ------- | ------------------------------------- |
-| `initialEntries` | `ReadMediaEntry[]` | Yes      | —       | Most recent books fetched from the DB |
-| `label`          | `string`           | Yes      | —       | Panel header label                    |
-| `icon`           | `React.ReactNode`  | Yes      | —       | Panel header icon                     |
-| `cols`           | `number`           | Yes      | —       | Grid column span                      |
-| `rows`           | `number`           | No       | `1`     | Grid row span                         |
+| Prop             | Type               | Required | Default | Description                                  |
+| ---------------- | ------------------ | -------- | ------- | -------------------------------------------- |
+| `initialEntries` | `ReadMediaEntry[]` | Yes      | —       | Most recent books fetched from the DB        |
+| `label`          | `string`           | Yes      | —       | Panel header label                           |
+| `icon`           | `React.ReactNode`  | Yes      | —       | Panel header icon                            |
+| `cols`           | `number`           | Yes      | —       | Grid column span                             |
+| `rows`           | `number`           | No       | `1`     | Grid row span                                |
+| `mobileOrder`    | `number`           | No       | —       | Forwarded to StatusPanel for mobile ordering |
 
 ## State
 

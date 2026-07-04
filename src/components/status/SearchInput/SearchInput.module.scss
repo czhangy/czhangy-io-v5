@@ -24,8 +24,7 @@
         width: 100%;
 
         &:focus {
-            border-color: $accent;
-            box-shadow: 0 0 6px rgba($accent, 0.35);
+            @include focus-glow;
         }
     }
 

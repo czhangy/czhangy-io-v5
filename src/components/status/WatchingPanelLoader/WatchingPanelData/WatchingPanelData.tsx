@@ -7,6 +7,7 @@ type WatchingPanelDataProps = {
     icon: React.ReactNode;
     cols: number;
     rows?: number;
+    mobileOrder?: number;
 };
 
 const WatchingPanelData = async ({
@@ -14,6 +15,7 @@ const WatchingPanelData = async ({
     icon,
     cols,
     rows,
+    mobileOrder,
 }: WatchingPanelDataProps) => {
     // -------------------------------------------------------------------------
     // COMPUTATIONS
@@ -51,6 +53,7 @@ const WatchingPanelData = async ({
             icon={icon}
             cols={cols}
             rows={rows}
+            mobileOrder={mobileOrder}
         />
     );
 };

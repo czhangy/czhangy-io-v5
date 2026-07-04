@@ -18,7 +18,7 @@
         .name {
             @include mono-label;
 
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -92,17 +92,23 @@
         @include mono-label;
 
         appearance: none;
-        background: transparent;
+        background-color: transparent;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%23ededed' fill-opacity='0.4' d='M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06z'/%3E%3C/svg%3E");
+        background-position: right 0.3rem center;
+        background-repeat: no-repeat;
+        background-size: 1rem;
         border: 1px solid $border-subtle;
         color: $foreground;
         font-size: 0.75rem;
         outline: none;
-        padding: 0.15rem 0.4rem;
-        transition: border-color 0.15s ease;
+        padding: 0.15rem 1.4rem 0.15rem 0.4rem;
+        transition:
+            border-color 0.15s ease,
+            box-shadow 0.15s ease;
         width: 100%;
 
         &:focus {
-            border-color: $accent;
+            @include focus-glow;
         }
 
         option {

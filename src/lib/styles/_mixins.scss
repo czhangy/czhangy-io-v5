@@ -32,6 +32,12 @@
     }
 }
 
+// Accent-colored glow applied on focus for interactive input elements.
+@mixin focus-glow {
+    border-color: $accent;
+    box-shadow: 0 0 6px rgba($accent, 0.35);
+}
+
 // Bordered interactive button matching the site's game UI aesthetic.
 @mixin game-button {
     background: transparent;

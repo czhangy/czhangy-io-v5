@@ -106,8 +106,8 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
     const headerActions: React.ReactNode = (
         <>
             <PanelButton href="/status/cardistry" icon={<LinkIcon />} />
-            {isAdmin && !isEditing ? (
-                <PanelButton onClick={handleEdit} />
+            {isAdmin ? (
+                <PanelButton onClick={handleEdit} disabled={isEditing} />
             ) : null}
         </>
     );

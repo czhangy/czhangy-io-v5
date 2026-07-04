@@ -70,8 +70,9 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
 
     const isAdmin: boolean = role === 'ADMIN';
 
-    const editButton: React.ReactNode =
-        isAdmin && !isEditing ? <PanelButton onClick={handleEdit} /> : null;
+    const editButton: React.ReactNode = isAdmin ? (
+        <PanelButton onClick={handleEdit} disabled={isEditing} />
+    ) : null;
 
     // -------------------------------------------------------------------------
     // MARKUP

@@ -7,6 +7,7 @@ type ReadingPanelDataProps = {
     icon: React.ReactNode;
     cols: number;
     rows?: number;
+    mobileOrder?: number;
 };
 
 const ReadingPanelData = async ({
@@ -14,6 +15,7 @@ const ReadingPanelData = async ({
     icon,
     cols,
     rows,
+    mobileOrder,
 }: ReadingPanelDataProps) => {
     // -------------------------------------------------------------------------
     // COMPUTATIONS
@@ -50,6 +52,7 @@ const ReadingPanelData = async ({
             icon={icon}
             cols={cols}
             rows={rows}
+            mobileOrder={mobileOrder}
         />
     );
 };

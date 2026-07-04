@@ -18,6 +18,7 @@ type WatchingPanelProps = {
     icon: React.ReactNode;
     cols: number;
     rows?: number;
+    mobileOrder?: number;
 };
 
 const WatchingPanel: React.FC<WatchingPanelProps> = ({
@@ -26,6 +27,7 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     icon,
     cols,
     rows,
+    mobileOrder,
 }) => {
     // -------------------------------------------------------------------------
     // HOOKS
@@ -131,8 +133,12 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     const headerActions: React.ReactNode = (
         <>
             <PanelButton href="/status/archives" icon={<LinkIcon />} />
-            {isAdmin && !isAdding ? (
-                <PanelButton onClick={handleStartAdd} icon={<PlusIcon />} />
+            {isAdmin ? (
+                <PanelButton
+                    onClick={handleStartAdd}
+                    icon={<PlusIcon />}
+                    disabled={isAdding}
+                />
             ) : null}
         </>
     );
@@ -148,6 +154,7 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
             cols={cols}
             rows={rows}
             headerAction={headerActions}
+            mobileOrder={mobileOrder}
         >
             <div className={styles.content}>
                 {isAdding ? (

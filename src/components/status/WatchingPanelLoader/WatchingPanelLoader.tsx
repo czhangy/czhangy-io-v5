@@ -6,11 +6,13 @@ import WatchingPanelData from './WatchingPanelData/WatchingPanelData';
 type WatchingPanelLoaderProps = {
     cols: number;
     rows?: number;
+    mobileOrder?: number;
 };
 
 const WatchingPanelLoader: React.FC<WatchingPanelLoaderProps> = ({
     cols,
     rows,
+    mobileOrder,
 }) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
@@ -32,6 +34,7 @@ const WatchingPanelLoader: React.FC<WatchingPanelLoaderProps> = ({
                     cols={cols}
                     rows={rows}
                     isLoading
+                    mobileOrder={mobileOrder}
                 />
             }
         >
@@ -40,6 +43,7 @@ const WatchingPanelLoader: React.FC<WatchingPanelLoaderProps> = ({
                 icon={ICON}
                 cols={cols}
                 rows={rows}
+                mobileOrder={mobileOrder}
             />
         </Suspense>
     );
