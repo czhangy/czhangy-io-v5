@@ -1,6 +1,6 @@
 # LocationPanel
 
-A Status page panel displaying the user's current general location. Admins see an edit button on hover that enables inline editing, persisted via `PATCH /api/status/location`.
+A Status page panel displaying the user's current general location. Admins see an edit button that opens a `SearchInput` backed by `GET /api/locations/search` (Nominatim). Selecting a result immediately persists the location via `PATCH /api/status/location` and closes the search form. Pressing Escape or clicking outside cancels without saving.
 
 ## Props
 
@@ -14,8 +14,18 @@ A Status page panel displaying the user's current general location. Admins see a
 
 ## State
 
-| State       | Type      | Initial value     | Description                          |
-| ----------- | --------- | ----------------- | ------------------------------------ |
-| `isEditing` | `boolean` | `false`           | Whether the inline edit form is open |
-| `location`  | `string`  | `initialLocation` | Saved location value                 |
-| `draft`     | `string`  | `initialLocation` | In-progress edit value               |
+| State         | Type               | Initial value     | Description                               |
+| ------------- | ------------------ | ----------------- | ----------------------------------------- |
+| `isEditing`   | `boolean`          | `false`           | Whether the search form is open           |
+| `location`    | `string`           | `initialLocation` | Persisted location displayed in read mode |
+| `query`       | `string`           | `''`              | Current text in the search input          |
+| `results`     | `LocationResult[]` | `[]`              | Location suggestions from the API         |
+| `isSearching` | `boolean`          | `false`           | Whether an API search is in flight        |
+
+## Effects
+
+- **On query change** — debounces 500 ms then calls `GET /api/locations/search?q=…`
+
+## Computations
+
+- `performSearch` — fetches location suggestions from the API and populates `results`
