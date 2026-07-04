@@ -2,23 +2,15 @@
 
 import { useEffect, useRef, useState } from 'react';
 import ChevronIcon from '@/lib/icons/ChevronIcon';
-import styles from './PanelSelect.module.scss';
+import styles from './Dropdown.module.scss';
 
-type PanelSelectProps = {
+type DropdownProps = {
     value: string;
     onChange: (value: string) => void;
-    options: (string | number)[];
-    placeholder?: string;
-    compact?: boolean;
+    options: string[];
 };
 
-const PanelSelect: React.FC<PanelSelectProps> = ({
-    value,
-    onChange,
-    options,
-    placeholder,
-    compact = false,
-}) => {
+const Dropdown: React.FC<DropdownProps> = ({ value, onChange, options }) => {
     // -------------------------------------------------------------------------
     // HOOKS
     // -------------------------------------------------------------------------
@@ -39,8 +31,8 @@ const PanelSelect: React.FC<PanelSelectProps> = ({
         setIsOpen((prev) => !prev);
     };
 
-    const handleSelect = (opt: string | number): void => {
-        onChange(String(opt));
+    const handleSelect = (opt: string): void => {
+        onChange(opt);
         setIsOpen(false);
     };
 
@@ -50,6 +42,12 @@ const PanelSelect: React.FC<PanelSelectProps> = ({
             setIsOpen(false);
         }
     };
+
+    // -------------------------------------------------------------------------
+    // RENDERING
+    // -------------------------------------------------------------------------
+
+    const displayLabel = value;
 
     // -------------------------------------------------------------------------
     // EFFECTS
@@ -70,25 +68,18 @@ const PanelSelect: React.FC<PanelSelectProps> = ({
     }, [isOpen]);
 
     // -------------------------------------------------------------------------
-    // RENDERING
-    // -------------------------------------------------------------------------
-
-    const isEmpty = !value && !!placeholder;
-    const displayLabel = value || placeholder || '';
-
-    // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
 
     return (
         <div
             ref={wrapperRef}
-            className={`${styles['panel-select']}${compact ? ` ${styles['panel-select--compact']}` : ''}`}
+            className={styles.dropdown}
             onKeyDown={handleKeyDown}
         >
             <button
                 type="button"
-                className={`${styles.trigger}${isEmpty ? ` ${styles['trigger--empty']}` : ''}`}
+                className={styles.trigger}
                 onClick={handleTriggerClick}
             >
                 <span className={styles['trigger-label']}>{displayLabel}</span>
@@ -99,7 +90,7 @@ const PanelSelect: React.FC<PanelSelectProps> = ({
                     {options.map((opt) => (
                         <li
                             key={opt}
-                            className={`${styles.option}${String(opt) === value ? ` ${styles['option--active']}` : ''}`}
+                            className={`${styles.option}${opt === value ? ` ${styles['option--active']}` : ''}`}
                             onMouseDown={(e: React.MouseEvent) =>
                                 e.preventDefault()
                             }
@@ -114,4 +105,4 @@ const PanelSelect: React.FC<PanelSelectProps> = ({
     );
 };
 
-export default PanelSelect;
+export default Dropdown;

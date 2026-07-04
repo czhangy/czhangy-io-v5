@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Dropdown from '@/components/common/Dropdown/Dropdown';
 import Modal from '@/components/common/Modal/Modal';
 import { CARDISTRY_MOVE_TYPES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
@@ -42,6 +43,10 @@ const AddMoveModal: React.FC<AddMoveModalProps> = ({ onClose, onAdd }) => {
         if (e.key === Key.Escape) onClose();
     };
 
+    const handleTypeChange = (value: string): void => {
+        setType(value);
+    };
+
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
@@ -64,22 +69,11 @@ const AddMoveModal: React.FC<AddMoveModalProps> = ({ onClose, onAdd }) => {
                     </div>
                     <div className={styles.field}>
                         <span className={styles.label}>Type</span>
-                        <select
-                            className={styles.select}
+                        <Dropdown
                             value={type}
-                            onChange={(
-                                e: React.ChangeEvent<HTMLSelectElement>
-                            ) => setType(e.target.value)}
-                        >
-                            <option value="" disabled>
-                                —
-                            </option>
-                            {CARDISTRY_MOVE_TYPES.map((t) => (
-                                <option key={t} value={t}>
-                                    {t}
-                                </option>
-                            ))}
-                        </select>
+                            onChange={handleTypeChange}
+                            options={CARDISTRY_MOVE_TYPES}
+                        />
                     </div>
                 </div>
                 <div className={styles.actions}>

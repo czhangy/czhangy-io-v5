@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Dropdown from '@/components/common/Dropdown/Dropdown';
 import Modal from '@/components/common/Modal/Modal';
 import { GAME_GENRES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
@@ -22,7 +23,17 @@ const EditGameModal: React.FC<EditGameModalProps> = ({
     // CONSTANTS
     // -------------------------------------------------------------------------
 
-    const RATING_OPTIONS: number[] = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
+    const RATING_OPTIONS: string[] = [
+        '1',
+        '1.5',
+        '2',
+        '2.5',
+        '3',
+        '3.5',
+        '4',
+        '4.5',
+        '5',
+    ];
 
     // -------------------------------------------------------------------------
     // STATE
@@ -68,20 +79,16 @@ const EditGameModal: React.FC<EditGameModalProps> = ({
         setName(e.target.value);
     };
 
-    const handleGenreChange = (
-        e: React.ChangeEvent<HTMLSelectElement>
-    ): void => {
-        setGenre(e.target.value);
+    const handleGenreChange = (value: string): void => {
+        setGenre(value);
     };
 
     const handleIconChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setIcon(e.target.value);
     };
 
-    const handleRatingChange = (
-        e: React.ChangeEvent<HTMLSelectElement>
-    ): void => {
-        setRating(e.target.value);
+    const handleRatingChange = (value: string): void => {
+        setRating(value);
     };
 
     // -------------------------------------------------------------------------
@@ -113,17 +120,11 @@ const EditGameModal: React.FC<EditGameModalProps> = ({
                 <div className={styles.row}>
                     <div className={styles.field}>
                         <span className={styles.label}>Genre</span>
-                        <select
-                            className={styles.select}
+                        <Dropdown
                             value={genre}
                             onChange={handleGenreChange}
-                        >
-                            {GAME_GENRES.map((g) => (
-                                <option key={g} value={g}>
-                                    {g}
-                                </option>
-                            ))}
-                        </select>
+                            options={GAME_GENRES}
+                        />
                     </div>
                     <div className={styles.field}>
                         <span className={styles.label}>Icon URL</span>
@@ -137,17 +138,11 @@ const EditGameModal: React.FC<EditGameModalProps> = ({
                 </div>
                 <div className={styles.field}>
                     <span className={styles.label}>Rating</span>
-                    <select
-                        className={styles.select}
+                    <Dropdown
                         value={rating}
                         onChange={handleRatingChange}
-                    >
-                        {RATING_OPTIONS.map((r) => (
-                            <option key={r} value={r}>
-                                {r}
-                            </option>
-                        ))}
-                    </select>
+                        options={RATING_OPTIONS}
+                    />
                 </div>
                 <div className={styles.actions}>
                     <button

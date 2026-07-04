@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useReducer } from 'react';
+import Dropdown from '@/components/common/Dropdown/Dropdown';
 import PaginationControls from '@/components/common/PaginationControls/PaginationControls';
 import DateHelpers from '@/lib/utils/DateHelpers';
 import type { Achievement } from '@/generated/prisma/client';
@@ -55,6 +56,8 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
         { value: 'tier', label: 'Tier' },
     ];
 
+    const SORT_FIELD_LABELS: string[] = SORT_FIELDS.map((f) => f.label);
+
     const CATEGORIES: string[] = [
         ...new Set(achievements.map((a) => a.category)),
     ].sort();
@@ -102,12 +105,11 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
     // HANDLERS
     // -------------------------------------------------------------------------
 
-    const handleFieldChange = (
-        e: React.ChangeEvent<HTMLSelectElement>
-    ): void => {
+    const handleFieldChange = (label: string): void => {
         dispatch({
             type: 'SET_SORT_FIELD',
-            field: e.target.value as SortField,
+            field: (SORT_FIELDS.find((f) => f.label === label)?.value ??
+                'date') as SortField,
         });
     };
 
@@ -115,10 +117,11 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
         dispatch({ type: 'TOGGLE_DIRECTION' });
     };
 
-    const handleCategoryChange = (
-        e: React.ChangeEvent<HTMLSelectElement>
-    ): void => {
-        dispatch({ type: 'SET_CATEGORY', category: e.target.value });
+    const handleCategoryChange = (value: string): void => {
+        dispatch({
+            type: 'SET_CATEGORY',
+            category: value === 'All' ? '' : value,
+        });
     };
 
     const handlePrevPage = (): void => {
@@ -135,6 +138,10 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
 
     const { sortField, sortDirection, categoryFilter, page, itemsPerPage } =
         state;
+
+    const currentSortLabel: string =
+        SORT_FIELDS.find((f) => f.value === sortField)?.label ??
+        SORT_FIELDS[0].label;
 
     const sortedAchievements: Achievement[] = achievements
         .filter((a) => (categoryFilter ? a.category === categoryFilter : true))
@@ -192,29 +199,16 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
         <div className={styles['achievements-content']}>
             <div className={styles.controls}>
                 <div className={styles.left}>
-                    <select
-                        className={styles.select}
-                        value={categoryFilter}
+                    <Dropdown
+                        value={categoryFilter === '' ? 'All' : categoryFilter}
                         onChange={handleCategoryChange}
-                    >
-                        <option value="">All</option>
-                        {CATEGORIES.map((cat) => (
-                            <option key={cat} value={cat}>
-                                {cat}
-                            </option>
-                        ))}
-                    </select>
-                    <select
-                        className={styles.select}
-                        value={sortField}
+                        options={['All', ...CATEGORIES]}
+                    />
+                    <Dropdown
+                        value={currentSortLabel}
                         onChange={handleFieldChange}
-                    >
-                        {SORT_FIELDS.map(({ value, label }) => (
-                            <option key={value} value={value}>
-                                {label}
-                            </option>
-                        ))}
-                    </select>
+                        options={SORT_FIELD_LABELS}
+                    />
                     <button
                         className={styles['direction-button']}
                         type="button"
