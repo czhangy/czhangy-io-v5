@@ -89,3 +89,8 @@ export type Job = {
     endDate: string | null; // null = Present
     logo: string; // path relative to /public, e.g. '/logos/company.png'
 };
+
+export type LocationResult = {
+    id: string;
+    name: string;
+};
