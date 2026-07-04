@@ -152,8 +152,8 @@
             }
 
             @media (width <= 768px) {
-                gap: 0.5rem 1rem;
                 display: grid;
+                gap: 0.5rem 1rem;
                 grid-template-columns: auto 1fr auto;
 
                 .proficiency {
@@ -170,6 +170,11 @@
                 .increment-buttons {
                     grid-column: 2;
                     grid-row: 2;
+
+                    .increment-btn {
+                        font-size: 0.65rem;
+                        padding: 0.2rem 0.35rem;
+                    }
                 }
 
                 .admin-actions {

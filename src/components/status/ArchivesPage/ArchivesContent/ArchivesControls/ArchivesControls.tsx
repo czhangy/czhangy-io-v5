@@ -36,11 +36,9 @@ const ArchivesControls: React.FC<ArchivesControlsProps> = ({
 
     return (
         <div className={styles['archives-controls']}>
-            <div className={styles.left}>
-                <Link className={styles['back-button']} href="/status">
-                    ← Back to Status
-                </Link>
-            </div>
+            <Link className={styles['back-button']} href="/status">
+                ← Back to Status
+            </Link>
             <div className={styles.right}>
                 {isAdmin ? (
                     <button
@@ -51,19 +49,23 @@ const ArchivesControls: React.FC<ArchivesControlsProps> = ({
                         Add Content
                     </button>
                 ) : null}
-                {isOpen ? (
-                    <AddContentModal
-                        onClose={() => setIsOpen(false)}
-                        onAdd={onAdd}
-                    />
+                {totalPages > 1 ? (
+                    <div className={styles['pagination-wrapper']}>
+                        <PaginationControls
+                            page={page}
+                            totalPages={totalPages}
+                            onPrev={onPrev}
+                            onNext={onNext}
+                        />
+                    </div>
                 ) : null}
-                <PaginationControls
-                    page={page}
-                    totalPages={totalPages}
-                    onPrev={onPrev}
-                    onNext={onNext}
-                />
             </div>
+            {isOpen ? (
+                <AddContentModal
+                    onClose={() => setIsOpen(false)}
+                    onAdd={onAdd}
+                />
+            ) : null}
         </div>
     );
 };

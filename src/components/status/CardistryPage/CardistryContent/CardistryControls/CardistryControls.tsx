@@ -36,11 +36,9 @@ const CardistryControls: React.FC<CardistryControlsProps> = ({
 
     return (
         <div className={styles['cardistry-controls']}>
-            <div className={styles.left}>
-                <Link className={styles['back-button']} href="/status">
-                    ← Back to Status
-                </Link>
-            </div>
+            <Link className={styles['back-button']} href="/status">
+                ← Back to Status
+            </Link>
             <div className={styles.right}>
                 {isAdmin ? (
                     <button
@@ -51,19 +49,20 @@ const CardistryControls: React.FC<CardistryControlsProps> = ({
                         Add Move
                     </button>
                 ) : null}
-                {isOpen ? (
-                    <AddMoveModal
-                        onClose={() => setIsOpen(false)}
-                        onAdd={onAdd}
-                    />
+                {totalPages > 1 ? (
+                    <div className={styles['pagination-wrapper']}>
+                        <PaginationControls
+                            page={page}
+                            totalPages={totalPages}
+                            onPrev={onPrev}
+                            onNext={onNext}
+                        />
+                    </div>
                 ) : null}
-                <PaginationControls
-                    page={page}
-                    totalPages={totalPages}
-                    onPrev={onPrev}
-                    onNext={onNext}
-                />
             </div>
+            {isOpen ? (
+                <AddMoveModal onClose={() => setIsOpen(false)} onAdd={onAdd} />
+            ) : null}
         </div>
     );
 };
