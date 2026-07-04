@@ -25,6 +25,12 @@ const GamePanel: React.FC<GamePanelProps> = ({
     rows,
 }) => {
     // -------------------------------------------------------------------------
+    // CONSTANTS
+    // -------------------------------------------------------------------------
+
+    const RATING_OPTIONS: number[] = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
+
+    // -------------------------------------------------------------------------
     // HOOKS
     // -------------------------------------------------------------------------
 
@@ -42,6 +48,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
     const [newName, setNewName] = useState<string>('');
     const [newGenre, setNewGenre] = useState<string>('');
     const [newIcon, setNewIcon] = useState<string>('');
+    const [newRating, setNewRating] = useState<string>('1');
     const [isSaving, setIsSaving] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
@@ -53,6 +60,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
         setNewName('');
         setNewGenre('');
         setNewIcon('');
+        setNewRating('1');
         setIsFetching(true);
         const res = await fetch('/api/games');
         if (res.ok) setGames((await res.json()) as Game[]);
@@ -65,6 +73,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
         setNewName('');
         setNewGenre('');
         setNewIcon('');
+        setNewRating('1');
     };
 
     const handleSelectGame = async (selected: Game): Promise<void> => {
@@ -79,6 +88,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
         setNewName('');
         setNewGenre('');
         setNewIcon('');
+        setNewRating('1');
     };
 
     const handleSaveNew = async (): Promise<void> => {
@@ -90,7 +100,12 @@ const GamePanel: React.FC<GamePanelProps> = ({
         const res = await fetch('/api/games', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, genre, icon }),
+            body: JSON.stringify({
+                name,
+                genre,
+                icon,
+                rating: parseFloat(newRating),
+            }),
         });
         if (!res.ok) {
             setIsSaving(false);
@@ -108,6 +123,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
         setNewName('');
         setNewGenre('');
         setNewIcon('');
+        setNewRating('1');
         setIsSaving(false);
     };
 
@@ -123,6 +139,12 @@ const GamePanel: React.FC<GamePanelProps> = ({
 
     const handleIconChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setNewIcon(e.target.value);
+    };
+
+    const handleRatingChange = (
+        e: React.ChangeEvent<HTMLSelectElement>
+    ): void => {
+        setNewRating(e.target.value);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent): void => {
@@ -170,37 +192,54 @@ const GamePanel: React.FC<GamePanelProps> = ({
                     className={styles['edit-form']}
                     onKeyDown={handleKeyDown}
                 >
-                    <div className={styles['name-wrapper']}>
-                        <input
-                            className={styles['name-input']}
-                            value={newName}
-                            onChange={handleNameChange}
-                            placeholder="Game name..."
-                            autoFocus
-                        />
-                        {isFetching ? (
-                            <span className={styles.spinner} />
-                        ) : filteredGames.length > 0 ? (
-                            <ul className={styles.dropdown}>
-                                {filteredGames.map((g) => (
-                                    <li
-                                        key={g.id}
-                                        className={styles['dropdown-item']}
-                                        onMouseDown={(e: React.MouseEvent) =>
-                                            e.preventDefault()
-                                        }
-                                        onClick={() => handleSelectGame(g)}
-                                    >
-                                        <span className={styles['item-name']}>
-                                            {g.name}
-                                        </span>
-                                        <span className={styles['item-genre']}>
-                                            {g.genre}
-                                        </span>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : null}
+                    <div className={styles['top-row']}>
+                        <div className={styles['name-wrapper']}>
+                            <input
+                                className={styles['name-input']}
+                                value={newName}
+                                onChange={handleNameChange}
+                                placeholder="Game name..."
+                                autoFocus
+                            />
+                            {isFetching ? (
+                                <span className={styles.spinner} />
+                            ) : filteredGames.length > 0 ? (
+                                <ul className={styles.dropdown}>
+                                    {filteredGames.map((g) => (
+                                        <li
+                                            key={g.id}
+                                            className={styles['dropdown-item']}
+                                            onMouseDown={(
+                                                e: React.MouseEvent
+                                            ) => e.preventDefault()}
+                                            onClick={() => handleSelectGame(g)}
+                                        >
+                                            <span
+                                                className={styles['item-name']}
+                                            >
+                                                {g.name}
+                                            </span>
+                                            <span
+                                                className={styles['item-genre']}
+                                            >
+                                                {g.genre}
+                                            </span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : null}
+                        </div>
+                        <select
+                            className={styles['rating-select']}
+                            value={newRating}
+                            onChange={handleRatingChange}
+                        >
+                            {RATING_OPTIONS.map((r) => (
+                                <option key={r} value={r}>
+                                    {r}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className={styles.row}>
                         <input

@@ -18,12 +18,21 @@ const EditGameModal: React.FC<EditGameModalProps> = ({
     onEdit,
 }) => {
     // -------------------------------------------------------------------------
+    // CONSTANTS
+    // -------------------------------------------------------------------------
+
+    const RATING_OPTIONS: number[] = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
+
+    // -------------------------------------------------------------------------
     // STATE
     // -------------------------------------------------------------------------
 
     const [name, setName] = useState<string>(game.name);
     const [genre, setGenre] = useState<string>(game.genre);
     const [icon, setIcon] = useState<string>(game.icon);
+    const [rating, setRating] = useState<string>(
+        game.rating !== null ? String(game.rating) : '1'
+    );
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -41,6 +50,7 @@ const EditGameModal: React.FC<EditGameModalProps> = ({
                 name: trimmedName,
                 genre: trimmedGenre,
                 icon: trimmedIcon,
+                rating: rating ? parseFloat(rating) : null,
             }),
         });
         if (!res.ok) return;
@@ -65,6 +75,12 @@ const EditGameModal: React.FC<EditGameModalProps> = ({
 
     const handleIconChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setIcon(e.target.value);
+    };
+
+    const handleRatingChange = (
+        e: React.ChangeEvent<HTMLSelectElement>
+    ): void => {
+        setRating(e.target.value);
     };
 
     // -------------------------------------------------------------------------
@@ -105,6 +121,17 @@ const EditGameModal: React.FC<EditGameModalProps> = ({
                     onKeyDown={handleKeyDown}
                     placeholder="Icon URL..."
                 />
+                <select
+                    className={styles.select}
+                    value={rating}
+                    onChange={handleRatingChange}
+                >
+                    {RATING_OPTIONS.map((r) => (
+                        <option key={r} value={r}>
+                            {r}
+                        </option>
+                    ))}
+                </select>
                 <button
                     type="button"
                     className={styles.submit}

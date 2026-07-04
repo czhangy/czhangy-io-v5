@@ -66,6 +66,36 @@
                         padding: 0.1rem 0.3rem;
                     }
                 }
+
+                .rating {
+                    align-items: center;
+                    display: flex;
+                    flex-shrink: 0;
+                    gap: 0.2rem;
+
+                    .star {
+                        color: $foreground;
+                        font-size: 1.3rem;
+                        line-height: 1;
+                        position: relative;
+
+                        &--full {
+                            color: $accent;
+                        }
+
+                        &--half {
+                            &::after {
+                                color: $accent;
+                                content: '★';
+                                left: 0;
+                                overflow: hidden;
+                                position: absolute;
+                                top: 0;
+                                width: 50%;
+                            }
+                        }
+                    }
+                }
             }
 
             .admin-actions {

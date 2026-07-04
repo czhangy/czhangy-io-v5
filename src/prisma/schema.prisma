@@ -65,8 +65,9 @@ model CardistryMove {
 }
 
 model Game {
-    id    Int    @id @default(autoincrement())
-    name  String @unique
-    genre String
-    icon  String
+    id     Int    @id @default(autoincrement())
+    name   String @unique
+    genre  String
+    icon   String
+    rating Float?
 }

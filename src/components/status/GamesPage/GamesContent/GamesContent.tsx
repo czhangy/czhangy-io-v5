@@ -114,8 +114,8 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
                                 className={styles.icon}
                                 src={game.icon}
                                 alt={`${game.name} icon`}
-                                width={40}
-                                height={40}
+                                width={64}
+                                height={64}
                             />
                         </div>
                         <div className={styles.details}>
@@ -125,6 +125,27 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
                                     {game.genre}
                                 </span>
                             </div>
+                            {game.rating !== null ? (
+                                <div className={styles.rating}>
+                                    {[1, 2, 3, 4, 5].map((i) => {
+                                        const isFull =
+                                            game.rating !== null &&
+                                            game.rating >= i;
+                                        const isHalf =
+                                            game.rating !== null &&
+                                            !isFull &&
+                                            game.rating >= i - 0.5;
+                                        return (
+                                            <span
+                                                key={i}
+                                                className={`${styles.star}${isFull ? ` ${styles['star--full']}` : isHalf ? ` ${styles['star--half']}` : ''}`}
+                                            >
+                                                ★
+                                            </span>
+                                        );
+                                    })}
+                                </div>
+                            ) : null}
                         </div>
                         {isAdmin ? (
                             <div className={styles['admin-actions']}>

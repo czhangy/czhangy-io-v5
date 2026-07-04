@@ -60,9 +60,16 @@
     gap: 0.35rem;
     min-width: 0;
 
+    .top-row {
+        align-items: flex-start;
+        display: flex;
+        gap: 0.35rem;
+    }
+
     .name-wrapper {
+        flex: 1;
+        min-width: 0;
         position: relative;
-        width: 100%;
 
         .name-input {
             @include mono-label;
@@ -178,6 +185,29 @@
 
         &:focus {
             @include focus-glow;
+        }
+    }
+
+    .rating-select {
+        @include mono-label;
+
+        appearance: none;
+        background: none;
+        border: 1px solid $border-subtle;
+        color: $foreground;
+        font-size: 0.72rem;
+        line-height: 1;
+        outline: none;
+        padding: 0.2rem 0.4rem;
+        transition: border-color 0.15s ease;
+        width: 3rem;
+
+        &:focus {
+            @include focus-glow;
+        }
+
+        option {
+            background: $background;
         }
     }
 

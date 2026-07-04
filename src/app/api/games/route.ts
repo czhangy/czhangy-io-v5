@@ -19,10 +19,11 @@ export const POST = async (request: NextRequest) => {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { name, genre, icon } = (await request.json()) as {
+    const { name, genre, icon, rating } = (await request.json()) as {
         name: string;
         genre: string;
         icon: string;
+        rating?: number | null;
     };
 
     if (!name?.trim()) {
@@ -58,7 +59,12 @@ export const POST = async (request: NextRequest) => {
     }
 
     const game = await prisma.game.create({
-        data: { name: name.trim(), genre: genre.trim(), icon: icon.trim() },
+        data: {
+            name: name.trim(),
+            genre: genre.trim(),
+            icon: icon.trim(),
+            rating: rating ?? null,
+        },
     });
 
     return NextResponse.json(game as Game);

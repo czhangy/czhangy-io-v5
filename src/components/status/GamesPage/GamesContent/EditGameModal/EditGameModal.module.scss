@@ -27,6 +27,28 @@
         }
     }
 
+    .select {
+        @include mono-label;
+
+        appearance: none;
+        background: transparent;
+        border: 1px solid $border-subtle;
+        color: $foreground;
+        font-size: 0.85rem;
+        outline: none;
+        padding: 0.5rem 0.75rem;
+        transition: border-color 0.15s ease;
+        width: 100%;
+
+        &:focus {
+            border-color: $accent;
+        }
+
+        option {
+            background: $background;
+        }
+    }
+
     .submit {
         @include game-button;
 

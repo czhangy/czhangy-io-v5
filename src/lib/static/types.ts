@@ -36,6 +36,7 @@ export type Game = {
     name: string;
     genre: string;
     icon: string;
+    rating: number | null;
 };
 
 export type BookSearchResult = {
