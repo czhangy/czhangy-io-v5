@@ -1,6 +1,6 @@
 # CardistryPanel
 
-A status panel displaying the cardistry move currently being practiced. Admins can select an existing move from a dropdown to mark it as active.
+A status panel displaying the cardistry move currently being practiced. Admins can select an existing move via a PanelSelect dropdown to mark it as active.
 
 ## Props
 

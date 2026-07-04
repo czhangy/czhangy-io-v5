@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react';
 import PanelButton from '@/components/status/PanelButton/PanelButton';
+import PanelSelect from '@/components/status/PanelSelect/PanelSelect';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { useSession } from '@/lib/context/SessionContext';
 import LinkIcon from '@/lib/icons/LinkIcon';
@@ -9,7 +10,6 @@ import { GAME_GENRES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
 import { Game } from '@/lib/static/types';
 import styles from './GamePanel.module.scss';
-import PanelSelect from './PanelSelect/PanelSelect';
 
 type GamePanelProps = {
     initialGame: Game | null;

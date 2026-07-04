@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import PanelButton from '@/components/status/PanelButton/PanelButton';
+import PanelSelect from '@/components/status/PanelSelect/PanelSelect';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { useSession } from '@/lib/context/SessionContext';
 import LinkIcon from '@/lib/icons/LinkIcon';
@@ -65,11 +66,8 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
         handleCancel();
     };
 
-    const handleDropdownChange = async (
-        e: React.ChangeEvent<HTMLSelectElement>
-    ): Promise<void> => {
-        const id = parseInt(e.target.value, 10);
-        const move = moves.find((m) => m.id === id);
+    const handleDropdownChange = async (value: string): Promise<void> => {
+        const move = moves.find((m) => m.name === value);
         if (move) await handleSelect(move);
     };
 
@@ -126,22 +124,12 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
         >
             {isEditing ? (
                 <div ref={editFormRef} className={styles['edit-form']}>
-                    <select
-                        className={styles.select}
-                        value={activeMove?.id ?? ''}
+                    <PanelSelect
+                        value={activeMove?.name ?? ''}
                         onChange={handleDropdownChange}
-                    >
-                        {!activeMove && (
-                            <option value="" disabled>
-                                — Select a move —
-                            </option>
-                        )}
-                        {moves.map((move) => (
-                            <option key={move.id} value={move.id}>
-                                {move.name}
-                            </option>
-                        ))}
-                    </select>
+                        options={moves.map((m) => m.name)}
+                        placeholder="— Select a move —"
+                    />
                 </div>
             ) : (
                 <div className={styles.content}>

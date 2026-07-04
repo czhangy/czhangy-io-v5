@@ -73,6 +73,7 @@ const PanelSelect: React.FC<PanelSelectProps> = ({
     // -------------------------------------------------------------------------
 
     const isEmpty = !value && !!placeholder;
+    const displayLabel = value || placeholder || '';
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -89,9 +90,7 @@ const PanelSelect: React.FC<PanelSelectProps> = ({
                 className={`${styles.trigger}${isEmpty ? ` ${styles['trigger--empty']}` : ''}`}
                 onClick={handleTriggerClick}
             >
-                <span className={styles['trigger-label']}>
-                    {value || placeholder}
-                </span>
+                <span className={styles['trigger-label']}>{displayLabel}</span>
             </button>
             {isOpen && (
                 <ul className={styles.options}>
