@@ -131,8 +131,12 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
     const headerActions: React.ReactNode = (
         <>
             <PanelButton href="/status/library" icon={<LinkIcon />} />
-            {isAdmin && !isAdding ? (
-                <PanelButton onClick={handleStartAdd} icon={<PlusIcon />} />
+            {isAdmin ? (
+                <PanelButton
+                    onClick={handleStartAdd}
+                    icon={<PlusIcon />}
+                    disabled={isAdding}
+                />
             ) : null}
         </>
     );

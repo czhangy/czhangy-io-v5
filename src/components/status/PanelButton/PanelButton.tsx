@@ -6,9 +6,15 @@ type PanelButtonProps = {
     icon?: React.ReactNode;
     href?: string;
     onClick?: () => void;
+    disabled?: boolean;
 };
 
-const PanelButton: React.FC<PanelButtonProps> = ({ icon, href, onClick }) => {
+const PanelButton: React.FC<PanelButtonProps> = ({
+    icon,
+    href,
+    onClick,
+    disabled,
+}) => {
     // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
@@ -28,7 +34,12 @@ const PanelButton: React.FC<PanelButtonProps> = ({ icon, href, onClick }) => {
     }
 
     return (
-        <button type="button" className={styles.button} onClick={onClick}>
+        <button
+            type="button"
+            className={styles.button}
+            onClick={onClick}
+            disabled={disabled}
+        >
             {content}
         </button>
     );

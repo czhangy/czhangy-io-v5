@@ -4,8 +4,9 @@ A shared action trigger for use in StatusPanel headers via the `headerAction` sl
 
 ## Props
 
-| Prop      | Type              | Required | Default        | Description                            |
-| --------- | ----------------- | -------- | -------------- | -------------------------------------- |
-| `icon`    | `React.ReactNode` | No       | `<EditIcon />` | Icon rendered inside the element       |
-| `onClick` | `() => void`      | No       | —              | Click handler; renders as `<button>`   |
-| `href`    | `string`          | No       | —              | Navigation target; renders as `<Link>` |
+| Prop       | Type              | Required | Default        | Description                              |
+| ---------- | ----------------- | -------- | -------------- | ---------------------------------------- |
+| `icon`     | `React.ReactNode` | No       | `<EditIcon />` | Icon rendered inside the element         |
+| `onClick`  | `() => void`      | No       | —              | Click handler; renders as `<button>`     |
+| `href`     | `string`          | No       | —              | Navigation target; renders as `<Link>`   |
+| `disabled` | `boolean`         | No       | `false`        | Disables the button and dims it visually |

@@ -14,8 +14,13 @@
         width: 0.9rem;
     }
 
+    &:disabled {
+        cursor: default;
+        opacity: 0.4;
+    }
+
     @media (hover: hover) {
-        &:hover {
+        &:not(:disabled):hover {
             color: $foreground;
         }
     }
