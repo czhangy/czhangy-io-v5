@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import PanelButton from '@/components/status/PanelButton/PanelButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { useSession } from '@/lib/context/SessionContext';
+import LinkIcon from '@/lib/icons/LinkIcon';
 import { Key } from '@/lib/static/enums';
 import { Game } from '@/lib/static/types';
 import styles from './GamePanel.module.scss';
@@ -135,9 +136,14 @@ const GamePanel: React.FC<GamePanelProps> = ({
 
     const isAdmin: boolean = role === 'ADMIN';
 
-    const editButton: React.ReactNode = isAdmin ? (
-        <PanelButton onClick={handleEdit} disabled={isEditing} />
-    ) : null;
+    const headerActions: React.ReactNode = (
+        <>
+            <PanelButton href="/status/games" icon={<LinkIcon />} />
+            {isAdmin ? (
+                <PanelButton onClick={handleEdit} disabled={isEditing} />
+            ) : null}
+        </>
+    );
 
     const filteredGames: Game[] = games.filter((g) =>
         g.name.toLowerCase().includes(newName.toLowerCase())
@@ -156,7 +162,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
             icon={icon}
             cols={cols}
             rows={rows}
-            headerAction={editButton}
+            headerAction={headerActions}
         >
             {isEditing ? (
                 <div
