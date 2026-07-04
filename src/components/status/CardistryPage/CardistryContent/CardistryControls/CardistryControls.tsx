@@ -3,20 +3,20 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import PaginationControls from '@/components/common/PaginationControls/PaginationControls';
-import { WatchedMediaEntry } from '@/lib/static/types';
-import AddContentModal from './AddContentModal/AddContentModal';
-import styles from './ArchivesControls.module.scss';
+import { CardistryMoveEntry } from '@/lib/static/types';
+import AddMoveModal from './AddMoveModal/AddMoveModal';
+import styles from './CardistryControls.module.scss';
 
-type ArchivesControlsProps = {
+type CardistryControlsProps = {
     page: number;
     totalPages: number;
     onPrev: () => void;
     onNext: () => void;
     isAdmin: boolean;
-    onAdd: (entry: WatchedMediaEntry) => void;
+    onAdd: (move: CardistryMoveEntry) => void;
 };
 
-const ArchivesControls: React.FC<ArchivesControlsProps> = ({
+const CardistryControls: React.FC<CardistryControlsProps> = ({
     page,
     totalPages,
     onPrev,
@@ -35,7 +35,7 @@ const ArchivesControls: React.FC<ArchivesControlsProps> = ({
     // -------------------------------------------------------------------------
 
     return (
-        <div className={styles['archives-controls']}>
+        <div className={styles['cardistry-controls']}>
             <Link className={styles['back-button']} href="/status">
                 ← Back to Status
             </Link>
@@ -46,7 +46,7 @@ const ArchivesControls: React.FC<ArchivesControlsProps> = ({
                         type="button"
                         onClick={() => setIsOpen(true)}
                     >
-                        Add Content
+                        Add Move
                     </button>
                 ) : null}
                 {totalPages > 1 ? (
@@ -61,13 +61,10 @@ const ArchivesControls: React.FC<ArchivesControlsProps> = ({
                 ) : null}
             </div>
             {isOpen ? (
-                <AddContentModal
-                    onClose={() => setIsOpen(false)}
-                    onAdd={onAdd}
-                />
+                <AddMoveModal onClose={() => setIsOpen(false)} onAdd={onAdd} />
             ) : null}
         </div>
     );
 };
 
-export default ArchivesControls;
+export default CardistryControls;

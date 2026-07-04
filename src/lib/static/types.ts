@@ -36,11 +36,12 @@ export type NavItem = {
     label: string;
 };
 
-export type SkillCategory = 'Coding' | 'Cardistry' | 'Magic';
-
-export type SkillEntry = {
+export type CardistryMoveEntry = {
+    id: number;
     name: string;
-    category: SkillCategory;
+    type: string;
+    count: number;
+    createdAt: string;
 };
 
 export type GameEntry = {

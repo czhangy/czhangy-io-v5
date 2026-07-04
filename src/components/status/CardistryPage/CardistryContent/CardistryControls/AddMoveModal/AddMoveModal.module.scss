@@ -1,0 +1,61 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.add-move-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    .input {
+        @include mono-label;
+
+        background: transparent;
+        border: 1px solid $border-subtle;
+        color: $foreground;
+        font-size: 0.85rem;
+        outline: none;
+        padding: 0.5rem 0.75rem;
+        transition: border-color 0.15s ease;
+        width: 100%;
+
+        &:focus {
+            border-color: $accent;
+        }
+    }
+
+    .select {
+        @include mono-label;
+
+        appearance: none;
+        background: transparent;
+        border: 1px solid $border-subtle;
+        color: $foreground;
+        font-size: 0.85rem;
+        outline: none;
+        padding: 0.5rem 0.75rem;
+        transition: border-color 0.15s ease;
+        width: 100%;
+
+        &:focus {
+            border-color: $accent;
+        }
+
+        option {
+            background: $background;
+        }
+    }
+
+    .submit {
+        @include game-button;
+
+        align-self: flex-end;
+        cursor: pointer;
+        letter-spacing: 0.15em;
+        padding: 0.5rem 1.25rem;
+
+        &:disabled {
+            cursor: default;
+            opacity: 0.4;
+        }
+    }
+}

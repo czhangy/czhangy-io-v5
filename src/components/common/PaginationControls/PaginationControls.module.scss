@@ -42,4 +42,15 @@
         letter-spacing: 0.1em;
         padding: 0 0.25rem;
     }
+
+    @media (width <= 768px) {
+        .button {
+            font-size: 0.75rem;
+            padding: 0.4rem 0.75rem;
+        }
+
+        .indicator {
+            font-size: 0.75rem;
+        }
+    }
 }

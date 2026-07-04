@@ -36,11 +36,9 @@ const LibraryControls: React.FC<LibraryControlsProps> = ({
 
     return (
         <div className={styles['library-controls']}>
-            <div className={styles.left}>
-                <Link className={styles['back-button']} href="/status">
-                    ← Back to Status
-                </Link>
-            </div>
+            <Link className={styles['back-button']} href="/status">
+                ← Back to Status
+            </Link>
             <div className={styles.right}>
                 {isAdmin ? (
                     <button
@@ -51,19 +49,20 @@ const LibraryControls: React.FC<LibraryControlsProps> = ({
                         Add Book
                     </button>
                 ) : null}
-                {isOpen ? (
-                    <AddBookModal
-                        onClose={() => setIsOpen(false)}
-                        onAdd={onAdd}
-                    />
+                {totalPages > 1 ? (
+                    <div className={styles['pagination-wrapper']}>
+                        <PaginationControls
+                            page={page}
+                            totalPages={totalPages}
+                            onPrev={onPrev}
+                            onNext={onNext}
+                        />
+                    </div>
                 ) : null}
-                <PaginationControls
-                    page={page}
-                    totalPages={totalPages}
-                    onPrev={onPrev}
-                    onNext={onNext}
-                />
             </div>
+            {isOpen ? (
+                <AddBookModal onClose={() => setIsOpen(false)} onAdd={onAdd} />
+            ) : null}
         </div>
     );
 };

@@ -14,6 +14,18 @@ export const READ_MILESTONES = [
     { count: 500, name: 'Professional Reader', tier: 3 },
 ];
 
+// Cardistry
+export const CARDISTRY_MOVE_TYPES: string[] = [
+    '1H Cut',
+    '2H Cut',
+    'Twirl',
+    'Aerial',
+    'Spread',
+    'Isolation',
+    'Display',
+    'Shuffle',
+];
+
 // Routes
 export const AUTH_ROUTES = ['/logs'];
 export const ADMIN_ROUTES = ['/register'];

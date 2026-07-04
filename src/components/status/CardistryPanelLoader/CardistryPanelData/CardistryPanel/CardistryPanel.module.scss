@@ -1,0 +1,112 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.content {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    min-width: 0;
+    padding: 0 0.75rem;
+    width: 100%;
+
+    .left {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        min-width: 0;
+
+        .name {
+            @include mono-label;
+
+            font-size: 1.4rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .metadata {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+
+            .type-tag {
+                @include mono-label;
+
+                border: 1px solid $border-subtle;
+                color: $text-dim;
+                flex-shrink: 0;
+                font-size: 0.8rem;
+                letter-spacing: 0.05em;
+                padding: 0.1rem 0.3rem;
+            }
+        }
+    }
+
+    .proficiency {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        gap: 0.4rem;
+        padding-left: 0.5rem;
+
+        .pips {
+            display: flex;
+            gap: 0.7rem;
+
+            .pip {
+                border: 1px solid $border-subtle;
+                display: block;
+                flex-shrink: 0;
+                height: 0.9rem;
+                transform: rotate(45deg);
+                transition:
+                    background-color 0.15s ease,
+                    border-color 0.15s ease;
+                width: 0.9rem;
+
+                &--filled {
+                    background: $accent;
+                    border-color: $accent;
+                }
+            }
+        }
+
+        .count {
+            @include mono-label;
+
+            color: $text-dim;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+        }
+    }
+}
+
+.edit-form {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+
+    .select {
+        @include mono-label;
+
+        appearance: none;
+        background: transparent;
+        border: 1px solid $border-subtle;
+        color: $foreground;
+        font-size: 0.75rem;
+        outline: none;
+        padding: 0.15rem 0.4rem;
+        transition: border-color 0.15s ease;
+        width: 100%;
+
+        &:focus {
+            border-color: $accent;
+        }
+
+        option {
+            background: $background;
+        }
+    }
+}
