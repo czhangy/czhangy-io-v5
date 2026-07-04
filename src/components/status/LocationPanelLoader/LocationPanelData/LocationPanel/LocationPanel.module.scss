@@ -4,7 +4,7 @@
 .location {
     @include mono-label;
 
-    font-size: 1.7rem;
+    font-size: 1.5rem;
     text-align: center;
     width: 100%;
 }
@@ -13,6 +13,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    width: 100%;
 
     .input {
         @include mono-label;
@@ -20,10 +21,10 @@
         background: transparent;
         border: 1px solid $border-subtle;
         color: $foreground;
-        font-size: 1.1rem;
+        font-size: 0.85rem;
         outline: none;
         padding: 0.25rem 0.4rem;
-        transition: border-color 0.15s ease;
+        padding: 0.2rem 1.75rem 0.2rem 0.4rem;
         width: 100%;
 
         &:focus {
