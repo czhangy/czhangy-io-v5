@@ -6,9 +6,10 @@ import styles from './VickyPanel.module.scss';
 type VickyPanelProps = {
     cols: number;
     rows?: number;
+    mobileOrder?: number;
 };
 
-const VickyPanel: React.FC<VickyPanelProps> = ({ cols, rows }) => {
+const VickyPanel: React.FC<VickyPanelProps> = ({ cols, rows, mobileOrder }) => {
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
@@ -20,6 +21,7 @@ const VickyPanel: React.FC<VickyPanelProps> = ({ cols, rows }) => {
             cols={cols}
             rows={rows}
             noPadding
+            mobileOrder={mobileOrder}
         >
             <div className={styles['image-wrapper']}>
                 <Image

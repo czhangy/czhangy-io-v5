@@ -18,6 +18,7 @@ type ReadingPanelProps = {
     icon: React.ReactNode;
     cols: number;
     rows?: number;
+    mobileOrder?: number;
 };
 
 const ReadingPanel: React.FC<ReadingPanelProps> = ({
@@ -26,6 +27,7 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
     icon,
     cols,
     rows,
+    mobileOrder,
 }) => {
     // -------------------------------------------------------------------------
     // HOOKS
@@ -146,6 +148,7 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
             cols={cols}
             rows={rows}
             headerAction={headerActions}
+            mobileOrder={mobileOrder}
         >
             <div className={styles.content}>
                 {isAdding ? (

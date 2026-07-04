@@ -4,13 +4,14 @@ A status panel displaying the 5 most recently added movies and TV shows, with an
 
 ## Props
 
-| Prop             | Type                  | Required | Default | Description                                     |
-| ---------------- | --------------------- | -------- | ------- | ----------------------------------------------- |
-| `initialEntries` | `WatchedMediaEntry[]` | Yes      | —       | 5 most recent entries from the DB               |
-| `label`          | `string`              | Yes      | —       | Panel header label                              |
-| `icon`           | `React.ReactNode`     | Yes      | —       | Panel header icon                               |
-| `cols`           | `number`              | Yes      | —       | Forwarded to the StatusPanel for grid placement |
-| `rows`           | `number`              | No       | —       | Forwarded to the StatusPanel for grid placement |
+| Prop             | Type                  | Required | Default | Description                                      |
+| ---------------- | --------------------- | -------- | ------- | ------------------------------------------------ |
+| `initialEntries` | `WatchedMediaEntry[]` | Yes      | —       | 5 most recent entries from the DB                |
+| `label`          | `string`              | Yes      | —       | Panel header label                               |
+| `icon`           | `React.ReactNode`     | Yes      | —       | Panel header icon                                |
+| `cols`           | `number`              | Yes      | —       | Forwarded to the StatusPanel for grid placement  |
+| `rows`           | `number`              | No       | —       | Forwarded to the StatusPanel for grid placement  |
+| `mobileOrder`    | `number`              | No       | —       | Forwarded to the StatusPanel for mobile ordering |
 
 ## State
 

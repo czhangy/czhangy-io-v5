@@ -18,13 +18,13 @@ const StatusPage: React.FC = () => {
             <div className={styles.content}>
                 <GlitchText text="STATUS" className={styles.title} />
                 <div className={styles.grid}>
-                    <LocationPanelLoader cols={4} />
-                    <SpotifyPanel cols={6} />
-                    <WatchingPanelLoader cols={6} rows={3} />
+                    <LocationPanelLoader cols={5} />
                     <GamePanelLoader cols={5} />
+                    <WatchingPanelLoader cols={6} rows={3} mobileOrder={5} />
                     <CardistryPanelLoader cols={5} />
-                    <ReadingPanelLoader cols={6} rows={2} />
-                    <VickyPanel cols={4} rows={2} />
+                    <SpotifyPanel cols={5} />
+                    <ReadingPanelLoader cols={6} rows={2} mobileOrder={6} />
+                    <VickyPanel cols={4} rows={2} mobileOrder={7} />
                 </div>
             </div>
         </div>

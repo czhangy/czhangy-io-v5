@@ -6,11 +6,13 @@ import ReadingPanelData from './ReadingPanelData/ReadingPanelData';
 type ReadingPanelLoaderProps = {
     cols: number;
     rows?: number;
+    mobileOrder?: number;
 };
 
 const ReadingPanelLoader: React.FC<ReadingPanelLoaderProps> = ({
     cols,
     rows,
+    mobileOrder,
 }) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
@@ -32,6 +34,7 @@ const ReadingPanelLoader: React.FC<ReadingPanelLoaderProps> = ({
                     cols={cols}
                     rows={rows}
                     isLoading
+                    mobileOrder={mobileOrder}
                 />
             }
         >
@@ -40,6 +43,7 @@ const ReadingPanelLoader: React.FC<ReadingPanelLoaderProps> = ({
                 icon={ICON}
                 cols={cols}
                 rows={rows}
+                mobileOrder={mobileOrder}
             />
         </Suspense>
     );

@@ -9,6 +9,7 @@ type StatusPanelProps = {
     rows?: number;
     isLoading?: boolean;
     noPadding?: boolean;
+    mobileOrder?: number;
 };
 
 const StatusPanel: React.FC<StatusPanelProps> = ({
@@ -20,6 +21,7 @@ const StatusPanel: React.FC<StatusPanelProps> = ({
     rows = 1,
     isLoading = false,
     noPadding = false,
+    mobileOrder,
 }) => {
     // -------------------------------------------------------------------------
     // MARKUP
@@ -33,6 +35,9 @@ const StatusPanel: React.FC<StatusPanelProps> = ({
                     '--cols': cols,
                     '--cols-tablet': Math.min(cols, 4),
                     '--rows': rows,
+                    ...(mobileOrder !== undefined
+                        ? { '--mobile-order': mobileOrder }
+                        : {}),
                 } as React.CSSProperties
             }
         >
