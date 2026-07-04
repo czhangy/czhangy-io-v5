@@ -1,17 +1,15 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import Image from 'next/image';
 import PanelButton from '@/components/status/PanelButton/PanelButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { useSession } from '@/lib/context/SessionContext';
 import { Key } from '@/lib/static/enums';
-import { Game, GameEntry, RAWGGame } from '@/lib/static/types';
+import { Game } from '@/lib/static/types';
 import styles from './GamePanel.module.scss';
 
 type GamePanelProps = {
-    initialEntry: GameEntry;
-    initialMeta: RAWGGame | null;
+    initialGame: Game | null;
     label: string;
     icon: React.ReactNode;
     cols: number;
@@ -19,8 +17,7 @@ type GamePanelProps = {
 };
 
 const GamePanel: React.FC<GamePanelProps> = ({
-    initialEntry,
-    initialMeta,
+    initialGame,
     label,
     icon,
     cols,
@@ -37,8 +34,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
     // STATE
     // -------------------------------------------------------------------------
 
-    const [entry, setEntry] = useState<GameEntry>(initialEntry);
-    const [meta, setMeta] = useState<RAWGGame | null>(initialMeta);
+    const [game, setGame] = useState<Game | null>(initialGame);
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [games, setGames] = useState<Game[]>([]);
     const [isFetching, setIsFetching] = useState<boolean>(false);
@@ -70,15 +66,13 @@ const GamePanel: React.FC<GamePanelProps> = ({
         setNewIcon('');
     };
 
-    const handleSelectGame = async (game: Game): Promise<void> => {
-        const newEntry: GameEntry = { name: game.name, rawgId: game.id };
+    const handleSelectGame = async (selected: Game): Promise<void> => {
         await fetch('/api/status/game', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ value: JSON.stringify(newEntry) }),
+            body: JSON.stringify({ value: String(selected.id) }),
         });
-        setEntry(newEntry);
-        setMeta({ cover: game.icon, genres: [game.genre] });
+        setGame(selected);
         setIsEditing(false);
         setGames([]);
         setNewName('');
@@ -101,15 +95,13 @@ const GamePanel: React.FC<GamePanelProps> = ({
             setIsSaving(false);
             return;
         }
-        const game = (await res.json()) as Game;
-        const newEntry: GameEntry = { name: game.name, rawgId: game.id };
+        const created = (await res.json()) as Game;
         await fetch('/api/status/game', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ value: JSON.stringify(newEntry) }),
+            body: JSON.stringify({ value: String(created.id) }),
         });
-        setEntry(newEntry);
-        setMeta({ cover: game.icon, genres: [game.genre] });
+        setGame(created);
         setIsEditing(false);
         setGames([]);
         setNewName('');
@@ -238,32 +230,26 @@ const GamePanel: React.FC<GamePanelProps> = ({
                 </div>
             ) : (
                 <div className={styles.content}>
-                    <Image
-                        className={
-                            meta?.cover
-                                ? styles.cover
-                                : styles['cover--fallback']
-                        }
-                        src={meta?.cover ?? '/game.png'}
-                        alt={`${entry.name} cover`}
-                        width={90}
-                        height={56}
-                    />
-                    <div className={styles.info}>
-                        <span className={styles.name}>{entry.name}</span>
-                        {meta?.genres && meta.genres.length > 0 ? (
-                            <div className={styles.genres}>
-                                {meta.genres.slice(0, 2).map((g) => (
-                                    <span
-                                        key={g}
-                                        className={styles['genre-tag']}
-                                    >
-                                        {g}
-                                    </span>
-                                ))}
+                    {game ? (
+                        <>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                                className={styles.icon}
+                                src={game.icon}
+                                alt={`${game.name} icon`}
+                                width={56}
+                                height={56}
+                            />
+                            <div className={styles.info}>
+                                <span className={styles.name}>{game.name}</span>
+                                <span className={styles['genre-tag']}>
+                                    {game.genre}
+                                </span>
                             </div>
-                        ) : null}
-                    </div>
+                        </>
+                    ) : (
+                        <span className={styles.empty}>—</span>
+                    )}
                 </div>
             )}
         </StatusPanel>

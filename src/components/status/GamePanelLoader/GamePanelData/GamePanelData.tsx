@@ -1,6 +1,5 @@
 import { prisma } from '@/lib/static/prisma';
-import { GameEntry, RAWGGame } from '@/lib/static/types';
-import RAWGHelpers from '@/lib/utils/RAWGHelpers';
+import { Game } from '@/lib/static/types';
 import GamePanel from './GamePanel/GamePanel';
 
 type GamePanelDataProps = {
@@ -17,30 +16,18 @@ const GamePanelData = async ({
     rows,
 }: GamePanelDataProps) => {
     // -------------------------------------------------------------------------
-    // CONSTANTS
-    // -------------------------------------------------------------------------
-
-    const DEFAULT_GAME_ENTRY: GameEntry = { name: 'Something', rawgId: -1 };
-
-    // -------------------------------------------------------------------------
     // COMPUTATIONS
     // -------------------------------------------------------------------------
 
-    const fetchGameEntry = async (): Promise<GameEntry> => {
+    const fetchGame = async (): Promise<Game | null> => {
         try {
             const item = await prisma.statusItem.findUnique({
                 where: { key: 'game' },
             });
-            if (item) return JSON.parse(item.value) as GameEntry;
-        } catch {}
-        return DEFAULT_GAME_ENTRY;
-    };
-
-    const fetchGameMeta = async (
-        entry: GameEntry
-    ): Promise<RAWGGame | null> => {
-        try {
-            return await RAWGHelpers.getGameById(entry.rawgId);
+            if (!item) return null;
+            const id = parseInt(item.value, 10);
+            if (isNaN(id)) return null;
+            return await prisma.game.findUnique({ where: { id } });
         } catch {}
         return null;
     };
@@ -49,8 +36,7 @@ const GamePanelData = async ({
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const gameEntry: GameEntry = await fetchGameEntry();
-    const gameMeta: RAWGGame | null = await fetchGameMeta(gameEntry);
+    const game: Game | null = await fetchGame();
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -58,8 +44,7 @@ const GamePanelData = async ({
 
     return (
         <GamePanel
-            initialEntry={gameEntry}
-            initialMeta={gameMeta}
+            initialGame={game}
             label={label}
             icon={icon}
             cols={cols}

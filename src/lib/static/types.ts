@@ -1,16 +1,3 @@
-export type RAWGGame = {
-    cover: string | null;
-    genres: string[];
-};
-
-export type RAWGSearchResult = {
-    id: number;
-    name: string;
-    year: string | null;
-    cover: string | null;
-    genres: string[];
-};
-
 export type SpotifyTrack = {
     name: string;
     artist: string;
@@ -42,11 +29,6 @@ export type CardistryMoveEntry = {
     type: string;
     count: number;
     createdAt: string;
-};
-
-export type GameEntry = {
-    name: string;
-    rawgId: number;
 };
 
 export type Game = {

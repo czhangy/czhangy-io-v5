@@ -19,7 +19,6 @@
 - `SPOTIFY_CLIENT_ID`
 - `SPOTIFY_CLIENT_SECRET`
 - `SPOTIFY_REFRESH_TOKEN`
-- `RAWG_API_KEY`
 - `TMDB_API_KEY`
 - `GOOGLE_BOOKS_API_KEY`
 
@@ -48,6 +47,5 @@
 - [Vercel](https://vercel.com/)
 - [Neon](https://neon.com/)
 - [Spotify Developers](https://developer.spotify.com/)
-- [RAWG](https://rawg.io/)
 - [TMDB](https://www.themoviedb.org/)
 - [Google Cloud](https://cloud.google.com/)

@@ -12,16 +12,10 @@
     display: flex;
     gap: 0.75rem;
 
-    .cover {
+    .icon {
         border-radius: 2px;
         flex-shrink: 0;
         object-fit: cover;
-
-        &--fallback {
-            border-radius: 2px;
-            flex-shrink: 0;
-            object-fit: contain;
-        }
     }
 
     .info {
@@ -39,22 +33,23 @@
             white-space: nowrap;
         }
 
-        .genres {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.25rem;
+        .genre-tag {
+            @include mono-label;
 
-            .genre-tag {
-                @include mono-label;
-
-                border: 1px solid $border-subtle;
-                color: $text-dim;
-                flex-shrink: 0;
-                font-size: 0.6rem;
-                letter-spacing: 0.05em;
-                padding: 0.1rem 0.3rem;
-            }
+            border: 1px solid $border-subtle;
+            color: $text-dim;
+            font-size: 0.6rem;
+            letter-spacing: 0.05em;
+            padding: 0.1rem 0.3rem;
+            width: fit-content;
         }
+    }
+
+    .empty {
+        @include mono-label;
+
+        color: $text-dim;
+        font-size: 1rem;
     }
 }
 

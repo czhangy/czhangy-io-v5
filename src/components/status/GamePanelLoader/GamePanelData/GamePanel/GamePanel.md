@@ -1,31 +1,29 @@
 # GamePanel
 
-A status panel displaying the game currently being played, with admin-only edit mode to select an existing game or create a new one from a single unified interface.
+A status panel displaying the game currently being played, with admin-only edit mode to select an existing game from the database or create a new one.
 
 ## Props
 
-| Prop           | Type               | Required | Default | Description                                     |
-| -------------- | ------------------ | -------- | ------- | ----------------------------------------------- |
-| `initialEntry` | `GameEntry`        | Yes      | —       | Game name and ID from the DB                    |
-| `initialMeta`  | `RAWGGame \| null` | Yes      | —       | Cover image and genres for display              |
-| `label`        | `string`           | Yes      | —       | Panel header label                              |
-| `icon`         | `React.ReactNode`  | Yes      | —       | Panel header icon                               |
-| `cols`         | `number`           | Yes      | —       | Forwarded to the StatusPanel for grid placement |
-| `rows`         | `number`           | No       | —       | Forwarded to the StatusPanel for grid placement |
+| Prop          | Type              | Required | Default | Description                                     |
+| ------------- | ----------------- | -------- | ------- | ----------------------------------------------- |
+| `initialGame` | `Game \| null`    | Yes      | —       | Currently active game from the DB, or null      |
+| `label`       | `string`          | Yes      | —       | Panel header label                              |
+| `icon`        | `React.ReactNode` | Yes      | —       | Panel header icon                               |
+| `cols`        | `number`          | Yes      | —       | Forwarded to the StatusPanel for grid placement |
+| `rows`        | `number`          | No       | —       | Forwarded to the StatusPanel for grid placement |
 
 ## State
 
-| State        | Type               | Initial value  | Description                                                 |
-| ------------ | ------------------ | -------------- | ----------------------------------------------------------- |
-| `entry`      | `GameEntry`        | `initialEntry` | Currently displayed game                                    |
-| `meta`       | `RAWGGame \| null` | `initialMeta`  | Cover and genre data for the displayed game                 |
-| `isEditing`  | `boolean`          | `false`        | Whether the edit form is open                               |
-| `games`      | `Game[]`           | `[]`           | All games fetched from the DB when edit opens               |
-| `isFetching` | `boolean`          | `false`        | Whether the initial games fetch is in progress              |
-| `newName`    | `string`           | `''`           | Name input; also used to filter the existing games dropdown |
-| `newGenre`   | `string`           | `''`           | Genre input for creating a new game                         |
-| `newIcon`    | `string`           | `''`           | Icon URL input for creating a new game                      |
-| `isSaving`   | `boolean`          | `false`        | Whether the new game POST request is in progress            |
+| State        | Type           | Initial value | Description                                                 |
+| ------------ | -------------- | ------------- | ----------------------------------------------------------- |
+| `game`       | `Game \| null` | `initialGame` | Currently displayed game                                    |
+| `isEditing`  | `boolean`      | `false`       | Whether the edit form is open                               |
+| `games`      | `Game[]`       | `[]`          | All games fetched from the DB when edit opens               |
+| `isFetching` | `boolean`      | `false`       | Whether the initial games fetch is in progress              |
+| `newName`    | `string`       | `''`          | Name input; also used to filter the existing games dropdown |
+| `newGenre`   | `string`       | `''`          | Genre input for creating a new game                         |
+| `newIcon`    | `string`       | `''`          | Icon URL input for creating a new game                      |
+| `isSaving`   | `boolean`      | `false`       | Whether the new game POST request is in progress            |
 
 ## Computations
 
