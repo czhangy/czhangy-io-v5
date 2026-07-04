@@ -21,10 +21,6 @@
         &:focus {
             border-color: $accent;
         }
-
-        &[type='number'] {
-            appearance: textfield;
-        }
     }
 
     .select {

@@ -24,7 +24,7 @@ const EditMoveModal: React.FC<EditMoveModalProps> = ({
 
     const [name, setName] = useState<string>(move.name);
     const [type, setType] = useState<string>(move.type);
-    const [count, setCount] = useState<number>(move.count);
+    const [count, setCount] = useState<string>(String(move.count));
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -32,11 +32,12 @@ const EditMoveModal: React.FC<EditMoveModalProps> = ({
 
     const handleSubmit = async (): Promise<void> => {
         const trimmed = name.trim();
-        if (!trimmed || !type) return;
+        const parsedCount = parseInt(count, 10);
+        if (!trimmed || !type || isNaN(parsedCount) || parsedCount < 0) return;
         const res = await fetch(`/api/cardistry/${move.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: trimmed, type, count }),
+            body: JSON.stringify({ name: trimmed, type, count: parsedCount }),
         });
         if (!res.ok) return;
         onEdit((await res.json()) as CardistryMoveEntry);
@@ -51,15 +52,15 @@ const EditMoveModal: React.FC<EditMoveModalProps> = ({
     const handleCountChange = (
         e: React.ChangeEvent<HTMLInputElement>
     ): void => {
-        const value = parseInt(e.target.value, 10);
-        setCount(isNaN(value) || value < 0 ? 0 : value);
+        setCount(e.target.value);
     };
 
     // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const isValid: boolean = name.trim().length > 0 && type.length > 0;
+    const isValid: boolean =
+        name.trim().length > 0 && type.length > 0 && /^\d+$/.test(count.trim());
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -94,8 +95,6 @@ const EditMoveModal: React.FC<EditMoveModalProps> = ({
                 </select>
                 <input
                     className={styles.input}
-                    type="number"
-                    min={0}
                     value={count}
                     onChange={handleCountChange}
                     onKeyDown={handleKeyDown}
