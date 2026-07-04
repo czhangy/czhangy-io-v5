@@ -1,13 +1,13 @@
 # GamePanel
 
-A status panel displaying the game currently being played, with admin-only inline search to update it via RAWG.
+A status panel displaying the game currently being played, with admin-only edit mode to select an existing game or create a new one from a single unified interface.
 
 ## Props
 
 | Prop           | Type               | Required | Default | Description                                     |
 | -------------- | ------------------ | -------- | ------- | ----------------------------------------------- |
-| `initialEntry` | `GameEntry`        | Yes      | —       | Game name and RAWG ID from the DB               |
-| `initialMeta`  | `RAWGGame \| null` | Yes      | —       | Cover image and genres from RAWG                |
+| `initialEntry` | `GameEntry`        | Yes      | —       | Game name and ID from the DB                    |
+| `initialMeta`  | `RAWGGame \| null` | Yes      | —       | Cover image and genres for display              |
 | `label`        | `string`           | Yes      | —       | Panel header label                              |
 | `icon`         | `React.ReactNode`  | Yes      | —       | Panel header icon                               |
 | `cols`         | `number`           | Yes      | —       | Forwarded to the StatusPanel for grid placement |
@@ -15,19 +15,19 @@ A status panel displaying the game currently being played, with admin-only inlin
 
 ## State
 
-| State           | Type                 | Initial value  | Description                             |
-| --------------- | -------------------- | -------------- | --------------------------------------- |
-| `entry`         | `GameEntry`          | `initialEntry` | Currently displayed game                |
-| `meta`          | `RAWGGame \| null`   | `initialMeta`  | Cover and genre data for displayed game |
-| `isEditing`     | `boolean`            | `false`        | Whether the search input is open        |
-| `query`         | `string`             | `''`           | Controlled search input value           |
-| `searchResults` | `RAWGSearchResult[]` | `[]`           | Results from the RAWG search proxy      |
-| `isSearching`   | `boolean`            | `false`        | Whether a search fetch is in progress   |
-
-## Effects
-
-- **On debounce (1000ms after query change)** — fires `performSearch` with the current query
+| State        | Type               | Initial value  | Description                                                 |
+| ------------ | ------------------ | -------------- | ----------------------------------------------------------- |
+| `entry`      | `GameEntry`        | `initialEntry` | Currently displayed game                                    |
+| `meta`       | `RAWGGame \| null` | `initialMeta`  | Cover and genre data for the displayed game                 |
+| `isEditing`  | `boolean`          | `false`        | Whether the edit form is open                               |
+| `games`      | `Game[]`           | `[]`           | All games fetched from the DB when edit opens               |
+| `isFetching` | `boolean`          | `false`        | Whether the initial games fetch is in progress              |
+| `newName`    | `string`           | `''`           | Name input; also used to filter the existing games dropdown |
+| `newGenre`   | `string`           | `''`           | Genre input for creating a new game                         |
+| `newIcon`    | `string`           | `''`           | Icon URL input for creating a new game                      |
+| `isSaving`   | `boolean`          | `false`        | Whether the new game POST request is in progress            |
 
 ## Computations
 
-- `performSearch` — fetches `/api/games/search` and updates `searchResults`
+- `filteredGames` — `games` filtered by case-insensitive match against `newName`; shown in the dropdown beneath the name input
+- `canSave` — true when all three new-game fields are non-empty
