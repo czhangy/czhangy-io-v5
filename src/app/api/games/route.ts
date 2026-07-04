@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SESSION_COOKIE } from '@/lib/static/constants';
+import { GAME_MILESTONES, SESSION_COOKIE } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
 import { Game } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
+import DateHelpers from '@/lib/utils/DateHelpers';
 
 export const GET = async () => {
     const games = await prisma.game.findMany({
@@ -66,6 +67,22 @@ export const POST = async (request: NextRequest) => {
             rating,
         },
     });
+
+    const count = await prisma.game.count();
+    const milestone = GAME_MILESTONES.find((m) => m.count === count);
+    if (milestone) {
+        await prisma.achievement
+            .create({
+                data: {
+                    tier: milestone.tier,
+                    name: milestone.name,
+                    category: 'Gaming',
+                    description: `Recorded ${milestone.count} played games.`,
+                    date: DateHelpers.getTodayString(),
+                },
+            })
+            .catch(() => {});
+    }
 
     return NextResponse.json(game as Game);
 };

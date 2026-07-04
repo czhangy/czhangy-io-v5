@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SESSION_COOKIE } from '@/lib/static/constants';
+import { GAME_MILESTONES, SESSION_COOKIE } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
 import { Game } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
@@ -97,6 +97,15 @@ export const DELETE = async (
         return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
     }
 
+    const countBefore = await prisma.game.count();
     await prisma.game.delete({ where: { id: numericId } });
+
+    const milestone = GAME_MILESTONES.find((m) => m.count === countBefore);
+    if (milestone) {
+        await prisma.achievement.deleteMany({
+            where: { name: milestone.name },
+        });
+    }
+
     return NextResponse.json({ success: true });
 };
