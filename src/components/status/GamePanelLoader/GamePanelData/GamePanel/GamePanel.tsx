@@ -142,20 +142,16 @@ const GamePanel: React.FC<GamePanelProps> = ({
         setShowDropdown(false);
     };
 
-    const handleGenreChange = (
-        e: React.ChangeEvent<HTMLSelectElement>
-    ): void => {
-        setNewGenre(e.target.value);
+    const handleGenreChange = (value: string): void => {
+        setNewGenre(value);
     };
 
     const handleIconChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setNewIcon(e.target.value);
     };
 
-    const handleRatingChange = (
-        e: React.ChangeEvent<HTMLSelectElement>
-    ): void => {
-        setNewRating(e.target.value);
+    const handleRatingChange = (value: string): void => {
+        setNewRating(value);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent): void => {
