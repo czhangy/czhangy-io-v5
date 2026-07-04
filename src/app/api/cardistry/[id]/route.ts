@@ -3,6 +3,7 @@ import { SESSION_COOKIE } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
 import { CardistryMoveEntry } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
+import DateHelpers from '@/lib/utils/DateHelpers';
 
 const authorize = async (request: NextRequest) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
@@ -94,6 +95,13 @@ export const PUT = async (
         return NextResponse.json({ error: 'Invalid count' }, { status: 400 });
     }
 
+    const currentMove = await prisma.cardistryMove.findUnique({
+        where: { id: numericId },
+    });
+    if (!currentMove) {
+        return NextResponse.json({ error: 'Move not found' }, { status: 404 });
+    }
+
     const conflict = await prisma.cardistryMove.findUnique({
         where: { name: name.trim() },
     });
@@ -108,6 +116,36 @@ export const PUT = async (
         where: { id: numericId },
         data: { name: name.trim(), type: type.trim(), count },
     });
+
+    const tierThresholds = [
+        { threshold: 100, label: 'Beginner', tier: 1 },
+        { threshold: 1000, label: 'Proficient', tier: 2 },
+        { threshold: 10000, label: 'Master', tier: 3 },
+    ];
+    const today = DateHelpers.getTodayString();
+
+    for (const { threshold, label, tier } of tierThresholds) {
+        if (currentMove.count < threshold && count >= threshold) {
+            try {
+                await prisma.achievement.create({
+                    data: {
+                        tier,
+                        name: `${move.name} ${label}`,
+                        category: 'Hobbies',
+                        description: `Perform ${threshold} ${move.name}s.`,
+                        date: today,
+                    },
+                });
+            } catch (e) {
+                if (
+                    (e as { code?: string }).code !== 'P2002' &&
+                    (e as { code?: string }).code !== '23505'
+                ) {
+                    throw e;
+                }
+            }
+        }
+    }
 
     return NextResponse.json({
         ...move,
