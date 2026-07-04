@@ -46,11 +46,7 @@ const AddAchievementModal: React.FC<AddAchievementModalProps> = ({
 
     return (
         <Modal title="ADD ACHIEVEMENT" onClose={onClose}>
-            <AchievementForm
-                submitLabel="Add"
-                onSubmit={handleSubmit}
-                onCancel={onClose}
-            />
+            <AchievementForm submitLabel="Add" onSubmit={handleSubmit} />
         </Modal>
     );
 };

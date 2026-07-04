@@ -9,14 +9,12 @@ type AchievementFormProps = {
     submitLabel: string;
     initialValues?: Partial<AchievementFormValues>;
     onSubmit: (values: AchievementFormValues) => Promise<void>;
-    onCancel: () => void;
 };
 
 const AchievementForm: React.FC<AchievementFormProps> = ({
     submitLabel,
     initialValues,
     onSubmit,
-    onCancel,
 }) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
@@ -191,13 +189,6 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
             </div>
             {error ? <span className={styles.error}>{error}</span> : null}
             <div className={styles.actions}>
-                <button
-                    className={styles['cancel-button']}
-                    type="button"
-                    onClick={onCancel}
-                >
-                    Cancel
-                </button>
                 <button
                     className={styles['submit-button']}
                     type="submit"

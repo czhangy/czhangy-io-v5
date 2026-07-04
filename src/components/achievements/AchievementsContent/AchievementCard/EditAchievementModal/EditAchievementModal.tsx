@@ -53,7 +53,6 @@ const EditAchievementModal: React.FC<EditAchievementModalProps> = ({
                 initialValues={{ ...achievement, date: achievement.date ?? '' }}
                 submitLabel="Save"
                 onSubmit={handleSubmit}
-                onCancel={onClose}
             />
         </Modal>
     );

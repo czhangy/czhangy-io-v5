@@ -92,47 +92,60 @@ const AddGameModal: React.FC<AddGameModalProps> = ({ onClose, onAdd }) => {
     return (
         <Modal title="ADD GAME" onClose={onClose}>
             <div className={styles['add-game-modal']}>
-                <input
-                    className={styles.input}
-                    value={name}
-                    onChange={handleNameChange}
-                    onKeyDown={handleKeyDown}
-                    placeholder="Game name..."
-                    autoFocus
-                />
-                <input
-                    className={styles.input}
-                    value={genre}
-                    onChange={handleGenreChange}
-                    onKeyDown={handleKeyDown}
-                    placeholder="Genre..."
-                />
-                <input
-                    className={styles.input}
-                    value={icon}
-                    onChange={handleIconChange}
-                    onKeyDown={handleKeyDown}
-                    placeholder="Icon URL..."
-                />
-                <select
-                    className={styles.select}
-                    value={rating}
-                    onChange={handleRatingChange}
-                >
-                    {RATING_OPTIONS.map((r) => (
-                        <option key={r} value={r}>
-                            {r}
-                        </option>
-                    ))}
-                </select>
-                <button
-                    type="button"
-                    className={styles.submit}
-                    onClick={handleSubmit}
-                    disabled={!isValid}
-                >
-                    Add
-                </button>
+                <div className={styles.field}>
+                    <span className={styles.label}>Name</span>
+                    <input
+                        className={styles.input}
+                        value={name}
+                        onChange={handleNameChange}
+                        onKeyDown={handleKeyDown}
+                        autoFocus
+                    />
+                </div>
+                <div className={styles.row}>
+                    <div className={styles.field}>
+                        <span className={styles.label}>Genre</span>
+                        <input
+                            className={styles.input}
+                            value={genre}
+                            onChange={handleGenreChange}
+                            onKeyDown={handleKeyDown}
+                        />
+                    </div>
+                    <div className={styles.field}>
+                        <span className={styles.label}>Icon URL</span>
+                        <input
+                            className={styles.input}
+                            value={icon}
+                            onChange={handleIconChange}
+                            onKeyDown={handleKeyDown}
+                        />
+                    </div>
+                </div>
+                <div className={styles.field}>
+                    <span className={styles.label}>Rating</span>
+                    <select
+                        className={styles.select}
+                        value={rating}
+                        onChange={handleRatingChange}
+                    >
+                        {RATING_OPTIONS.map((r) => (
+                            <option key={r} value={r}>
+                                {r}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className={styles.actions}>
+                    <button
+                        type="button"
+                        className={styles.submit}
+                        onClick={handleSubmit}
+                        disabled={!isValid}
+                    >
+                        Add
+                    </button>
+                </div>
             </div>
         </Modal>
     );
