@@ -10,7 +10,7 @@ const GamesPage = async () => {
     // -------------------------------------------------------------------------
 
     const games: Game[] = await prisma.game.findMany({
-        orderBy: { name: 'asc' },
+        orderBy: [{ rating: { sort: 'desc', nulls: 'last' } }, { name: 'asc' }],
     });
 
     // -------------------------------------------------------------------------

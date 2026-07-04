@@ -23,7 +23,7 @@ export const POST = async (request: NextRequest) => {
         name: string;
         genre: string;
         icon: string;
-        rating?: number | null;
+        rating: number;
     };
 
     if (!name?.trim()) {
@@ -63,7 +63,7 @@ export const POST = async (request: NextRequest) => {
             name: name.trim(),
             genre: genre.trim(),
             icon: icon.trim(),
-            rating: rating ?? null,
+            rating,
         },
     });
 

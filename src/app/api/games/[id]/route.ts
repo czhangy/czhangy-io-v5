@@ -33,7 +33,7 @@ export const PUT = async (
         name: string;
         genre: string;
         icon: string;
-        rating?: number | null;
+        rating: number;
     };
 
     if (!name?.trim()) {
@@ -76,7 +76,7 @@ export const PUT = async (
             name: name.trim(),
             genre: genre.trim(),
             icon: icon.trim(),
-            rating: rating ?? null,
+            rating,
         },
     });
 

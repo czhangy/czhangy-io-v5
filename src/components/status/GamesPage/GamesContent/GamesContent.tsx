@@ -41,7 +41,12 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
 
     const handleAdd = (game: Game): void => {
         setGames((prev) =>
-            [...prev, game].sort((a, b) => a.name.localeCompare(b.name))
+            [...prev, game].sort((a, b) => {
+                const ratingDiff = b.rating - a.rating;
+                return ratingDiff !== 0
+                    ? ratingDiff
+                    : a.name.localeCompare(b.name);
+            })
         );
         setPage(1);
     };
@@ -50,7 +55,12 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
         setGames((prev) =>
             prev
                 .map((g) => (g.id === updated.id ? updated : g))
-                .sort((a, b) => a.name.localeCompare(b.name))
+                .sort((a, b) => {
+                    const ratingDiff = b.rating - a.rating;
+                    return ratingDiff !== 0
+                        ? ratingDiff
+                        : a.name.localeCompare(b.name);
+                })
         );
         setEditingGame(null);
     };
@@ -125,27 +135,21 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
                                     {game.genre}
                                 </span>
                             </div>
-                            {game.rating !== null ? (
-                                <div className={styles.rating}>
-                                    {[1, 2, 3, 4, 5].map((i) => {
-                                        const isFull =
-                                            game.rating !== null &&
-                                            game.rating >= i;
-                                        const isHalf =
-                                            game.rating !== null &&
-                                            !isFull &&
-                                            game.rating >= i - 0.5;
-                                        return (
-                                            <span
-                                                key={i}
-                                                className={`${styles.star}${isFull ? ` ${styles['star--full']}` : isHalf ? ` ${styles['star--half']}` : ''}`}
-                                            >
-                                                ★
-                                            </span>
-                                        );
-                                    })}
-                                </div>
-                            ) : null}
+                            <div className={styles.rating}>
+                                {[1, 2, 3, 4, 5].map((i) => {
+                                    const isFull = game.rating >= i;
+                                    const isHalf =
+                                        !isFull && game.rating >= i - 0.5;
+                                    return (
+                                        <span
+                                            key={i}
+                                            className={`${styles.star}${isFull ? ` ${styles['star--full']}` : isHalf ? ` ${styles['star--half']}` : ''}`}
+                                        >
+                                            ★
+                                        </span>
+                                    );
+                                })}
+                            </div>
                         </div>
                         {isAdmin ? (
                             <div className={styles['admin-actions']}>
