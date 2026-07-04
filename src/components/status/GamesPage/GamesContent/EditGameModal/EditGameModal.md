@@ -15,7 +15,7 @@ Modal form for editing an existing game's name, genre, and icon URL, pre-filled 
 | State   | Type     | Initial value | Description               |
 | ------- | -------- | ------------- | ------------------------- |
 | `name`  | `string` | `game.name`   | Controlled name input     |
-| `genre` | `string` | `game.genre`  | Controlled genre input    |
+| `genre` | `string` | `game.genre`  | Controlled genre dropdown |
 | `icon`  | `string` | `game.icon`   | Controlled icon URL input |
 
 ## Computations

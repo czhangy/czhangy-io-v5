@@ -14,7 +14,7 @@ Modal form for creating a new game with name, genre, and icon URL fields.
 | State   | Type     | Initial value | Description               |
 | ------- | -------- | ------------- | ------------------------- |
 | `name`  | `string` | `''`          | Controlled name input     |
-| `genre` | `string` | `''`          | Controlled genre input    |
+| `genre` | `string` | `''`          | Controlled genre dropdown |
 | `icon`  | `string` | `''`          | Controlled icon URL input |
 
 ## Computations

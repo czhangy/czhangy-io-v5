@@ -59,7 +59,7 @@
     min-width: 0;
 
     .top-row {
-        align-items: flex-start;
+        align-items: center;
         display: flex;
         gap: 0.35rem;
     }
@@ -172,29 +172,6 @@
 
         &:focus {
             @include focus-glow;
-        }
-    }
-
-    .rating-select {
-        @include mono-label;
-
-        appearance: none;
-        background: none;
-        border: 1px solid $border-subtle;
-        color: $foreground;
-        font-size: 0.72rem;
-        line-height: 1;
-        outline: none;
-        padding: 0.2rem 0.4rem;
-        transition: border-color 0.15s ease;
-        width: 3rem;
-
-        &:focus {
-            @include focus-glow;
-        }
-
-        option {
-            background: $background;
         }
     }
 

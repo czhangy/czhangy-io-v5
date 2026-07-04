@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Modal from '@/components/common/Modal/Modal';
+import { GAME_GENRES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
 import { Game } from '@/lib/static/types';
 import styles from './AddGameModal.module.scss';
@@ -61,7 +62,7 @@ const AddGameModal: React.FC<AddGameModalProps> = ({ onClose, onAdd }) => {
     };
 
     const handleGenreChange = (
-        e: React.ChangeEvent<HTMLInputElement>
+        e: React.ChangeEvent<HTMLSelectElement>
     ): void => {
         setGenre(e.target.value);
     };
@@ -105,12 +106,20 @@ const AddGameModal: React.FC<AddGameModalProps> = ({ onClose, onAdd }) => {
                 <div className={styles.row}>
                     <div className={styles.field}>
                         <span className={styles.label}>Genre</span>
-                        <input
-                            className={styles.input}
+                        <select
+                            className={`${styles.select}${!genre ? ` ${styles['select--empty']}` : ''}`}
                             value={genre}
                             onChange={handleGenreChange}
-                            onKeyDown={handleKeyDown}
-                        />
+                        >
+                            <option value="" disabled>
+                                Select genre
+                            </option>
+                            {GAME_GENRES.map((g) => (
+                                <option key={g} value={g}>
+                                    {g}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className={styles.field}>
                         <span className={styles.label}>Icon URL</span>

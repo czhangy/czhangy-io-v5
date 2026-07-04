@@ -21,7 +21,7 @@ A status panel displaying the game currently being played, with admin-only edit 
 | `games`      | `Game[]`       | `[]`          | All games fetched from the DB when edit opens               |
 | `isFetching` | `boolean`      | `false`       | Whether the initial games fetch is in progress              |
 | `newName`    | `string`       | `''`          | Name input; also used to filter the existing games dropdown |
-| `newGenre`   | `string`       | `''`          | Genre input for creating a new game                         |
+| `newGenre`   | `string`       | `''`          | Genre dropdown selection for creating a new game            |
 | `newIcon`    | `string`       | `''`          | Icon URL input for creating a new game                      |
 | `isSaving`   | `boolean`      | `false`       | Whether the new game POST request is in progress            |
 

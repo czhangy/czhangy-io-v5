@@ -1,0 +1,40 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.panel-select {
+    @include mono-label;
+
+    appearance: none;
+    background: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%23ededed' fill-opacity='0.4' d='M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06z'/%3E%3C/svg%3E");
+    background-position: right 0.3rem center;
+    background-repeat: no-repeat;
+    background-size: 1rem;
+    border: 1px solid $border-subtle;
+    color: $foreground;
+    cursor: pointer;
+    flex: 1;
+    font-size: 0.75rem;
+    line-height: 1;
+    min-width: 0;
+    outline: none;
+    padding: 0.2rem 1.4rem 0.2rem 0.4rem;
+    transition: border-color 0.15s ease;
+
+    &:focus {
+        @include focus-glow;
+    }
+
+    option {
+        background: $background;
+    }
+
+    &--compact {
+        flex: none;
+        width: 3.5rem;
+    }
+
+    &--empty {
+        color: $text-dim;
+    }
+}

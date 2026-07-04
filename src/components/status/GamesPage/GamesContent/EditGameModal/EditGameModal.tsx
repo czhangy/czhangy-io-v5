@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Modal from '@/components/common/Modal/Modal';
+import { GAME_GENRES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
 import { Game } from '@/lib/static/types';
 import styles from './EditGameModal.module.scss';
@@ -68,7 +69,7 @@ const EditGameModal: React.FC<EditGameModalProps> = ({
     };
 
     const handleGenreChange = (
-        e: React.ChangeEvent<HTMLInputElement>
+        e: React.ChangeEvent<HTMLSelectElement>
     ): void => {
         setGenre(e.target.value);
     };
@@ -112,12 +113,17 @@ const EditGameModal: React.FC<EditGameModalProps> = ({
                 <div className={styles.row}>
                     <div className={styles.field}>
                         <span className={styles.label}>Genre</span>
-                        <input
-                            className={styles.input}
+                        <select
+                            className={styles.select}
                             value={genre}
                             onChange={handleGenreChange}
-                            onKeyDown={handleKeyDown}
-                        />
+                        >
+                            {GAME_GENRES.map((g) => (
+                                <option key={g} value={g}>
+                                    {g}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className={styles.field}>
                         <span className={styles.label}>Icon URL</span>

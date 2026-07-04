@@ -5,9 +5,11 @@ import PanelButton from '@/components/status/PanelButton/PanelButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { useSession } from '@/lib/context/SessionContext';
 import LinkIcon from '@/lib/icons/LinkIcon';
+import { GAME_GENRES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
 import { Game } from '@/lib/static/types';
 import styles from './GamePanel.module.scss';
+import PanelSelect from './PanelSelect/PanelSelect';
 
 type GamePanelProps = {
     initialGame: Game | null;
@@ -132,7 +134,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
     };
 
     const handleGenreChange = (
-        e: React.ChangeEvent<HTMLInputElement>
+        e: React.ChangeEvent<HTMLSelectElement>
     ): void => {
         setNewGenre(e.target.value);
     };
@@ -224,21 +226,16 @@ const GamePanel: React.FC<GamePanelProps> = ({
                                 </ul>
                             ) : null}
                         </div>
-                        <select
-                            className={styles['rating-select']}
+                        <PanelSelect
+                            options={RATING_OPTIONS}
                             value={newRating}
                             onChange={handleRatingChange}
-                        >
-                            {RATING_OPTIONS.map((r) => (
-                                <option key={r} value={r}>
-                                    {r}
-                                </option>
-                            ))}
-                        </select>
+                            compact
+                        />
                     </div>
                     <div className={styles.row}>
-                        <input
-                            className={styles['field-input']}
+                        <PanelSelect
+                            options={GAME_GENRES}
                             value={newGenre}
                             onChange={handleGenreChange}
                             placeholder="Genre"
