@@ -1,8 +1,8 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import SearchInput from '@/components/common/SearchInput/SearchInput';
 import EditButton from '@/components/status/EditButton/EditButton';
-import SearchInput from '@/components/status/SearchInput/SearchInput';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { Key } from '@/lib/static/enums';
 import { LocationResult } from '@/lib/static/types';

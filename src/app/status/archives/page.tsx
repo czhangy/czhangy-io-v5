@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import ArchivesPage from '@/components/status/ArchivesPage/ArchivesPage';
+import ArchivesPage from '@/components/archives/ArchivesPage';
 
 export const metadata: Metadata = { title: 'Archives' };
 

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import CardistryPage from '@/components/status/CardistryPage/CardistryPage';
+import CardistryPage from '@/components/cardistry/CardistryPage';
 
 export const metadata: Metadata = { title: 'Cardistry' };
 

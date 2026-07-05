@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import PaginationControls from '@/components/common/PaginationControls/PaginationControls';
+import Pagination from '@/components/common/Pagination/Pagination';
 import { Game } from '@/lib/static/types';
 import AddGameModal from './AddGameModal/AddGameModal';
 import styles from './GamesControls.module.scss';
@@ -51,7 +51,7 @@ const GamesControls: React.FC<GamesControlsProps> = ({
                 ) : null}
                 {totalPages > 1 ? (
                     <div className={styles['pagination-wrapper']}>
-                        <PaginationControls
+                        <Pagination
                             page={page}
                             totalPages={totalPages}
                             onPrev={onPrev}

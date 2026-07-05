@@ -1,13 +1,13 @@
-import styles from './PaginationControls.module.scss';
+import styles from './Pagination.module.scss';
 
-type PaginationControlsProps = {
+type PaginationProps = {
     page: number;
     totalPages: number;
     onPrev: () => void;
     onNext: () => void;
 };
 
-const PaginationControls: React.FC<PaginationControlsProps> = ({
+const Pagination: React.FC<PaginationProps> = ({
     page,
     totalPages,
     onPrev,
@@ -42,4 +42,4 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
     );
 };
 
-export default PaginationControls;
+export default Pagination;

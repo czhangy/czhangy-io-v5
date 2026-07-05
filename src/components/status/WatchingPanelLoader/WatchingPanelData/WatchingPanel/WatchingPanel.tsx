@@ -2,9 +2,9 @@
 
 import { useRef, useState } from 'react';
 import Image from 'next/image';
+import SearchInput from '@/components/common/SearchInput/SearchInput';
 import EditButton from '@/components/status/EditButton/EditButton';
 import LinkButton from '@/components/status/LinkButton/LinkButton';
-import SearchInput from '@/components/status/SearchInput/SearchInput';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { Key } from '@/lib/static/enums';
 import { TMDBSearchResult, WatchedMediaEntry } from '@/lib/static/types';

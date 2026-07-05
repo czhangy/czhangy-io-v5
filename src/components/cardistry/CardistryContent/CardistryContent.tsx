@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import PaginationControls from '@/components/common/PaginationControls/PaginationControls';
+import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import DeleteIcon from '@/lib/icons/DeleteIcon';
 import EditIcon from '@/lib/icons/EditIcon';
@@ -209,7 +209,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                 })}
             </ul>
             <div className={styles.pagination}>
-                <PaginationControls
+                <Pagination
                     page={page}
                     totalPages={totalPages}
                     onPrev={handlePrevPage}

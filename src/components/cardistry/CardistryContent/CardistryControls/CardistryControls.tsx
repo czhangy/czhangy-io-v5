@@ -2,21 +2,21 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import PaginationControls from '@/components/common/PaginationControls/PaginationControls';
-import { ReadMediaEntry } from '@/lib/static/types';
-import AddBookModal from './AddBookModal/AddBookModal';
-import styles from './LibraryControls.module.scss';
+import Pagination from '@/components/common/Pagination/Pagination';
+import { CardistryMoveEntry } from '@/lib/static/types';
+import AddMoveModal from './AddMoveModal/AddMoveModal';
+import styles from './CardistryControls.module.scss';
 
-type LibraryControlsProps = {
+type CardistryControlsProps = {
     page: number;
     totalPages: number;
     onPrev: () => void;
     onNext: () => void;
     isAdmin: boolean;
-    onAdd: (entry: ReadMediaEntry) => void;
+    onAdd: (move: CardistryMoveEntry) => void;
 };
 
-const LibraryControls: React.FC<LibraryControlsProps> = ({
+const CardistryControls: React.FC<CardistryControlsProps> = ({
     page,
     totalPages,
     onPrev,
@@ -35,7 +35,7 @@ const LibraryControls: React.FC<LibraryControlsProps> = ({
     // -------------------------------------------------------------------------
 
     return (
-        <div className={styles['library-controls']}>
+        <div className={styles['cardistry-controls']}>
             <Link className={styles['back-button']} href="/status">
                 ← Back to Status
             </Link>
@@ -46,12 +46,12 @@ const LibraryControls: React.FC<LibraryControlsProps> = ({
                         type="button"
                         onClick={() => setIsOpen(true)}
                     >
-                        Add Book
+                        Add Move
                     </button>
                 ) : null}
                 {totalPages > 1 ? (
                     <div className={styles['pagination-wrapper']}>
-                        <PaginationControls
+                        <Pagination
                             page={page}
                             totalPages={totalPages}
                             onPrev={onPrev}
@@ -61,10 +61,10 @@ const LibraryControls: React.FC<LibraryControlsProps> = ({
                 ) : null}
             </div>
             {isOpen ? (
-                <AddBookModal onClose={() => setIsOpen(false)} onAdd={onAdd} />
+                <AddMoveModal onClose={() => setIsOpen(false)} onAdd={onAdd} />
             ) : null}
         </div>
     );
 };
 
-export default LibraryControls;
+export default CardistryControls;

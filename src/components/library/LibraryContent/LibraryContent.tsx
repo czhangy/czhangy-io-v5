@@ -2,20 +2,18 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import PaginationControls from '@/components/common/PaginationControls/PaginationControls';
+import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import DeleteIcon from '@/lib/icons/DeleteIcon';
-import { WatchedMediaEntry } from '@/lib/static/types';
-import styles from './ArchivesContent.module.scss';
-import ArchivesControls from './ArchivesControls/ArchivesControls';
+import { ReadMediaEntry } from '@/lib/static/types';
+import styles from './LibraryContent.module.scss';
+import LibraryControls from './LibraryControls/LibraryControls';
 
-type ArchivesContentProps = {
-    initialEntries: WatchedMediaEntry[];
+type LibraryContentProps = {
+    initialEntries: ReadMediaEntry[];
 };
 
-const ArchivesContent: React.FC<ArchivesContentProps> = ({
-    initialEntries,
-}) => {
+const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
@@ -32,23 +30,23 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
     // STATE
     // -------------------------------------------------------------------------
 
-    const [entries, setEntries] = useState<WatchedMediaEntry[]>(initialEntries);
+    const [entries, setEntries] = useState<ReadMediaEntry[]>(initialEntries);
     const [page, setPage] = useState<number>(1);
 
     // -------------------------------------------------------------------------
     // HANDLERS
     // -------------------------------------------------------------------------
 
-    const handleAdd = (entry: WatchedMediaEntry): void => {
+    const handleAdd = (entry: ReadMediaEntry): void => {
         setEntries((prev) => {
-            const filtered = prev.filter((e) => e.tmdbId !== entry.tmdbId);
+            const filtered = prev.filter((e) => e.bookId !== entry.bookId);
             return [entry, ...filtered];
         });
         setPage(1);
     };
 
     const handleDelete = async (id: number): Promise<void> => {
-        const res = await fetch(`/api/watched/${id}`, { method: 'DELETE' });
+        const res = await fetch(`/api/read/${id}`, { method: 'DELETE' });
         if (!res.ok) return;
         const nextEntries = entries.filter((e) => e.id !== id);
         const newTotalPages = Math.max(
@@ -78,7 +76,7 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
         Math.ceil(entries.length / ITEMS_PER_PAGE)
     );
 
-    const paginatedEntries: WatchedMediaEntry[] = entries.slice(
+    const paginatedEntries: ReadMediaEntry[] = entries.slice(
         (page - 1) * ITEMS_PER_PAGE,
         page * ITEMS_PER_PAGE
     );
@@ -88,8 +86,8 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
     // -------------------------------------------------------------------------
 
     return (
-        <div className={styles['archives-content']}>
-            <ArchivesControls
+        <div className={styles['library-content']}>
+            <LibraryControls
                 page={page}
                 totalPages={totalPages}
                 onPrev={handlePrevPage}
@@ -101,14 +99,17 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
                 {paginatedEntries.map((entry) => (
                     <li key={entry.id} className={styles.item}>
                         <Image
-                            className={styles.poster}
-                            src={entry.poster}
-                            alt={`${entry.name} poster`}
+                            className={styles.cover}
+                            src={entry.cover}
+                            alt={`${entry.name} cover`}
                             width={43}
                             height={60}
                         />
                         <div className={styles.info}>
                             <span className={styles.name}>{entry.name}</span>
+                            <span className={styles.author}>
+                                {entry.author}
+                            </span>
                             {entry.genres.length > 0 ? (
                                 <div className={styles.genres}>
                                     {entry.genres.slice(0, 2).map((g) => (
@@ -135,7 +136,7 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
                 ))}
             </ul>
             <div className={styles.pagination}>
-                <PaginationControls
+                <Pagination
                     page={page}
                     totalPages={totalPages}
                     onPrev={handlePrevPage}
@@ -146,4 +147,4 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
     );
 };
 
-export default ArchivesContent;
+export default LibraryContent;

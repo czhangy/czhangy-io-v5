@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useReducer } from 'react';
-import PaginationControls from '@/components/common/PaginationControls/PaginationControls';
+import Pagination from '@/components/common/Pagination/Pagination';
 import DateHelpers from '@/lib/utils/DateHelpers';
 import type { Achievement } from '@/generated/prisma/client';
 import AchievementCard from './AchievementCard/AchievementCard';
@@ -220,7 +220,7 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
                 </div>
                 <div className={styles.right}>
                     <AchievementsControls />
-                    <PaginationControls
+                    <Pagination
                         page={page}
                         totalPages={totalPages}
                         onPrev={handlePrevPage}
@@ -237,7 +237,7 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
                 ))}
             </div>
             <div className={styles.pagination}>
-                <PaginationControls
+                <Pagination
                     page={page}
                     totalPages={totalPages}
                     onPrev={handlePrevPage}

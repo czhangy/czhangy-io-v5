@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import Modal from '@/components/common/Modal/Modal';
-import SearchInput from '@/components/status/SearchInput/SearchInput';
+import SearchInput from '@/components/common/SearchInput/SearchInput';
 import { Key } from '@/lib/static/enums';
 import { BookSearchResult, ReadMediaEntry } from '@/lib/static/types';
 
