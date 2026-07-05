@@ -45,10 +45,12 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
         setPage(1);
     };
 
-    const handleDelete = async (id: number): Promise<void> => {
-        const res = await fetch(`/api/read/${id}`, { method: 'DELETE' });
+    const handleDelete = async (bookId: string): Promise<void> => {
+        const res = await fetch(`/api/read/${encodeURIComponent(bookId)}`, {
+            method: 'DELETE',
+        });
         if (!res.ok) return;
-        const nextEntries = entries.filter((e) => e.id !== id);
+        const nextEntries = entries.filter((e) => e.bookId !== bookId);
         const newTotalPages = Math.max(
             1,
             Math.ceil(nextEntries.length / ITEMS_PER_PAGE)
@@ -97,7 +99,7 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
             />
             <ul className={styles.list}>
                 {paginatedEntries.map((entry) => (
-                    <li key={entry.id} className={styles.item}>
+                    <li key={entry.bookId} className={styles.item}>
                         <Image
                             className={styles.cover}
                             src={entry.cover}
@@ -127,7 +129,7 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
                             <button
                                 type="button"
                                 className={styles['delete-button']}
-                                onClick={() => handleDelete(entry.id)}
+                                onClick={() => handleDelete(entry.bookId)}
                             >
                                 <DeleteIcon />
                             </button>

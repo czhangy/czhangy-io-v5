@@ -14,7 +14,6 @@ export type Game = {
 };
 
 export type Book = {
-    id: number;
     name: string;
     author: string;
     bookId: string;

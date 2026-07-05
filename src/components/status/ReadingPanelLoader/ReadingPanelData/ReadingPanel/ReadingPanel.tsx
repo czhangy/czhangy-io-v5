@@ -162,7 +162,7 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
                 ) : null}
                 <ul className={styles.list}>
                     {entries.map((entry) => (
-                        <li key={entry.id} className={styles.item}>
+                        <li key={entry.bookId} className={styles.item}>
                             <Image
                                 className={styles.cover}
                                 src={entry.cover}

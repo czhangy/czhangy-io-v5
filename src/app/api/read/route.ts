@@ -47,7 +47,7 @@ export const POST = async (request: NextRequest) => {
         const count = await prisma.books.count();
         const milestone = READ_MILESTONES.find((m) => m.count === count);
         if (milestone) {
-            await prisma.achievement
+            await prisma.achievements
                 .create({
                     data: {
                         tier: milestone.tier,
@@ -62,7 +62,11 @@ export const POST = async (request: NextRequest) => {
     }
 
     const entry: Book = {
-        ...record,
+        name: record.name,
+        author: record.author,
+        bookId: record.bookId,
+        cover: record.cover,
+        genres: record.genres,
         addedAt: record.addedAt.toISOString(),
     };
 

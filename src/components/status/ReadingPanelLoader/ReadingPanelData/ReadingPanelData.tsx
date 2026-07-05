@@ -28,7 +28,11 @@ const ReadingPanelData = async ({
                 take: 3,
             });
             return records.map((r) => ({
-                ...r,
+                name: r.name,
+                author: r.author,
+                bookId: r.bookId,
+                cover: r.cover,
+                genres: r.genres,
                 addedAt: r.addedAt.toISOString(),
             }));
         } catch {}
