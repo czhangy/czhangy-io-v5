@@ -24,7 +24,7 @@ export const PATCH = async (
         );
     }
 
-    const item = await prisma.statusItem.upsert({
+    const item = await prisma.highlight.upsert({
         where: { key },
         update: { value },
         create: { key, value },

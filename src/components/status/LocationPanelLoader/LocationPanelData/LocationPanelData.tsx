@@ -26,7 +26,7 @@ const LocationPanelData = async ({
 
     const fetchLocation = async (): Promise<string> => {
         try {
-            const item = await prisma.statusItem.findUnique({
+            const item = await prisma.highlight.findUnique({
                 where: { key: 'location' },
             });
             if (item) return item.value;

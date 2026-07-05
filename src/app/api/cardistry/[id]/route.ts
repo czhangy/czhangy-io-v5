@@ -30,27 +30,27 @@ export const PATCH = async (
         return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
     }
 
-    const existingItem = await prisma.statusItem.findUnique({
-        where: { key: 'cardistryMove' },
-    });
-
-    if (existingItem) {
-        await prisma.statusItem.update({
-            where: { key: 'cardistryMove' },
-            data: { value: String(numericId) },
-        });
-    } else {
-        await prisma.statusItem.create({
-            data: { key: 'cardistryMove', value: String(numericId) },
-        });
-    }
-
     const move = await prisma.cardistryMove.findUnique({
         where: { id: numericId },
     });
 
     if (!move) {
         return NextResponse.json({ error: 'Move not found' }, { status: 404 });
+    }
+
+    const existingItem = await prisma.highlight.findUnique({
+        where: { key: 'move' },
+    });
+
+    if (existingItem) {
+        await prisma.highlight.update({
+            where: { key: 'move' },
+            data: { value: move.name },
+        });
+    } else {
+        await prisma.highlight.create({
+            data: { key: 'move', value: move.name },
+        });
     }
 
     return NextResponse.json({

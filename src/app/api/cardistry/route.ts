@@ -58,18 +58,18 @@ export const POST = async (request: NextRequest) => {
         data: { name: name.trim(), type: type.trim() },
     });
 
-    const existingItem = await prisma.statusItem.findUnique({
-        where: { key: 'cardistryMove' },
+    const existingItem = await prisma.highlight.findUnique({
+        where: { key: 'move' },
     });
 
     if (existingItem) {
-        await prisma.statusItem.update({
-            where: { key: 'cardistryMove' },
-            data: { value: String(move.id) },
+        await prisma.highlight.update({
+            where: { key: 'move' },
+            data: { value: move.name },
         });
     } else {
-        await prisma.statusItem.create({
-            data: { key: 'cardistryMove', value: String(move.id) },
+        await prisma.highlight.create({
+            data: { key: 'move', value: move.name },
         });
     }
 

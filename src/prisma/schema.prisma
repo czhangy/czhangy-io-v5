@@ -19,7 +19,7 @@ model User {
     createdAt      DateTime @default(now())
 }
 
-model StatusItem {
+model Highlight {
     key       String   @id
     value     String
     updatedAt DateTime @updatedAt

@@ -81,7 +81,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
         await fetch('/api/status/game', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ value: String(selected.id) }),
+            body: JSON.stringify({ value: selected.name }),
         });
         setGame(selected);
         setIsEditing(false);
@@ -116,7 +116,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
         await fetch('/api/status/game', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ value: String(created.id) }),
+            body: JSON.stringify({ value: created.name }),
         });
         setGame(created);
         setIsEditing(false);
