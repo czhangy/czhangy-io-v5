@@ -2,8 +2,8 @@
 
 import { useEffect, useReducer } from 'react';
 import Pagination from '@/components/common/Pagination/Pagination';
+import { Achievement } from '@/lib/static/types';
 import DateHelpers from '@/lib/utils/DateHelpers';
-import type { Achievement } from '@/prisma/generated/client';
 import AchievementCard from './AchievementCard/AchievementCard';
 import styles from './AchievementsContent.module.scss';
 import AchievementsControls from './AchievementsControls/AchievementsControls';
@@ -231,7 +231,7 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
             <div className={styles.grid}>
                 {paginatedAchievements.map((achievement) => (
                     <AchievementCard
-                        key={achievement.id}
+                        key={achievement.name}
                         achievement={achievement}
                     />
                 ))}

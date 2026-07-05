@@ -21,13 +21,21 @@ const GamePanelData = async ({
 
     const fetchGame = async (): Promise<Game | null> => {
         try {
-            const item = await prisma.statusItem.findUnique({
+            const item = await prisma.highlights.findUnique({
                 where: { key: 'game' },
             });
             if (!item) return null;
-            const id = parseInt(item.value, 10);
-            if (isNaN(id)) return null;
-            return await prisma.game.findUnique({ where: { id } });
+            const g = await prisma.games.findUnique({
+                where: { name: item.value },
+            });
+            if (g) {
+                return {
+                    name: g.name,
+                    genre: g.genre,
+                    icon: g.icon,
+                    rating: g.rating,
+                };
+            }
         } catch {}
         return null;
     };

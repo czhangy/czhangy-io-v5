@@ -1,4 +1,4 @@
-import { SpotifyTrack } from '@/lib/static/types';
+import { SpotifyResponse } from '@/lib/static/types';
 
 export default class SpotifyHelpers {
     // -------------------------------------------------------------------------
@@ -31,7 +31,7 @@ export default class SpotifyHelpers {
     // PUBLIC
     // -------------------------------------------------------------------------
 
-    static async getRecentlyPlayed(): Promise<SpotifyTrack | null> {
+    static async getRecentlyPlayed(): Promise<SpotifyResponse | null> {
         const accessToken = await SpotifyHelpers.getAccessToken();
 
         const response = await fetch(

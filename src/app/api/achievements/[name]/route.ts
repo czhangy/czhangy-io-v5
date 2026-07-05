@@ -3,28 +3,35 @@ import { SESSION_COOKIE } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
 
-type Params = { params: Promise<{ id: string }> };
+type Params = { params: Promise<{ name: string }> };
 
 export const PATCH = async (request: NextRequest, { params }: Params) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await AuthHelpers.verifyToken(token) : null;
+    const role = token ? await AuthHelpers.verifyToken(token) : null;
 
-    if (!session || session.role !== 'ADMIN') {
+    if (role !== 'ADMIN') {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
-    const { tier, name, category, description, date } =
-        (await request.json()) as {
-            tier: number;
-            name: string;
-            category: string;
-            description: string;
-            date: string;
-        };
+    const { name } = await params;
+    const decodedName = decodeURIComponent(name);
+
+    const {
+        tier,
+        name: newName,
+        category,
+        description,
+        date,
+    } = (await request.json()) as {
+        tier: number;
+        name: string;
+        category: string;
+        description: string;
+        date: string;
+    };
 
     if (
-        !name ||
+        !newName ||
         !category ||
         !description ||
         !date ||
@@ -37,9 +44,9 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
     }
 
     try {
-        await prisma.achievement.update({
-            where: { id: parseInt(id) },
-            data: { tier, name, category, description, date },
+        await prisma.achievements.update({
+            where: { name: decodedName },
+            data: { tier, name: newName, category, description, date },
         });
     } catch (e) {
         if (
@@ -59,17 +66,16 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
 
 export const DELETE = async (request: NextRequest, { params }: Params) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await AuthHelpers.verifyToken(token) : null;
+    const role = token ? await AuthHelpers.verifyToken(token) : null;
 
-    if (!session || session.role !== 'ADMIN') {
+    if (role !== 'ADMIN') {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
+    const { name } = await params;
+    const decodedName = decodeURIComponent(name);
 
-    await prisma.achievement.delete({
-        where: { id: parseInt(id) },
-    });
+    await prisma.achievements.delete({ where: { name: decodedName } });
 
     return NextResponse.json({ success: true });
 };

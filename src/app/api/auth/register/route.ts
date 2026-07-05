@@ -5,9 +5,9 @@ import AuthHelpers from '@/lib/utils/AuthHelpers';
 
 export const POST = async (request: NextRequest) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await AuthHelpers.verifyToken(token) : null;
+    const role = token ? await AuthHelpers.verifyToken(token) : null;
 
-    if (!session || session.role !== 'ADMIN') {
+    if (role !== 'ADMIN') {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -21,7 +21,7 @@ export const POST = async (request: NextRequest) => {
     }
 
     const hashedPassword = await AuthHelpers.hashPassword(password);
-    await prisma.user.create({ data: { hashedPassword, role: 'USER' } });
+    await prisma.users.create({ data: { hashedPassword, role: 'USER' } });
 
     return NextResponse.json({ success: true });
 };

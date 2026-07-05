@@ -5,14 +5,14 @@ import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import DeleteIcon from '@/lib/icons/DeleteIcon';
 import EditIcon from '@/lib/icons/EditIcon';
-import { CardistryMoveEntry } from '@/lib/static/types';
+import { Move } from '@/lib/static/types';
 import CardistryHelpers from '@/lib/utils/CardistryHelpers';
 import styles from './CardistryContent.module.scss';
 import CardistryControls from './CardistryControls/CardistryControls';
 import EditMoveModal from './EditMoveModal/EditMoveModal';
 
 type CardistryContentProps = {
-    initialMoves: CardistryMoveEntry[];
+    initialMoves: Move[];
 };
 
 const CardistryContent: React.FC<CardistryContentProps> = ({
@@ -34,19 +34,17 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
     // STATE
     // -------------------------------------------------------------------------
 
-    const [moves, setMoves] = useState<CardistryMoveEntry[]>(initialMoves);
+    const [moves, setMoves] = useState<Move[]>(initialMoves);
     const [page, setPage] = useState<number>(1);
-    const [editingMove, setEditingMove] = useState<CardistryMoveEntry | null>(
-        null
-    );
+    const [editingMove, setEditingMove] = useState<Move | null>(null);
 
     // -------------------------------------------------------------------------
     // HANDLERS
     // -------------------------------------------------------------------------
 
-    const handleAdd = (move: CardistryMoveEntry): void => {
+    const handleAdd = (move: Move): void => {
         setMoves((prev) => {
-            const filtered = prev.filter((m) => m.id !== move.id);
+            const filtered = prev.filter((m) => m.name !== move.name);
             return [...filtered, move].sort(
                 (a, b) =>
                     new Date(a.createdAt).getTime() -
@@ -56,18 +54,18 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
         setPage(1);
     };
 
-    const handleUpdate = (updated: CardistryMoveEntry): void => {
+    const handleUpdate = (updated: Move): void => {
         setMoves((prev) =>
-            prev.map((m) => (m.id === updated.id ? updated : m))
+            prev.map((m) => (m.name === updated.name ? updated : m))
         );
         setEditingMove(null);
     };
 
     const handleIncrement = async (
-        move: CardistryMoveEntry,
+        move: Move,
         amount: number
     ): Promise<void> => {
-        const res = await fetch(`/api/cardistry/${move.id}`, {
+        const res = await fetch(`/api/moves/${encodeURIComponent(move.name)}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -77,16 +75,18 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
             }),
         });
         if (!res.ok) return;
-        const updated = (await res.json()) as CardistryMoveEntry;
+        const updated = (await res.json()) as Move;
         setMoves((prev) =>
-            prev.map((m) => (m.id === updated.id ? updated : m))
+            prev.map((m) => (m.name === updated.name ? updated : m))
         );
     };
 
-    const handleDelete = async (id: number): Promise<void> => {
-        const res = await fetch(`/api/cardistry/${id}`, { method: 'DELETE' });
+    const handleDelete = async (name: string): Promise<void> => {
+        const res = await fetch(`/api/moves/${encodeURIComponent(name)}`, {
+            method: 'DELETE',
+        });
         if (!res.ok) return;
-        const nextMoves = moves.filter((m) => m.id !== id);
+        const nextMoves = moves.filter((m) => m.name !== name);
         const newTotalPages = Math.max(
             1,
             Math.ceil(nextMoves.length / ITEMS_PER_PAGE)
@@ -114,7 +114,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
         Math.ceil(moves.length / ITEMS_PER_PAGE)
     );
 
-    const paginatedMoves: CardistryMoveEntry[] = moves.slice(
+    const paginatedMoves: Move[] = moves.slice(
         (page - 1) * ITEMS_PER_PAGE,
         page * ITEMS_PER_PAGE
     );
@@ -139,7 +139,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                         move.count
                     );
                     return (
-                        <li key={move.id} className={styles.item}>
+                        <li key={move.name} className={styles.item}>
                             <div className={styles.proficiency}>
                                 <div className={styles.pips}>
                                     {[0, 1, 2].map((i) => (
@@ -196,7 +196,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                                             type="button"
                                             className={styles['action-button']}
                                             onClick={() =>
-                                                handleDelete(move.id)
+                                                handleDelete(move.name)
                                             }
                                         >
                                             <DeleteIcon />

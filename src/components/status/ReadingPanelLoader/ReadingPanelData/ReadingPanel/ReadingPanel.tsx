@@ -7,11 +7,11 @@ import EditButton from '@/components/status/EditButton/EditButton';
 import LinkButton from '@/components/status/LinkButton/LinkButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { Key } from '@/lib/static/enums';
-import { BookSearchResult, ReadMediaEntry } from '@/lib/static/types';
+import { Book, GoogleBooksResponse } from '@/lib/static/types';
 import styles from './ReadingPanel.module.scss';
 
 type ReadingPanelProps = {
-    initialEntries: ReadMediaEntry[];
+    initialEntries: Book[];
     label: string;
     icon: React.ReactNode;
     cols: number;
@@ -43,10 +43,12 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
     // STATE
     // -------------------------------------------------------------------------
 
-    const [entries, setEntries] = useState<ReadMediaEntry[]>(initialEntries);
+    const [entries, setEntries] = useState<Book[]>(initialEntries);
     const [isAdding, setIsAdding] = useState<boolean>(false);
     const [query, setQuery] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<BookSearchResult[]>([]);
+    const [searchResults, setSearchResults] = useState<GoogleBooksResponse[]>(
+        []
+    );
     const [isSearching, setIsSearching] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
@@ -83,16 +85,19 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
     };
 
     const handleSelectResult = async (id: string | number): Promise<void> => {
-        const result = searchResults.find((r) => r.id === id);
+        const result = searchResults.find((r) => r.googleBooksId === id);
         if (!result) return;
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        const res = await fetch('/api/read', {
+        const res = await fetch('/api/books', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: result.name, bookId: result.id }),
+            body: JSON.stringify({
+                name: result.name,
+                bookId: result.googleBooksId,
+            }),
         });
         if (!res.ok) return;
-        const saved = (await res.json()) as ReadMediaEntry;
+        const saved = (await res.json()) as Book;
         const filtered = entries.filter((e) => e.bookId !== saved.bookId);
         setEntries([saved, ...filtered].slice(0, MAX_ENTRIES));
         setIsAdding(false);
@@ -111,9 +116,11 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
     const performSearch = async (q: string): Promise<void> => {
         setIsSearching(true);
         setSearchResults([]);
-        const res = await fetch(`/api/books/search?q=${encodeURIComponent(q)}`);
-        const results: BookSearchResult[] = res.ok
-            ? ((await res.json()) as BookSearchResult[])
+        const res = await fetch(
+            `/api/google_books/search?q=${encodeURIComponent(q)}`
+        );
+        const results: GoogleBooksResponse[] = res.ok
+            ? ((await res.json()) as GoogleBooksResponse[])
             : [];
         setSearchResults(results);
         setIsSearching(false);
@@ -150,7 +157,10 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
                             value={query}
                             placeholder="Search books..."
                             isSearching={isSearching}
-                            results={searchResults}
+                            results={searchResults.map((r) => ({
+                                ...r,
+                                id: r.googleBooksId,
+                            }))}
                             onChange={handleQueryChange}
                             onKeyDown={handleKeyDown}
                             onClear={handleCancel}
@@ -160,7 +170,7 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
                 ) : null}
                 <ul className={styles.list}>
                     {entries.map((entry) => (
-                        <li key={entry.id} className={styles.item}>
+                        <li key={entry.bookId} className={styles.item}>
                             <Image
                                 className={styles.cover}
                                 src={entry.cover}

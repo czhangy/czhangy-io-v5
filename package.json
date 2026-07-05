@@ -13,8 +13,7 @@
         "gen:component": "PYTHONPATH=src python3 ./src/lib/scripts/generators/generate_component.py",
         "gen:class": "PYTHONPATH=src python3 ./src/lib/scripts/generators/generate_class.py",
         "gen:icon": "PYTHONPATH=src python3 ./src/lib/scripts/generators/generate_icon.py",
-        "db:generate": "prisma generate",
-        "db:push": "prisma db push",
+        "db:push": "prisma db push && prisma generate",
         "db:seed": "tsx src/prisma/seed.ts",
         "postinstall": "prisma generate",
         "prepare": "husky"

@@ -4,11 +4,11 @@ import { useRef, useState } from 'react';
 import Modal from '@/components/common/Modal/Modal';
 import SearchInput from '@/components/common/SearchInput/SearchInput';
 import { Key } from '@/lib/static/enums';
-import { BookSearchResult, ReadMediaEntry } from '@/lib/static/types';
+import { Book, GoogleBooksResponse } from '@/lib/static/types';
 
 type AddBookModalProps = {
     onClose: () => void;
-    onAdd: (entry: ReadMediaEntry) => void;
+    onAdd: (entry: Book) => void;
 };
 
 const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
@@ -23,7 +23,9 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
     // -------------------------------------------------------------------------
 
     const [query, setQuery] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<BookSearchResult[]>([]);
+    const [searchResults, setSearchResults] = useState<GoogleBooksResponse[]>(
+        []
+    );
     const [isSearching, setIsSearching] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
@@ -33,9 +35,11 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
     const performSearch = async (q: string): Promise<void> => {
         setIsSearching(true);
         setSearchResults([]);
-        const res = await fetch(`/api/books/search?q=${encodeURIComponent(q)}`);
-        const results: BookSearchResult[] = res.ok
-            ? ((await res.json()) as BookSearchResult[])
+        const res = await fetch(
+            `/api/google_books/search?q=${encodeURIComponent(q)}`
+        );
+        const results: GoogleBooksResponse[] = res.ok
+            ? ((await res.json()) as GoogleBooksResponse[])
             : [];
         setSearchResults(results);
         setIsSearching(false);
@@ -61,16 +65,19 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
     };
 
     const handleSelectResult = async (id: string | number): Promise<void> => {
-        const result = searchResults.find((r) => r.id === id);
+        const result = searchResults.find((r) => r.googleBooksId === id);
         if (!result) return;
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        const res = await fetch('/api/read', {
+        const res = await fetch('/api/books', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: result.name, bookId: result.id }),
+            body: JSON.stringify({
+                name: result.name,
+                bookId: result.googleBooksId,
+            }),
         });
         if (!res.ok) return;
-        const saved = (await res.json()) as ReadMediaEntry;
+        const saved = (await res.json()) as Book;
         onAdd(saved);
         onClose();
     };
@@ -96,7 +103,10 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
                 value={query}
                 placeholder="Search books..."
                 isSearching={isSearching}
-                results={searchResults}
+                results={searchResults.map((r) => ({
+                    ...r,
+                    id: r.googleBooksId,
+                }))}
                 onChange={handleQueryChange}
                 onKeyDown={handleKeyDown}
                 onClear={handleClear}

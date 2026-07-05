@@ -5,13 +5,13 @@ import Dropdown from '@/components/common/Dropdown/Dropdown';
 import Modal from '@/components/common/Modal/Modal';
 import { CARDISTRY_MOVE_TYPES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
-import { CardistryMoveEntry } from '@/lib/static/types';
+import { Move } from '@/lib/static/types';
 import styles from './EditMoveModal.module.scss';
 
 type EditMoveModalProps = {
-    move: CardistryMoveEntry;
+    move: Move;
     onClose: () => void;
-    onEdit: (move: CardistryMoveEntry) => void;
+    onEdit: (move: Move) => void;
 };
 
 const EditMoveModal: React.FC<EditMoveModalProps> = ({
@@ -35,13 +35,17 @@ const EditMoveModal: React.FC<EditMoveModalProps> = ({
         const trimmed = name.trim();
         const parsedCount = parseInt(count, 10);
         if (!trimmed || !type || isNaN(parsedCount) || parsedCount < 0) return;
-        const res = await fetch(`/api/cardistry/${move.id}`, {
+        const res = await fetch(`/api/moves/${encodeURIComponent(move.name)}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: trimmed, type, count: parsedCount }),
+            body: JSON.stringify({
+                name: trimmed,
+                type,
+                count: parsedCount,
+            }),
         });
         if (!res.ok) return;
-        onEdit((await res.json()) as CardistryMoveEntry);
+        onEdit((await res.json()) as Move);
         onClose();
     };
 

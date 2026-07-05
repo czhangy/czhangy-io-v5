@@ -4,11 +4,11 @@ import { useRef, useState } from 'react';
 import Modal from '@/components/common/Modal/Modal';
 import SearchInput from '@/components/common/SearchInput/SearchInput';
 import { Key } from '@/lib/static/enums';
-import { TMDBSearchResult, WatchedMediaEntry } from '@/lib/static/types';
+import { Content, TMDBResponse } from '@/lib/static/types';
 
 type AddContentModalProps = {
     onClose: () => void;
-    onAdd: (entry: WatchedMediaEntry) => void;
+    onAdd: (entry: Content) => void;
 };
 
 const AddContentModal: React.FC<AddContentModalProps> = ({
@@ -26,7 +26,7 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
     // -------------------------------------------------------------------------
 
     const [query, setQuery] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<TMDBSearchResult[]>([]);
+    const [searchResults, setSearchResults] = useState<TMDBResponse[]>([]);
     const [isSearching, setIsSearching] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
@@ -36,9 +36,9 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
     const performSearch = async (q: string): Promise<void> => {
         setIsSearching(true);
         setSearchResults([]);
-        const res = await fetch(`/api/media/search?q=${encodeURIComponent(q)}`);
-        const results: TMDBSearchResult[] = res.ok
-            ? ((await res.json()) as TMDBSearchResult[])
+        const res = await fetch(`/api/tmdb/search?q=${encodeURIComponent(q)}`);
+        const results: TMDBResponse[] = res.ok
+            ? ((await res.json()) as TMDBResponse[])
             : [];
         setSearchResults(results);
         setIsSearching(false);
@@ -64,20 +64,20 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
     };
 
     const handleSelectResult = async (id: string | number): Promise<void> => {
-        const result = searchResults.find((r) => r.id === id);
+        const result = searchResults.find((r) => r.tmdbId === id);
         if (!result) return;
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        const res = await fetch('/api/watched', {
+        const res = await fetch('/api/content', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 name: result.name,
-                tmdbId: result.id,
+                tmdbId: result.tmdbId,
                 mediaType: result.mediaType,
             }),
         });
         if (!res.ok) return;
-        const saved = (await res.json()) as WatchedMediaEntry;
+        const saved = (await res.json()) as Content;
         onAdd(saved);
         onClose();
     };
@@ -103,7 +103,7 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
                 value={query}
                 placeholder="Search movies & shows..."
                 isSearching={isSearching}
-                results={searchResults}
+                results={searchResults.map((r) => ({ ...r, id: r.tmdbId }))}
                 onChange={handleQueryChange}
                 onKeyDown={handleKeyDown}
                 onClear={handleClear}

@@ -5,23 +5,24 @@ import AuthHelpers from '@/lib/utils/AuthHelpers';
 
 export const DELETE = async (
     request: NextRequest,
-    { params }: { params: Promise<{ id: string }> }
+    { params }: { params: Promise<{ bookId: string }> }
 ) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await AuthHelpers.verifyToken(token) : null;
+    const role = token ? await AuthHelpers.verifyToken(token) : null;
 
-    if (!session || session.role !== 'ADMIN') {
+    if (role !== 'ADMIN') {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
+    const { bookId } = await params;
+    const decodedBookId = decodeURIComponent(bookId);
 
-    const countBefore = await prisma.readMedia.count();
-    await prisma.readMedia.delete({ where: { id: parseInt(id) } });
+    const countBefore = await prisma.books.count();
+    await prisma.books.delete({ where: { bookId: decodedBookId } });
 
     const milestone = READ_MILESTONES.find((m) => m.count === countBefore);
     if (milestone) {
-        await prisma.achievement.deleteMany({
+        await prisma.achievements.deleteMany({
             where: { name: milestone.name },
         });
     }

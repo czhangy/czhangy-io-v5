@@ -4,39 +4,36 @@ import { prisma } from '@/lib/static/prisma';
 import { Game } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
 
-const authorize = async (request: NextRequest) => {
+const authorize = async (request: NextRequest): Promise<boolean> => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await AuthHelpers.verifyToken(token) : null;
-    return session?.role === 'ADMIN' ? session : null;
-};
-
-const parseId = (id: string) => {
-    const n = parseInt(id, 10);
-    return isNaN(n) ? null : n;
+    const role = token ? await AuthHelpers.verifyToken(token) : null;
+    return role === 'ADMIN';
 };
 
 export const PUT = async (
     request: NextRequest,
-    { params }: { params: Promise<{ id: string }> }
+    { params }: { params: Promise<{ name: string }> }
 ) => {
     if (!(await authorize(request))) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
-    const numericId = parseId(id);
-    if (numericId === null) {
-        return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
-    }
+    const { name } = await params;
+    const decodedName = decodeURIComponent(name);
 
-    const { name, genre, icon, rating } = (await request.json()) as {
+    const {
+        name: newName,
+        genre,
+        icon,
+        rating,
+    } = (await request.json()) as {
         name: string;
         genre: string;
         icon: string;
         rating: number;
     };
 
-    if (!name?.trim()) {
+    if (!newName?.trim()) {
         return NextResponse.json(
             { error: 'Name is required' },
             { status: 400 }
@@ -55,54 +52,58 @@ export const PUT = async (
         );
     }
 
-    const current = await prisma.game.findUnique({ where: { id: numericId } });
+    const current = await prisma.games.findUnique({
+        where: { name: decodedName },
+    });
     if (!current) {
         return NextResponse.json({ error: 'Game not found' }, { status: 404 });
     }
 
-    const conflict = await prisma.game.findUnique({
-        where: { name: name.trim() },
+    const conflict = await prisma.games.findUnique({
+        where: { name: newName.trim() },
     });
-    if (conflict && conflict.id !== numericId) {
+    if (conflict && conflict.name !== decodedName) {
         return NextResponse.json(
             { error: 'Game already exists' },
             { status: 409 }
         );
     }
 
-    const game = await prisma.game.update({
-        where: { id: numericId },
+    const game = await prisma.games.update({
+        where: { name: decodedName },
         data: {
-            name: name.trim(),
+            name: newName.trim(),
             genre: genre.trim(),
             icon: icon.trim(),
             rating,
         },
     });
 
-    return NextResponse.json(game as Game);
+    return NextResponse.json({
+        name: game.name,
+        genre: game.genre,
+        icon: game.icon,
+        rating: game.rating,
+    } as Game);
 };
 
 export const DELETE = async (
     request: NextRequest,
-    { params }: { params: Promise<{ id: string }> }
+    { params }: { params: Promise<{ name: string }> }
 ) => {
     if (!(await authorize(request))) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
-    const numericId = parseId(id);
-    if (numericId === null) {
-        return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
-    }
+    const { name } = await params;
+    const decodedName = decodeURIComponent(name);
 
-    const countBefore = await prisma.game.count();
-    await prisma.game.delete({ where: { id: numericId } });
+    const countBefore = await prisma.games.count();
+    await prisma.games.delete({ where: { name: decodedName } });
 
     const milestone = GAME_MILESTONES.find((m) => m.count === countBefore);
     if (milestone) {
-        await prisma.achievement.deleteMany({
+        await prisma.achievements.deleteMany({
             where: { name: milestone.name },
         });
     }

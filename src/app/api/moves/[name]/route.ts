@@ -1,85 +1,71 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SESSION_COOKIE } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
-import { CardistryMoveEntry } from '@/lib/static/types';
+import { Move } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
 import DateHelpers from '@/lib/utils/DateHelpers';
 
-const authorize = async (request: NextRequest) => {
+const authorize = async (request: NextRequest): Promise<boolean> => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await AuthHelpers.verifyToken(token) : null;
-    return session?.role === 'ADMIN' ? session : null;
-};
-
-const parseId = (id: string) => {
-    const n = parseInt(id, 10);
-    return isNaN(n) ? null : n;
+    const role = token ? await AuthHelpers.verifyToken(token) : null;
+    return role === 'ADMIN';
 };
 
 export const PATCH = async (
     request: NextRequest,
-    { params }: { params: Promise<{ id: string }> }
+    { params }: { params: Promise<{ name: string }> }
 ) => {
     if (!(await authorize(request))) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
-    const numericId = parseId(id);
-    if (numericId === null) {
-        return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
-    }
+    const { name } = await params;
+    const decodedName = decodeURIComponent(name);
 
-    const existingItem = await prisma.statusItem.findUnique({
-        where: { key: 'cardistryMove' },
-    });
-
-    if (existingItem) {
-        await prisma.statusItem.update({
-            where: { key: 'cardistryMove' },
-            data: { value: String(numericId) },
-        });
-    } else {
-        await prisma.statusItem.create({
-            data: { key: 'cardistryMove', value: String(numericId) },
-        });
-    }
-
-    const move = await prisma.cardistryMove.findUnique({
-        where: { id: numericId },
+    const move = await prisma.moves.findUnique({
+        where: { name: decodedName },
     });
 
     if (!move) {
         return NextResponse.json({ error: 'Move not found' }, { status: 404 });
     }
 
+    await prisma.highlights.upsert({
+        where: { key: 'move' },
+        update: { value: move.name },
+        create: { key: 'move', value: move.name },
+    });
+
     return NextResponse.json({
-        ...move,
+        name: move.name,
+        type: move.type,
+        count: move.count,
         createdAt: move.createdAt.toISOString(),
-    } as CardistryMoveEntry);
+    } as Move);
 };
 
 export const PUT = async (
     request: NextRequest,
-    { params }: { params: Promise<{ id: string }> }
+    { params }: { params: Promise<{ name: string }> }
 ) => {
     if (!(await authorize(request))) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
-    const numericId = parseId(id);
-    if (numericId === null) {
-        return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
-    }
+    const { name } = await params;
+    const decodedName = decodeURIComponent(name);
 
-    const { name, type, count } = (await request.json()) as {
+    const {
+        name: newName,
+        type,
+        count,
+    } = (await request.json()) as {
         name: string;
         type: string;
         count: number;
     };
 
-    if (!name?.trim()) {
+    if (!newName?.trim()) {
         return NextResponse.json(
             { error: 'Name is required' },
             { status: 400 }
@@ -95,26 +81,26 @@ export const PUT = async (
         return NextResponse.json({ error: 'Invalid count' }, { status: 400 });
     }
 
-    const currentMove = await prisma.cardistryMove.findUnique({
-        where: { id: numericId },
+    const currentMove = await prisma.moves.findUnique({
+        where: { name: decodedName },
     });
     if (!currentMove) {
         return NextResponse.json({ error: 'Move not found' }, { status: 404 });
     }
 
-    const conflict = await prisma.cardistryMove.findUnique({
-        where: { name: name.trim() },
+    const conflict = await prisma.moves.findUnique({
+        where: { name: newName.trim() },
     });
-    if (conflict && conflict.id !== numericId) {
+    if (conflict && conflict.name !== decodedName) {
         return NextResponse.json(
             { error: 'Move already exists' },
             { status: 409 }
         );
     }
 
-    const move = await prisma.cardistryMove.update({
-        where: { id: numericId },
-        data: { name: name.trim(), type: type.trim(), count },
+    const move = await prisma.moves.update({
+        where: { name: decodedName },
+        data: { name: newName.trim(), type: type.trim(), count },
     });
 
     const tierThresholds = [
@@ -127,7 +113,7 @@ export const PUT = async (
     for (const { threshold, label, tier } of tierThresholds) {
         if (currentMove.count < threshold && count >= threshold) {
             try {
-                await prisma.achievement.create({
+                await prisma.achievements.create({
                     data: {
                         tier,
                         name: `${move.name} ${label}`,
@@ -148,25 +134,24 @@ export const PUT = async (
     }
 
     return NextResponse.json({
-        ...move,
+        name: move.name,
+        type: move.type,
+        count: move.count,
         createdAt: move.createdAt.toISOString(),
-    } as CardistryMoveEntry);
+    } as Move);
 };
 
 export const DELETE = async (
     request: NextRequest,
-    { params }: { params: Promise<{ id: string }> }
+    { params }: { params: Promise<{ name: string }> }
 ) => {
     if (!(await authorize(request))) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
-    const numericId = parseId(id);
-    if (numericId === null) {
-        return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
-    }
+    const { name } = await params;
+    const decodedName = decodeURIComponent(name);
 
-    await prisma.cardistryMove.delete({ where: { id: numericId } });
+    await prisma.moves.delete({ where: { name: decodedName } });
     return NextResponse.json({ success: true });
 };

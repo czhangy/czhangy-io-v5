@@ -6,17 +6,24 @@ import AuthHelpers from '@/lib/utils/AuthHelpers';
 import DateHelpers from '@/lib/utils/DateHelpers';
 
 export const GET = async () => {
-    const games = await prisma.game.findMany({
+    const games = await prisma.games.findMany({
         orderBy: { name: 'asc' },
     });
-    return NextResponse.json(games as Game[]);
+    return NextResponse.json(
+        games.map((g) => ({
+            name: g.name,
+            genre: g.genre,
+            icon: g.icon,
+            rating: g.rating,
+        })) as Game[]
+    );
 };
 
 export const POST = async (request: NextRequest) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await AuthHelpers.verifyToken(token) : null;
+    const role = token ? await AuthHelpers.verifyToken(token) : null;
 
-    if (!session || session.role !== 'ADMIN') {
+    if (role !== 'ADMIN') {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -48,7 +55,7 @@ export const POST = async (request: NextRequest) => {
         );
     }
 
-    const existing = await prisma.game.findUnique({
+    const existing = await prisma.games.findUnique({
         where: { name: name.trim() },
     });
 
@@ -59,7 +66,7 @@ export const POST = async (request: NextRequest) => {
         );
     }
 
-    const game = await prisma.game.create({
+    const game = await prisma.games.create({
         data: {
             name: name.trim(),
             genre: genre.trim(),
@@ -68,10 +75,10 @@ export const POST = async (request: NextRequest) => {
         },
     });
 
-    const count = await prisma.game.count();
+    const count = await prisma.games.count();
     const milestone = GAME_MILESTONES.find((m) => m.count === count);
     if (milestone) {
-        await prisma.achievement
+        await prisma.achievements
             .create({
                 data: {
                     tier: milestone.tier,
@@ -84,5 +91,10 @@ export const POST = async (request: NextRequest) => {
             .catch(() => {});
     }
 
-    return NextResponse.json(game as Game);
+    return NextResponse.json({
+        name: game.name,
+        genre: game.genre,
+        icon: game.icon,
+        rating: game.rating,
+    } as Game);
 };

@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { READ_MILESTONES, SESSION_COOKIE } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
-import { ReadMediaEntry } from '@/lib/static/types';
+import { Book } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
 import DateHelpers from '@/lib/utils/DateHelpers';
 import GoogleBooksHelpers from '@/lib/utils/GoogleBooksHelpers';
 
 export const POST = async (request: NextRequest) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await AuthHelpers.verifyToken(token) : null;
+    const role = token ? await AuthHelpers.verifyToken(token) : null;
 
-    if (!session || session.role !== 'ADMIN') {
+    if (role !== 'ADMIN') {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -19,7 +19,7 @@ export const POST = async (request: NextRequest) => {
         bookId: string;
     };
 
-    const existing = await prisma.readMedia.findUnique({ where: { bookId } });
+    const existing = await prisma.books.findUnique({ where: { bookId } });
 
     const bookData = await GoogleBooksHelpers.getBookById(bookId);
     const author = bookData?.author;
@@ -31,7 +31,7 @@ export const POST = async (request: NextRequest) => {
         );
     }
 
-    const record = await prisma.readMedia.upsert({
+    const record = await prisma.books.upsert({
         where: { bookId },
         create: {
             name,
@@ -44,10 +44,10 @@ export const POST = async (request: NextRequest) => {
     });
 
     if (!existing) {
-        const count = await prisma.readMedia.count();
+        const count = await prisma.books.count();
         const milestone = READ_MILESTONES.find((m) => m.count === count);
         if (milestone) {
-            await prisma.achievement
+            await prisma.achievements
                 .create({
                     data: {
                         tier: milestone.tier,
@@ -61,8 +61,12 @@ export const POST = async (request: NextRequest) => {
         }
     }
 
-    const entry: ReadMediaEntry = {
-        ...record,
+    const entry: Book = {
+        name: record.name,
+        author: record.author,
+        bookId: record.bookId,
+        cover: record.cover,
+        genres: record.genres,
         addedAt: record.addedAt.toISOString(),
     };
 

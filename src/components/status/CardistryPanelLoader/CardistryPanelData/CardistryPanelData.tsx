@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/static/prisma';
-import { CardistryMoveEntry } from '@/lib/static/types';
+import { Move } from '@/lib/static/types';
 import CardistryPanel from './CardistryPanel/CardistryPanel';
 
 type CardistryPanelDataProps = {
@@ -19,17 +19,22 @@ const CardistryPanelData = async ({
     // COMPUTATIONS
     // -------------------------------------------------------------------------
 
-    const fetchActiveMove = async (): Promise<CardistryMoveEntry | null> => {
+    const fetchActiveMove = async (): Promise<Move | null> => {
         try {
-            const item = await prisma.statusItem.findUnique({
-                where: { key: 'cardistryMove' },
+            const item = await prisma.highlights.findUnique({
+                where: { key: 'move' },
             });
             if (!item) return null;
-            const move = await prisma.cardistryMove.findUnique({
-                where: { id: parseInt(item.value, 10) },
+            const move = await prisma.moves.findUnique({
+                where: { name: item.value },
             });
             if (move) {
-                return { ...move, createdAt: move.createdAt.toISOString() };
+                return {
+                    name: move.name,
+                    type: move.type,
+                    count: move.count,
+                    createdAt: move.createdAt.toISOString(),
+                };
             }
         } catch {}
         return null;
@@ -39,7 +44,7 @@ const CardistryPanelData = async ({
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const activeMove: CardistryMoveEntry | null = await fetchActiveMove();
+    const activeMove: Move | null = await fetchActiveMove();
 
     // -------------------------------------------------------------------------
     // MARKUP

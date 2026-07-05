@@ -1,4 +1,4 @@
-import { BookSearchResult } from '@/lib/static/types';
+import { GoogleBooksResponse } from '@/lib/static/types';
 
 const BASE_URL = 'https://www.googleapis.com/books/v1';
 
@@ -92,7 +92,7 @@ export default class GoogleBooksHelpers {
     // PUBLIC
     // -------------------------------------------------------------------------
 
-    static async searchBooks(query: string): Promise<BookSearchResult[]> {
+    static async searchBooks(query: string): Promise<GoogleBooksResponse[]> {
         if (!query.trim()) return [];
         const keyParam = this.apiKey ? `&key=${this.apiKey}` : '';
         const res = await fetch(
@@ -106,10 +106,10 @@ export default class GoogleBooksHelpers {
             .filter((item) => item.volumeInfo.publishedDate)
             .filter((item) => item.volumeInfo.authors?.length)
             .map((item) => ({
-                id: item.id,
+                googleBooksId: item.id,
                 name: item.volumeInfo.title,
                 author: item.volumeInfo.authors?.[0] ?? null,
-                year: item.volumeInfo.publishedDate?.split('-')[0] ?? null,
+                note: item.volumeInfo.publishedDate?.split('-')[0] ?? null,
                 cover: this.coverUrl(item.volumeInfo),
             }));
     }

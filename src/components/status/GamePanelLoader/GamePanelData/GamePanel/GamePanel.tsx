@@ -78,10 +78,10 @@ const GamePanel: React.FC<GamePanelProps> = ({
     };
 
     const handleSelectGame = async (selected: Game): Promise<void> => {
-        await fetch('/api/status/game', {
+        await fetch('/api/highlights/game', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ value: String(selected.id) }),
+            body: JSON.stringify({ value: selected.name }),
         });
         setGame(selected);
         setIsEditing(false);
@@ -113,10 +113,10 @@ const GamePanel: React.FC<GamePanelProps> = ({
             return;
         }
         const created = (await res.json()) as Game;
-        await fetch('/api/status/game', {
+        await fetch('/api/highlights/game', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ value: String(created.id) }),
+            body: JSON.stringify({ value: created.name }),
         });
         setGame(created);
         setIsEditing(false);
@@ -216,7 +216,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
                                 <ul className={styles.dropdown}>
                                     {filteredGames.map((g) => (
                                         <li
-                                            key={g.id}
+                                            key={g.name}
                                             className={styles['dropdown-item']}
                                             onMouseDown={(
                                                 e: React.MouseEvent

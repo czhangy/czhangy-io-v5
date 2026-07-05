@@ -8,9 +8,9 @@ export const PATCH = async (
     { params }: { params: Promise<{ key: string }> }
 ) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await AuthHelpers.verifyToken(token) : null;
+    const role = token ? await AuthHelpers.verifyToken(token) : null;
 
-    if (!session || session.role !== 'ADMIN') {
+    if (role !== 'ADMIN') {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -24,7 +24,7 @@ export const PATCH = async (
         );
     }
 
-    const item = await prisma.statusItem.upsert({
+    const item = await prisma.highlights.upsert({
         where: { key },
         update: { value },
         create: { key, value },

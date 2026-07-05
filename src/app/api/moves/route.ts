@@ -1,26 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SESSION_COOKIE } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
-import { CardistryMoveEntry } from '@/lib/static/types';
+import { Move } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
 
 export const GET = async () => {
-    const moves = await prisma.cardistryMove.findMany({
+    const moves = await prisma.moves.findMany({
         orderBy: { name: 'asc' },
     });
     return NextResponse.json(
         moves.map((m) => ({
-            ...m,
+            name: m.name,
+            type: m.type,
+            count: m.count,
             createdAt: m.createdAt.toISOString(),
-        })) as CardistryMoveEntry[]
+        })) as Move[]
     );
 };
 
 export const POST = async (request: NextRequest) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await AuthHelpers.verifyToken(token) : null;
+    const role = token ? await AuthHelpers.verifyToken(token) : null;
 
-    if (!session || session.role !== 'ADMIN') {
+    if (role !== 'ADMIN') {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -43,7 +45,7 @@ export const POST = async (request: NextRequest) => {
         );
     }
 
-    const existing = await prisma.cardistryMove.findUnique({
+    const existing = await prisma.moves.findUnique({
         where: { name: name.trim() },
     });
 
@@ -54,27 +56,20 @@ export const POST = async (request: NextRequest) => {
         );
     }
 
-    const move = await prisma.cardistryMove.create({
+    const move = await prisma.moves.create({
         data: { name: name.trim(), type: type.trim() },
     });
 
-    const existingItem = await prisma.statusItem.findUnique({
-        where: { key: 'cardistryMove' },
+    await prisma.highlights.upsert({
+        where: { key: 'move' },
+        update: { value: move.name },
+        create: { key: 'move', value: move.name },
     });
 
-    if (existingItem) {
-        await prisma.statusItem.update({
-            where: { key: 'cardistryMove' },
-            data: { value: String(move.id) },
-        });
-    } else {
-        await prisma.statusItem.create({
-            data: { key: 'cardistryMove', value: String(move.id) },
-        });
-    }
-
     return NextResponse.json({
-        ...move,
+        name: move.name,
+        type: move.type,
+        count: move.count,
         createdAt: move.createdAt.toISOString(),
-    } as CardistryMoveEntry);
+    } as Move);
 };

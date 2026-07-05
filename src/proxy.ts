@@ -24,7 +24,7 @@ export const proxy = async (request: NextRequest) => {
         return NextResponse.redirect(loginUrl);
     }
 
-    if (isAdminRoute && session?.role !== 'ADMIN') {
+    if (isAdminRoute && session !== 'ADMIN') {
         return NextResponse.redirect(new URL('/', request.url));
     }
 

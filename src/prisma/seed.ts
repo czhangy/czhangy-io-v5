@@ -21,21 +21,13 @@ const seed = async () => {
 
     const hashedPassword = await hash(password, 12);
 
-    const admin = await prisma.user.upsert({
+    const admin = await prisma.users.upsert({
         where: { id: 'admin' },
         update: { hashedPassword },
         create: { id: 'admin', hashedPassword, role: 'ADMIN' },
     });
 
     console.log(`Admin user seeded: ${admin.id}`);
-
-    await prisma.statusItem.upsert({
-        where: { key: 'location' },
-        update: {},
-        create: { key: 'location', value: 'Seattle, WA' },
-    });
-
-    console.log('Status items seeded.');
 };
 
 seed()

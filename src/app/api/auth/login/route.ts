@@ -15,7 +15,7 @@ export const POST = async (request: NextRequest) => {
         );
     }
 
-    const users = await prisma.user.findMany();
+    const users = await prisma.users.findMany();
 
     for (const user of users) {
         const match = await AuthHelpers.verifyPassword(
@@ -24,10 +24,7 @@ export const POST = async (request: NextRequest) => {
         );
 
         if (match) {
-            const token = await AuthHelpers.signToken({
-                id: user.id,
-                role: user.role,
-            });
+            const token = await AuthHelpers.signToken(user.role);
             const response = NextResponse.json({ role: user.role });
 
             response.cookies.set(SESSION_COOKIE, token, {

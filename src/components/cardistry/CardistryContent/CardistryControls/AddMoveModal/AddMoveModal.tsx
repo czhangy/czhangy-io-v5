@@ -5,12 +5,12 @@ import Dropdown from '@/components/common/Dropdown/Dropdown';
 import Modal from '@/components/common/Modal/Modal';
 import { CARDISTRY_MOVE_TYPES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
-import { CardistryMoveEntry } from '@/lib/static/types';
+import { Move } from '@/lib/static/types';
 import styles from './AddMoveModal.module.scss';
 
 type AddMoveModalProps = {
     onClose: () => void;
-    onAdd: (move: CardistryMoveEntry) => void;
+    onAdd: (move: Move) => void;
 };
 
 const AddMoveModal: React.FC<AddMoveModalProps> = ({ onClose, onAdd }) => {
@@ -28,13 +28,13 @@ const AddMoveModal: React.FC<AddMoveModalProps> = ({ onClose, onAdd }) => {
     const handleSubmit = async (): Promise<void> => {
         const trimmed = name.trim();
         if (!trimmed) return;
-        const res = await fetch('/api/cardistry', {
+        const res = await fetch('/api/moves', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: trimmed, type }),
         });
         if (!res.ok) return;
-        onAdd((await res.json()) as CardistryMoveEntry);
+        onAdd((await res.json()) as Move);
         onClose();
     };
 

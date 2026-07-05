@@ -41,10 +41,7 @@ export default async function RootLayout({
             className={`${geistSans.variable} ${geistMono.variable}`}
         >
             <body>
-                <SessionProvider
-                    isLoggedIn={!!session}
-                    role={session?.role ?? null}
-                >
+                <SessionProvider isLoggedIn={!!session} role={session}>
                     <div className="page-bg" />
                     <Navbar />
                     <main className="page-main">{children}</main>

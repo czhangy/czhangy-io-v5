@@ -7,11 +7,11 @@ import EditButton from '@/components/status/EditButton/EditButton';
 import LinkButton from '@/components/status/LinkButton/LinkButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { Key } from '@/lib/static/enums';
-import { TMDBSearchResult, WatchedMediaEntry } from '@/lib/static/types';
+import { Content, TMDBResponse } from '@/lib/static/types';
 import styles from './WatchingPanel.module.scss';
 
 type WatchingPanelProps = {
-    initialEntries: WatchedMediaEntry[];
+    initialEntries: Content[];
     label: string;
     icon: React.ReactNode;
     cols: number;
@@ -43,10 +43,10 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     // STATE
     // -------------------------------------------------------------------------
 
-    const [entries, setEntries] = useState<WatchedMediaEntry[]>(initialEntries);
+    const [entries, setEntries] = useState<Content[]>(initialEntries);
     const [isAdding, setIsAdding] = useState<boolean>(false);
     const [query, setQuery] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<TMDBSearchResult[]>([]);
+    const [searchResults, setSearchResults] = useState<TMDBResponse[]>([]);
     const [isSearching, setIsSearching] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
@@ -81,20 +81,20 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     };
 
     const handleSelectResult = async (id: string | number) => {
-        const result = searchResults.find((r) => r.id === id);
+        const result = searchResults.find((r) => r.tmdbId === id);
         if (!result) return;
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        const res = await fetch('/api/watched', {
+        const res = await fetch('/api/content', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 name: result.name,
-                tmdbId: result.id,
+                tmdbId: result.tmdbId,
                 mediaType: result.mediaType,
             }),
         });
         if (!res.ok) return;
-        const saved = (await res.json()) as WatchedMediaEntry;
+        const saved = (await res.json()) as Content;
         const filtered = entries.filter((e) => e.tmdbId !== saved.tmdbId);
         setEntries([saved, ...filtered].slice(0, MAX_ENTRIES));
         setIsAdding(false);
@@ -113,9 +113,9 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     const performSearch = async (q: string): Promise<void> => {
         setIsSearching(true);
         setSearchResults([]);
-        const res = await fetch(`/api/media/search?q=${encodeURIComponent(q)}`);
-        const results: TMDBSearchResult[] = res.ok
-            ? ((await res.json()) as TMDBSearchResult[])
+        const res = await fetch(`/api/tmdb/search?q=${encodeURIComponent(q)}`);
+        const results: TMDBResponse[] = res.ok
+            ? ((await res.json()) as TMDBResponse[])
             : [];
         setSearchResults(results);
         setIsSearching(false);
@@ -152,7 +152,10 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
                             value={query}
                             placeholder="Search movies & shows..."
                             isSearching={isSearching}
-                            results={searchResults}
+                            results={searchResults.map((r) => ({
+                                ...r,
+                                id: r.tmdbId,
+                            }))}
                             onChange={handleQueryChange}
                             onKeyDown={handleKeyDown}
                             onClear={handleCancel}
@@ -162,7 +165,7 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
                 ) : null}
                 <ul className={styles.list}>
                     {entries.map((entry) => (
-                        <li key={entry.id} className={styles.item}>
+                        <li key={entry.name} className={styles.item}>
                             <Image
                                 className={styles.poster}
                                 src={entry.poster}

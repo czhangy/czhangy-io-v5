@@ -55,7 +55,7 @@ const EditGameModal: React.FC<EditGameModalProps> = ({
         const trimmedGenre = genre.trim();
         const trimmedIcon = icon.trim();
         if (!trimmedName || !trimmedGenre || !trimmedIcon) return;
-        const res = await fetch(`/api/games/${game.id}`, {
+        const res = await fetch(`/api/games/${encodeURIComponent(game.name)}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

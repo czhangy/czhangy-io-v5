@@ -54,7 +54,7 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
     const handleUpdate = (updated: Game): void => {
         setGames((prev) =>
             prev
-                .map((g) => (g.id === updated.id ? updated : g))
+                .map((g) => (g.name === updated.name ? updated : g))
                 .sort((a, b) => {
                     const ratingDiff = b.rating - a.rating;
                     return ratingDiff !== 0
@@ -65,10 +65,12 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
         setEditingGame(null);
     };
 
-    const handleDelete = async (id: number): Promise<void> => {
-        const res = await fetch(`/api/games/${id}`, { method: 'DELETE' });
+    const handleDelete = async (name: string): Promise<void> => {
+        const res = await fetch(`/api/games/${encodeURIComponent(name)}`, {
+            method: 'DELETE',
+        });
         if (!res.ok) return;
-        const nextGames = games.filter((g) => g.id !== id);
+        const nextGames = games.filter((g) => g.name !== name);
         const newTotalPages = Math.max(
             1,
             Math.ceil(nextGames.length / ITEMS_PER_PAGE)
@@ -117,7 +119,7 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
             />
             <ul className={styles.list}>
                 {paginatedGames.map((game) => (
-                    <li key={game.id} className={styles.item}>
+                    <li key={game.name} className={styles.item}>
                         <div className={styles['icon-wrapper']}>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
@@ -163,7 +165,7 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
                                 <button
                                     type="button"
                                     className={styles['action-button']}
-                                    onClick={() => handleDelete(game.id)}
+                                    onClick={() => handleDelete(game.name)}
                                 >
                                     <DeleteIcon />
                                 </button>

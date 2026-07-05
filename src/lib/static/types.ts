@@ -1,30 +1,13 @@
-export type SpotifyTrack = {
+// Models
+export type Achievement = {
+    tier: number;
     name: string;
-    artist: string;
-    albumArt: string;
-    url: string;
+    category: string;
+    description: string;
+    date: string | null;
 };
 
-export type TMDBMedia = {
-    poster: string | null;
-    genres: string[];
-};
-
-export type TMDBSearchResult = {
-    id: number;
-    name: string;
-    year: string | null;
-    mediaType: 'movie' | 'tv';
-    poster: string | null;
-};
-
-export type NavItem = {
-    href: string;
-    label: string;
-};
-
-export type CardistryMoveEntry = {
-    id: number;
+export type Move = {
     name: string;
     type: string;
     count: number;
@@ -32,23 +15,13 @@ export type CardistryMoveEntry = {
 };
 
 export type Game = {
-    id: number;
     name: string;
     genre: string;
     icon: string;
     rating: number;
 };
 
-export type BookSearchResult = {
-    id: string;
-    name: string;
-    author: string | null;
-    year: string | null;
-    cover: string | null;
-};
-
-export type ReadMediaEntry = {
-    id: number;
+export type Book = {
     name: string;
     author: string;
     bookId: string;
@@ -57,8 +30,7 @@ export type ReadMediaEntry = {
     addedAt: string;
 };
 
-export type WatchedMediaEntry = {
-    id: number;
+export type Content = {
     name: string;
     tmdbId: number;
     mediaType: 'movie' | 'tv';
@@ -67,19 +39,41 @@ export type WatchedMediaEntry = {
     addedAt: string;
 };
 
-export type UserRole = 'ADMIN' | 'USER';
-
-export type Session = {
-    id: string;
-    role: UserRole;
+// External API responses
+export type SpotifyResponse = {
+    name: string;
+    artist: string;
+    albumArt: string;
+    url: string;
 };
 
-export type AchievementFormValues = {
-    tier: number;
+export type TMDBResponse = {
+    tmdbId: number;
     name: string;
-    category: string;
-    description: string;
-    date: string;
+    note: string | null;
+    mediaType: 'movie' | 'tv';
+    poster: string | null;
+};
+
+export type TMDBMetadata = {
+    poster: string | null;
+    genres: string[];
+};
+
+export type GoogleBooksResponse = {
+    googleBooksId: string;
+    name: string;
+    author: string | null;
+    note: string | null;
+    cover: string | null;
+};
+
+// App
+export type UserRole = 'ADMIN' | 'USER';
+
+export type NavItem = {
+    href: string;
+    label: string;
 };
 
 export type Job = {
@@ -90,7 +84,10 @@ export type Job = {
     logo: string; // path relative to /public, e.g. '/logos/company.png'
 };
 
-export type LocationResult = {
-    id: string;
+export type CreateAchievementParams = {
+    tier: number;
     name: string;
+    category: string;
+    description: string;
+    date: string;
 };

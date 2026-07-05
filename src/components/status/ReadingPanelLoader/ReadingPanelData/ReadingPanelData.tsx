@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/static/prisma';
-import { ReadMediaEntry } from '@/lib/static/types';
+import { Book } from '@/lib/static/types';
 import ReadingPanel from './ReadingPanel/ReadingPanel';
 
 type ReadingPanelDataProps = {
@@ -21,14 +21,18 @@ const ReadingPanelData = async ({
     // COMPUTATIONS
     // -------------------------------------------------------------------------
 
-    const fetchRecentEntries = async (): Promise<ReadMediaEntry[]> => {
+    const fetchRecentEntries = async (): Promise<Book[]> => {
         try {
-            const records = await prisma.readMedia.findMany({
+            const records = await prisma.books.findMany({
                 orderBy: { addedAt: 'desc' },
                 take: 3,
             });
             return records.map((r) => ({
-                ...r,
+                name: r.name,
+                author: r.author,
+                bookId: r.bookId,
+                cover: r.cover,
+                genres: r.genres,
                 addedAt: r.addedAt.toISOString(),
             }));
         } catch {}
@@ -39,7 +43,7 @@ const ReadingPanelData = async ({
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const entries: ReadMediaEntry[] = await fetchRecentEntries();
+    const entries: Book[] = await fetchRecentEntries();
 
     // -------------------------------------------------------------------------
     // MARKUP

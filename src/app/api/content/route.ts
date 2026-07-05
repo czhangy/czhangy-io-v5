@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SESSION_COOKIE, WATCHED_MILESTONES } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
-import { WatchedMediaEntry } from '@/lib/static/types';
+import { Content } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
 import DateHelpers from '@/lib/utils/DateHelpers';
 import TMDBHelpers from '@/lib/utils/TMDBHelpers';
 
 export const POST = async (request: NextRequest) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await AuthHelpers.verifyToken(token) : null;
+    const role = token ? await AuthHelpers.verifyToken(token) : null;
 
-    if (!session || session.role !== 'ADMIN') {
+    if (role !== 'ADMIN') {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -20,7 +20,7 @@ export const POST = async (request: NextRequest) => {
         mediaType: 'movie' | 'tv';
     };
 
-    const existing = await prisma.watchedMedia.findUnique({
+    const existing = await prisma.content.findUnique({
         where: { tmdbId },
     });
 
@@ -33,7 +33,7 @@ export const POST = async (request: NextRequest) => {
         );
     }
 
-    const record = await prisma.watchedMedia.upsert({
+    const record = await prisma.content.upsert({
         where: { tmdbId },
         create: {
             name,
@@ -46,10 +46,10 @@ export const POST = async (request: NextRequest) => {
     });
 
     if (!existing) {
-        const count = await prisma.watchedMedia.count();
+        const count = await prisma.content.count();
         const milestone = WATCHED_MILESTONES.find((m) => m.count === count);
         if (milestone) {
-            await prisma.achievement
+            await prisma.achievements
                 .create({
                     data: {
                         tier: milestone.tier,
@@ -63,7 +63,7 @@ export const POST = async (request: NextRequest) => {
         }
     }
 
-    const entry: WatchedMediaEntry = {
+    const entry: Content = {
         ...record,
         mediaType: record.mediaType as 'movie' | 'tv',
         addedAt: record.addedAt.toISOString(),
