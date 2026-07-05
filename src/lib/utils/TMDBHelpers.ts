@@ -11,6 +11,7 @@ type TMDBMultiResult = {
     release_date?: string;
     first_air_date?: string;
     poster_path?: string | null;
+    genre_ids?: number[];
 };
 
 type TMDBMultiResponse = {
@@ -45,6 +46,7 @@ export default class TMDBHelpers {
             .filter((r) => r.media_type === 'movie' || r.media_type === 'tv')
             .filter((r) => (r.release_date ?? r.first_air_date)?.slice(0, 4))
             .filter((r) => r.poster_path)
+            .filter((r) => r.genre_ids?.length)
             .slice(0, 5)
             .map((r) => ({
                 tmdbId: r.id,
