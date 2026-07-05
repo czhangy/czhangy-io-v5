@@ -46,7 +46,7 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
     };
 
     const handleDelete = async (bookId: string): Promise<void> => {
-        const res = await fetch(`/api/read/${encodeURIComponent(bookId)}`, {
+        const res = await fetch(`/api/books/${encodeURIComponent(bookId)}`, {
             method: 'DELETE',
         });
         if (!res.ok) return;

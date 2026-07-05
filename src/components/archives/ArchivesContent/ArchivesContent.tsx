@@ -48,7 +48,7 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
     };
 
     const handleDelete = async (name: string): Promise<void> => {
-        const res = await fetch(`/api/watched/${encodeURIComponent(name)}`, {
+        const res = await fetch(`/api/content/${encodeURIComponent(name)}`, {
             method: 'DELETE',
         });
         if (!res.ok) return;

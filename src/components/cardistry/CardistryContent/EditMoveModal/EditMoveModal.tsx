@@ -35,18 +35,15 @@ const EditMoveModal: React.FC<EditMoveModalProps> = ({
         const trimmed = name.trim();
         const parsedCount = parseInt(count, 10);
         if (!trimmed || !type || isNaN(parsedCount) || parsedCount < 0) return;
-        const res = await fetch(
-            `/api/cardistry/${encodeURIComponent(move.name)}`,
-            {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: trimmed,
-                    type,
-                    count: parsedCount,
-                }),
-            }
-        );
+        const res = await fetch(`/api/moves/${encodeURIComponent(move.name)}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: trimmed,
+                type,
+                count: parsedCount,
+            }),
+        });
         if (!res.ok) return;
         onEdit((await res.json()) as Move);
         onClose();

@@ -65,18 +65,15 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
         move: Move,
         amount: number
     ): Promise<void> => {
-        const res = await fetch(
-            `/api/cardistry/${encodeURIComponent(move.name)}`,
-            {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: move.name,
-                    type: move.type,
-                    count: move.count + amount,
-                }),
-            }
-        );
+        const res = await fetch(`/api/moves/${encodeURIComponent(move.name)}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: move.name,
+                type: move.type,
+                count: move.count + amount,
+            }),
+        });
         if (!res.ok) return;
         const updated = (await res.json()) as Move;
         setMoves((prev) =>
@@ -85,7 +82,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
     };
 
     const handleDelete = async (name: string): Promise<void> => {
-        const res = await fetch(`/api/cardistry/${encodeURIComponent(name)}`, {
+        const res = await fetch(`/api/moves/${encodeURIComponent(name)}`, {
             method: 'DELETE',
         });
         if (!res.ok) return;

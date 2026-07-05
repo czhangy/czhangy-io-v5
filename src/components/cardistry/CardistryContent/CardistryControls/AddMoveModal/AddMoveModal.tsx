@@ -28,7 +28,7 @@ const AddMoveModal: React.FC<AddMoveModalProps> = ({ onClose, onAdd }) => {
     const handleSubmit = async (): Promise<void> => {
         const trimmed = name.trim();
         if (!trimmed) return;
-        const res = await fetch('/api/cardistry', {
+        const res = await fetch('/api/moves', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: trimmed, type }),

@@ -28,14 +28,6 @@ const seed = async () => {
     });
 
     console.log(`Admin user seeded: ${admin.id}`);
-
-    await prisma.highlights.upsert({
-        where: { key: 'location' },
-        update: {},
-        create: { key: 'location', value: 'Seattle, WA' },
-    });
-
-    console.log('Highlights seeded.');
 };
 
 seed()

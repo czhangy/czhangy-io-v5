@@ -84,7 +84,7 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
         const result = searchResults.find((r) => r.tmdbId === id);
         if (!result) return;
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        const res = await fetch('/api/watched', {
+        const res = await fetch('/api/content', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -113,7 +113,7 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     const performSearch = async (q: string): Promise<void> => {
         setIsSearching(true);
         setSearchResults([]);
-        const res = await fetch(`/api/media/search?q=${encodeURIComponent(q)}`);
+        const res = await fetch(`/api/tmdb/search?q=${encodeURIComponent(q)}`);
         const results: TMDBResponse[] = res.ok
             ? ((await res.json()) as TMDBResponse[])
             : [];

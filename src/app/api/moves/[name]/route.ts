@@ -30,20 +30,11 @@ export const PATCH = async (
         return NextResponse.json({ error: 'Move not found' }, { status: 404 });
     }
 
-    const existingItem = await prisma.highlights.findUnique({
+    await prisma.highlights.upsert({
         where: { key: 'move' },
+        update: { value: move.name },
+        create: { key: 'move', value: move.name },
     });
-
-    if (existingItem) {
-        await prisma.highlights.update({
-            where: { key: 'move' },
-            data: { value: move.name },
-        });
-    } else {
-        await prisma.highlights.create({
-            data: { key: 'move', value: move.name },
-        });
-    }
 
     return NextResponse.json({
         name: move.name,

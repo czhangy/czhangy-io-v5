@@ -78,7 +78,7 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
 
     const handleSelectResult = async (name: string | number): Promise<void> => {
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        await fetch('/api/status/location', {
+        await fetch('/api/highlights/location', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ value: String(name) }),

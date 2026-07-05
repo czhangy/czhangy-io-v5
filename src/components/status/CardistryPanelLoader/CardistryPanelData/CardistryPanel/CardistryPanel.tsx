@@ -44,7 +44,7 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
 
     const handleEdit = async (): Promise<void> => {
         setIsEditing(true);
-        const res = await fetch('/api/cardistry');
+        const res = await fetch('/api/moves');
         if (res.ok) setMoves((await res.json()) as Move[]);
     };
 
@@ -54,12 +54,9 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
     };
 
     const handleSelect = async (move: Move): Promise<void> => {
-        const res = await fetch(
-            `/api/cardistry/${encodeURIComponent(move.name)}`,
-            {
-                method: 'PATCH',
-            }
-        );
+        const res = await fetch(`/api/moves/${encodeURIComponent(move.name)}`, {
+            method: 'PATCH',
+        });
         if (!res.ok) return;
         setActiveMove((await res.json()) as Move);
         handleCancel();

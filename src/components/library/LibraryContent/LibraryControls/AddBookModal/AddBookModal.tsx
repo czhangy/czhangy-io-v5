@@ -35,7 +35,9 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
     const performSearch = async (q: string): Promise<void> => {
         setIsSearching(true);
         setSearchResults([]);
-        const res = await fetch(`/api/books/search?q=${encodeURIComponent(q)}`);
+        const res = await fetch(
+            `/api/google_books/search?q=${encodeURIComponent(q)}`
+        );
         const results: GoogleBooksResponse[] = res.ok
             ? ((await res.json()) as GoogleBooksResponse[])
             : [];
@@ -66,7 +68,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
         const result = searchResults.find((r) => r.googleBooksId === id);
         if (!result) return;
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        const res = await fetch('/api/read', {
+        const res = await fetch('/api/books', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
