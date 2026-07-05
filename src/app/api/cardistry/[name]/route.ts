@@ -11,27 +11,19 @@ const authorize = async (request: NextRequest): Promise<boolean> => {
     return role === 'ADMIN';
 };
 
-const parseId = (id: string) => {
-    const n = parseInt(id, 10);
-    return isNaN(n) ? null : n;
-};
-
 export const PATCH = async (
     request: NextRequest,
-    { params }: { params: Promise<{ id: string }> }
+    { params }: { params: Promise<{ name: string }> }
 ) => {
     if (!(await authorize(request))) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
-    const numericId = parseId(id);
-    if (numericId === null) {
-        return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
-    }
+    const { name } = await params;
+    const decodedName = decodeURIComponent(name);
 
     const move = await prisma.moves.findUnique({
-        where: { id: numericId },
+        where: { name: decodedName },
     });
 
     if (!move) {
@@ -54,32 +46,35 @@ export const PATCH = async (
     }
 
     return NextResponse.json({
-        ...move,
+        name: move.name,
+        type: move.type,
+        count: move.count,
         createdAt: move.createdAt.toISOString(),
     } as Move);
 };
 
 export const PUT = async (
     request: NextRequest,
-    { params }: { params: Promise<{ id: string }> }
+    { params }: { params: Promise<{ name: string }> }
 ) => {
     if (!(await authorize(request))) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
-    const numericId = parseId(id);
-    if (numericId === null) {
-        return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
-    }
+    const { name } = await params;
+    const decodedName = decodeURIComponent(name);
 
-    const { name, type, count } = (await request.json()) as {
+    const {
+        name: newName,
+        type,
+        count,
+    } = (await request.json()) as {
         name: string;
         type: string;
         count: number;
     };
 
-    if (!name?.trim()) {
+    if (!newName?.trim()) {
         return NextResponse.json(
             { error: 'Name is required' },
             { status: 400 }
@@ -96,16 +91,16 @@ export const PUT = async (
     }
 
     const currentMove = await prisma.moves.findUnique({
-        where: { id: numericId },
+        where: { name: decodedName },
     });
     if (!currentMove) {
         return NextResponse.json({ error: 'Move not found' }, { status: 404 });
     }
 
     const conflict = await prisma.moves.findUnique({
-        where: { name: name.trim() },
+        where: { name: newName.trim() },
     });
-    if (conflict && conflict.id !== numericId) {
+    if (conflict && conflict.name !== decodedName) {
         return NextResponse.json(
             { error: 'Move already exists' },
             { status: 409 }
@@ -113,8 +108,8 @@ export const PUT = async (
     }
 
     const move = await prisma.moves.update({
-        where: { id: numericId },
-        data: { name: name.trim(), type: type.trim(), count },
+        where: { name: decodedName },
+        data: { name: newName.trim(), type: type.trim(), count },
     });
 
     const tierThresholds = [
@@ -148,25 +143,24 @@ export const PUT = async (
     }
 
     return NextResponse.json({
-        ...move,
+        name: move.name,
+        type: move.type,
+        count: move.count,
         createdAt: move.createdAt.toISOString(),
     } as Move);
 };
 
 export const DELETE = async (
     request: NextRequest,
-    { params }: { params: Promise<{ id: string }> }
+    { params }: { params: Promise<{ name: string }> }
 ) => {
     if (!(await authorize(request))) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
-    const numericId = parseId(id);
-    if (numericId === null) {
-        return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
-    }
+    const { name } = await params;
+    const decodedName = decodeURIComponent(name);
 
-    await prisma.moves.delete({ where: { id: numericId } });
+    await prisma.moves.delete({ where: { name: decodedName } });
     return NextResponse.json({ success: true });
 };

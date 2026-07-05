@@ -14,7 +14,9 @@ const CardistryPage = async () => {
     });
 
     const moves: Move[] = records.map((r) => ({
-        ...r,
+        name: r.name,
+        type: r.type,
+        count: r.count,
         createdAt: r.createdAt.toISOString(),
     }));
 

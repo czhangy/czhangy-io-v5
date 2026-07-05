@@ -29,7 +29,12 @@ const CardistryPanelData = async ({
                 where: { name: item.value },
             });
             if (move) {
-                return { ...move, createdAt: move.createdAt.toISOString() };
+                return {
+                    name: move.name,
+                    type: move.type,
+                    count: move.count,
+                    createdAt: move.createdAt.toISOString(),
+                };
             }
         } catch {}
         return null;

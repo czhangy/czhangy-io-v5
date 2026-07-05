@@ -1,6 +1,5 @@
 // Models
 export type Move = {
-    id: number;
     name: string;
     type: string;
     count: number;

@@ -10,7 +10,9 @@ export const GET = async () => {
     });
     return NextResponse.json(
         moves.map((m) => ({
-            ...m,
+            name: m.name,
+            type: m.type,
+            count: m.count,
             createdAt: m.createdAt.toISOString(),
         })) as Move[]
     );
@@ -74,7 +76,9 @@ export const POST = async (request: NextRequest) => {
     }
 
     return NextResponse.json({
-        ...move,
+        name: move.name,
+        type: move.type,
+        count: move.count,
         createdAt: move.createdAt.toISOString(),
     } as Move);
 };

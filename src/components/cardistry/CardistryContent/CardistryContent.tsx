@@ -44,7 +44,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
 
     const handleAdd = (move: Move): void => {
         setMoves((prev) => {
-            const filtered = prev.filter((m) => m.id !== move.id);
+            const filtered = prev.filter((m) => m.name !== move.name);
             return [...filtered, move].sort(
                 (a, b) =>
                     new Date(a.createdAt).getTime() -
@@ -56,7 +56,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
 
     const handleUpdate = (updated: Move): void => {
         setMoves((prev) =>
-            prev.map((m) => (m.id === updated.id ? updated : m))
+            prev.map((m) => (m.name === updated.name ? updated : m))
         );
         setEditingMove(null);
     };
@@ -65,26 +65,31 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
         move: Move,
         amount: number
     ): Promise<void> => {
-        const res = await fetch(`/api/cardistry/${move.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: move.name,
-                type: move.type,
-                count: move.count + amount,
-            }),
-        });
+        const res = await fetch(
+            `/api/cardistry/${encodeURIComponent(move.name)}`,
+            {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: move.name,
+                    type: move.type,
+                    count: move.count + amount,
+                }),
+            }
+        );
         if (!res.ok) return;
         const updated = (await res.json()) as Move;
         setMoves((prev) =>
-            prev.map((m) => (m.id === updated.id ? updated : m))
+            prev.map((m) => (m.name === updated.name ? updated : m))
         );
     };
 
-    const handleDelete = async (id: number): Promise<void> => {
-        const res = await fetch(`/api/cardistry/${id}`, { method: 'DELETE' });
+    const handleDelete = async (name: string): Promise<void> => {
+        const res = await fetch(`/api/cardistry/${encodeURIComponent(name)}`, {
+            method: 'DELETE',
+        });
         if (!res.ok) return;
-        const nextMoves = moves.filter((m) => m.id !== id);
+        const nextMoves = moves.filter((m) => m.name !== name);
         const newTotalPages = Math.max(
             1,
             Math.ceil(nextMoves.length / ITEMS_PER_PAGE)
@@ -137,7 +142,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                         move.count
                     );
                     return (
-                        <li key={move.id} className={styles.item}>
+                        <li key={move.name} className={styles.item}>
                             <div className={styles.proficiency}>
                                 <div className={styles.pips}>
                                     {[0, 1, 2].map((i) => (
@@ -194,7 +199,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                                             type="button"
                                             className={styles['action-button']}
                                             onClick={() =>
-                                                handleDelete(move.id)
+                                                handleDelete(move.name)
                                             }
                                         >
                                             <DeleteIcon />
