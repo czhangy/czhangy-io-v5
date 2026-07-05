@@ -5,12 +5,12 @@ import Image from 'next/image';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import DeleteIcon from '@/lib/icons/DeleteIcon';
-import { WatchedMediaEntry } from '@/lib/static/types';
+import { Content } from '@/lib/static/types';
 import styles from './ArchivesContent.module.scss';
 import ArchivesControls from './ArchivesControls/ArchivesControls';
 
 type ArchivesContentProps = {
-    initialEntries: WatchedMediaEntry[];
+    initialEntries: Content[];
 };
 
 const ArchivesContent: React.FC<ArchivesContentProps> = ({
@@ -32,14 +32,14 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
     // STATE
     // -------------------------------------------------------------------------
 
-    const [entries, setEntries] = useState<WatchedMediaEntry[]>(initialEntries);
+    const [entries, setEntries] = useState<Content[]>(initialEntries);
     const [page, setPage] = useState<number>(1);
 
     // -------------------------------------------------------------------------
     // HANDLERS
     // -------------------------------------------------------------------------
 
-    const handleAdd = (entry: WatchedMediaEntry): void => {
+    const handleAdd = (entry: Content): void => {
         setEntries((prev) => {
             const filtered = prev.filter((e) => e.tmdbId !== entry.tmdbId);
             return [entry, ...filtered];
@@ -47,10 +47,12 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
         setPage(1);
     };
 
-    const handleDelete = async (id: number): Promise<void> => {
-        const res = await fetch(`/api/watched/${id}`, { method: 'DELETE' });
+    const handleDelete = async (name: string): Promise<void> => {
+        const res = await fetch(`/api/watched/${encodeURIComponent(name)}`, {
+            method: 'DELETE',
+        });
         if (!res.ok) return;
-        const nextEntries = entries.filter((e) => e.id !== id);
+        const nextEntries = entries.filter((e) => e.name !== name);
         const newTotalPages = Math.max(
             1,
             Math.ceil(nextEntries.length / ITEMS_PER_PAGE)
@@ -78,7 +80,7 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
         Math.ceil(entries.length / ITEMS_PER_PAGE)
     );
 
-    const paginatedEntries: WatchedMediaEntry[] = entries.slice(
+    const paginatedEntries: Content[] = entries.slice(
         (page - 1) * ITEMS_PER_PAGE,
         page * ITEMS_PER_PAGE
     );
@@ -99,7 +101,7 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
             />
             <ul className={styles.list}>
                 {paginatedEntries.map((entry) => (
-                    <li key={entry.id} className={styles.item}>
+                    <li key={entry.name} className={styles.item}>
                         <Image
                             className={styles.poster}
                             src={entry.poster}
@@ -126,7 +128,7 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
                             <button
                                 type="button"
                                 className={styles['delete-button']}
-                                onClick={() => handleDelete(entry.id)}
+                                onClick={() => handleDelete(entry.name)}
                             >
                                 <DeleteIcon />
                             </button>

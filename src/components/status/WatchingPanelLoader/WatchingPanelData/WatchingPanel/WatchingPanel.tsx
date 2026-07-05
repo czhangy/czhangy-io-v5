@@ -7,11 +7,11 @@ import EditButton from '@/components/status/EditButton/EditButton';
 import LinkButton from '@/components/status/LinkButton/LinkButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { Key } from '@/lib/static/enums';
-import { TMDBSearchResult, WatchedMediaEntry } from '@/lib/static/types';
+import { Content, TMDBSearchResult } from '@/lib/static/types';
 import styles from './WatchingPanel.module.scss';
 
 type WatchingPanelProps = {
-    initialEntries: WatchedMediaEntry[];
+    initialEntries: Content[];
     label: string;
     icon: React.ReactNode;
     cols: number;
@@ -43,7 +43,7 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     // STATE
     // -------------------------------------------------------------------------
 
-    const [entries, setEntries] = useState<WatchedMediaEntry[]>(initialEntries);
+    const [entries, setEntries] = useState<Content[]>(initialEntries);
     const [isAdding, setIsAdding] = useState<boolean>(false);
     const [query, setQuery] = useState<string>('');
     const [searchResults, setSearchResults] = useState<TMDBSearchResult[]>([]);
@@ -94,7 +94,7 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
             }),
         });
         if (!res.ok) return;
-        const saved = (await res.json()) as WatchedMediaEntry;
+        const saved = (await res.json()) as Content;
         const filtered = entries.filter((e) => e.tmdbId !== saved.tmdbId);
         setEntries([saved, ...filtered].slice(0, MAX_ENTRIES));
         setIsAdding(false);
@@ -162,7 +162,7 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
                 ) : null}
                 <ul className={styles.list}>
                     {entries.map((entry) => (
-                        <li key={entry.id} className={styles.item}>
+                        <li key={entry.name} className={styles.item}>
                             <Image
                                 className={styles.poster}
                                 src={entry.poster}

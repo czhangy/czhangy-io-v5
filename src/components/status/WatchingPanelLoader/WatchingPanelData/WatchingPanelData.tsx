@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/static/prisma';
-import { WatchedMediaEntry } from '@/lib/static/types';
+import { Content } from '@/lib/static/types';
 import WatchingPanel from './WatchingPanel/WatchingPanel';
 
 type WatchingPanelDataProps = {
@@ -21,9 +21,9 @@ const WatchingPanelData = async ({
     // COMPUTATIONS
     // -------------------------------------------------------------------------
 
-    const fetchRecentEntries = async (): Promise<WatchedMediaEntry[]> => {
+    const fetchRecentEntries = async (): Promise<Content[]> => {
         try {
-            const records = await prisma.watchedMedia.findMany({
+            const records = await prisma.content.findMany({
                 orderBy: { addedAt: 'desc' },
                 take: 5,
             });
@@ -40,7 +40,7 @@ const WatchingPanelData = async ({
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const entries: WatchedMediaEntry[] = await fetchRecentEntries();
+    const entries: Content[] = await fetchRecentEntries();
 
     // -------------------------------------------------------------------------
     // MARKUP

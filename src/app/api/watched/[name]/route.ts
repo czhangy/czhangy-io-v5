@@ -5,7 +5,7 @@ import AuthHelpers from '@/lib/utils/AuthHelpers';
 
 export const DELETE = async (
     request: NextRequest,
-    { params }: { params: Promise<{ id: string }> }
+    { params }: { params: Promise<{ name: string }> }
 ) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
     const role = token ? await AuthHelpers.verifyToken(token) : null;
@@ -14,10 +14,10 @@ export const DELETE = async (
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
+    const { name } = await params;
 
-    const countBefore = await prisma.watchedMedia.count();
-    await prisma.watchedMedia.delete({ where: { id: parseInt(id) } });
+    const countBefore = await prisma.content.count();
+    await prisma.content.delete({ where: { name: decodeURIComponent(name) } });
 
     const milestone = WATCHED_MILESTONES.find((m) => m.count === countBefore);
     if (milestone) {

@@ -25,9 +25,9 @@ model Highlight {
     updatedAt DateTime @updatedAt
 }
 
-model WatchedMedia {
+model Content {
     id        Int      @id @default(autoincrement())
-    name      String
+    name      String   @unique
     tmdbId    Int      @unique
     mediaType String
     poster    String

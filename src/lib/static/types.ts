@@ -57,8 +57,7 @@ export type ReadMediaEntry = {
     addedAt: string;
 };
 
-export type WatchedMediaEntry = {
-    id: number;
+export type Content = {
     name: string;
     tmdbId: number;
     mediaType: 'movie' | 'tv';

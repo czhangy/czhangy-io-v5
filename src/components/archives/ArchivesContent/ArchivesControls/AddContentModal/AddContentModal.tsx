@@ -4,11 +4,11 @@ import { useRef, useState } from 'react';
 import Modal from '@/components/common/Modal/Modal';
 import SearchInput from '@/components/common/SearchInput/SearchInput';
 import { Key } from '@/lib/static/enums';
-import { TMDBSearchResult, WatchedMediaEntry } from '@/lib/static/types';
+import { Content, TMDBSearchResult } from '@/lib/static/types';
 
 type AddContentModalProps = {
     onClose: () => void;
-    onAdd: (entry: WatchedMediaEntry) => void;
+    onAdd: (entry: Content) => void;
 };
 
 const AddContentModal: React.FC<AddContentModalProps> = ({
@@ -77,7 +77,7 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
             }),
         });
         if (!res.ok) return;
-        const saved = (await res.json()) as WatchedMediaEntry;
+        const saved = (await res.json()) as Content;
         onAdd(saved);
         onClose();
     };

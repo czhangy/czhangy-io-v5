@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SESSION_COOKIE, WATCHED_MILESTONES } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
-import { WatchedMediaEntry } from '@/lib/static/types';
+import { Content } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
 import DateHelpers from '@/lib/utils/DateHelpers';
 import TMDBHelpers from '@/lib/utils/TMDBHelpers';
@@ -20,7 +20,7 @@ export const POST = async (request: NextRequest) => {
         mediaType: 'movie' | 'tv';
     };
 
-    const existing = await prisma.watchedMedia.findUnique({
+    const existing = await prisma.content.findUnique({
         where: { tmdbId },
     });
 
@@ -33,7 +33,7 @@ export const POST = async (request: NextRequest) => {
         );
     }
 
-    const record = await prisma.watchedMedia.upsert({
+    const record = await prisma.content.upsert({
         where: { tmdbId },
         create: {
             name,
@@ -46,7 +46,7 @@ export const POST = async (request: NextRequest) => {
     });
 
     if (!existing) {
-        const count = await prisma.watchedMedia.count();
+        const count = await prisma.content.count();
         const milestone = WATCHED_MILESTONES.find((m) => m.count === count);
         if (milestone) {
             await prisma.achievement
@@ -63,7 +63,7 @@ export const POST = async (request: NextRequest) => {
         }
     }
 
-    const entry: WatchedMediaEntry = {
+    const entry: Content = {
         ...record,
         mediaType: record.mediaType as 'movie' | 'tv',
         addedAt: record.addedAt.toISOString(),

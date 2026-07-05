@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Pagination from '@/components/common/Pagination/Pagination';
-import { WatchedMediaEntry } from '@/lib/static/types';
+import { Content } from '@/lib/static/types';
 import AddContentModal from './AddContentModal/AddContentModal';
 import styles from './ArchivesControls.module.scss';
 
@@ -13,7 +13,7 @@ type ArchivesControlsProps = {
     onPrev: () => void;
     onNext: () => void;
     isAdmin: boolean;
-    onAdd: (entry: WatchedMediaEntry) => void;
+    onAdd: (entry: Content) => void;
 };
 
 const ArchivesControls: React.FC<ArchivesControlsProps> = ({
