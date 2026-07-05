@@ -1,6 +1,6 @@
 # NBAPanelData
 
-Async server component that fetches NBA data and renders it inside a StatusPanel.
+Async server component that fetches the most recent Warriors game from the ESPN API and renders the away and home team logos, abbreviations, and final scores inside a StatusPanel. The winning team's score is highlighted.
 
 ## Props
 

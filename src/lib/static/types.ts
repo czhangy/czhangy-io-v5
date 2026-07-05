@@ -60,6 +60,25 @@ export type TMDBMetadata = {
     genres: string[];
 };
 
+export type NBATeamResponse = {
+    abbreviation: string;
+    displayName: string;
+    logo: string;
+    score: string;
+    record: string;
+    streak: string;
+    standing: string;
+    isWinner: boolean;
+    isHome: boolean;
+    isWarriors: boolean;
+};
+
+export type NBAGameResponse = {
+    date: string;
+    away: NBATeamResponse;
+    home: NBATeamResponse;
+};
+
 export type GoogleBooksResponse = {
     googleBooksId: string;
     name: string;

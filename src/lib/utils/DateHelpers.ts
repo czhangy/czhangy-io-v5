@@ -12,7 +12,7 @@ export default class DateHelpers {
         ].join('/');
     };
 
-    static parseLooseDate = (dateStr: string): Date | null => {
+    static getDateObject = (dateStr: string): Date | null => {
         const match = dateStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/);
         if (!match) return null;
         const [, m, d, y] = match;
@@ -29,8 +29,8 @@ export default class DateHelpers {
         return parsed;
     };
 
-    static normalizeDate = (dateStr: string): string => {
-        const parsed = DateHelpers.parseLooseDate(dateStr);
+    static getMMDDYYYY = (dateStr: string): string => {
+        const parsed = DateHelpers.getDateObject(dateStr);
         if (!parsed) return dateStr;
         return [
             String(parsed.getMonth() + 1).padStart(2, '0'),
@@ -39,7 +39,17 @@ export default class DateHelpers {
         ].join('/');
     };
 
-    static parseDateNumber = (dateStr: string | null): number => {
+    static getHumanReadableDate = (dateStr: string): string =>
+        new Date(dateStr)
+            .toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                timeZone: 'America/Los_Angeles',
+            })
+            .toUpperCase();
+
+    static getUnixTimestamp = (dateStr: string | null): number => {
         if (!dateStr) return 0;
         const [month, day, year] = dateStr.split('/').map(Number);
         return new Date(year, month - 1, day).getTime();

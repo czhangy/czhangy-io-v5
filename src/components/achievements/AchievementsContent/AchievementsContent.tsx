@@ -152,8 +152,8 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
                     return sortDirection === 'asc' ? tierDiff : -tierDiff;
                 }
                 return (
-                    DateHelpers.parseDateNumber(b.date) -
-                    DateHelpers.parseDateNumber(a.date)
+                    DateHelpers.getUnixTimestamp(b.date) -
+                    DateHelpers.getUnixTimestamp(a.date)
                 );
             }
             let comparison = 0;
@@ -161,8 +161,8 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
                 comparison = a.name.localeCompare(b.name);
             } else {
                 comparison =
-                    DateHelpers.parseDateNumber(a.date) -
-                    DateHelpers.parseDateNumber(b.date);
+                    DateHelpers.getUnixTimestamp(a.date) -
+                    DateHelpers.getUnixTimestamp(b.date);
             }
             return sortDirection === 'asc' ? comparison : -comparison;
         });

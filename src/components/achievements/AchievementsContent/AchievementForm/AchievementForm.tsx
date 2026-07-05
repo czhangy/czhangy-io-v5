@@ -72,7 +72,7 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
                 name,
                 category,
                 description,
-                date: DateHelpers.normalizeDate(date.trim()),
+                date: DateHelpers.getMMDDYYYY(date.trim()),
             });
         } catch (err) {
             setError(err instanceof Error ? err.message : String(err));
@@ -99,7 +99,7 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
 
         const dateStr = date.trim();
         if (!dateStr) return 'Date is required.';
-        const parsed = DateHelpers.parseLooseDate(dateStr);
+        const parsed = DateHelpers.getDateObject(dateStr);
         if (!parsed) return 'Date has incorrect format.';
         if (parsed.getFullYear() < 2019) return 'Date is too early.';
         const today = new Date();

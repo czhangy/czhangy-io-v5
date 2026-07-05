@@ -26,7 +26,7 @@ const StatusPage: React.FC = () => {
                     <SpotifyPanel cols={5} />
                     <ReadingPanelLoader cols={6} rows={2} mobileOrder={6} />
                     <VickyPanel cols={4} rows={2} mobileOrder={7} />
-                    <NBAPanel cols={6} mobileOrder={8} />
+                    <NBAPanel cols={6} mobileOrder={4} />
                 </div>
             </div>
         </div>
