@@ -259,8 +259,6 @@ const GamePanel: React.FC<GamePanelProps> = ({
                             onChange={handleIconChange}
                             placeholder="Icon URL"
                         />
-                    </div>
-                    <div className={styles.actions}>
                         <button
                             type="button"
                             className={styles['save-btn']}
@@ -268,13 +266,6 @@ const GamePanel: React.FC<GamePanelProps> = ({
                             disabled={isSaving || !canSave}
                         >
                             SAVE
-                        </button>
-                        <button
-                            type="button"
-                            className={styles['cancel-btn']}
-                            onClick={handleCancel}
-                        >
-                            CANCEL
                         </button>
                     </div>
                 </div>
