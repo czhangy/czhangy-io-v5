@@ -120,6 +120,12 @@
                     font-size: 0.75rem;
                     letter-spacing: 0.15em;
                     padding: 0.3rem 0.5rem;
+
+                    &:disabled {
+                        color: $text-dim;
+                        cursor: not-allowed;
+                        opacity: 0.5;
+                    }
                 }
             }
 
