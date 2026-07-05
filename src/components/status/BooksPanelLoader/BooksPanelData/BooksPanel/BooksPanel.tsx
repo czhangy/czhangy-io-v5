@@ -94,6 +94,9 @@ const BooksPanel: React.FC<BooksPanelProps> = ({
             body: JSON.stringify({
                 name: result.name,
                 bookId: result.googleBooksId,
+                author: result.author,
+                cover: result.cover,
+                genres: result.genres,
             }),
         });
         if (!res.ok) return;
@@ -160,6 +163,8 @@ const BooksPanel: React.FC<BooksPanelProps> = ({
                             results={searchResults.map((r) => ({
                                 ...r,
                                 id: r.googleBooksId,
+                                note: r.note ?? undefined,
+                                image: r.cover ?? undefined,
                             }))}
                             onChange={handleQueryChange}
                             onKeyDown={handleKeyDown}

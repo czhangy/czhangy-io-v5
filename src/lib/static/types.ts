@@ -53,10 +53,6 @@ export type TMDBResponse = {
     note: string | null;
     mediaType: 'movie' | 'tv';
     poster: string | null;
-};
-
-export type TMDBMetadata = {
-    poster: string | null;
     genres: string[];
 };
 
@@ -85,6 +81,7 @@ export type GoogleBooksResponse = {
     author: string | null;
     note: string | null;
     cover: string | null;
+    genres: string[];
 };
 
 // App

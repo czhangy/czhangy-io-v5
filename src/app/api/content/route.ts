@@ -4,7 +4,6 @@ import { prisma } from '@/lib/static/prisma';
 import { Content } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
 import DateHelpers from '@/lib/utils/DateHelpers';
-import TMDBHelpers from '@/lib/utils/TMDBHelpers';
 
 export const POST = async (request: NextRequest) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
@@ -14,21 +13,22 @@ export const POST = async (request: NextRequest) => {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { name, tmdbId, mediaType } = (await request.json()) as {
-        name: string;
-        tmdbId: number;
-        mediaType: 'movie' | 'tv';
-    };
+    const { name, tmdbId, mediaType, poster, genres } =
+        (await request.json()) as {
+            name: string;
+            tmdbId: number;
+            mediaType: 'movie' | 'tv';
+            poster: string | null;
+            genres: string[];
+        };
 
     const existing = await prisma.content.findUnique({
         where: { tmdbId },
     });
 
-    const tmdbData = await TMDBHelpers.getMediaById(tmdbId, mediaType);
-    const poster = tmdbData?.poster;
-    if (!poster) {
+    if (!poster || !genres?.length) {
         return NextResponse.json(
-            { error: 'Poster not available' },
+            { error: 'Content details incomplete' },
             { status: 422 }
         );
     }
@@ -40,7 +40,7 @@ export const POST = async (request: NextRequest) => {
             tmdbId,
             mediaType,
             poster,
-            genres: tmdbData?.genres ?? [],
+            genres,
         },
         update: { addedAt: new Date() },
     });

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { createPortal } from 'react-dom';
 import styles from './SearchInput.module.scss';
 
@@ -11,7 +12,9 @@ type SearchInputProps = {
     results: {
         id: string | number;
         name: string;
-        note: string | null;
+        note?: string;
+        image?: string;
+        genres?: string[];
     }[];
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -144,9 +147,43 @@ const SearchInput: React.FC<SearchInputProps> = ({
                                   className={styles['dropdown-item']}
                                   onClick={() => onSelectResult(result.id)}
                               >
-                                  <span className={styles['result-name']}>
-                                      {result.name}
-                                  </span>
+                                  {result.image ? (
+                                      <Image
+                                          className={styles['result-image']}
+                                          src={result.image}
+                                          alt=""
+                                          width={32}
+                                          height={45}
+                                      />
+                                  ) : null}
+                                  <div className={styles['result-info']}>
+                                      <span className={styles['result-name']}>
+                                          {result.name}
+                                      </span>
+                                      {result.genres &&
+                                      result.genres.length > 0 ? (
+                                          <div
+                                              className={
+                                                  styles['result-genres']
+                                              }
+                                          >
+                                              {result.genres
+                                                  .slice(0, 2)
+                                                  .map((genre) => (
+                                                      <span
+                                                          key={genre}
+                                                          className={
+                                                              styles[
+                                                                  'genre-tag'
+                                                              ]
+                                                          }
+                                                      >
+                                                          {genre}
+                                                      </span>
+                                                  ))}
+                                          </div>
+                                      ) : null}
+                                  </div>
                                   {result.note ? (
                                       <span className={styles['result-note']}>
                                           {result.note}

@@ -16,6 +16,16 @@ A reusable search input with a loading spinner, a clear (✕) button, and a drop
 | `onSelectResult` | `(id: string \| number) => void`               | Yes      | —       | Called with the selected result's id             |
 | `hideClear`      | `boolean`                                      | No       | `false` | When true, hides the clear (✕) button            |
 
+### `SearchResult` shape
+
+| Field    | Type               | Required | Description                                                               |
+| -------- | ------------------ | -------- | ------------------------------------------------------------------------- |
+| `id`     | `string \| number` | Yes      | Unique identifier passed to `onSelectResult`                              |
+| `name`   | `string`           | Yes      | Primary label shown in the dropdown row                                   |
+| `note`   | `string`           | No       | Secondary label shown right-aligned (e.g. a year); omit to render no note |
+| `image`  | `string`           | No       | Cover/poster thumbnail URL; omit to render the row without an image       |
+| `genres` | `string[]`         | No       | Up to the first 2 are shown as tags; omit to render no genre row          |
+
 ## State
 
 | State          | Type                   | Initial value | Description                                                             |

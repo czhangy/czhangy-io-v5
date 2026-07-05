@@ -125,7 +125,6 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
                     results={results.map((r) => ({
                         id: r,
                         name: r,
-                        note: null,
                     }))}
                     onChange={handleQueryChange}
                     onKeyDown={handleKeyDown}

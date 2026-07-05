@@ -91,6 +91,8 @@ const ContentPanel: React.FC<ContentPanelProps> = ({
                 name: result.name,
                 tmdbId: result.tmdbId,
                 mediaType: result.mediaType,
+                poster: result.poster,
+                genres: result.genres,
             }),
         });
         if (!res.ok) return;
@@ -155,6 +157,8 @@ const ContentPanel: React.FC<ContentPanelProps> = ({
                             results={searchResults.map((r) => ({
                                 ...r,
                                 id: r.tmdbId,
+                                note: r.note ?? undefined,
+                                image: r.poster ?? undefined,
                             }))}
                             onChange={handleQueryChange}
                             onKeyDown={handleKeyDown}
