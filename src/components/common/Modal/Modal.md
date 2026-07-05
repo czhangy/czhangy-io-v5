@@ -18,4 +18,4 @@ A portal-rendered modal shell with a darkened backdrop, title bar, and close but
 
 ## Effects
 
-- **On mount** — sets `document.body.style.overflow` to `hidden` to lock scroll; restores the previous value on unmount
+- **On mount** — locks body scroll by setting `overflow: hidden` and pinning the body with `position: fixed` at the current scroll offset; restores the previous styles and scroll position on unmount. Pinning via `position: fixed` (rather than `overflow: hidden` alone) is required to prevent iOS Safari from scrolling the page when a focused input inside the modal is scrolled into view above the keyboard.
