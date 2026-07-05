@@ -49,7 +49,7 @@ export default class TMDBHelpers {
             .map((r) => ({
                 id: r.id,
                 name: r.title ?? r.name ?? '',
-                year: (r.release_date ?? r.first_air_date)?.slice(0, 4) ?? null,
+                note: (r.release_date ?? r.first_air_date)?.slice(0, 4) ?? null,
                 mediaType: r.media_type as 'movie' | 'tv',
                 poster: r.poster_path ? `${IMAGE_BASE}${r.poster_path}` : null,
             }));

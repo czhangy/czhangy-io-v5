@@ -10,7 +10,7 @@ type SearchInputProps = {
     results: {
         id: string | number;
         name: string;
-        year: string | null;
+        note: string | null;
     }[];
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -90,9 +90,9 @@ const SearchInput: React.FC<SearchInputProps> = ({
                             <span className={styles['result-name']}>
                                 {result.name}
                             </span>
-                            {result.year ? (
-                                <span className={styles['result-year']}>
-                                    {result.year}
+                            {result.note ? (
+                                <span className={styles['result-note']}>
+                                    {result.note}
                                 </span>
                             ) : null}
                         </li>

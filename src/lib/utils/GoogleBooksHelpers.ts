@@ -109,7 +109,7 @@ export default class GoogleBooksHelpers {
                 id: item.id,
                 name: item.volumeInfo.title,
                 author: item.volumeInfo.authors?.[0] ?? null,
-                year: item.volumeInfo.publishedDate?.split('-')[0] ?? null,
+                note: item.volumeInfo.publishedDate?.split('-')[0] ?? null,
                 cover: this.coverUrl(item.volumeInfo),
             }));
     }

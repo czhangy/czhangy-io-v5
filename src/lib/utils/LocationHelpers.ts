@@ -1,5 +1,3 @@
-import { LocationResult } from '@/lib/static/types';
-
 type PhotonProperties = {
     osm_id: number;
     osm_type: string;
@@ -93,7 +91,7 @@ export default class LocationHelpers {
     // PUBLIC
     // -------------------------------------------------------------------------
 
-    static async searchLocations(q: string): Promise<LocationResult[]> {
+    static async searchLocations(q: string): Promise<string[]> {
         const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=8&osm_tag=place`;
         const res = await fetch(url, {
             headers: {
@@ -104,17 +102,14 @@ export default class LocationHelpers {
 
         const data = (await res.json()) as PhotonResponse;
         const seen = new Set<string>();
-        const results: LocationResult[] = [];
+        const results: string[] = [];
 
         for (const feature of data.features) {
             const props = feature.properties;
             const name = this.formatName(props);
             if (!name || seen.has(name)) continue;
             seen.add(name);
-            results.push({
-                id: `${props.osm_type}-${props.osm_id}`,
-                name,
-            });
+            results.push(name);
         }
 
         return results;

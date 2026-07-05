@@ -13,7 +13,7 @@ export type TMDBMedia = {
 export type TMDBSearchResult = {
     id: number;
     name: string;
-    year: string | null;
+    note: string | null;
     mediaType: 'movie' | 'tv';
     poster: string | null;
 };
@@ -43,7 +43,7 @@ export type BookSearchResult = {
     id: string;
     name: string;
     author: string | null;
-    year: string | null;
+    note: string | null;
     cover: string | null;
 };
 
@@ -88,9 +88,4 @@ export type Job = {
     startDate: string;
     endDate: string | null; // null = Present
     logo: string; // path relative to /public, e.g. '/logos/company.png'
-};
-
-export type LocationResult = {
-    id: string;
-    name: string;
 };

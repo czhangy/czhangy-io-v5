@@ -5,7 +5,6 @@ import SearchInput from '@/components/common/SearchInput/SearchInput';
 import EditButton from '@/components/status/EditButton/EditButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { Key } from '@/lib/static/enums';
-import { LocationResult } from '@/lib/static/types';
 import styles from './LocationPanel.module.scss';
 
 type LocationPanelProps = {
@@ -36,7 +35,7 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [location, setLocation] = useState<string>(initialLocation);
     const [query, setQuery] = useState<string>('');
-    const [results, setResults] = useState<LocationResult[]>([]);
+    const [results, setResults] = useState<string[]>([]);
     const [isSearching, setIsSearching] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
@@ -49,9 +48,7 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
         const res = await fetch(
             `/api/locations/search?q=${encodeURIComponent(q)}`
         );
-        const data: LocationResult[] = res.ok
-            ? ((await res.json()) as LocationResult[])
-            : [];
+        const data: string[] = res.ok ? ((await res.json()) as string[]) : [];
         setResults(data);
         setIsSearching(false);
     };
@@ -79,16 +76,14 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
         searchTimeoutRef.current = setTimeout(() => performSearch(value), 500);
     };
 
-    const handleSelectResult = async (id: string | number): Promise<void> => {
-        const result = results.find((r) => r.id === String(id));
-        if (!result) return;
+    const handleSelectResult = async (name: string | number): Promise<void> => {
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
         await fetch('/api/status/location', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ value: result.name }),
+            body: JSON.stringify({ value: String(name) }),
         });
-        setLocation(result.name);
+        setLocation(String(name));
         setIsEditing(false);
     };
 
@@ -127,7 +122,11 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
                     value={query}
                     placeholder="Search locations..."
                     isSearching={isSearching}
-                    results={results.map((r) => ({ ...r, year: null }))}
+                    results={results.map((r) => ({
+                        id: r,
+                        name: r,
+                        note: null,
+                    }))}
                     onChange={handleQueryChange}
                     onKeyDown={handleKeyDown}
                     onClear={handleClose}
