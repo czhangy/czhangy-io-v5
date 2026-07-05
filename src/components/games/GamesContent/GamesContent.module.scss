@@ -133,6 +133,14 @@
                     flex-shrink: 0;
                 }
 
+                .details {
+                    .metadata {
+                        .genre-tag {
+                            font-size: 0.65rem;
+                        }
+                    }
+                }
+
                 .admin-actions {
                     gap: 1rem;
                 }

@@ -15,3 +15,7 @@ A portal-rendered modal shell with a darkened backdrop, title bar, and close but
 | State       | Type      | Initial value | Description                            |
 | ----------- | --------- | ------------- | -------------------------------------- |
 | `isClosing` | `boolean` | `false`       | Whether the close animation is playing |
+
+## Effects
+
+- **On mount** — sets `document.body.style.overflow` to `hidden` to lock scroll; restores the previous value on unmount

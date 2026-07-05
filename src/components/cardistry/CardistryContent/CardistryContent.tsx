@@ -37,6 +37,9 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
     const [moves, setMoves] = useState<Move[]>(initialMoves);
     const [page, setPage] = useState<number>(1);
     const [editingMove, setEditingMove] = useState<Move | null>(null);
+    const [incrementingMoves, setIncrementingMoves] = useState<Set<string>>(
+        new Set()
+    );
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -65,6 +68,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
         move: Move,
         amount: number
     ): Promise<void> => {
+        setIncrementingMoves((prev) => new Set(prev).add(move.name));
         const res = await fetch(`/api/moves/${encodeURIComponent(move.name)}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -73,6 +77,11 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                 type: move.type,
                 count: move.count + amount,
             }),
+        });
+        setIncrementingMoves((prev) => {
+            const next = new Set(prev);
+            next.delete(move.name);
+            return next;
         });
         if (!res.ok) return;
         const updated = (await res.json()) as Move;
@@ -173,6 +182,9 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                                                 className={
                                                     styles['increment-btn']
                                                 }
+                                                disabled={incrementingMoves.has(
+                                                    move.name
+                                                )}
                                                 onClick={() =>
                                                     handleIncrement(
                                                         move,
