@@ -105,6 +105,7 @@ export default class GoogleBooksHelpers {
             .filter((item) => this.coverUrl(item.volumeInfo) !== null)
             .filter((item) => item.volumeInfo.publishedDate)
             .filter((item) => item.volumeInfo.authors?.length)
+            .filter((item) => item.volumeInfo.categories?.length)
             .map((item) => ({
                 googleBooksId: item.id,
                 name: item.volumeInfo.title,
