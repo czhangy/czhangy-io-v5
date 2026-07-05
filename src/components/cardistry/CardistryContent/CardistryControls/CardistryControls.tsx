@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Pagination from '@/components/common/Pagination/Pagination';
-import { CardistryMoveEntry } from '@/lib/static/types';
+import { Move } from '@/lib/static/types';
 import AddMoveModal from './AddMoveModal/AddMoveModal';
 import styles from './CardistryControls.module.scss';
 
@@ -13,7 +13,7 @@ type CardistryControlsProps = {
     onPrev: () => void;
     onNext: () => void;
     isAdmin: boolean;
-    onAdd: (move: CardistryMoveEntry) => void;
+    onAdd: (move: Move) => void;
 };
 
 const CardistryControls: React.FC<CardistryControlsProps> = ({

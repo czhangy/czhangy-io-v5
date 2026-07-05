@@ -5,14 +5,14 @@ import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import DeleteIcon from '@/lib/icons/DeleteIcon';
 import EditIcon from '@/lib/icons/EditIcon';
-import { CardistryMoveEntry } from '@/lib/static/types';
+import { Move } from '@/lib/static/types';
 import CardistryHelpers from '@/lib/utils/CardistryHelpers';
 import styles from './CardistryContent.module.scss';
 import CardistryControls from './CardistryControls/CardistryControls';
 import EditMoveModal from './EditMoveModal/EditMoveModal';
 
 type CardistryContentProps = {
-    initialMoves: CardistryMoveEntry[];
+    initialMoves: Move[];
 };
 
 const CardistryContent: React.FC<CardistryContentProps> = ({
@@ -34,17 +34,15 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
     // STATE
     // -------------------------------------------------------------------------
 
-    const [moves, setMoves] = useState<CardistryMoveEntry[]>(initialMoves);
+    const [moves, setMoves] = useState<Move[]>(initialMoves);
     const [page, setPage] = useState<number>(1);
-    const [editingMove, setEditingMove] = useState<CardistryMoveEntry | null>(
-        null
-    );
+    const [editingMove, setEditingMove] = useState<Move | null>(null);
 
     // -------------------------------------------------------------------------
     // HANDLERS
     // -------------------------------------------------------------------------
 
-    const handleAdd = (move: CardistryMoveEntry): void => {
+    const handleAdd = (move: Move): void => {
         setMoves((prev) => {
             const filtered = prev.filter((m) => m.id !== move.id);
             return [...filtered, move].sort(
@@ -56,7 +54,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
         setPage(1);
     };
 
-    const handleUpdate = (updated: CardistryMoveEntry): void => {
+    const handleUpdate = (updated: Move): void => {
         setMoves((prev) =>
             prev.map((m) => (m.id === updated.id ? updated : m))
         );
@@ -64,7 +62,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
     };
 
     const handleIncrement = async (
-        move: CardistryMoveEntry,
+        move: Move,
         amount: number
     ): Promise<void> => {
         const res = await fetch(`/api/cardistry/${move.id}`, {
@@ -77,7 +75,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
             }),
         });
         if (!res.ok) return;
-        const updated = (await res.json()) as CardistryMoveEntry;
+        const updated = (await res.json()) as Move;
         setMoves((prev) =>
             prev.map((m) => (m.id === updated.id ? updated : m))
         );
@@ -114,7 +112,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
         Math.ceil(moves.length / ITEMS_PER_PAGE)
     );
 
-    const paginatedMoves: CardistryMoveEntry[] = moves.slice(
+    const paginatedMoves: Move[] = moves.slice(
         (page - 1) * ITEMS_PER_PAGE,
         page * ITEMS_PER_PAGE
     );

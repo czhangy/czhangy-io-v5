@@ -1,4 +1,4 @@
-import { TMDBMedia, TMDBSearchResult } from '@/lib/static/types';
+import { TMDBMetadata, TMDBResponse } from '@/lib/static/types';
 
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE = 'https://image.tmdb.org/t/p/w185';
@@ -33,7 +33,7 @@ export default class TMDBHelpers {
     // PUBLIC
     // -------------------------------------------------------------------------
 
-    static async searchMedia(query: string): Promise<TMDBSearchResult[]> {
+    static async searchMedia(query: string): Promise<TMDBResponse[]> {
         if (!query.trim() || !this.apiKey) return [];
         const res = await fetch(
             `${BASE_URL}/search/multi?api_key=${this.apiKey}&query=${encodeURIComponent(query)}`,
@@ -58,7 +58,7 @@ export default class TMDBHelpers {
     static async getMediaById(
         id: number,
         mediaType: 'movie' | 'tv'
-    ): Promise<TMDBMedia | null> {
+    ): Promise<TMDBMetadata | null> {
         if (id <= 0 || !this.apiKey) return null;
         const res = await fetch(
             `${BASE_URL}/${mediaType}/${id}?api_key=${this.apiKey}`,

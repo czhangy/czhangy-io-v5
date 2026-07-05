@@ -5,12 +5,12 @@ import Image from 'next/image';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import DeleteIcon from '@/lib/icons/DeleteIcon';
-import { ReadMediaEntry } from '@/lib/static/types';
+import { Book } from '@/lib/static/types';
 import styles from './LibraryContent.module.scss';
 import LibraryControls from './LibraryControls/LibraryControls';
 
 type LibraryContentProps = {
-    initialEntries: ReadMediaEntry[];
+    initialEntries: Book[];
 };
 
 const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
@@ -30,14 +30,14 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
     // STATE
     // -------------------------------------------------------------------------
 
-    const [entries, setEntries] = useState<ReadMediaEntry[]>(initialEntries);
+    const [entries, setEntries] = useState<Book[]>(initialEntries);
     const [page, setPage] = useState<number>(1);
 
     // -------------------------------------------------------------------------
     // HANDLERS
     // -------------------------------------------------------------------------
 
-    const handleAdd = (entry: ReadMediaEntry): void => {
+    const handleAdd = (entry: Book): void => {
         setEntries((prev) => {
             const filtered = prev.filter((e) => e.bookId !== entry.bookId);
             return [entry, ...filtered];
@@ -76,7 +76,7 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
         Math.ceil(entries.length / ITEMS_PER_PAGE)
     );
 
-    const paginatedEntries: ReadMediaEntry[] = entries.slice(
+    const paginatedEntries: Book[] = entries.slice(
         (page - 1) * ITEMS_PER_PAGE,
         page * ITEMS_PER_PAGE
     );

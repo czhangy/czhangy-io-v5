@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import Modal from '@/components/common/Modal/Modal';
 import SearchInput from '@/components/common/SearchInput/SearchInput';
 import { Key } from '@/lib/static/enums';
-import { Content, TMDBSearchResult } from '@/lib/static/types';
+import { Content, TMDBResponse } from '@/lib/static/types';
 
 type AddContentModalProps = {
     onClose: () => void;
@@ -26,7 +26,7 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
     // -------------------------------------------------------------------------
 
     const [query, setQuery] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<TMDBSearchResult[]>([]);
+    const [searchResults, setSearchResults] = useState<TMDBResponse[]>([]);
     const [isSearching, setIsSearching] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
@@ -37,8 +37,8 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
         setIsSearching(true);
         setSearchResults([]);
         const res = await fetch(`/api/media/search?q=${encodeURIComponent(q)}`);
-        const results: TMDBSearchResult[] = res.ok
-            ? ((await res.json()) as TMDBSearchResult[])
+        const results: TMDBResponse[] = res.ok
+            ? ((await res.json()) as TMDBResponse[])
             : [];
         setSearchResults(results);
         setIsSearching(false);

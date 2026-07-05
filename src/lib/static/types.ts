@@ -1,29 +1,5 @@
-export type SpotifyTrack = {
-    name: string;
-    artist: string;
-    albumArt: string;
-    url: string;
-};
-
-export type TMDBMedia = {
-    poster: string | null;
-    genres: string[];
-};
-
-export type TMDBSearchResult = {
-    id: number;
-    name: string;
-    note: string | null;
-    mediaType: 'movie' | 'tv';
-    poster: string | null;
-};
-
-export type NavItem = {
-    href: string;
-    label: string;
-};
-
-export type CardistryMoveEntry = {
+// Models
+export type Move = {
     id: number;
     name: string;
     type: string;
@@ -39,15 +15,7 @@ export type Game = {
     rating: number;
 };
 
-export type BookSearchResult = {
-    id: string;
-    name: string;
-    author: string | null;
-    note: string | null;
-    cover: string | null;
-};
-
-export type ReadMediaEntry = {
+export type Book = {
     id: number;
     name: string;
     author: string;
@@ -66,14 +34,41 @@ export type Content = {
     addedAt: string;
 };
 
+// External API responses
+export type SpotifyResponse = {
+    name: string;
+    artist: string;
+    albumArt: string;
+    url: string;
+};
+
+export type TMDBResponse = {
+    id: number;
+    name: string;
+    note: string | null;
+    mediaType: 'movie' | 'tv';
+    poster: string | null;
+};
+
+export type TMDBMetadata = {
+    poster: string | null;
+    genres: string[];
+};
+
+export type GoogleBooksResponse = {
+    id: string;
+    name: string;
+    author: string | null;
+    note: string | null;
+    cover: string | null;
+};
+
+// App
 export type UserRole = 'ADMIN' | 'USER';
 
-export type AchievementFormValues = {
-    tier: number;
-    name: string;
-    category: string;
-    description: string;
-    date: string;
+export type NavItem = {
+    href: string;
+    label: string;
 };
 
 export type Job = {
@@ -82,4 +77,12 @@ export type Job = {
     startDate: string;
     endDate: string | null; // null = Present
     logo: string; // path relative to /public, e.g. '/logos/company.png'
+};
+
+export type CreateAchievementParams = {
+    tier: number;
+    name: string;
+    category: string;
+    description: string;
+    date: string;
 };

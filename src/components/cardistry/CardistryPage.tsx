@@ -1,6 +1,6 @@
 import GlitchText from '@/components/common/GlitchText/GlitchText';
 import { prisma } from '@/lib/static/prisma';
-import { CardistryMoveEntry } from '@/lib/static/types';
+import { Move } from '@/lib/static/types';
 import CardistryContent from './CardistryContent/CardistryContent';
 import styles from './CardistryPage.module.scss';
 
@@ -13,7 +13,7 @@ const CardistryPage = async () => {
         orderBy: { createdAt: 'asc' },
     });
 
-    const moves: CardistryMoveEntry[] = records.map((r) => ({
+    const moves: Move[] = records.map((r) => ({
         ...r,
         createdAt: r.createdAt.toISOString(),
     }));

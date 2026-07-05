@@ -1,4 +1,4 @@
-import { BookSearchResult } from '@/lib/static/types';
+import { GoogleBooksResponse } from '@/lib/static/types';
 
 const BASE_URL = 'https://www.googleapis.com/books/v1';
 
@@ -92,7 +92,7 @@ export default class GoogleBooksHelpers {
     // PUBLIC
     // -------------------------------------------------------------------------
 
-    static async searchBooks(query: string): Promise<BookSearchResult[]> {
+    static async searchBooks(query: string): Promise<GoogleBooksResponse[]> {
         if (!query.trim()) return [];
         const keyParam = this.apiKey ? `&key=${this.apiKey}` : '';
         const res = await fetch(

@@ -16,8 +16,8 @@ export const DELETE = async (
 
     const { id } = await params;
 
-    const countBefore = await prisma.readMedia.count();
-    await prisma.readMedia.delete({ where: { id: parseInt(id) } });
+    const countBefore = await prisma.books.count();
+    await prisma.books.delete({ where: { id: parseInt(id) } });
 
     const milestone = READ_MILESTONES.find((m) => m.count === countBefore);
     if (milestone) {

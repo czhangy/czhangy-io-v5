@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SESSION_COOKIE } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
-import { CardistryMoveEntry } from '@/lib/static/types';
+import { Move } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
 import DateHelpers from '@/lib/utils/DateHelpers';
 
@@ -56,7 +56,7 @@ export const PATCH = async (
     return NextResponse.json({
         ...move,
         createdAt: move.createdAt.toISOString(),
-    } as CardistryMoveEntry);
+    } as Move);
 };
 
 export const PUT = async (
@@ -150,7 +150,7 @@ export const PUT = async (
     return NextResponse.json({
         ...move,
         createdAt: move.createdAt.toISOString(),
-    } as CardistryMoveEntry);
+    } as Move);
 };
 
 export const DELETE = async (

@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/static/prisma';
-import { CardistryMoveEntry } from '@/lib/static/types';
+import { Move } from '@/lib/static/types';
 import CardistryPanel from './CardistryPanel/CardistryPanel';
 
 type CardistryPanelDataProps = {
@@ -19,7 +19,7 @@ const CardistryPanelData = async ({
     // COMPUTATIONS
     // -------------------------------------------------------------------------
 
-    const fetchActiveMove = async (): Promise<CardistryMoveEntry | null> => {
+    const fetchActiveMove = async (): Promise<Move | null> => {
         try {
             const item = await prisma.highlight.findUnique({
                 where: { key: 'move' },
@@ -39,7 +39,7 @@ const CardistryPanelData = async ({
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const activeMove: CardistryMoveEntry | null = await fetchActiveMove();
+    const activeMove: Move | null = await fetchActiveMove();
 
     // -------------------------------------------------------------------------
     // MARKUP

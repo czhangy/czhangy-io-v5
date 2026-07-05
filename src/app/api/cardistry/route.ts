@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SESSION_COOKIE } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
-import { CardistryMoveEntry } from '@/lib/static/types';
+import { Move } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
 
 export const GET = async () => {
@@ -12,7 +12,7 @@ export const GET = async () => {
         moves.map((m) => ({
             ...m,
             createdAt: m.createdAt.toISOString(),
-        })) as CardistryMoveEntry[]
+        })) as Move[]
     );
 };
 
@@ -76,5 +76,5 @@ export const POST = async (request: NextRequest) => {
     return NextResponse.json({
         ...move,
         createdAt: move.createdAt.toISOString(),
-    } as CardistryMoveEntry);
+    } as Move);
 };

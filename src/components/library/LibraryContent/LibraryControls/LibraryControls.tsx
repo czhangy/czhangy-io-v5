@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Pagination from '@/components/common/Pagination/Pagination';
-import { ReadMediaEntry } from '@/lib/static/types';
+import { Book } from '@/lib/static/types';
 import AddBookModal from './AddBookModal/AddBookModal';
 import styles from './LibraryControls.module.scss';
 
@@ -13,7 +13,7 @@ type LibraryControlsProps = {
     onPrev: () => void;
     onNext: () => void;
     isAdmin: boolean;
-    onAdd: (entry: ReadMediaEntry) => void;
+    onAdd: (entry: Book) => void;
 };
 
 const LibraryControls: React.FC<LibraryControlsProps> = ({

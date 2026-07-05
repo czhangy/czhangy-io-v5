@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
-import { SpotifyTrack } from '@/lib/static/types';
+import { SpotifyResponse } from '@/lib/static/types';
 import SpotifyHelpers from '@/lib/utils/SpotifyHelpers';
 import styles from './SpotifyPanelData.module.scss';
 
@@ -21,7 +21,8 @@ const SpotifyPanelData = async ({
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const track: SpotifyTrack | null = await SpotifyHelpers.getRecentlyPlayed();
+    const track: SpotifyResponse | null =
+        await SpotifyHelpers.getRecentlyPlayed();
 
     // -------------------------------------------------------------------------
     // MARKUP

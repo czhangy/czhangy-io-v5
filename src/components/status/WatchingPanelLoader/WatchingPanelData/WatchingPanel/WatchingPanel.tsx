@@ -7,7 +7,7 @@ import EditButton from '@/components/status/EditButton/EditButton';
 import LinkButton from '@/components/status/LinkButton/LinkButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { Key } from '@/lib/static/enums';
-import { Content, TMDBSearchResult } from '@/lib/static/types';
+import { Content, TMDBResponse } from '@/lib/static/types';
 import styles from './WatchingPanel.module.scss';
 
 type WatchingPanelProps = {
@@ -46,7 +46,7 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     const [entries, setEntries] = useState<Content[]>(initialEntries);
     const [isAdding, setIsAdding] = useState<boolean>(false);
     const [query, setQuery] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<TMDBSearchResult[]>([]);
+    const [searchResults, setSearchResults] = useState<TMDBResponse[]>([]);
     const [isSearching, setIsSearching] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
@@ -114,8 +114,8 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
         setIsSearching(true);
         setSearchResults([]);
         const res = await fetch(`/api/media/search?q=${encodeURIComponent(q)}`);
-        const results: TMDBSearchResult[] = res.ok
-            ? ((await res.json()) as TMDBSearchResult[])
+        const results: TMDBResponse[] = res.ok
+            ? ((await res.json()) as TMDBResponse[])
             : [];
         setSearchResults(results);
         setIsSearching(false);

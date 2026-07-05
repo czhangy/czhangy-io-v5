@@ -2,14 +2,14 @@
 
 import { useState } from 'react';
 import Dropdown from '@/components/common/Dropdown/Dropdown';
-import { AchievementFormValues } from '@/lib/static/types';
+import { CreateAchievementParams } from '@/lib/static/types';
 import DateHelpers from '@/lib/utils/DateHelpers';
 import styles from './AchievementForm.module.scss';
 
 type AchievementFormProps = {
     submitLabel: string;
-    initialValues?: Partial<AchievementFormValues>;
-    onSubmit: (values: AchievementFormValues) => Promise<void>;
+    initialValues?: Partial<CreateAchievementParams>;
+    onSubmit: (values: CreateAchievementParams) => Promise<void>;
 };
 
 const AchievementForm: React.FC<AchievementFormProps> = ({

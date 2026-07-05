@@ -4,11 +4,11 @@ import { useRef, useState } from 'react';
 import Modal from '@/components/common/Modal/Modal';
 import SearchInput from '@/components/common/SearchInput/SearchInput';
 import { Key } from '@/lib/static/enums';
-import { BookSearchResult, ReadMediaEntry } from '@/lib/static/types';
+import { Book, GoogleBooksResponse } from '@/lib/static/types';
 
 type AddBookModalProps = {
     onClose: () => void;
-    onAdd: (entry: ReadMediaEntry) => void;
+    onAdd: (entry: Book) => void;
 };
 
 const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
@@ -23,7 +23,9 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
     // -------------------------------------------------------------------------
 
     const [query, setQuery] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<BookSearchResult[]>([]);
+    const [searchResults, setSearchResults] = useState<GoogleBooksResponse[]>(
+        []
+    );
     const [isSearching, setIsSearching] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
@@ -34,8 +36,8 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
         setIsSearching(true);
         setSearchResults([]);
         const res = await fetch(`/api/books/search?q=${encodeURIComponent(q)}`);
-        const results: BookSearchResult[] = res.ok
-            ? ((await res.json()) as BookSearchResult[])
+        const results: GoogleBooksResponse[] = res.ok
+            ? ((await res.json()) as GoogleBooksResponse[])
             : [];
         setSearchResults(results);
         setIsSearching(false);
@@ -70,7 +72,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
             body: JSON.stringify({ name: result.name, bookId: result.id }),
         });
         if (!res.ok) return;
-        const saved = (await res.json()) as ReadMediaEntry;
+        const saved = (await res.json()) as Book;
         onAdd(saved);
         onClose();
     };

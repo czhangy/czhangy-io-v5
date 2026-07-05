@@ -5,12 +5,12 @@ import EditButton from '@/components/status/EditButton/EditButton';
 import LinkButton from '@/components/status/LinkButton/LinkButton';
 import PanelDropdown from '@/components/status/PanelDropdown/PanelDropdown';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
-import { CardistryMoveEntry } from '@/lib/static/types';
+import { Move } from '@/lib/static/types';
 import CardistryHelpers from '@/lib/utils/CardistryHelpers';
 import styles from './CardistryPanel.module.scss';
 
 type CardistryPanelProps = {
-    initialMove: CardistryMoveEntry | null;
+    initialMove: Move | null;
     label: string;
     icon: React.ReactNode;
     cols: number;
@@ -34,11 +34,9 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
     // STATE
     // -------------------------------------------------------------------------
 
-    const [activeMove, setActiveMove] = useState<CardistryMoveEntry | null>(
-        initialMove
-    );
+    const [activeMove, setActiveMove] = useState<Move | null>(initialMove);
     const [isEditing, setIsEditing] = useState<boolean>(false);
-    const [moves, setMoves] = useState<CardistryMoveEntry[]>([]);
+    const [moves, setMoves] = useState<Move[]>([]);
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -47,7 +45,7 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
     const handleEdit = async (): Promise<void> => {
         setIsEditing(true);
         const res = await fetch('/api/cardistry');
-        if (res.ok) setMoves((await res.json()) as CardistryMoveEntry[]);
+        if (res.ok) setMoves((await res.json()) as Move[]);
     };
 
     const handleCancel = (): void => {
@@ -55,12 +53,12 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
         setMoves([]);
     };
 
-    const handleSelect = async (move: CardistryMoveEntry): Promise<void> => {
+    const handleSelect = async (move: Move): Promise<void> => {
         const res = await fetch(`/api/cardistry/${move.id}`, {
             method: 'PATCH',
         });
         if (!res.ok) return;
-        setActiveMove((await res.json()) as CardistryMoveEntry);
+        setActiveMove((await res.json()) as Move);
         handleCancel();
     };
 

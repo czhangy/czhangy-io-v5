@@ -12,14 +12,14 @@ enum Role {
     USER
 }
 
-model User {
+model Users {
     id             String   @id @default(cuid())
     hashedPassword String
     role           Role     @default(USER)
     createdAt      DateTime @default(now())
 }
 
-model Highlight {
+model Highlights {
     key       String   @id
     value     String
     updatedAt DateTime @updatedAt
@@ -35,7 +35,7 @@ model Content {
     addedAt   DateTime @default(now())
 }
 
-model ReadMedia {
+model Books {
     id        Int      @id @default(autoincrement())
     name      String
     author    String
@@ -45,7 +45,7 @@ model ReadMedia {
     addedAt   DateTime @default(now())
 }
 
-model Achievement {
+model Achievements {
     id          Int      @id @default(autoincrement())
     tier        Int      @default(1)
     name        String   @unique
@@ -56,7 +56,7 @@ model Achievement {
     updatedAt   DateTime @updatedAt
 }
 
-model CardistryMove {
+model Moves {
     id        Int      @id @default(autoincrement())
     name      String   @unique
     type      String
@@ -64,7 +64,7 @@ model CardistryMove {
     createdAt DateTime @default(now())
 }
 
-model Game {
+model Games {
     id     Int    @id @default(autoincrement())
     name   String @unique
     genre  String
