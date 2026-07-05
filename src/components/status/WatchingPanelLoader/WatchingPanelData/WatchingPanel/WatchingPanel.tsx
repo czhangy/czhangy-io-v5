@@ -2,12 +2,10 @@
 
 import { useRef, useState } from 'react';
 import Image from 'next/image';
-import PanelButton from '@/components/status/PanelButton/PanelButton';
+import EditButton from '@/components/status/EditButton/EditButton';
+import LinkButton from '@/components/status/LinkButton/LinkButton';
 import SearchInput from '@/components/status/SearchInput/SearchInput';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
-import { useSession } from '@/lib/context/SessionContext';
-import LinkIcon from '@/lib/icons/LinkIcon';
-import PlusIcon from '@/lib/icons/PlusIcon';
 import { Key } from '@/lib/static/enums';
 import { TMDBSearchResult, WatchedMediaEntry } from '@/lib/static/types';
 import styles from './WatchingPanel.module.scss';
@@ -34,7 +32,6 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     // -------------------------------------------------------------------------
 
     const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const { role } = useSession();
 
     // -------------------------------------------------------------------------
     // CONSTANTS
@@ -128,18 +125,10 @@ const WatchingPanel: React.FC<WatchingPanelProps> = ({
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const isAdmin: boolean = role === 'ADMIN';
-
     const headerActions: React.ReactNode = (
         <>
-            <PanelButton href="/status/archives" icon={<LinkIcon />} />
-            {isAdmin ? (
-                <PanelButton
-                    onClick={handleStartAdd}
-                    icon={<PlusIcon />}
-                    disabled={isAdding}
-                />
-            ) : null}
+            <EditButton onClick={handleStartAdd} disabled={isAdding} />
+            <LinkButton href="/status/archives" />
         </>
     );
 

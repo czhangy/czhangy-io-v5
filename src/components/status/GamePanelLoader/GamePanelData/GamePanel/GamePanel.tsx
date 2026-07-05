@@ -1,11 +1,10 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import PanelButton from '@/components/status/PanelButton/PanelButton';
+import EditButton from '@/components/status/EditButton/EditButton';
+import LinkButton from '@/components/status/LinkButton/LinkButton';
 import PanelSelect from '@/components/status/PanelSelect/PanelSelect';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
-import { useSession } from '@/lib/context/SessionContext';
-import LinkIcon from '@/lib/icons/LinkIcon';
 import { GAME_GENRES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
 import { Game } from '@/lib/static/types';
@@ -37,7 +36,6 @@ const GamePanel: React.FC<GamePanelProps> = ({
     // -------------------------------------------------------------------------
 
     const formRef = useRef<HTMLDivElement>(null);
-    const { role } = useSession();
 
     // -------------------------------------------------------------------------
     // STATE
@@ -169,14 +167,10 @@ const GamePanel: React.FC<GamePanelProps> = ({
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const isAdmin: boolean = role === 'ADMIN';
-
     const headerActions: React.ReactNode = (
         <>
-            <PanelButton href="/status/games" icon={<LinkIcon />} />
-            {isAdmin ? (
-                <PanelButton onClick={handleEdit} disabled={isEditing} />
-            ) : null}
+            <EditButton onClick={handleEdit} disabled={isEditing} />
+            <LinkButton href="/status/games" />
         </>
     );
 

@@ -1,37 +1,26 @@
-import Link from 'next/link';
-import EditIcon from '@/lib/icons/EditIcon';
-import styles from './PanelButton.module.scss';
+'use client';
 
-type PanelButtonProps = {
-    icon?: React.ReactNode;
-    href?: string;
+import { useSession } from '@/lib/context/SessionContext';
+import EditIcon from '@/lib/icons/EditIcon';
+import styles from './EditButton.module.scss';
+
+type EditButtonProps = {
     onClick?: () => void;
     disabled?: boolean;
 };
 
-const PanelButton: React.FC<PanelButtonProps> = ({
-    icon,
-    href,
-    onClick,
-    disabled,
-}) => {
+const EditButton: React.FC<EditButtonProps> = ({ onClick, disabled }) => {
     // -------------------------------------------------------------------------
-    // RENDERING
+    // HOOKS
     // -------------------------------------------------------------------------
 
-    const content = icon ?? <EditIcon />;
+    const { role } = useSession();
 
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
 
-    if (href) {
-        return (
-            <Link href={href} className={styles.button}>
-                {content}
-            </Link>
-        );
-    }
+    if (role !== 'ADMIN') return null;
 
     return (
         <button
@@ -40,9 +29,9 @@ const PanelButton: React.FC<PanelButtonProps> = ({
             onClick={onClick}
             disabled={disabled}
         >
-            {content}
+            <EditIcon />
         </button>
     );
 };
 
-export default PanelButton;
+export default EditButton;

@@ -1,11 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import PanelButton from '@/components/status/PanelButton/PanelButton';
+import EditButton from '@/components/status/EditButton/EditButton';
+import LinkButton from '@/components/status/LinkButton/LinkButton';
 import PanelSelect from '@/components/status/PanelSelect/PanelSelect';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
-import { useSession } from '@/lib/context/SessionContext';
-import LinkIcon from '@/lib/icons/LinkIcon';
 import { CardistryMoveEntry } from '@/lib/static/types';
 import CardistryHelpers from '@/lib/utils/CardistryHelpers';
 import styles from './CardistryPanel.module.scss';
@@ -30,7 +29,6 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
     // -------------------------------------------------------------------------
 
     const editFormRef = useRef<HTMLDivElement>(null);
-    const { role } = useSession();
 
     // -------------------------------------------------------------------------
     // STATE
@@ -95,18 +93,14 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const isAdmin: boolean = role === 'ADMIN';
-
     const proficiency = activeMove
         ? CardistryHelpers.getProficiency(activeMove.count)
         : null;
 
     const headerActions: React.ReactNode = (
         <>
-            <PanelButton href="/status/cardistry" icon={<LinkIcon />} />
-            {isAdmin ? (
-                <PanelButton onClick={handleEdit} disabled={isEditing} />
-            ) : null}
+            <EditButton onClick={handleEdit} disabled={isEditing} />
+            <LinkButton href="/status/cardistry" />
         </>
     );
 

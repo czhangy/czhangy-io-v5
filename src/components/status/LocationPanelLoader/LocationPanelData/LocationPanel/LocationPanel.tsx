@@ -1,10 +1,9 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import PanelButton from '@/components/status/PanelButton/PanelButton';
+import EditButton from '@/components/status/EditButton/EditButton';
 import SearchInput from '@/components/status/SearchInput/SearchInput';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
-import { useSession } from '@/lib/context/SessionContext';
 import { Key } from '@/lib/static/enums';
 import { LocationResult } from '@/lib/static/types';
 import styles from './LocationPanel.module.scss';
@@ -28,7 +27,6 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
     // HOOKS
     // -------------------------------------------------------------------------
 
-    const { role } = useSession();
     const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     // -------------------------------------------------------------------------
@@ -110,12 +108,6 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const isAdmin: boolean = role === 'ADMIN';
-
-    const editButton: React.ReactNode = isAdmin ? (
-        <PanelButton onClick={handleEdit} disabled={isEditing} />
-    ) : null;
-
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
@@ -126,7 +118,9 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
             icon={icon}
             cols={cols}
             rows={rows}
-            headerAction={editButton}
+            headerAction={
+                <EditButton onClick={handleEdit} disabled={isEditing} />
+            }
         >
             {isEditing ? (
                 <SearchInput
