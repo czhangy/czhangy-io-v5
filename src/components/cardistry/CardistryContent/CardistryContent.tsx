@@ -1,10 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import AdminActions from '@/components/common/AdminActions/AdminActions';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
-import DeleteIcon from '@/lib/icons/DeleteIcon';
-import EditIcon from '@/lib/icons/EditIcon';
 import { Move } from '@/lib/static/types';
 import CardistryHelpers from '@/lib/utils/CardistryHelpers';
 import styles from './CardistryContent.module.scss';
@@ -196,24 +195,11 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                                             </button>
                                         ))}
                                     </div>
-                                    <div className={styles['admin-actions']}>
-                                        <button
-                                            type="button"
-                                            className={styles['action-button']}
-                                            onClick={() => setEditingMove(move)}
-                                        >
-                                            <EditIcon />
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className={styles['action-button']}
-                                            onClick={() =>
-                                                handleDelete(move.name)
-                                            }
-                                        >
-                                            <DeleteIcon />
-                                        </button>
-                                    </div>
+                                    <AdminActions
+                                        className={styles['admin-actions']}
+                                        onEdit={() => setEditingMove(move)}
+                                        onDelete={() => handleDelete(move.name)}
+                                    />
                                 </>
                             ) : null}
                         </li>
