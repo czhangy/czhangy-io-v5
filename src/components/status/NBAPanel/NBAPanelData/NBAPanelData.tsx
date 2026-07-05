@@ -27,7 +27,8 @@ const NBAPanelData = async ({
     const game: NBAGameResponse | null =
         await ESPNHelpers.getLastWarriorsGame();
 
-    const isRecent: boolean = !!game && DateHelpers.isWithinDays(game.date, 15);
+    const isRecent: boolean =
+        !!game && DateHelpers.isWithinDays(game.date, 215);
 
     const warriorsAreHome: boolean = game?.home.isWarriors ?? false;
     const warriors = warriorsAreHome ? game?.home : game?.away;
@@ -56,8 +57,8 @@ const NBAPanelData = async ({
                             className={styles.logo}
                             src={warriors!.logo}
                             alt={`${warriors!.displayName} logo`}
-                            width={56}
-                            height={56}
+                            width={42}
+                            height={42}
                         />
                         <span className={styles.standing}>
                             {warriors!.standing}
@@ -91,8 +92,8 @@ const NBAPanelData = async ({
                             className={styles.logo}
                             src={opponent!.logo}
                             alt={`${opponent!.displayName} logo`}
-                            width={56}
-                            height={56}
+                            width={42}
+                            height={42}
                         />
                         <span className={styles.standing}>
                             {opponent!.standing}
