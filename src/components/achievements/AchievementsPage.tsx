@@ -1,6 +1,6 @@
 import GlitchText from '@/components/common/GlitchText/GlitchText';
 import { prisma } from '@/lib/static/prisma';
-import type { Achievement } from '@/prisma/generated/client';
+import { Achievement } from '@/lib/static/types';
 import AchievementsContent from './AchievementsContent/AchievementsContent';
 import styles from './AchievementsPage.module.scss';
 
@@ -9,9 +9,16 @@ const AchievementsPage = async () => {
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const achievements: Achievement[] = await prisma.achievements.findMany({
+    const records = await prisma.achievements.findMany({
         orderBy: { createdAt: 'asc' },
     });
+    const achievements: Achievement[] = records.map((r) => ({
+        tier: r.tier,
+        name: r.name,
+        category: r.category,
+        description: r.description,
+        date: r.date,
+    }));
 
     // -------------------------------------------------------------------------
     // MARKUP

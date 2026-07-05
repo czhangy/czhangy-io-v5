@@ -1,4 +1,12 @@
 // Models
+export type Achievement = {
+    tier: number;
+    name: string;
+    category: string;
+    description: string;
+    date: string | null;
+};
+
 export type Move = {
     name: string;
     type: string;
