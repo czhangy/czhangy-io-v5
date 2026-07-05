@@ -28,9 +28,9 @@ const BooksPanelData = async ({
                 take: 3,
             });
             return records.map((r) => ({
+                id: r.id,
                 name: r.name,
                 author: r.author,
-                bookId: r.bookId,
                 cover: r.cover,
                 genres: r.genres,
                 addedAt: r.addedAt.toISOString(),

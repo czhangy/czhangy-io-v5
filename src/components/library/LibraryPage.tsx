@@ -14,9 +14,9 @@ const LibraryPage = async () => {
     });
 
     const entries: Book[] = records.map((r) => ({
+        id: r.id,
         name: r.name,
         author: r.author,
-        bookId: r.bookId,
         cover: r.cover,
         genres: r.genres,
         addedAt: r.addedAt.toISOString(),

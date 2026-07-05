@@ -1,6 +1,6 @@
 # WatchedContent
 
-Client component rendered by WatchedPage. Displays a paginated list of watched media entries with poster, name, and genre tags. Admin users see a delete button on the right of each row that removes the entry from the DB and filters it from local state. Pagination controls appear at the top right (via WatchedControls) and centered at the bottom.
+Client component rendered by WatchedPage. Displays a paginated list of watched media entries with poster, name, and genre tags. Admin users see a feature button and a delete button on the right of each row — delete removes the entry from the DB and filters it from local state. Pagination controls appear at the top right (via WatchedControls) and centered at the bottom.
 
 ## Props
 
@@ -17,7 +17,8 @@ Client component rendered by WatchedPage. Displays a paginated list of watched m
 
 ## Handlers
 
-- `handleAdd` — prepends a newly added entry (deduplicating by `tmdbId`) and resets to page 1
+- `handleAdd` — inserts a newly added entry (deduplicating by `name`) into its sorted position and navigates to the page it lands on
+- `handleFeature` — re-submits an entry's existing data to `POST /api/content`, bumping its `addedAt` to now without changing any other field
 - `handleDelete` — removes an entry by id and clamps the page if necessary
 
 ## Computations

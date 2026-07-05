@@ -72,8 +72,9 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 name: result.name,
-                tmdbId: result.tmdbId,
                 mediaType: result.mediaType,
+                poster: result.poster,
+                genres: result.genres,
             }),
         });
         if (!res.ok) return;
@@ -103,7 +104,12 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
                 value={query}
                 placeholder="Search movies & shows..."
                 isSearching={isSearching}
-                results={searchResults.map((r) => ({ ...r, id: r.tmdbId }))}
+                results={searchResults.map((r) => ({
+                    ...r,
+                    id: r.tmdbId,
+                    note: r.note ?? undefined,
+                    image: r.poster ?? undefined,
+                }))}
                 onChange={handleQueryChange}
                 onKeyDown={handleKeyDown}
                 onClear={handleClear}

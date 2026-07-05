@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import DeleteIcon from '@/lib/icons/DeleteIcon';
+import StarIcon from '@/lib/icons/StarIcon';
 import { Book } from '@/lib/static/types';
 import styles from './LibraryContent.module.scss';
 import LibraryControls from './LibraryControls/LibraryControls';
@@ -38,21 +39,40 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
     // -------------------------------------------------------------------------
 
     const handleAdd = (entry: Book): void => {
-        setEntries((prev) => {
-            const filtered = prev.filter((e) => e.bookId !== entry.bookId);
-            return [...filtered, entry].sort((a, b) =>
-                a.name.localeCompare(b.name)
-            );
-        });
-        setPage(1);
+        const filtered = entries.filter((e) => e.id !== entry.id);
+        const nextEntries = [...filtered, entry].sort((a, b) =>
+            a.name.localeCompare(b.name)
+        );
+        const index = nextEntries.findIndex((e) => e.id === entry.id);
+        setEntries(nextEntries);
+        setPage(Math.floor(index / ITEMS_PER_PAGE) + 1);
     };
 
-    const handleDelete = async (bookId: string): Promise<void> => {
-        const res = await fetch(`/api/books/${encodeURIComponent(bookId)}`, {
+    const handleFeature = async (entry: Book): Promise<void> => {
+        const res = await fetch('/api/books', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: entry.name,
+                author: entry.author,
+                cover: entry.cover,
+                genres: entry.genres,
+            }),
+        });
+        if (!res.ok) return;
+        const updated = (await res.json()) as Book;
+        const nextEntries = entries.map((e) =>
+            e.id === updated.id ? updated : e
+        );
+        setEntries(nextEntries);
+    };
+
+    const handleDelete = async (id: number): Promise<void> => {
+        const res = await fetch(`/api/books/${id}`, {
             method: 'DELETE',
         });
         if (!res.ok) return;
-        const nextEntries = entries.filter((e) => e.bookId !== bookId);
+        const nextEntries = entries.filter((e) => e.id !== id);
         const newTotalPages = Math.max(
             1,
             Math.ceil(nextEntries.length / ITEMS_PER_PAGE)
@@ -101,7 +121,7 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
             />
             <ul className={styles.list}>
                 {paginatedEntries.map((entry) => (
-                    <li key={entry.bookId} className={styles.item}>
+                    <li key={entry.id} className={styles.item}>
                         <Image
                             className={styles.cover}
                             src={entry.cover}
@@ -128,13 +148,22 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
                             ) : null}
                         </div>
                         {isAdmin ? (
-                            <button
-                                type="button"
-                                className={styles['delete-button']}
-                                onClick={() => handleDelete(entry.bookId)}
-                            >
-                                <DeleteIcon />
-                            </button>
+                            <div className={styles['admin-actions']}>
+                                <button
+                                    type="button"
+                                    className={styles['action-button']}
+                                    onClick={() => handleFeature(entry)}
+                                >
+                                    <StarIcon />
+                                </button>
+                                <button
+                                    type="button"
+                                    className={styles['action-button']}
+                                    onClick={() => handleDelete(entry.id)}
+                                >
+                                    <DeleteIcon />
+                                </button>
+                            </div>
                         ) : null}
                     </li>
                 ))}

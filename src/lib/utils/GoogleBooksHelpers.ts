@@ -22,12 +22,6 @@ type GoogleBooksSearchResponse = {
     items?: GoogleBooksItem[];
 };
 
-type GoogleBooksMeta = {
-    author: string | null;
-    cover: string | null;
-    genres: string[];
-};
-
 export default class GoogleBooksHelpers {
     // -------------------------------------------------------------------------
     // PRIVATE
@@ -96,7 +90,7 @@ export default class GoogleBooksHelpers {
         if (!query.trim()) return [];
         const keyParam = this.apiKey ? `&key=${this.apiKey}` : '';
         const res = await fetch(
-            `${BASE_URL}/volumes?q=${encodeURIComponent(query)}&maxResults=8&printType=books${keyParam}`,
+            `${BASE_URL}/volumes?q=${encodeURIComponent(query)}&maxResults=12&printType=books${keyParam}`,
             { cache: 'no-store' }
         );
         if (!res.ok) return [];
@@ -105,26 +99,14 @@ export default class GoogleBooksHelpers {
             .filter((item) => this.coverUrl(item.volumeInfo) !== null)
             .filter((item) => item.volumeInfo.publishedDate)
             .filter((item) => item.volumeInfo.authors?.length)
+            .filter((item) => item.volumeInfo.categories?.length)
             .map((item) => ({
                 googleBooksId: item.id,
                 name: item.volumeInfo.title,
                 author: item.volumeInfo.authors?.[0] ?? null,
                 note: item.volumeInfo.publishedDate?.split('-')[0] ?? null,
                 cover: this.coverUrl(item.volumeInfo),
+                genres: this.normalizeGenres(item.volumeInfo.categories ?? []),
             }));
-    }
-
-    static async getBookById(id: string): Promise<GoogleBooksMeta | null> {
-        const keyParam = this.apiKey ? `?key=${this.apiKey}` : '';
-        const res = await fetch(`${BASE_URL}/volumes/${id}${keyParam}`, {
-            cache: 'no-store',
-        });
-        if (!res.ok) return null;
-        const item = (await res.json()) as GoogleBooksItem;
-        return {
-            author: item.volumeInfo.authors?.[0] ?? null,
-            cover: this.coverUrl(item.volumeInfo),
-            genres: this.normalizeGenres(item.volumeInfo.categories ?? []),
-        };
     }
 }

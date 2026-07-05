@@ -22,9 +22,9 @@ export type Game = {
 };
 
 export type Book = {
+    id: number;
     name: string;
     author: string;
-    bookId: string;
     cover: string;
     genres: string[];
     addedAt: string;
@@ -32,7 +32,6 @@ export type Book = {
 
 export type Content = {
     name: string;
-    tmdbId: number;
     mediaType: 'movie' | 'tv';
     poster: string;
     genres: string[];
@@ -52,10 +51,6 @@ export type TMDBResponse = {
     name: string;
     note: string | null;
     mediaType: 'movie' | 'tv';
-    poster: string | null;
-};
-
-export type TMDBMetadata = {
     poster: string | null;
     genres: string[];
 };
@@ -85,6 +80,7 @@ export type GoogleBooksResponse = {
     author: string | null;
     note: string | null;
     cover: string | null;
+    genres: string[];
 };
 
 // App

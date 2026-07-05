@@ -4,7 +4,6 @@ import { prisma } from '@/lib/static/prisma';
 import { Book } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
 import DateHelpers from '@/lib/utils/DateHelpers';
-import GoogleBooksHelpers from '@/lib/utils/GoogleBooksHelpers';
 
 export const POST = async (request: NextRequest) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
@@ -14,31 +13,31 @@ export const POST = async (request: NextRequest) => {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { name, bookId } = (await request.json()) as {
+    const { name, author, cover, genres } = (await request.json()) as {
         name: string;
-        bookId: string;
+        author: string | null;
+        cover: string | null;
+        genres: string[];
     };
 
-    const existing = await prisma.books.findUnique({ where: { bookId } });
-
-    const bookData = await GoogleBooksHelpers.getBookById(bookId);
-    const author = bookData?.author;
-    const cover = bookData?.cover;
-    if (!author || !cover) {
+    if (!author || !cover || !genres?.length) {
         return NextResponse.json(
             { error: 'Book details incomplete' },
             { status: 422 }
         );
     }
 
+    const existing = await prisma.books.findUnique({
+        where: { name_author: { name, author } },
+    });
+
     const record = await prisma.books.upsert({
-        where: { bookId },
+        where: { name_author: { name, author } },
         create: {
             name,
-            bookId,
             author,
             cover,
-            genres: bookData?.genres ?? [],
+            genres,
         },
         update: { addedAt: new Date() },
     });
@@ -62,9 +61,9 @@ export const POST = async (request: NextRequest) => {
     }
 
     const entry: Book = {
+        id: record.id,
         name: record.name,
         author: record.author,
-        bookId: record.bookId,
         cover: record.cover,
         genres: record.genres,
         addedAt: record.addedAt.toISOString(),
