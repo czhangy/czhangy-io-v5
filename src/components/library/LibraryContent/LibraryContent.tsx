@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import AdminActions from '@/components/common/AdminActions/AdminActions';
+import ListControls from '@/components/common/ListControls/ListControls';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import { Book } from '@/lib/static/types';
+import AddBookModal from './AddBookModal/AddBookModal';
 import styles from './LibraryContent.module.scss';
-import LibraryControls from './LibraryControls/LibraryControls';
 
 type LibraryContentProps = {
     initialEntries: Book[];
@@ -32,6 +33,7 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
 
     const [entries, setEntries] = useState<Book[]>(initialEntries);
     const [page, setPage] = useState<number>(1);
+    const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -110,14 +112,22 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
 
     return (
         <div className={styles['library-content']}>
-            <LibraryControls
+            <ListControls
                 page={page}
                 totalPages={totalPages}
                 onPrev={handlePrevPage}
                 onNext={handleNextPage}
                 isAdmin={isAdmin}
-                onAdd={handleAdd}
-            />
+                addLabel="Add Book"
+                onAddClick={() => setIsAddOpen(true)}
+            >
+                {isAddOpen ? (
+                    <AddBookModal
+                        onClose={() => setIsAddOpen(false)}
+                        onAdd={handleAdd}
+                    />
+                ) : null}
+            </ListControls>
             <ul className={styles.list}>
                 {paginatedEntries.map((entry) => (
                     <li key={entry.id} className={styles.item}>

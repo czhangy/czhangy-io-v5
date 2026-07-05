@@ -1,0 +1,37 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .label {
+        @include mono-label;
+
+        color: $text-mid;
+        font-size: 0.7rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    .input {
+        background: $background;
+        border: 1px solid $border-subtle;
+        color: $foreground;
+        font-family: $font-mono;
+        font-size: 0.875rem;
+        padding: 0.625rem 0.75rem;
+        transition: border-color 0.15s ease;
+        width: 100%;
+
+        &::placeholder {
+            color: $text-dim;
+        }
+
+        &:focus {
+            border-color: $accent;
+            outline: none;
+        }
+    }
+}

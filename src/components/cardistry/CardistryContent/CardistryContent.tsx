@@ -2,12 +2,13 @@
 
 import { useState } from 'react';
 import AdminActions from '@/components/common/AdminActions/AdminActions';
+import ListControls from '@/components/common/ListControls/ListControls';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import { Move } from '@/lib/static/types';
 import CardistryHelpers from '@/lib/utils/CardistryHelpers';
+import AddMoveModal from './AddMoveModal/AddMoveModal';
 import styles from './CardistryContent.module.scss';
-import CardistryControls from './CardistryControls/CardistryControls';
 import EditMoveModal from './EditMoveModal/EditMoveModal';
 
 type CardistryContentProps = {
@@ -39,6 +40,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
     const [incrementingMoves, setIncrementingMoves] = useState<Set<string>>(
         new Set()
     );
+    const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -133,14 +135,22 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
 
     return (
         <div className={styles['cardistry-content']}>
-            <CardistryControls
+            <ListControls
                 page={page}
                 totalPages={totalPages}
                 onPrev={handlePrevPage}
                 onNext={handleNextPage}
                 isAdmin={isAdmin}
-                onAdd={handleAdd}
-            />
+                addLabel="Add Move"
+                onAddClick={() => setIsAddOpen(true)}
+            >
+                {isAddOpen ? (
+                    <AddMoveModal
+                        onClose={() => setIsAddOpen(false)}
+                        onAdd={handleAdd}
+                    />
+                ) : null}
+            </ListControls>
             <ul className={styles.list}>
                 {paginatedMoves.map((move) => {
                     const proficiency = CardistryHelpers.getProficiency(

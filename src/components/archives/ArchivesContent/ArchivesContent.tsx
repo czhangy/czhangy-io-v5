@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import AdminActions from '@/components/common/AdminActions/AdminActions';
+import ListControls from '@/components/common/ListControls/ListControls';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import { Content } from '@/lib/static/types';
+import AddContentModal from './AddContentModal/AddContentModal';
 import styles from './ArchivesContent.module.scss';
-import ArchivesControls from './ArchivesControls/ArchivesControls';
 
 type ArchivesContentProps = {
     initialEntries: Content[];
@@ -34,6 +35,7 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
 
     const [entries, setEntries] = useState<Content[]>(initialEntries);
     const [page, setPage] = useState<number>(1);
+    const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -112,14 +114,22 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
 
     return (
         <div className={styles['archives-content']}>
-            <ArchivesControls
+            <ListControls
                 page={page}
                 totalPages={totalPages}
                 onPrev={handlePrevPage}
                 onNext={handleNextPage}
                 isAdmin={isAdmin}
-                onAdd={handleAdd}
-            />
+                addLabel="Add Content"
+                onAddClick={() => setIsAddOpen(true)}
+            >
+                {isAddOpen ? (
+                    <AddContentModal
+                        onClose={() => setIsAddOpen(false)}
+                        onAdd={handleAdd}
+                    />
+                ) : null}
+            </ListControls>
             <ul className={styles.list}>
                 {paginatedEntries.map((entry) => (
                     <li key={entry.name} className={styles.item}>

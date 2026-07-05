@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import Dropdown from '@/components/common/Dropdown/Dropdown';
+import AddButton from '@/components/common/AddButton/AddButton';
+import FormField from '@/components/common/FormField/FormField';
 import Modal from '@/components/common/Modal/Modal';
 import { CARDISTRY_MOVE_TYPES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
@@ -43,10 +44,6 @@ const AddMoveModal: React.FC<AddMoveModalProps> = ({ onClose, onAdd }) => {
         if (e.key === Key.Escape) onClose();
     };
 
-    const handleTypeChange = (value: string): void => {
-        setType(value);
-    };
-
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
@@ -55,37 +52,25 @@ const AddMoveModal: React.FC<AddMoveModalProps> = ({ onClose, onAdd }) => {
         <Modal title="ADD MOVE" onClose={onClose}>
             <div className={styles['add-move-modal']}>
                 <div className={styles.row}>
-                    <div className={styles.field}>
-                        <span className={styles.label}>Name</span>
-                        <input
-                            className={styles.input}
-                            value={name}
-                            onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>
-                            ) => setName(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            autoFocus
-                        />
-                    </div>
-                    <div className={styles.field}>
-                        <span className={styles.label}>Type</span>
-                        <Dropdown
-                            value={type}
-                            onChange={handleTypeChange}
-                            options={CARDISTRY_MOVE_TYPES}
-                        />
-                    </div>
+                    <FormField
+                        label="Name"
+                        value={name}
+                        onChange={setName}
+                        onKeyDown={handleKeyDown}
+                        autoFocus
+                    />
+                    <FormField
+                        label="Type"
+                        value={type}
+                        onChange={setType}
+                        options={CARDISTRY_MOVE_TYPES}
+                    />
                 </div>
-                <div className={styles.actions}>
-                    <button
-                        type="button"
-                        className={styles.submit}
-                        onClick={handleSubmit}
-                        disabled={!name.trim() || !type}
-                    >
-                        Add
-                    </button>
-                </div>
+                <AddButton
+                    label="Add"
+                    disabled={!name.trim() || !type}
+                    onSubmit={handleSubmit}
+                />
             </div>
         </Modal>
     );
