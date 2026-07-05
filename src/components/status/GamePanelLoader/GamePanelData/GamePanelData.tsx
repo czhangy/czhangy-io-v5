@@ -25,9 +25,17 @@ const GamePanelData = async ({
                 where: { key: 'game' },
             });
             if (!item) return null;
-            return await prisma.games.findUnique({
+            const g = await prisma.games.findUnique({
                 where: { name: item.value },
             });
+            if (g) {
+                return {
+                    name: g.name,
+                    genre: g.genre,
+                    icon: g.icon,
+                    rating: g.rating,
+                };
+            }
         } catch {}
         return null;
     };

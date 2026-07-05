@@ -10,33 +10,30 @@ const authorize = async (request: NextRequest): Promise<boolean> => {
     return role === 'ADMIN';
 };
 
-const parseId = (id: string) => {
-    const n = parseInt(id, 10);
-    return isNaN(n) ? null : n;
-};
-
 export const PUT = async (
     request: NextRequest,
-    { params }: { params: Promise<{ id: string }> }
+    { params }: { params: Promise<{ name: string }> }
 ) => {
     if (!(await authorize(request))) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
-    const numericId = parseId(id);
-    if (numericId === null) {
-        return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
-    }
+    const { name } = await params;
+    const decodedName = decodeURIComponent(name);
 
-    const { name, genre, icon, rating } = (await request.json()) as {
+    const {
+        name: newName,
+        genre,
+        icon,
+        rating,
+    } = (await request.json()) as {
         name: string;
         genre: string;
         icon: string;
         rating: number;
     };
 
-    if (!name?.trim()) {
+    if (!newName?.trim()) {
         return NextResponse.json(
             { error: 'Name is required' },
             { status: 400 }
@@ -55,15 +52,17 @@ export const PUT = async (
         );
     }
 
-    const current = await prisma.games.findUnique({ where: { id: numericId } });
+    const current = await prisma.games.findUnique({
+        where: { name: decodedName },
+    });
     if (!current) {
         return NextResponse.json({ error: 'Game not found' }, { status: 404 });
     }
 
     const conflict = await prisma.games.findUnique({
-        where: { name: name.trim() },
+        where: { name: newName.trim() },
     });
-    if (conflict && conflict.id !== numericId) {
+    if (conflict && conflict.name !== decodedName) {
         return NextResponse.json(
             { error: 'Game already exists' },
             { status: 409 }
@@ -71,34 +70,36 @@ export const PUT = async (
     }
 
     const game = await prisma.games.update({
-        where: { id: numericId },
+        where: { name: decodedName },
         data: {
-            name: name.trim(),
+            name: newName.trim(),
             genre: genre.trim(),
             icon: icon.trim(),
             rating,
         },
     });
 
-    return NextResponse.json(game as Game);
+    return NextResponse.json({
+        name: game.name,
+        genre: game.genre,
+        icon: game.icon,
+        rating: game.rating,
+    } as Game);
 };
 
 export const DELETE = async (
     request: NextRequest,
-    { params }: { params: Promise<{ id: string }> }
+    { params }: { params: Promise<{ name: string }> }
 ) => {
     if (!(await authorize(request))) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
-    const numericId = parseId(id);
-    if (numericId === null) {
-        return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
-    }
+    const { name } = await params;
+    const decodedName = decodeURIComponent(name);
 
     const countBefore = await prisma.games.count();
-    await prisma.games.delete({ where: { id: numericId } });
+    await prisma.games.delete({ where: { name: decodedName } });
 
     const milestone = GAME_MILESTONES.find((m) => m.count === countBefore);
     if (milestone) {

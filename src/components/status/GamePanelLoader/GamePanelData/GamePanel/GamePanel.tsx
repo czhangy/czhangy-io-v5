@@ -216,7 +216,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
                                 <ul className={styles.dropdown}>
                                     {filteredGames.map((g) => (
                                         <li
-                                            key={g.id}
+                                            key={g.name}
                                             className={styles['dropdown-item']}
                                             onMouseDown={(
                                                 e: React.MouseEvent

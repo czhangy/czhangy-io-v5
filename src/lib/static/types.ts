@@ -7,7 +7,6 @@ export type Move = {
 };
 
 export type Game = {
-    id: number;
     name: string;
     genre: string;
     icon: string;
