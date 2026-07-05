@@ -40,7 +40,9 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
     const handleAdd = (entry: Book): void => {
         setEntries((prev) => {
             const filtered = prev.filter((e) => e.bookId !== entry.bookId);
-            return [entry, ...filtered];
+            return [...filtered, entry].sort((a, b) =>
+                a.name.localeCompare(b.name)
+            );
         });
         setPage(1);
     };
