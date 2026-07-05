@@ -1,8 +1,8 @@
 import { prisma } from '@/lib/static/prisma';
 import { Book } from '@/lib/static/types';
-import ReadingPanel from './ReadingPanel/ReadingPanel';
+import BooksPanel from './BooksPanel/BooksPanel';
 
-type ReadingPanelDataProps = {
+type BooksPanelDataProps = {
     label: string;
     icon: React.ReactNode;
     cols: number;
@@ -10,13 +10,13 @@ type ReadingPanelDataProps = {
     mobileOrder?: number;
 };
 
-const ReadingPanelData = async ({
+const BooksPanelData = async ({
     label,
     icon,
     cols,
     rows,
     mobileOrder,
-}: ReadingPanelDataProps) => {
+}: BooksPanelDataProps) => {
     // -------------------------------------------------------------------------
     // COMPUTATIONS
     // -------------------------------------------------------------------------
@@ -50,7 +50,7 @@ const ReadingPanelData = async ({
     // -------------------------------------------------------------------------
 
     return (
-        <ReadingPanel
+        <BooksPanel
             initialEntries={entries}
             label={label}
             icon={icon}
@@ -61,4 +61,4 @@ const ReadingPanelData = async ({
     );
 };
 
-export default ReadingPanelData;
+export default BooksPanelData;

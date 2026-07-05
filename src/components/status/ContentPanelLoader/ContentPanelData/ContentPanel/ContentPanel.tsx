@@ -7,11 +7,11 @@ import EditButton from '@/components/status/EditButton/EditButton';
 import LinkButton from '@/components/status/LinkButton/LinkButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { Key } from '@/lib/static/enums';
-import { Book, GoogleBooksResponse } from '@/lib/static/types';
-import styles from './ReadingPanel.module.scss';
+import { Content, TMDBResponse } from '@/lib/static/types';
+import styles from './ContentPanel.module.scss';
 
-type ReadingPanelProps = {
-    initialEntries: Book[];
+type ContentPanelProps = {
+    initialEntries: Content[];
     label: string;
     icon: React.ReactNode;
     cols: number;
@@ -19,7 +19,7 @@ type ReadingPanelProps = {
     mobileOrder?: number;
 };
 
-const ReadingPanel: React.FC<ReadingPanelProps> = ({
+const ContentPanel: React.FC<ContentPanelProps> = ({
     initialEntries,
     label,
     icon,
@@ -37,31 +37,29 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
     // CONSTANTS
     // -------------------------------------------------------------------------
 
-    const MAX_ENTRIES: number = 3;
+    const MAX_ENTRIES = 5;
 
     // -------------------------------------------------------------------------
     // STATE
     // -------------------------------------------------------------------------
 
-    const [entries, setEntries] = useState<Book[]>(initialEntries);
+    const [entries, setEntries] = useState<Content[]>(initialEntries);
     const [isAdding, setIsAdding] = useState<boolean>(false);
     const [query, setQuery] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<GoogleBooksResponse[]>(
-        []
-    );
+    const [searchResults, setSearchResults] = useState<TMDBResponse[]>([]);
     const [isSearching, setIsSearching] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
     // HANDLERS
     // -------------------------------------------------------------------------
 
-    const handleStartAdd = (): void => {
+    const handleStartAdd = () => {
         setIsAdding(true);
         setQuery('');
         setSearchResults([]);
     };
 
-    const handleCancel = (): void => {
+    const handleCancel = () => {
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
         setIsAdding(false);
         setQuery('');
@@ -69,9 +67,7 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
         setIsSearching(false);
     };
 
-    const handleQueryChange = (
-        e: React.ChangeEvent<HTMLInputElement>
-    ): void => {
+    const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setQuery(value);
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
@@ -84,28 +80,29 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
         }, 1000);
     };
 
-    const handleSelectResult = async (id: string | number): Promise<void> => {
-        const result = searchResults.find((r) => r.googleBooksId === id);
+    const handleSelectResult = async (id: string | number) => {
+        const result = searchResults.find((r) => r.tmdbId === id);
         if (!result) return;
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        const res = await fetch('/api/books', {
+        const res = await fetch('/api/content', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 name: result.name,
-                bookId: result.googleBooksId,
+                tmdbId: result.tmdbId,
+                mediaType: result.mediaType,
             }),
         });
         if (!res.ok) return;
-        const saved = (await res.json()) as Book;
-        const filtered = entries.filter((e) => e.bookId !== saved.bookId);
+        const saved = (await res.json()) as Content;
+        const filtered = entries.filter((e) => e.tmdbId !== saved.tmdbId);
         setEntries([saved, ...filtered].slice(0, MAX_ENTRIES));
         setIsAdding(false);
         setQuery('');
         setSearchResults([]);
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === Key.Escape) handleCancel();
     };
 
@@ -116,11 +113,9 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
     const performSearch = async (q: string): Promise<void> => {
         setIsSearching(true);
         setSearchResults([]);
-        const res = await fetch(
-            `/api/google_books/search?q=${encodeURIComponent(q)}`
-        );
-        const results: GoogleBooksResponse[] = res.ok
-            ? ((await res.json()) as GoogleBooksResponse[])
+        const res = await fetch(`/api/tmdb/search?q=${encodeURIComponent(q)}`);
+        const results: TMDBResponse[] = res.ok
+            ? ((await res.json()) as TMDBResponse[])
             : [];
         setSearchResults(results);
         setIsSearching(false);
@@ -133,7 +128,7 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
     const headerActions: React.ReactNode = (
         <>
             <EditButton onClick={handleStartAdd} disabled={isAdding} />
-            <LinkButton href="/status/library" />
+            <LinkButton href="/status/archives" />
         </>
     );
 
@@ -155,11 +150,11 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
                     <div className={styles['add-form']}>
                         <SearchInput
                             value={query}
-                            placeholder="Search books..."
+                            placeholder="Search movies & shows..."
                             isSearching={isSearching}
                             results={searchResults.map((r) => ({
                                 ...r,
-                                id: r.googleBooksId,
+                                id: r.tmdbId,
                             }))}
                             onChange={handleQueryChange}
                             onKeyDown={handleKeyDown}
@@ -170,20 +165,17 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
                 ) : null}
                 <ul className={styles.list}>
                     {entries.map((entry) => (
-                        <li key={entry.bookId} className={styles.item}>
+                        <li key={entry.name} className={styles.item}>
                             <Image
-                                className={styles.cover}
-                                src={entry.cover}
-                                alt={`${entry.name} cover`}
+                                className={styles.poster}
+                                src={entry.poster}
+                                alt={`${entry.name} poster`}
                                 width={43}
                                 height={60}
                             />
                             <div className={styles.info}>
                                 <span className={styles.title}>
                                     {entry.name}
-                                </span>
-                                <span className={styles.author}>
-                                    {entry.author}
                                 </span>
                                 {entry.genres.length > 0 ? (
                                     <div className={styles.metadata}>
@@ -206,4 +198,4 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
     );
 };
 
-export default ReadingPanel;
+export default ContentPanel;

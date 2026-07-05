@@ -1,8 +1,8 @@
 import { prisma } from '@/lib/static/prisma';
 import { Content } from '@/lib/static/types';
-import WatchingPanel from './WatchingPanel/WatchingPanel';
+import ContentPanel from './ContentPanel/ContentPanel';
 
-type WatchingPanelDataProps = {
+type ContentPanelDataProps = {
     label: string;
     icon: React.ReactNode;
     cols: number;
@@ -10,13 +10,13 @@ type WatchingPanelDataProps = {
     mobileOrder?: number;
 };
 
-const WatchingPanelData = async ({
+const ContentPanelData = async ({
     label,
     icon,
     cols,
     rows,
     mobileOrder,
-}: WatchingPanelDataProps) => {
+}: ContentPanelDataProps) => {
     // -------------------------------------------------------------------------
     // COMPUTATIONS
     // -------------------------------------------------------------------------
@@ -47,7 +47,7 @@ const WatchingPanelData = async ({
     // -------------------------------------------------------------------------
 
     return (
-        <WatchingPanel
+        <ContentPanel
             initialEntries={entries}
             label={label}
             icon={icon}
@@ -58,4 +58,4 @@ const WatchingPanelData = async ({
     );
 };
 
-export default WatchingPanelData;
+export default ContentPanelData;

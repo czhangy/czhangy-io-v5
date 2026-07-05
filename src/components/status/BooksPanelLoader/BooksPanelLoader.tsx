@@ -1,15 +1,15 @@
 import { Suspense } from 'react';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
-import TVIcon from '@/lib/icons/TVIcon';
-import WatchingPanelData from './WatchingPanelData/WatchingPanelData';
+import BookIcon from '@/lib/icons/BookIcon';
+import BooksPanelData from './BooksPanelData/BooksPanelData';
 
-type WatchingPanelLoaderProps = {
+type BooksPanelLoaderProps = {
     cols: number;
     rows?: number;
     mobileOrder?: number;
 };
 
-const WatchingPanelLoader: React.FC<WatchingPanelLoaderProps> = ({
+const BooksPanelLoader: React.FC<BooksPanelLoaderProps> = ({
     cols,
     rows,
     mobileOrder,
@@ -18,8 +18,8 @@ const WatchingPanelLoader: React.FC<WatchingPanelLoaderProps> = ({
     // CONSTANTS
     // -------------------------------------------------------------------------
 
-    const LABEL: string = 'WATCHING';
-    const ICON: React.ReactNode = <TVIcon />;
+    const LABEL: string = 'READING';
+    const ICON: React.ReactNode = <BookIcon />;
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -38,7 +38,7 @@ const WatchingPanelLoader: React.FC<WatchingPanelLoaderProps> = ({
                 />
             }
         >
-            <WatchingPanelData
+            <BooksPanelData
                 label={LABEL}
                 icon={ICON}
                 cols={cols}
@@ -49,4 +49,4 @@ const WatchingPanelLoader: React.FC<WatchingPanelLoaderProps> = ({
     );
 };
 
-export default WatchingPanelLoader;
+export default BooksPanelLoader;

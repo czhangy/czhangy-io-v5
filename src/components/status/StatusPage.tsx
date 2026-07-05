@@ -1,13 +1,13 @@
 import GlitchText from '@/components/common/GlitchText/GlitchText';
+import BooksPanelLoader from './BooksPanelLoader/BooksPanelLoader';
 import CardistryPanelLoader from './CardistryPanelLoader/CardistryPanelLoader';
+import ContentPanelLoader from './ContentPanelLoader/ContentPanelLoader';
 import GamePanelLoader from './GamePanelLoader/GamePanelLoader';
 import LocationPanelLoader from './LocationPanelLoader/LocationPanelLoader';
 import NBAPanel from './NBAPanel/NBAPanel';
-import ReadingPanelLoader from './ReadingPanelLoader/ReadingPanelLoader';
 import SpotifyPanel from './SpotifyPanel/SpotifyPanel';
 import styles from './StatusPage.module.scss';
 import VickyPanel from './VickyPanel/VickyPanel';
-import WatchingPanelLoader from './WatchingPanelLoader/WatchingPanelLoader';
 
 const StatusPage: React.FC = () => {
     // -------------------------------------------------------------------------
@@ -21,10 +21,10 @@ const StatusPage: React.FC = () => {
                 <div className={styles.grid}>
                     <LocationPanelLoader cols={5} />
                     <GamePanelLoader cols={5} />
-                    <WatchingPanelLoader cols={6} rows={3} mobileOrder={5} />
+                    <ContentPanelLoader cols={6} rows={3} mobileOrder={5} />
                     <CardistryPanelLoader cols={5} />
                     <SpotifyPanel cols={5} />
-                    <ReadingPanelLoader cols={6} rows={2} mobileOrder={6} />
+                    <BooksPanelLoader cols={6} rows={2} mobileOrder={6} />
                     <VickyPanel cols={4} rows={2} mobileOrder={7} />
                     <NBAPanel cols={6} mobileOrder={4} />
                 </div>

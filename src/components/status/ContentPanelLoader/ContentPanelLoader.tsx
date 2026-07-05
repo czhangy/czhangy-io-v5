@@ -1,15 +1,15 @@
 import { Suspense } from 'react';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
-import BookIcon from '@/lib/icons/BookIcon';
-import ReadingPanelData from './ReadingPanelData/ReadingPanelData';
+import TVIcon from '@/lib/icons/TVIcon';
+import ContentPanelData from './ContentPanelData/ContentPanelData';
 
-type ReadingPanelLoaderProps = {
+type ContentPanelLoaderProps = {
     cols: number;
     rows?: number;
     mobileOrder?: number;
 };
 
-const ReadingPanelLoader: React.FC<ReadingPanelLoaderProps> = ({
+const ContentPanelLoader: React.FC<ContentPanelLoaderProps> = ({
     cols,
     rows,
     mobileOrder,
@@ -18,8 +18,8 @@ const ReadingPanelLoader: React.FC<ReadingPanelLoaderProps> = ({
     // CONSTANTS
     // -------------------------------------------------------------------------
 
-    const LABEL: string = 'READING';
-    const ICON: React.ReactNode = <BookIcon />;
+    const LABEL: string = 'WATCHING';
+    const ICON: React.ReactNode = <TVIcon />;
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -38,7 +38,7 @@ const ReadingPanelLoader: React.FC<ReadingPanelLoaderProps> = ({
                 />
             }
         >
-            <ReadingPanelData
+            <ContentPanelData
                 label={LABEL}
                 icon={ICON}
                 cols={cols}
@@ -49,4 +49,4 @@ const ReadingPanelLoader: React.FC<ReadingPanelLoaderProps> = ({
     );
 };
 
-export default ReadingPanelLoader;
+export default ContentPanelLoader;
