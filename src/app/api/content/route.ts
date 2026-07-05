@@ -49,7 +49,7 @@ export const POST = async (request: NextRequest) => {
         const count = await prisma.content.count();
         const milestone = WATCHED_MILESTONES.find((m) => m.count === count);
         if (milestone) {
-            await prisma.achievement
+            await prisma.achievements
                 .create({
                     data: {
                         tier: milestone.tier,
