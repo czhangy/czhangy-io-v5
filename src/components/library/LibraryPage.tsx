@@ -10,7 +10,7 @@ const LibraryPage = async () => {
     // -------------------------------------------------------------------------
 
     const records = await prisma.books.findMany({
-        orderBy: { addedAt: 'desc' },
+        orderBy: { name: 'asc' },
     });
 
     const entries: Book[] = records.map((r) => ({

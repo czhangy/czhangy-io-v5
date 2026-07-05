@@ -10,7 +10,7 @@ const ArchivesPage = async () => {
     // -------------------------------------------------------------------------
 
     const records = await prisma.content.findMany({
-        orderBy: { addedAt: 'desc' },
+        orderBy: { name: 'asc' },
     });
 
     const entries: Content[] = records.map((r) => ({

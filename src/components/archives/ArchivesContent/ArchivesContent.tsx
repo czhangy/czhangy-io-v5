@@ -42,7 +42,9 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
     const handleAdd = (entry: Content): void => {
         setEntries((prev) => {
             const filtered = prev.filter((e) => e.tmdbId !== entry.tmdbId);
-            return [entry, ...filtered];
+            return [...filtered, entry].sort((a, b) =>
+                a.name.localeCompare(b.name)
+            );
         });
         setPage(1);
     };
