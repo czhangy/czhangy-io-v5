@@ -2,6 +2,7 @@ import GlitchText from '@/components/common/GlitchText/GlitchText';
 import CardistryPanelLoader from './CardistryPanelLoader/CardistryPanelLoader';
 import GamePanelLoader from './GamePanelLoader/GamePanelLoader';
 import LocationPanelLoader from './LocationPanelLoader/LocationPanelLoader';
+import NBAPanel from './NBAPanel/NBAPanel';
 import ReadingPanelLoader from './ReadingPanelLoader/ReadingPanelLoader';
 import SpotifyPanel from './SpotifyPanel/SpotifyPanel';
 import styles from './StatusPage.module.scss';
@@ -25,6 +26,7 @@ const StatusPage: React.FC = () => {
                     <SpotifyPanel cols={5} />
                     <ReadingPanelLoader cols={6} rows={2} mobileOrder={6} />
                     <VickyPanel cols={4} rows={2} mobileOrder={7} />
+                    <NBAPanel cols={6} mobileOrder={4} />
                 </div>
             </div>
         </div>

@@ -1,0 +1,89 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.game {
+    align-items: center;
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+
+    .team-block {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+
+        .logo {
+            flex-shrink: 0;
+        }
+
+        .standing {
+            @include mono-label;
+
+            color: $text-dim;
+            font-size: 0.65rem;
+            letter-spacing: 0.05em;
+        }
+
+        .record {
+            @include mono-label;
+
+            color: $text-dim;
+            font-size: 0.65rem;
+            letter-spacing: 0.05em;
+        }
+    }
+
+    .center {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+
+        .matchup {
+            @include mono-label;
+
+            color: $text-mid;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+        }
+
+        .scores {
+            align-items: center;
+            display: flex;
+            gap: 0.5rem;
+
+            .score {
+                @include mono-label;
+
+                color: $text-dim;
+                font-size: 1.5rem;
+
+                &--winner {
+                    color: $accent;
+                }
+            }
+
+            .separator {
+                color: $text-dim;
+                font-size: 1rem;
+            }
+        }
+
+        .meta {
+            @include mono-label;
+
+            color: $text-dim;
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+        }
+    }
+}
+
+.empty {
+    @include mono-label;
+
+    color: $text-dim;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+}
