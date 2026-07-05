@@ -4,10 +4,10 @@ import { prisma } from '@/lib/static/prisma';
 import { Game } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
 
-const authorize = async (request: NextRequest) => {
+const authorize = async (request: NextRequest): Promise<boolean> => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await AuthHelpers.verifyToken(token) : null;
-    return session?.role === 'ADMIN' ? session : null;
+    const role = token ? await AuthHelpers.verifyToken(token) : null;
+    return role === 'ADMIN';
 };
 
 const parseId = (id: string) => {

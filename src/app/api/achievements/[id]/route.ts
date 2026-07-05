@@ -7,9 +7,9 @@ type Params = { params: Promise<{ id: string }> };
 
 export const PATCH = async (request: NextRequest, { params }: Params) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await AuthHelpers.verifyToken(token) : null;
+    const role = token ? await AuthHelpers.verifyToken(token) : null;
 
-    if (!session || session.role !== 'ADMIN') {
+    if (role !== 'ADMIN') {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -59,9 +59,9 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
 
 export const DELETE = async (request: NextRequest, { params }: Params) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await AuthHelpers.verifyToken(token) : null;
+    const role = token ? await AuthHelpers.verifyToken(token) : null;
 
-    if (!session || session.role !== 'ADMIN') {
+    if (role !== 'ADMIN') {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

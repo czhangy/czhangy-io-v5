@@ -69,11 +69,6 @@ export type WatchedMediaEntry = {
 
 export type UserRole = 'ADMIN' | 'USER';
 
-export type Session = {
-    id: string;
-    role: UserRole;
-};
-
 export type AchievementFormValues = {
     tier: number;
     name: string;

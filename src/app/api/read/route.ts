@@ -8,9 +8,9 @@ import GoogleBooksHelpers from '@/lib/utils/GoogleBooksHelpers';
 
 export const POST = async (request: NextRequest) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await AuthHelpers.verifyToken(token) : null;
+    const role = token ? await AuthHelpers.verifyToken(token) : null;
 
-    if (!session || session.role !== 'ADMIN') {
+    if (role !== 'ADMIN') {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

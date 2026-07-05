@@ -6,7 +6,7 @@ import {
     LOGGED_OUT_NAV_ITEMS,
     NAV_ITEMS,
 } from '@/lib/static/constants';
-import { NavItem, Session, UserRole } from '@/lib/static/types';
+import { NavItem, UserRole } from '@/lib/static/types';
 
 export default class AuthHelpers {
     // -------------------------------------------------------------------------
@@ -38,17 +38,17 @@ export default class AuthHelpers {
         return compare(password, hashedPassword);
     };
 
-    static signToken = (session: Session): Promise<string> => {
-        return new SignJWT({ ...session })
+    static signToken = (role: UserRole): Promise<string> => {
+        return new SignJWT({ role })
             .setProtectedHeader({ alg: AuthHelpers.ALGORITHM })
             .setExpirationTime(AuthHelpers.JWT_EXPIRY)
             .sign(AuthHelpers.getSecret());
     };
 
-    static verifyToken = async (token: string): Promise<Session | null> => {
+    static verifyToken = async (token: string): Promise<UserRole | null> => {
         try {
             const { payload } = await jwtVerify(token, AuthHelpers.getSecret());
-            return payload as unknown as Session;
+            return (payload as { role?: UserRole }).role ?? null;
         } catch {
             return null;
         }

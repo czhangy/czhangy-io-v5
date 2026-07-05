@@ -24,10 +24,7 @@ export const POST = async (request: NextRequest) => {
         );
 
         if (match) {
-            const token = await AuthHelpers.signToken({
-                id: user.id,
-                role: user.role,
-            });
+            const token = await AuthHelpers.signToken(user.role);
             const response = NextResponse.json({ role: user.role });
 
             response.cookies.set(SESSION_COOKIE, token, {
