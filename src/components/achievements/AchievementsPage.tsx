@@ -1,6 +1,6 @@
 import GlitchText from '@/components/common/GlitchText/GlitchText';
 import { prisma } from '@/lib/static/prisma';
-import type { Achievement } from '@/generated/prisma/client';
+import type { Achievement } from '@/prisma/generated/client';
 import AchievementsContent from './AchievementsContent/AchievementsContent';
 import styles from './AchievementsPage.module.scss';
 

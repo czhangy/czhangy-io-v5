@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import EditButton from '@/components/status/EditButton/EditButton';
 import LinkButton from '@/components/status/LinkButton/LinkButton';
-import PanelSelect from '@/components/status/PanelSelect/PanelSelect';
+import PanelDropdown from '@/components/status/PanelDropdown/PanelDropdown';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { CardistryMoveEntry } from '@/lib/static/types';
 import CardistryHelpers from '@/lib/utils/CardistryHelpers';
@@ -118,7 +118,7 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
         >
             {isEditing ? (
                 <div ref={editFormRef} className={styles['edit-form']}>
-                    <PanelSelect
+                    <PanelDropdown
                         value={activeMove?.name ?? ''}
                         onChange={handleDropdownChange}
                         options={moves.map((m) => m.name)}

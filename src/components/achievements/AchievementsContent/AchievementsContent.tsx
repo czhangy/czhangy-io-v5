@@ -3,7 +3,7 @@
 import { useEffect, useReducer } from 'react';
 import Pagination from '@/components/common/Pagination/Pagination';
 import DateHelpers from '@/lib/utils/DateHelpers';
-import type { Achievement } from '@/generated/prisma/client';
+import type { Achievement } from '@/prisma/generated/client';
 import AchievementCard from './AchievementCard/AchievementCard';
 import styles from './AchievementsContent.module.scss';
 import AchievementsControls from './AchievementsControls/AchievementsControls';

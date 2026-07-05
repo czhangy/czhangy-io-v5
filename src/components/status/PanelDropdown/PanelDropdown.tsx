@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import ChevronIcon from '@/lib/icons/ChevronIcon';
-import styles from './PanelSelect.module.scss';
+import styles from './PanelDropdown.module.scss';
 
-type PanelSelectProps = {
+type PanelDropdownProps = {
     value: string;
     onChange: (value: string) => void;
     options: (string | number)[];
@@ -12,7 +12,7 @@ type PanelSelectProps = {
     compact?: boolean;
 };
 
-const PanelSelect: React.FC<PanelSelectProps> = ({
+const PanelDropdown: React.FC<PanelDropdownProps> = ({
     value,
     onChange,
     options,
@@ -114,4 +114,4 @@ const PanelSelect: React.FC<PanelSelectProps> = ({
     );
 };
 
-export default PanelSelect;
+export default PanelDropdown;

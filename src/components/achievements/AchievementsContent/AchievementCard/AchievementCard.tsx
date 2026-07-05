@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from '@/lib/context/SessionContext';
 import DeleteIcon from '@/lib/icons/DeleteIcon';
 import EditIcon from '@/lib/icons/EditIcon';
-import type { Achievement } from '@/generated/prisma/client';
+import type { Achievement } from '@/prisma/generated/client';
 import styles from './AchievementCard.module.scss';
 import EditAchievementModal from './EditAchievementModal/EditAchievementModal';
 

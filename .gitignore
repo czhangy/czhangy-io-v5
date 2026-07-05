@@ -44,4 +44,4 @@ next-env.d.ts
 __pycache__
 
 # Prisma
-/src/generated/prisma
+/src/prisma/generated

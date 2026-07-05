@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react';
 import EditButton from '@/components/status/EditButton/EditButton';
 import LinkButton from '@/components/status/LinkButton/LinkButton';
-import PanelSelect from '@/components/status/PanelSelect/PanelSelect';
+import PanelDropdown from '@/components/status/PanelDropdown/PanelDropdown';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { GAME_GENRES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
@@ -233,7 +233,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
                                 </ul>
                             ) : null}
                         </div>
-                        <PanelSelect
+                        <PanelDropdown
                             options={RATING_OPTIONS}
                             value={newRating}
                             onChange={handleRatingChange}
@@ -241,7 +241,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
                         />
                     </div>
                     <div className={styles.row}>
-                        <PanelSelect
+                        <PanelDropdown
                             options={GAME_GENRES}
                             value={newGenre}
                             onChange={handleGenreChange}
