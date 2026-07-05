@@ -46,15 +46,15 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
     // -------------------------------------------------------------------------
 
     const handleAdd = (move: Move): void => {
-        setMoves((prev) => {
-            const filtered = prev.filter((m) => m.name !== move.name);
-            return [...filtered, move].sort(
-                (a, b) =>
-                    new Date(a.createdAt).getTime() -
-                    new Date(b.createdAt).getTime()
-            );
-        });
-        setPage(1);
+        const filtered = moves.filter((m) => m.name !== move.name);
+        const nextMoves = [...filtered, move].sort(
+            (a, b) =>
+                new Date(a.createdAt).getTime() -
+                new Date(b.createdAt).getTime()
+        );
+        const index = nextMoves.findIndex((m) => m.name === move.name);
+        setMoves(nextMoves);
+        setPage(Math.floor(index / ITEMS_PER_PAGE) + 1);
     };
 
     const handleUpdate = (updated: Move): void => {

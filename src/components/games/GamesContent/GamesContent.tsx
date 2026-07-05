@@ -40,15 +40,13 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
     // -------------------------------------------------------------------------
 
     const handleAdd = (game: Game): void => {
-        setGames((prev) =>
-            [...prev, game].sort((a, b) => {
-                const ratingDiff = b.rating - a.rating;
-                return ratingDiff !== 0
-                    ? ratingDiff
-                    : a.name.localeCompare(b.name);
-            })
-        );
-        setPage(1);
+        const nextGames = [...games, game].sort((a, b) => {
+            const ratingDiff = b.rating - a.rating;
+            return ratingDiff !== 0 ? ratingDiff : a.name.localeCompare(b.name);
+        });
+        const index = nextGames.findIndex((g) => g.name === game.name);
+        setGames(nextGames);
+        setPage(Math.floor(index / ITEMS_PER_PAGE) + 1);
     };
 
     const handleUpdate = (updated: Game): void => {

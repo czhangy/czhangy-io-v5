@@ -40,13 +40,13 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
     // -------------------------------------------------------------------------
 
     const handleAdd = (entry: Content): void => {
-        setEntries((prev) => {
-            const filtered = prev.filter((e) => e.tmdbId !== entry.tmdbId);
-            return [...filtered, entry].sort((a, b) =>
-                a.name.localeCompare(b.name)
-            );
-        });
-        setPage(1);
+        const filtered = entries.filter((e) => e.tmdbId !== entry.tmdbId);
+        const nextEntries = [...filtered, entry].sort((a, b) =>
+            a.name.localeCompare(b.name)
+        );
+        const index = nextEntries.findIndex((e) => e.tmdbId === entry.tmdbId);
+        setEntries(nextEntries);
+        setPage(Math.floor(index / ITEMS_PER_PAGE) + 1);
     };
 
     const handleDelete = async (name: string): Promise<void> => {
