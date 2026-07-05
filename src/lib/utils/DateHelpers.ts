@@ -39,6 +39,11 @@ export default class DateHelpers {
         ].join('/');
     };
 
+    static isWithinDays = (isoDate: string, days: number): boolean => {
+        const ms = 1000 * 60 * 60 * 24;
+        return (Date.now() - new Date(isoDate).getTime()) / ms <= days;
+    };
+
     static getHumanReadableDate = (dateStr: string): string =>
         new Date(dateStr)
             .toLocaleDateString('en-US', {

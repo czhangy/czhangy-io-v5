@@ -26,6 +26,8 @@ const NBAPanelData = async ({
 
     const game: NBAGameResponse | null = await NBAHelpers.getLastWarriorsGame();
 
+    const isRecent: boolean = !!game && DateHelpers.isWithinDays(game.date, 15);
+
     const warriorsAreHome: boolean = game?.home.isWarriors ?? false;
     const warriors = warriorsAreHome ? game?.home : game?.away;
     const opponent = warriorsAreHome ? game?.away : game?.home;
@@ -46,7 +48,7 @@ const NBAPanelData = async ({
             rows={rows}
             mobileOrder={mobileOrder}
         >
-            {game ? (
+            {game && isRecent ? (
                 <div className={styles.game}>
                     <div className={styles['team-block']}>
                         <Image
@@ -101,7 +103,7 @@ const NBAPanelData = async ({
                     </div>
                 </div>
             ) : (
-                <p className={styles.empty}>No recent games</p>
+                <p className={styles.empty}>No recent Warriors games</p>
             )}
         </StatusPanel>
     );
