@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect, useReducer } from 'react';
-import Dropdown from '@/components/common/Dropdown/Dropdown';
 import PaginationControls from '@/components/common/PaginationControls/PaginationControls';
 import DateHelpers from '@/lib/utils/DateHelpers';
 import type { Achievement } from '@/generated/prisma/client';
 import AchievementCard from './AchievementCard/AchievementCard';
 import styles from './AchievementsContent.module.scss';
 import AchievementsControls from './AchievementsControls/AchievementsControls';
+import FilterControl from './AchievementsControls/FilterControl/FilterControl';
 
 type AchievementsContentProps = {
     achievements: Achievement[];
@@ -199,12 +199,13 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
         <div className={styles['achievements-content']}>
             <div className={styles.controls}>
                 <div className={styles.left}>
-                    <Dropdown
+                    <FilterControl
                         value={categoryFilter === '' ? 'All' : categoryFilter}
                         onChange={handleCategoryChange}
                         options={['All', ...CATEGORIES]}
+                        maxLabel="Hobbies"
                     />
-                    <Dropdown
+                    <FilterControl
                         value={currentSortLabel}
                         onChange={handleFieldChange}
                         options={SORT_FIELD_LABELS}
