@@ -2,7 +2,7 @@ import Image from 'next/image';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { NBAGameResponse } from '@/lib/static/types';
 import DateHelpers from '@/lib/utils/DateHelpers';
-import NBAHelpers from '@/lib/utils/NBAHelpers';
+import ESPNHelpers from '@/lib/utils/ESPNHelpers';
 import styles from './NBAPanelData.module.scss';
 
 type NBAPanelDataProps = {
@@ -24,7 +24,8 @@ const NBAPanelData = async ({
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const game: NBAGameResponse | null = await NBAHelpers.getLastWarriorsGame();
+    const game: NBAGameResponse | null =
+        await ESPNHelpers.getLastWarriorsGame();
 
     const isRecent: boolean = !!game && DateHelpers.isWithinDays(game.date, 15);
 

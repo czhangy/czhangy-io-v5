@@ -53,7 +53,7 @@ type ESPNTeamResponse = {
     };
 };
 
-export default class NBAHelpers {
+export default class ESPNHelpers {
     // -------------------------------------------------------------------------
     // PRIVATE
     // -------------------------------------------------------------------------
@@ -108,7 +108,7 @@ export default class NBAHelpers {
             conferenceId === '5' ? 'East' : conferenceId === '6' ? 'West' : '';
         const standing =
             seed && conference
-                ? `${NBAHelpers.ordinal(seed)} in ${conference}`
+                ? `${ESPNHelpers.ordinal(seed)} in ${conference}`
                 : '';
 
         return { streak, standing };
@@ -136,12 +136,12 @@ export default class NBAHelpers {
 
     static async getLastWarriorsGame(): Promise<NBAGameResponse | null> {
         const [regular, post] = await Promise.all([
-            NBAHelpers.fetchSchedule(2),
-            NBAHelpers.fetchSchedule(3),
+            ESPNHelpers.fetchSchedule(2),
+            ESPNHelpers.fetchSchedule(3),
         ]);
 
         const last = [...regular, ...post]
-            .filter(NBAHelpers.isCompleted)
+            .filter(ESPNHelpers.isCompleted)
             .sort(
                 (a, b) =>
                     new Date(b.date).getTime() - new Date(a.date).getTime()
@@ -154,8 +154,8 @@ export default class NBAHelpers {
         const home = competitors.find((c) => c.homeAway === 'home')!;
 
         const [awayDetails, homeDetails] = await Promise.all([
-            NBAHelpers.fetchTeamDetails(away.team.id),
-            NBAHelpers.fetchTeamDetails(home.team.id),
+            ESPNHelpers.fetchTeamDetails(away.team.id),
+            ESPNHelpers.fetchTeamDetails(home.team.id),
         ]);
 
         const mapTeam = (
@@ -164,7 +164,7 @@ export default class NBAHelpers {
         ): NBATeamResponse => ({
             abbreviation: c.team.abbreviation,
             displayName: c.team.displayName,
-            logo: NBAHelpers.getDarkLogo(c.team.logos),
+            logo: ESPNHelpers.getDarkLogo(c.team.logos),
             score: c.score!.displayValue,
             record:
                 c.record?.find((r) => r.type === 'total')?.displayValue ?? '',
