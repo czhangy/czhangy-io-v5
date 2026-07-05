@@ -12,9 +12,10 @@ A custom dropdown for use in forms and filter controls. Replaces native `<select
 
 ## State
 
-| State    | Type      | Initial value | Description                         |
-| -------- | --------- | ------------- | ----------------------------------- |
-| `isOpen` | `boolean` | `false`       | Whether the options list is visible |
+| State         | Type                  | Initial value | Description                                                     |
+| ------------- | --------------------- | ------------- | --------------------------------------------------------------- |
+| `isOpen`      | `boolean`             | `false`       | Whether the options list is visible                             |
+| `optionsRect` | `OptionsRect \| null` | `null`        | Viewport position/width used to place the portaled options list |
 
 ## Rendering
 
@@ -22,4 +23,5 @@ A custom dropdown for use in forms and filter controls. Replaces native `<select
 
 ## Effects
 
-- **On `isOpen`** — attaches/detaches a `mousedown` listener on `document` to close the dropdown when clicking outside the wrapper
+- **On `isOpen`** — attaches/detaches a `mousedown` listener on `document` to close the dropdown when clicking outside the wrapper or the portaled options list
+- **On `isOpen`** — while open, tracks the trigger's bounding rect (recomputed on scroll/resize) so the options list can be positioned via a `document.body` portal, escaping any ancestor's `overflow`/`max-height` clipping (e.g. a scrollable modal)
