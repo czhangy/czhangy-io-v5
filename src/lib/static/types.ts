@@ -40,7 +40,7 @@ export type SpotifyResponse = {
 };
 
 export type TMDBResponse = {
-    id: number;
+    tmdbId: number;
     name: string;
     note: string | null;
     mediaType: 'movie' | 'tv';
@@ -53,7 +53,7 @@ export type TMDBMetadata = {
 };
 
 export type GoogleBooksResponse = {
-    id: string;
+    googleBooksId: string;
     name: string;
     author: string | null;
     note: string | null;

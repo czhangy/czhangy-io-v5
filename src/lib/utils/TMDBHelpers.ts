@@ -47,7 +47,7 @@ export default class TMDBHelpers {
             .filter((r) => r.poster_path)
             .slice(0, 5)
             .map((r) => ({
-                id: r.id,
+                tmdbId: r.id,
                 name: r.title ?? r.name ?? '',
                 note: (r.release_date ?? r.first_air_date)?.slice(0, 4) ?? null,
                 mediaType: r.media_type as 'movie' | 'tv',

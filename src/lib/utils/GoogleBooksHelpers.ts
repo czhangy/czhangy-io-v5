@@ -106,7 +106,7 @@ export default class GoogleBooksHelpers {
             .filter((item) => item.volumeInfo.publishedDate)
             .filter((item) => item.volumeInfo.authors?.length)
             .map((item) => ({
-                id: item.id,
+                googleBooksId: item.id,
                 name: item.volumeInfo.title,
                 author: item.volumeInfo.authors?.[0] ?? null,
                 note: item.volumeInfo.publishedDate?.split('-')[0] ?? null,

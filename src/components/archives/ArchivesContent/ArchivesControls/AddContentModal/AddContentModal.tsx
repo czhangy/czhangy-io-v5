@@ -64,7 +64,7 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
     };
 
     const handleSelectResult = async (id: string | number): Promise<void> => {
-        const result = searchResults.find((r) => r.id === id);
+        const result = searchResults.find((r) => r.tmdbId === id);
         if (!result) return;
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
         const res = await fetch('/api/watched', {
@@ -72,7 +72,7 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 name: result.name,
-                tmdbId: result.id,
+                tmdbId: result.tmdbId,
                 mediaType: result.mediaType,
             }),
         });
@@ -103,7 +103,7 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
                 value={query}
                 placeholder="Search movies & shows..."
                 isSearching={isSearching}
-                results={searchResults}
+                results={searchResults.map((r) => ({ ...r, id: r.tmdbId }))}
                 onChange={handleQueryChange}
                 onKeyDown={handleKeyDown}
                 onClear={handleClear}

@@ -85,13 +85,16 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
     };
 
     const handleSelectResult = async (id: string | number): Promise<void> => {
-        const result = searchResults.find((r) => r.id === id);
+        const result = searchResults.find((r) => r.googleBooksId === id);
         if (!result) return;
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
         const res = await fetch('/api/read', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: result.name, bookId: result.id }),
+            body: JSON.stringify({
+                name: result.name,
+                bookId: result.googleBooksId,
+            }),
         });
         if (!res.ok) return;
         const saved = (await res.json()) as Book;
@@ -152,7 +155,10 @@ const ReadingPanel: React.FC<ReadingPanelProps> = ({
                             value={query}
                             placeholder="Search books..."
                             isSearching={isSearching}
-                            results={searchResults}
+                            results={searchResults.map((r) => ({
+                                ...r,
+                                id: r.googleBooksId,
+                            }))}
                             onChange={handleQueryChange}
                             onKeyDown={handleKeyDown}
                             onClear={handleCancel}
