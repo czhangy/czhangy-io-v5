@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import AdminActions from '@/components/common/AdminActions/AdminActions';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
-import DeleteIcon from '@/lib/icons/DeleteIcon';
-import StarIcon from '@/lib/icons/StarIcon';
 import { Book } from '@/lib/static/types';
 import styles from './LibraryContent.module.scss';
 import LibraryControls from './LibraryControls/LibraryControls';
@@ -148,22 +147,10 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
                             ) : null}
                         </div>
                         {isAdmin ? (
-                            <div className={styles['admin-actions']}>
-                                <button
-                                    type="button"
-                                    className={styles['action-button']}
-                                    onClick={() => handleFeature(entry)}
-                                >
-                                    <StarIcon />
-                                </button>
-                                <button
-                                    type="button"
-                                    className={styles['action-button']}
-                                    onClick={() => handleDelete(entry.id)}
-                                >
-                                    <DeleteIcon />
-                                </button>
-                            </div>
+                            <AdminActions
+                                onHighlight={() => handleFeature(entry)}
+                                onDelete={() => handleDelete(entry.id)}
+                            />
                         ) : null}
                     </li>
                 ))}

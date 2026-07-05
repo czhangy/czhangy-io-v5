@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import AdminActions from '@/components/common/AdminActions/AdminActions';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
-import DeleteIcon from '@/lib/icons/DeleteIcon';
-import StarIcon from '@/lib/icons/StarIcon';
 import { Content } from '@/lib/static/types';
 import styles from './ArchivesContent.module.scss';
 import ArchivesControls from './ArchivesControls/ArchivesControls';
@@ -147,22 +146,10 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
                             ) : null}
                         </div>
                         {isAdmin ? (
-                            <div className={styles['admin-actions']}>
-                                <button
-                                    type="button"
-                                    className={styles['action-button']}
-                                    onClick={() => handleFeature(entry)}
-                                >
-                                    <StarIcon />
-                                </button>
-                                <button
-                                    type="button"
-                                    className={styles['action-button']}
-                                    onClick={() => handleDelete(entry.name)}
-                                >
-                                    <DeleteIcon />
-                                </button>
-                            </div>
+                            <AdminActions
+                                onHighlight={() => handleFeature(entry)}
+                                onDelete={() => handleDelete(entry.name)}
+                            />
                         ) : null}
                     </li>
                 ))}

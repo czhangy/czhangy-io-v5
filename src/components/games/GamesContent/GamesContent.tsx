@@ -1,10 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import AdminActions from '@/components/common/AdminActions/AdminActions';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
-import DeleteIcon from '@/lib/icons/DeleteIcon';
-import EditIcon from '@/lib/icons/EditIcon';
 import { Game } from '@/lib/static/types';
 import EditGameModal from './EditGameModal/EditGameModal';
 import styles from './GamesContent.module.scss';
@@ -152,22 +151,10 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
                             </div>
                         </div>
                         {isAdmin ? (
-                            <div className={styles['admin-actions']}>
-                                <button
-                                    type="button"
-                                    className={styles['action-button']}
-                                    onClick={() => setEditingGame(game)}
-                                >
-                                    <EditIcon />
-                                </button>
-                                <button
-                                    type="button"
-                                    className={styles['action-button']}
-                                    onClick={() => handleDelete(game.name)}
-                                >
-                                    <DeleteIcon />
-                                </button>
-                            </div>
+                            <AdminActions
+                                onEdit={() => setEditingGame(game)}
+                                onDelete={() => handleDelete(game.name)}
+                            />
                         ) : null}
                     </li>
                 ))}

@@ -27,8 +27,7 @@ const NBAPanelData = async ({
     const game: NBAGameResponse | null =
         await ESPNHelpers.getLastWarriorsGame();
 
-    const isRecent: boolean =
-        !!game && DateHelpers.isWithinDays(game.date, 215);
+    const isRecent: boolean = !!game && DateHelpers.isWithinDays(game.date, 15);
 
     const warriorsAreHome: boolean = game?.home.isWarriors ?? false;
     const warriors = warriorsAreHome ? game?.home : game?.away;
