@@ -1,10 +1,11 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import PanelButton from '@/components/status/PanelButton/PanelButton';
+import EditButton from '@/components/status/EditButton/EditButton';
+import LinkButton from '@/components/status/LinkButton/LinkButton';
+import PanelDropdown from '@/components/status/PanelDropdown/PanelDropdown';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
-import { useSession } from '@/lib/context/SessionContext';
-import LinkIcon from '@/lib/icons/LinkIcon';
+import { GAME_GENRES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
 import { Game } from '@/lib/static/types';
 import styles from './GamePanel.module.scss';
@@ -35,7 +36,6 @@ const GamePanel: React.FC<GamePanelProps> = ({
     // -------------------------------------------------------------------------
 
     const formRef = useRef<HTMLDivElement>(null);
-    const { role } = useSession();
 
     // -------------------------------------------------------------------------
     // STATE
@@ -50,6 +50,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
     const [newIcon, setNewIcon] = useState<string>('');
     const [newRating, setNewRating] = useState<string>('1');
     const [isSaving, setIsSaving] = useState<boolean>(false);
+    const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -131,24 +132,34 @@ const GamePanel: React.FC<GamePanelProps> = ({
         setNewName(e.target.value);
     };
 
-    const handleGenreChange = (
-        e: React.ChangeEvent<HTMLInputElement>
-    ): void => {
-        setNewGenre(e.target.value);
+    const handleNameFocus = (): void => {
+        setShowDropdown(true);
+    };
+
+    const handleNameBlur = (): void => {
+        setShowDropdown(false);
+    };
+
+    const handleGenreChange = (value: string): void => {
+        setNewGenre(value);
     };
 
     const handleIconChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setNewIcon(e.target.value);
     };
 
-    const handleRatingChange = (
-        e: React.ChangeEvent<HTMLSelectElement>
-    ): void => {
-        setNewRating(e.target.value);
+    const handleRatingChange = (value: string): void => {
+        setNewRating(value);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent): void => {
-        if (e.key === Key.Escape) handleCancel();
+        if (e.key === Key.Escape) {
+            if (showDropdown) {
+                setShowDropdown(false);
+                return;
+            }
+            handleCancel();
+        }
         if (e.key === Key.Enter) handleSaveNew();
     };
 
@@ -156,14 +167,10 @@ const GamePanel: React.FC<GamePanelProps> = ({
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const isAdmin: boolean = role === 'ADMIN';
-
     const headerActions: React.ReactNode = (
         <>
-            <PanelButton href="/status/games" icon={<LinkIcon />} />
-            {isAdmin ? (
-                <PanelButton onClick={handleEdit} disabled={isEditing} />
-            ) : null}
+            <EditButton onClick={handleEdit} disabled={isEditing} />
+            <LinkButton href="/status/games" />
         </>
     );
 
@@ -198,12 +205,14 @@ const GamePanel: React.FC<GamePanelProps> = ({
                                 className={styles['name-input']}
                                 value={newName}
                                 onChange={handleNameChange}
+                                onFocus={handleNameFocus}
+                                onBlur={handleNameBlur}
                                 placeholder="Game name..."
                                 autoFocus
                             />
                             {isFetching ? (
                                 <span className={styles.spinner} />
-                            ) : filteredGames.length > 0 ? (
+                            ) : showDropdown && filteredGames.length > 0 ? (
                                 <ul className={styles.dropdown}>
                                     {filteredGames.map((g) => (
                                         <li
@@ -224,21 +233,16 @@ const GamePanel: React.FC<GamePanelProps> = ({
                                 </ul>
                             ) : null}
                         </div>
-                        <select
-                            className={styles['rating-select']}
+                        <PanelDropdown
+                            options={RATING_OPTIONS}
                             value={newRating}
                             onChange={handleRatingChange}
-                        >
-                            {RATING_OPTIONS.map((r) => (
-                                <option key={r} value={r}>
-                                    {r}
-                                </option>
-                            ))}
-                        </select>
+                            compact
+                        />
                     </div>
                     <div className={styles.row}>
-                        <input
-                            className={styles['field-input']}
+                        <PanelDropdown
+                            options={GAME_GENRES}
                             value={newGenre}
                             onChange={handleGenreChange}
                             placeholder="Genre"
@@ -249,8 +253,6 @@ const GamePanel: React.FC<GamePanelProps> = ({
                             onChange={handleIconChange}
                             placeholder="Icon URL"
                         />
-                    </div>
-                    <div className={styles.actions}>
                         <button
                             type="button"
                             className={styles['save-btn']}
@@ -258,13 +260,6 @@ const GamePanel: React.FC<GamePanelProps> = ({
                             disabled={isSaving || !canSave}
                         >
                             SAVE
-                        </button>
-                        <button
-                            type="button"
-                            className={styles['cancel-btn']}
-                            onClick={handleCancel}
-                        >
-                            CANCEL
                         </button>
                     </div>
                 </div>

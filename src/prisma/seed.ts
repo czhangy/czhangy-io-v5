@@ -2,7 +2,7 @@ import type { HTTPQueryOptions } from '@neondatabase/serverless';
 import { PrismaNeonHttp } from '@prisma/adapter-neon';
 import { hash } from 'bcryptjs';
 import { config } from 'dotenv';
-import { PrismaClient } from '@/generated/prisma/client';
+import { PrismaClient } from '@/prisma/generated/client';
 
 config({ path: '.env.local' });
 

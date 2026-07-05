@@ -1,6 +1,6 @@
 import type { HTTPQueryOptions } from '@neondatabase/serverless';
 import { PrismaNeonHttp } from '@prisma/adapter-neon';
-import { PrismaClient } from '@/generated/prisma/client';
+import { PrismaClient } from '@/prisma/generated/client';
 
 type GlobalWithPrisma = typeof globalThis & { prisma: PrismaClient };
 

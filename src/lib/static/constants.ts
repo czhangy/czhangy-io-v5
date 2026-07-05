@@ -19,6 +19,43 @@ export const GAME_MILESTONES = [
     { count: 500, name: 'Professional Gamer', tier: 1 },
 ];
 
+// Games
+export const GAME_GENRES: string[] = [
+    'ARPG',
+    'Action Adventure',
+    'Adventure',
+    'Adventure Platformer',
+    'Battle Royale',
+    "Beat 'Em Up",
+    'Education',
+    'FPS',
+    'Graphic Adventure',
+    'Hero Shooter',
+    'Horror',
+    'Idle',
+    'Looter Shooter',
+    'MMORPG',
+    'Management Sim',
+    'Metroidvania',
+    'Narrative',
+    'Party',
+    'Platformer',
+    'Point-and-Click',
+    'Psychological Thriller',
+    'Puzzle',
+    'Puzzle Adventure',
+    'Puzzle Platformer',
+    'RPG',
+    'Racing',
+    'Roguelike',
+    'Roguelike Deckbuilder',
+    'Sandbox',
+    'Simulator',
+    'Soulslike',
+    'Survival',
+    'Tower Defense',
+];
+
 // Cardistry
 export const CARDISTRY_MOVE_TYPES: string[] = [
     '1H Cut',

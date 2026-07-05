@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import PanelButton from '@/components/status/PanelButton/PanelButton';
+import EditButton from '@/components/status/EditButton/EditButton';
+import LinkButton from '@/components/status/LinkButton/LinkButton';
+import PanelDropdown from '@/components/status/PanelDropdown/PanelDropdown';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
-import { useSession } from '@/lib/context/SessionContext';
-import LinkIcon from '@/lib/icons/LinkIcon';
 import { CardistryMoveEntry } from '@/lib/static/types';
 import CardistryHelpers from '@/lib/utils/CardistryHelpers';
 import styles from './CardistryPanel.module.scss';
@@ -29,7 +29,6 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
     // -------------------------------------------------------------------------
 
     const editFormRef = useRef<HTMLDivElement>(null);
-    const { role } = useSession();
 
     // -------------------------------------------------------------------------
     // STATE
@@ -65,11 +64,8 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
         handleCancel();
     };
 
-    const handleDropdownChange = async (
-        e: React.ChangeEvent<HTMLSelectElement>
-    ): Promise<void> => {
-        const id = parseInt(e.target.value, 10);
-        const move = moves.find((m) => m.id === id);
+    const handleDropdownChange = async (value: string): Promise<void> => {
+        const move = moves.find((m) => m.name === value);
         if (move) await handleSelect(move);
     };
 
@@ -97,18 +93,14 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const isAdmin: boolean = role === 'ADMIN';
-
     const proficiency = activeMove
         ? CardistryHelpers.getProficiency(activeMove.count)
         : null;
 
     const headerActions: React.ReactNode = (
         <>
-            <PanelButton href="/status/cardistry" icon={<LinkIcon />} />
-            {isAdmin ? (
-                <PanelButton onClick={handleEdit} disabled={isEditing} />
-            ) : null}
+            <EditButton onClick={handleEdit} disabled={isEditing} />
+            <LinkButton href="/status/cardistry" />
         </>
     );
 
@@ -126,22 +118,12 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
         >
             {isEditing ? (
                 <div ref={editFormRef} className={styles['edit-form']}>
-                    <select
-                        className={styles.select}
-                        value={activeMove?.id ?? ''}
+                    <PanelDropdown
+                        value={activeMove?.name ?? ''}
                         onChange={handleDropdownChange}
-                    >
-                        {!activeMove && (
-                            <option value="" disabled>
-                                — Select a move —
-                            </option>
-                        )}
-                        {moves.map((move) => (
-                            <option key={move.id} value={move.id}>
-                                {move.name}
-                            </option>
-                        ))}
-                    </select>
+                        options={moves.map((m) => m.name)}
+                        placeholder="— Select a move —"
+                    />
                 </div>
             ) : (
                 <div className={styles.content}>

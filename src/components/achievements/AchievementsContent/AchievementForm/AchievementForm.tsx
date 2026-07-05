@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Dropdown from '@/components/common/Dropdown/Dropdown';
 import { AchievementFormValues } from '@/lib/static/types';
 import DateHelpers from '@/lib/utils/DateHelpers';
 import styles from './AchievementForm.module.scss';
@@ -30,7 +31,7 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
         'Misc',
         'Travel',
     ];
-    const TIER_OPTIONS: number[] = [1, 2, 3];
+    const TIER_OPTIONS: string[] = ['1', '2', '3'];
 
     // -------------------------------------------------------------------------
     // STATE
@@ -77,6 +78,14 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
             setError(err instanceof Error ? err.message : String(err));
             setIsSubmitting(false);
         }
+    };
+
+    const handleTierChange = (value: string): void => {
+        setTier(Number(value));
+    };
+
+    const handleCategoryChange = (value: string): void => {
+        setCategory(value);
     };
 
     // -------------------------------------------------------------------------
@@ -140,41 +149,19 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
             <div className={styles.row}>
                 <div className={styles.field}>
                     <span className={styles.label}>Tier</span>
-                    <select
-                        className={styles.select}
-                        value={tier}
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                            setTier(Number(e.target.value))
-                        }
-                    >
-                        <option value={0} disabled>
-                            —
-                        </option>
-                        {TIER_OPTIONS.map((t) => (
-                            <option key={t} value={t}>
-                                {t}
-                            </option>
-                        ))}
-                    </select>
+                    <Dropdown
+                        value={tier === 0 ? '' : String(tier)}
+                        onChange={handleTierChange}
+                        options={TIER_OPTIONS}
+                    />
                 </div>
                 <div className={styles.field}>
                     <span className={styles.label}>Category</span>
-                    <select
-                        className={styles.select}
+                    <Dropdown
                         value={category}
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                            setCategory(e.target.value)
-                        }
-                    >
-                        <option value="" disabled>
-                            —
-                        </option>
-                        {CATEGORIES.map((cat) => (
-                            <option key={cat} value={cat}>
-                                {cat}
-                            </option>
-                        ))}
-                    </select>
+                        onChange={handleCategoryChange}
+                        options={CATEGORIES}
+                    />
                 </div>
             </div>
             <div className={styles.field}>

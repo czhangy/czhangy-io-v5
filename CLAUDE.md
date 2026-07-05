@@ -61,45 +61,23 @@ Pre-commit hooks via Husky/lint-staged automatically run ESLint, Prettier, and S
 
 Shared UI primitives live in `src/components/common/` (Modal, Dropdown, Accordion, Spinner, etc.).
 
-**Domain directories** (`src/components/career/`, `src/components/achievements/`, etc.) group related components by feature area. When a domain contains exactly one page component, that page lives directly in the domain directory — not in a named subdirectory — alongside its `.module.scss` and `.md` files:
+**Page components** always live directly under `src/components/` in a lowercase directory named after the route segment — regardless of route depth:
 
 ```
-src/components/career/
-  CareerPage.tsx          ← page component at domain root (only page in this domain)
-  CareerPage.module.scss
-  CareerPage.md
-  JobCard/                ← child components in subdirectories as normal
-    JobCard.tsx
-    ...
+src/components/
+  archives/               ← page for /status/archives
+    ArchivesPage.tsx
+    ArchivesPage.module.scss
+    ArchivesPage.md
+    ArchivesContent/      ← child component, co-located here
+      ...
+  library/                ← page for /status/library
+    LibraryPage.tsx
+    LibraryPage.module.scss
+    LibraryPage.md
 ```
 
-Do **not** create a `CareerPage/` subdirectory inside `career/` just to hold `CareerPage.tsx`. The domain directory itself serves as that container.
-
-When a domain contains **multiple distinct page components at the same route level** (e.g. `auth/` has both `LoginPage` at `/auth/login` and `RegisterPage` at `/auth/register`), each page gets its own subdirectory as usual:
-
-```
-src/components/auth/
-  LoginPage/
-    LoginPage.tsx
-    LoginPage.module.scss
-    LoginPage.md
-  RegisterPage/
-    RegisterPage.tsx
-    ...
-```
-
-Pages at **different route levels** within the same domain do not trigger this rule. If `StatusPage` lives at `/status` and `WatchedPage` lives at `/status/watched`, `StatusPage` stays at the domain root and `WatchedPage` gets its own subdirectory — the domain root is not reorganized just because a subroute page was added:
-
-```
-src/components/status/
-  StatusPage.tsx          ← domain root, page for /status
-  StatusPage.module.scss
-  StatusPage.md
-  WatchedPage/            ← subroute page for /status/watched
-    WatchedPage.tsx
-    WatchedPage.module.scss
-    WatchedPage.md
-```
+**Domain directories** (`src/components/status/`, `src/components/career/`, etc.) exist only for shared child components used by pages in that feature area. They never contain page components.
 
 **Component co-location**: If a child component is only used by a single parent component, place its directory inside the parent's directory rather than as a sibling. Components used by multiple parents live at the nearest shared ancestor level.
 
