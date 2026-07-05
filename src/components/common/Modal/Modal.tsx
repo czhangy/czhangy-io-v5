@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import MediaHelpers from '@/lib/utils/MediaHelpers';
 import styles from './Modal.module.scss';
@@ -17,6 +17,18 @@ const Modal: React.FC<ModalProps> = ({ title, children, onClose }) => {
     // -------------------------------------------------------------------------
 
     const [isClosing, setIsClosing] = useState<boolean>(false);
+
+    // -------------------------------------------------------------------------
+    // EFFECTS
+    // -------------------------------------------------------------------------
+
+    useEffect(() => {
+        const prev = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = prev;
+        };
+    }, []);
 
     // -------------------------------------------------------------------------
     // HANDLERS
