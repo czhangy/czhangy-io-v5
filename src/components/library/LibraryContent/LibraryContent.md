@@ -1,6 +1,6 @@
 # LibraryContent
 
-Client component rendered by LibraryPage. Displays a paginated list of read media entries with cover, title, author, and genre tags. Admin users see a delete button on each row and an "Add Book" button in the controls bar.
+Client component rendered by LibraryPage. Displays a paginated list of read media entries with cover, title, author, and genre tags. Admin users see a feature button and a delete button on each row, plus an "Add Book" button in the controls bar.
 
 ## Props
 
@@ -18,6 +18,7 @@ Client component rendered by LibraryPage. Displays a paginated list of read medi
 ## Handlers
 
 - `handleAdd` — inserts a newly added entry (deduplicating by `id`) into its sorted position and navigates to the page it lands on
+- `handleFeature` — re-submits an entry's existing data to `POST /api/books`, bumping its `addedAt` to now without changing any other field
 - `handleDelete` — removes an entry by id and clamps the page if necessary
 
 ## Computations

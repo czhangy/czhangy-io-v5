@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import DeleteIcon from '@/lib/icons/DeleteIcon';
+import StarIcon from '@/lib/icons/StarIcon';
 import { Content } from '@/lib/static/types';
 import styles from './ArchivesContent.module.scss';
 import ArchivesControls from './ArchivesControls/ArchivesControls';
@@ -47,6 +48,25 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
         const index = nextEntries.findIndex((e) => e.name === entry.name);
         setEntries(nextEntries);
         setPage(Math.floor(index / ITEMS_PER_PAGE) + 1);
+    };
+
+    const handleFeature = async (entry: Content): Promise<void> => {
+        const res = await fetch('/api/content', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: entry.name,
+                mediaType: entry.mediaType,
+                poster: entry.poster,
+                genres: entry.genres,
+            }),
+        });
+        if (!res.ok) return;
+        const updated = (await res.json()) as Content;
+        const nextEntries = entries.map((e) =>
+            e.name === updated.name ? updated : e
+        );
+        setEntries(nextEntries);
     };
 
     const handleDelete = async (name: string): Promise<void> => {
@@ -127,13 +147,22 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
                             ) : null}
                         </div>
                         {isAdmin ? (
-                            <button
-                                type="button"
-                                className={styles['delete-button']}
-                                onClick={() => handleDelete(entry.name)}
-                            >
-                                <DeleteIcon />
-                            </button>
+                            <div className={styles['admin-actions']}>
+                                <button
+                                    type="button"
+                                    className={styles['action-button']}
+                                    onClick={() => handleFeature(entry)}
+                                >
+                                    <StarIcon />
+                                </button>
+                                <button
+                                    type="button"
+                                    className={styles['action-button']}
+                                    onClick={() => handleDelete(entry.name)}
+                                >
+                                    <DeleteIcon />
+                                </button>
+                            </div>
                         ) : null}
                     </li>
                 ))}
