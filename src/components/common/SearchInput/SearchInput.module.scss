@@ -68,50 +68,50 @@
             }
         }
     }
+}
 
-    .dropdown {
-        background: $background;
-        border: 1px solid $border-subtle;
-        left: 0;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        position: absolute;
-        right: 0;
-        top: 100%;
-        z-index: 10;
+.dropdown {
+    background: $background;
+    border: 1px solid $border-subtle;
+    left: var(--dropdown-left);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: var(--dropdown-top);
+    width: var(--dropdown-width);
+    z-index: 1100;
 
-        .dropdown-item {
-            align-items: center;
-            cursor: pointer;
-            display: flex;
-            gap: 0.5rem;
-            justify-content: space-between;
-            padding: 0.3rem 0.5rem;
-            transition: background 0.1s ease;
+    .dropdown-item {
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        gap: 0.5rem;
+        justify-content: space-between;
+        padding: 0.3rem 0.5rem;
+        transition: background 0.1s ease;
 
-            @media (hover: hover) {
-                &:hover {
-                    background: rgba($foreground, 0.05);
-                }
+        @media (hover: hover) {
+            &:hover {
+                background: rgba($foreground, 0.05);
             }
+        }
 
-            .result-name {
-                @include mono-label;
+        .result-name {
+            @include mono-label;
 
-                font-size: 0.75rem;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
+            font-size: 0.75rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
 
-            .result-note {
-                @include mono-label;
+        .result-note {
+            @include mono-label;
 
-                color: $text-dim;
-                flex-shrink: 0;
-                font-size: 0.65rem;
-            }
+            color: $text-dim;
+            flex-shrink: 0;
+            font-size: 0.65rem;
         }
     }
 }

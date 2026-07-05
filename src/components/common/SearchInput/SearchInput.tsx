@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import styles from './SearchInput.module.scss';
 
 type SearchInputProps = {
@@ -31,10 +32,33 @@ const SearchInput: React.FC<SearchInputProps> = ({
     hideClear,
 }) => {
     // -------------------------------------------------------------------------
+    // CONSTANTS
+    // -------------------------------------------------------------------------
+
+    type DropdownRect = {
+        top: number;
+        left: number;
+        width: number;
+    };
+
+    // -------------------------------------------------------------------------
     // HOOKS
     // -------------------------------------------------------------------------
 
     const wrapperRef = useRef<HTMLDivElement>(null);
+    const dropdownRef = useRef<HTMLUListElement>(null);
+
+    // -------------------------------------------------------------------------
+    // STATE
+    // -------------------------------------------------------------------------
+
+    const [dropdownRect, setDropdownRect] = useState<DropdownRect | null>(null);
+
+    // -------------------------------------------------------------------------
+    // RENDERING
+    // -------------------------------------------------------------------------
+
+    const hasResults = results.length > 0;
 
     // -------------------------------------------------------------------------
     // EFFECTS
@@ -42,9 +66,11 @@ const SearchInput: React.FC<SearchInputProps> = ({
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
+            const target = e.target as Node;
             if (
                 wrapperRef.current &&
-                !wrapperRef.current.contains(e.target as Node)
+                !wrapperRef.current.contains(target) &&
+                !dropdownRef.current?.contains(target)
             ) {
                 onClear();
             }
@@ -53,6 +79,26 @@ const SearchInput: React.FC<SearchInputProps> = ({
         return () =>
             document.removeEventListener('mousedown', handleClickOutside);
     }, [onClear]);
+
+    useLayoutEffect(() => {
+        if (!hasResults) return;
+        const updateRect = (): void => {
+            if (!wrapperRef.current) return;
+            const rect = wrapperRef.current.getBoundingClientRect();
+            setDropdownRect({
+                top: rect.bottom,
+                left: rect.left,
+                width: rect.width,
+            });
+        };
+        updateRect();
+        window.addEventListener('scroll', updateRect, true);
+        window.addEventListener('resize', updateRect);
+        return () => {
+            window.removeEventListener('scroll', updateRect, true);
+            window.removeEventListener('resize', updateRect);
+        };
+    }, [hasResults]);
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -79,26 +125,39 @@ const SearchInput: React.FC<SearchInputProps> = ({
                     ✕
                 </button>
             ) : null}
-            {results.length > 0 ? (
-                <ul className={styles.dropdown}>
-                    {results.map((result) => (
-                        <li
-                            key={result.id}
-                            className={styles['dropdown-item']}
-                            onClick={() => onSelectResult(result.id)}
-                        >
-                            <span className={styles['result-name']}>
-                                {result.name}
-                            </span>
-                            {result.note ? (
-                                <span className={styles['result-note']}>
-                                    {result.note}
-                                </span>
-                            ) : null}
-                        </li>
-                    ))}
-                </ul>
-            ) : null}
+            {hasResults && dropdownRect
+                ? createPortal(
+                      <ul
+                          ref={dropdownRef}
+                          className={styles.dropdown}
+                          style={
+                              {
+                                  '--dropdown-top': `${dropdownRect.top}px`,
+                                  '--dropdown-left': `${dropdownRect.left}px`,
+                                  '--dropdown-width': `${dropdownRect.width}px`,
+                              } as React.CSSProperties
+                          }
+                      >
+                          {results.map((result) => (
+                              <li
+                                  key={result.id}
+                                  className={styles['dropdown-item']}
+                                  onClick={() => onSelectResult(result.id)}
+                              >
+                                  <span className={styles['result-name']}>
+                                      {result.name}
+                                  </span>
+                                  {result.note ? (
+                                      <span className={styles['result-note']}>
+                                          {result.note}
+                                      </span>
+                                  ) : null}
+                              </li>
+                          ))}
+                      </ul>,
+                      document.body
+                  )
+                : null}
         </div>
     );
 };

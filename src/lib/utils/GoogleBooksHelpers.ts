@@ -96,7 +96,7 @@ export default class GoogleBooksHelpers {
         if (!query.trim()) return [];
         const keyParam = this.apiKey ? `&key=${this.apiKey}` : '';
         const res = await fetch(
-            `${BASE_URL}/volumes?q=${encodeURIComponent(query)}&maxResults=8&printType=books${keyParam}`,
+            `${BASE_URL}/volumes?q=${encodeURIComponent(query)}&maxResults=12&printType=books${keyParam}`,
             { cache: 'no-store' }
         );
         if (!res.ok) return [];

@@ -49,13 +49,14 @@ module.exports = {
             // Return statement → MARKUP
             if (stmt.type === 'ReturnStatement') return 'MARKUP';
 
-            // Standalone call expressions: useEffect → EFFECTS, other use* → HOOKS
+            // Standalone call expressions: useEffect/useLayoutEffect → EFFECTS, other use* → HOOKS
             if (
                 stmt.type === 'ExpressionStatement' &&
                 stmt.expression.type === 'CallExpression'
             ) {
                 const callee = getCalleeName(stmt.expression.callee);
-                if (callee === 'useEffect') return 'EFFECTS';
+                if (callee === 'useEffect' || callee === 'useLayoutEffect')
+                    return 'EFFECTS';
                 if (callee?.startsWith('use')) return 'HOOKS';
             }
 

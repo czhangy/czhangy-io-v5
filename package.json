@@ -15,6 +15,7 @@
         "gen:icon": "PYTHONPATH=src python3 ./src/lib/scripts/generators/generate_icon.py",
         "db:push": "prisma db push && prisma generate",
         "db:seed": "tsx src/prisma/seed.ts",
+        "db:studio": "prisma studio",
         "postinstall": "prisma generate",
         "prepare": "husky"
     },
