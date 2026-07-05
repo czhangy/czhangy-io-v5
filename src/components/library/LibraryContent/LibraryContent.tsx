@@ -38,21 +38,21 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
     // -------------------------------------------------------------------------
 
     const handleAdd = (entry: Book): void => {
-        const filtered = entries.filter((e) => e.bookId !== entry.bookId);
+        const filtered = entries.filter((e) => e.id !== entry.id);
         const nextEntries = [...filtered, entry].sort((a, b) =>
             a.name.localeCompare(b.name)
         );
-        const index = nextEntries.findIndex((e) => e.bookId === entry.bookId);
+        const index = nextEntries.findIndex((e) => e.id === entry.id);
         setEntries(nextEntries);
         setPage(Math.floor(index / ITEMS_PER_PAGE) + 1);
     };
 
-    const handleDelete = async (bookId: string): Promise<void> => {
-        const res = await fetch(`/api/books/${encodeURIComponent(bookId)}`, {
+    const handleDelete = async (id: number): Promise<void> => {
+        const res = await fetch(`/api/books/${id}`, {
             method: 'DELETE',
         });
         if (!res.ok) return;
-        const nextEntries = entries.filter((e) => e.bookId !== bookId);
+        const nextEntries = entries.filter((e) => e.id !== id);
         const newTotalPages = Math.max(
             1,
             Math.ceil(nextEntries.length / ITEMS_PER_PAGE)
@@ -101,7 +101,7 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
             />
             <ul className={styles.list}>
                 {paginatedEntries.map((entry) => (
-                    <li key={entry.bookId} className={styles.item}>
+                    <li key={entry.id} className={styles.item}>
                         <Image
                             className={styles.cover}
                             src={entry.cover}
@@ -131,7 +131,7 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
                             <button
                                 type="button"
                                 className={styles['delete-button']}
-                                onClick={() => handleDelete(entry.bookId)}
+                                onClick={() => handleDelete(entry.id)}
                             >
                                 <DeleteIcon />
                             </button>

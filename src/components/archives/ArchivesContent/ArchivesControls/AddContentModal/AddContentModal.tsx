@@ -72,7 +72,6 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 name: result.name,
-                tmdbId: result.tmdbId,
                 mediaType: result.mediaType,
                 poster: result.poster,
                 genres: result.genres,

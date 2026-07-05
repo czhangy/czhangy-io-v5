@@ -13,18 +13,12 @@ export const POST = async (request: NextRequest) => {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { name, tmdbId, mediaType, poster, genres } =
-        (await request.json()) as {
-            name: string;
-            tmdbId: number;
-            mediaType: 'movie' | 'tv';
-            poster: string | null;
-            genres: string[];
-        };
-
-    const existing = await prisma.content.findUnique({
-        where: { tmdbId },
-    });
+    const { name, mediaType, poster, genres } = (await request.json()) as {
+        name: string;
+        mediaType: 'movie' | 'tv';
+        poster: string | null;
+        genres: string[];
+    };
 
     if (!poster || !genres?.length) {
         return NextResponse.json(
@@ -33,11 +27,12 @@ export const POST = async (request: NextRequest) => {
         );
     }
 
+    const existing = await prisma.content.findUnique({ where: { name } });
+
     const record = await prisma.content.upsert({
-        where: { tmdbId },
+        where: { name },
         create: {
             name,
-            tmdbId,
             mediaType,
             poster,
             genres,

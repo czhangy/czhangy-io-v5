@@ -89,7 +89,6 @@ const ContentPanel: React.FC<ContentPanelProps> = ({
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 name: result.name,
-                tmdbId: result.tmdbId,
                 mediaType: result.mediaType,
                 poster: result.poster,
                 genres: result.genres,
@@ -97,7 +96,7 @@ const ContentPanel: React.FC<ContentPanelProps> = ({
         });
         if (!res.ok) return;
         const saved = (await res.json()) as Content;
-        const filtered = entries.filter((e) => e.tmdbId !== saved.tmdbId);
+        const filtered = entries.filter((e) => e.name !== saved.name);
         setEntries([saved, ...filtered].slice(0, MAX_ENTRIES));
         setIsAdding(false);
         setQuery('');

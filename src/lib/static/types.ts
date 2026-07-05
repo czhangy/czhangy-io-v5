@@ -22,9 +22,9 @@ export type Game = {
 };
 
 export type Book = {
+    id: number;
     name: string;
     author: string;
-    bookId: string;
     cover: string;
     genres: string[];
     addedAt: string;
@@ -32,7 +32,6 @@ export type Book = {
 
 export type Content = {
     name: string;
-    tmdbId: number;
     mediaType: 'movie' | 'tv';
     poster: string;
     genres: string[];

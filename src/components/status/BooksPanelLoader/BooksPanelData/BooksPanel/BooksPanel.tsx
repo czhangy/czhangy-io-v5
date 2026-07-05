@@ -93,7 +93,6 @@ const BooksPanel: React.FC<BooksPanelProps> = ({
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 name: result.name,
-                bookId: result.googleBooksId,
                 author: result.author,
                 cover: result.cover,
                 genres: result.genres,
@@ -101,7 +100,7 @@ const BooksPanel: React.FC<BooksPanelProps> = ({
         });
         if (!res.ok) return;
         const saved = (await res.json()) as Book;
-        const filtered = entries.filter((e) => e.bookId !== saved.bookId);
+        const filtered = entries.filter((e) => e.id !== saved.id);
         setEntries([saved, ...filtered].slice(0, MAX_ENTRIES));
         setIsAdding(false);
         setQuery('');
@@ -175,7 +174,7 @@ const BooksPanel: React.FC<BooksPanelProps> = ({
                 ) : null}
                 <ul className={styles.list}>
                     {entries.map((entry) => (
-                        <li key={entry.bookId} className={styles.item}>
+                        <li key={entry.id} className={styles.item}>
                             <Image
                                 className={styles.cover}
                                 src={entry.cover}

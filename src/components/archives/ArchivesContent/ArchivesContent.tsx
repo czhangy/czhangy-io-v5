@@ -40,11 +40,11 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
     // -------------------------------------------------------------------------
 
     const handleAdd = (entry: Content): void => {
-        const filtered = entries.filter((e) => e.tmdbId !== entry.tmdbId);
+        const filtered = entries.filter((e) => e.name !== entry.name);
         const nextEntries = [...filtered, entry].sort((a, b) =>
             a.name.localeCompare(b.name)
         );
-        const index = nextEntries.findIndex((e) => e.tmdbId === entry.tmdbId);
+        const index = nextEntries.findIndex((e) => e.name === entry.name);
         setEntries(nextEntries);
         setPage(Math.floor(index / ITEMS_PER_PAGE) + 1);
     };

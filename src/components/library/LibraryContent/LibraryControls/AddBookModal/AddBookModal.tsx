@@ -73,7 +73,6 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 name: result.name,
-                bookId: result.googleBooksId,
                 author: result.author,
                 cover: result.cover,
                 genres: result.genres,

@@ -28,7 +28,6 @@ model Highlights {
 model Content {
     id        Int      @id @default(autoincrement())
     name      String   @unique
-    tmdbId    Int      @unique
     mediaType String
     poster    String
     genres    String[]
@@ -36,13 +35,14 @@ model Content {
 }
 
 model Books {
-    id        Int      @id @default(autoincrement())
-    name      String
-    author    String
-    bookId    String   @unique
-    cover     String
-    genres    String[]
-    addedAt   DateTime @default(now())
+    id      Int      @id @default(autoincrement())
+    name    String
+    author  String
+    cover   String
+    genres  String[]
+    addedAt DateTime @default(now())
+
+    @@unique([name, author])
 }
 
 model Achievements {

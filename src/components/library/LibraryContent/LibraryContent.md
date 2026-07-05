@@ -17,7 +17,7 @@ Client component rendered by LibraryPage. Displays a paginated list of read medi
 
 ## Handlers
 
-- `handleAdd` — inserts a newly added entry (deduplicating by `bookId`) into its sorted position and navigates to the page it lands on
+- `handleAdd` — inserts a newly added entry (deduplicating by `id`) into its sorted position and navigates to the page it lands on
 - `handleDelete` — removes an entry by id and clamps the page if necessary
 
 ## Computations
