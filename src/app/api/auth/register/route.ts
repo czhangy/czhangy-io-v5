@@ -21,7 +21,7 @@ export const POST = async (request: NextRequest) => {
     }
 
     const hashedPassword = await AuthHelpers.hashPassword(password);
-    await prisma.user.create({ data: { hashedPassword, role: 'USER' } });
+    await prisma.users.create({ data: { hashedPassword, role: 'USER' } });
 
     return NextResponse.json({ success: true });
 };

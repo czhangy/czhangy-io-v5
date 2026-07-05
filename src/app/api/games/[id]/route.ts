@@ -55,12 +55,12 @@ export const PUT = async (
         );
     }
 
-    const current = await prisma.game.findUnique({ where: { id: numericId } });
+    const current = await prisma.games.findUnique({ where: { id: numericId } });
     if (!current) {
         return NextResponse.json({ error: 'Game not found' }, { status: 404 });
     }
 
-    const conflict = await prisma.game.findUnique({
+    const conflict = await prisma.games.findUnique({
         where: { name: name.trim() },
     });
     if (conflict && conflict.id !== numericId) {
@@ -70,7 +70,7 @@ export const PUT = async (
         );
     }
 
-    const game = await prisma.game.update({
+    const game = await prisma.games.update({
         where: { id: numericId },
         data: {
             name: name.trim(),
@@ -97,12 +97,12 @@ export const DELETE = async (
         return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
     }
 
-    const countBefore = await prisma.game.count();
-    await prisma.game.delete({ where: { id: numericId } });
+    const countBefore = await prisma.games.count();
+    await prisma.games.delete({ where: { id: numericId } });
 
     const milestone = GAME_MILESTONES.find((m) => m.count === countBefore);
     if (milestone) {
-        await prisma.achievement.deleteMany({
+        await prisma.achievements.deleteMany({
             where: { name: milestone.name },
         });
     }

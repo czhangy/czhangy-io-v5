@@ -21,11 +21,11 @@ const GamePanelData = async ({
 
     const fetchGame = async (): Promise<Game | null> => {
         try {
-            const item = await prisma.highlight.findUnique({
+            const item = await prisma.highlights.findUnique({
                 where: { key: 'game' },
             });
             if (!item) return null;
-            return await prisma.game.findUnique({
+            return await prisma.games.findUnique({
                 where: { name: item.value },
             });
         } catch {}

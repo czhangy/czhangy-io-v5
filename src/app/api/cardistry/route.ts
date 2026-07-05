@@ -5,7 +5,7 @@ import { Move } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
 
 export const GET = async () => {
-    const moves = await prisma.cardistryMove.findMany({
+    const moves = await prisma.moves.findMany({
         orderBy: { name: 'asc' },
     });
     return NextResponse.json(
@@ -43,7 +43,7 @@ export const POST = async (request: NextRequest) => {
         );
     }
 
-    const existing = await prisma.cardistryMove.findUnique({
+    const existing = await prisma.moves.findUnique({
         where: { name: name.trim() },
     });
 
@@ -54,21 +54,21 @@ export const POST = async (request: NextRequest) => {
         );
     }
 
-    const move = await prisma.cardistryMove.create({
+    const move = await prisma.moves.create({
         data: { name: name.trim(), type: type.trim() },
     });
 
-    const existingItem = await prisma.highlight.findUnique({
+    const existingItem = await prisma.highlights.findUnique({
         where: { key: 'move' },
     });
 
     if (existingItem) {
-        await prisma.highlight.update({
+        await prisma.highlights.update({
             where: { key: 'move' },
             data: { value: move.name },
         });
     } else {
-        await prisma.highlight.create({
+        await prisma.highlights.create({
             data: { key: 'move', value: move.name },
         });
     }

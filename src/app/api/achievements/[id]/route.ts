@@ -37,7 +37,7 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
     }
 
     try {
-        await prisma.achievement.update({
+        await prisma.achievements.update({
             where: { id: parseInt(id) },
             data: { tier, name, category, description, date },
         });
@@ -67,7 +67,7 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
 
     const { id } = await params;
 
-    await prisma.achievement.delete({
+    await prisma.achievements.delete({
         where: { id: parseInt(id) },
     });
 

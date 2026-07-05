@@ -21,7 +21,7 @@ export const DELETE = async (
 
     const milestone = READ_MILESTONES.find((m) => m.count === countBefore);
     if (milestone) {
-        await prisma.achievement.deleteMany({
+        await prisma.achievements.deleteMany({
             where: { name: milestone.name },
         });
     }

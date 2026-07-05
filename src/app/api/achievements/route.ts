@@ -34,7 +34,7 @@ export const POST = async (request: NextRequest) => {
     }
 
     try {
-        await prisma.achievement.create({
+        await prisma.achievements.create({
             data: { tier, name, category, description, date },
         });
     } catch (e) {

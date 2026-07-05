@@ -15,7 +15,7 @@ export const POST = async (request: NextRequest) => {
         );
     }
 
-    const users = await prisma.user.findMany();
+    const users = await prisma.users.findMany();
 
     for (const user of users) {
         const match = await AuthHelpers.verifyPassword(

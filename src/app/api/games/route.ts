@@ -6,7 +6,7 @@ import AuthHelpers from '@/lib/utils/AuthHelpers';
 import DateHelpers from '@/lib/utils/DateHelpers';
 
 export const GET = async () => {
-    const games = await prisma.game.findMany({
+    const games = await prisma.games.findMany({
         orderBy: { name: 'asc' },
     });
     return NextResponse.json(games as Game[]);
@@ -48,7 +48,7 @@ export const POST = async (request: NextRequest) => {
         );
     }
 
-    const existing = await prisma.game.findUnique({
+    const existing = await prisma.games.findUnique({
         where: { name: name.trim() },
     });
 
@@ -59,7 +59,7 @@ export const POST = async (request: NextRequest) => {
         );
     }
 
-    const game = await prisma.game.create({
+    const game = await prisma.games.create({
         data: {
             name: name.trim(),
             genre: genre.trim(),
@@ -68,7 +68,7 @@ export const POST = async (request: NextRequest) => {
         },
     });
 
-    const count = await prisma.game.count();
+    const count = await prisma.games.count();
     const milestone = GAME_MILESTONES.find((m) => m.count === count);
     if (milestone) {
         await prisma.achievement

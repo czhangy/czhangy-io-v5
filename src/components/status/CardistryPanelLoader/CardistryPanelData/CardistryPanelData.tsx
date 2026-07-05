@@ -21,11 +21,11 @@ const CardistryPanelData = async ({
 
     const fetchActiveMove = async (): Promise<Move | null> => {
         try {
-            const item = await prisma.highlight.findUnique({
+            const item = await prisma.highlights.findUnique({
                 where: { key: 'move' },
             });
             if (!item) return null;
-            const move = await prisma.cardistryMove.findUnique({
+            const move = await prisma.moves.findUnique({
                 where: { name: item.value },
             });
             if (move) {

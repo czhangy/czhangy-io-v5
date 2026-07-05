@@ -9,7 +9,7 @@ const CardistryPage = async () => {
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const records = await prisma.cardistryMove.findMany({
+    const records = await prisma.moves.findMany({
         orderBy: { createdAt: 'asc' },
     });
 

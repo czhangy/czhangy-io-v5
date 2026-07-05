@@ -9,7 +9,7 @@ const AchievementsPage = async () => {
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const achievements: Achievement[] = await prisma.achievement.findMany({
+    const achievements: Achievement[] = await prisma.achievements.findMany({
         orderBy: { createdAt: 'asc' },
     });
 

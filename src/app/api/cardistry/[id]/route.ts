@@ -30,7 +30,7 @@ export const PATCH = async (
         return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
     }
 
-    const move = await prisma.cardistryMove.findUnique({
+    const move = await prisma.moves.findUnique({
         where: { id: numericId },
     });
 
@@ -38,17 +38,17 @@ export const PATCH = async (
         return NextResponse.json({ error: 'Move not found' }, { status: 404 });
     }
 
-    const existingItem = await prisma.highlight.findUnique({
+    const existingItem = await prisma.highlights.findUnique({
         where: { key: 'move' },
     });
 
     if (existingItem) {
-        await prisma.highlight.update({
+        await prisma.highlights.update({
             where: { key: 'move' },
             data: { value: move.name },
         });
     } else {
-        await prisma.highlight.create({
+        await prisma.highlights.create({
             data: { key: 'move', value: move.name },
         });
     }
@@ -95,14 +95,14 @@ export const PUT = async (
         return NextResponse.json({ error: 'Invalid count' }, { status: 400 });
     }
 
-    const currentMove = await prisma.cardistryMove.findUnique({
+    const currentMove = await prisma.moves.findUnique({
         where: { id: numericId },
     });
     if (!currentMove) {
         return NextResponse.json({ error: 'Move not found' }, { status: 404 });
     }
 
-    const conflict = await prisma.cardistryMove.findUnique({
+    const conflict = await prisma.moves.findUnique({
         where: { name: name.trim() },
     });
     if (conflict && conflict.id !== numericId) {
@@ -112,7 +112,7 @@ export const PUT = async (
         );
     }
 
-    const move = await prisma.cardistryMove.update({
+    const move = await prisma.moves.update({
         where: { id: numericId },
         data: { name: name.trim(), type: type.trim(), count },
     });
@@ -127,7 +127,7 @@ export const PUT = async (
     for (const { threshold, label, tier } of tierThresholds) {
         if (currentMove.count < threshold && count >= threshold) {
             try {
-                await prisma.achievement.create({
+                await prisma.achievements.create({
                     data: {
                         tier,
                         name: `${move.name} ${label}`,
@@ -167,6 +167,6 @@ export const DELETE = async (
         return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
     }
 
-    await prisma.cardistryMove.delete({ where: { id: numericId } });
+    await prisma.moves.delete({ where: { id: numericId } });
     return NextResponse.json({ success: true });
 };
