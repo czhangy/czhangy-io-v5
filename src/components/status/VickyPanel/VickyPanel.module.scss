@@ -3,6 +3,10 @@
     flex: 1;
     overflow: hidden;
     position: relative;
+
+    @media (480px < width <= 768px) {
+        aspect-ratio: 1;
+    }
 }
 
 .image {
