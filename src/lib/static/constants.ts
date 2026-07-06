@@ -70,7 +70,7 @@ export const CARDISTRY_MOVE_TYPES: string[] = [
 
 // Routes
 export const AUTH_ROUTES = ['/logs'];
-export const ADMIN_ROUTES = ['/register'];
+export const ADMIN_ROUTES = ['/register', '/logs/new'];
 export const NAV_ITEMS: NavItem[] = [
     { href: '/status', label: 'Status' },
     { href: '/career', label: 'Career' },

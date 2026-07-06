@@ -1,0 +1,133 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.new-log-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 2rem;
+
+    .body-field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        .label {
+            @include mono-label;
+
+            color: $text-mid;
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+
+            .toolbar-button {
+                @include mono-label;
+
+                align-items: center;
+                background: transparent;
+                border: 1px solid $border-subtle;
+                color: $text-dim;
+                cursor: pointer;
+                display: flex;
+                font-size: 0.75rem;
+                height: 2.25rem;
+                justify-content: center;
+                transition:
+                    border-color 0.15s ease,
+                    color 0.15s ease;
+                width: 2.25rem;
+
+                .bold {
+                    font-weight: 700;
+                }
+
+                .italic {
+                    font-style: italic;
+                }
+
+                .underline {
+                    text-decoration: underline;
+                }
+
+                @media (hover: hover) {
+                    &:hover:not(:disabled) {
+                        border-color: $accent;
+                        color: $foreground;
+                    }
+                }
+
+                &:disabled {
+                    cursor: not-allowed;
+                    opacity: 0.5;
+                }
+
+                &--active {
+                    background: rgba($accent, 0.15);
+                    border-color: $accent;
+                    color: $accent;
+                }
+
+                svg {
+                    display: block;
+                    height: 0.9rem;
+                    width: 0.9rem;
+                }
+            }
+        }
+
+        .editor {
+            background: $background;
+            border: 1px solid $border-subtle;
+            color: $foreground;
+            font-family: $font-mono;
+            font-size: 0.875rem;
+            min-height: 32rem;
+            padding: 0.75rem;
+            transition: border-color 0.15s ease;
+
+            &:focus-within {
+                @include focus-glow;
+
+                outline: none;
+            }
+
+            p:global(.is-editor-empty):first-child::before {
+                color: $text-dim;
+                content: attr(data-placeholder);
+                float: left;
+                height: 0;
+                pointer-events: none;
+            }
+
+            h1,
+            h2,
+            h3 {
+                @include mono-label;
+
+                margin: 1rem 0 0.5rem;
+            }
+
+            ul {
+                margin: 0.5rem 0;
+                padding-left: 1.5rem;
+            }
+
+            blockquote {
+                border-left: 2px solid $accent;
+                color: $text-mid;
+                margin: 0.5rem 0;
+                padding-left: 1rem;
+            }
+
+            a {
+                color: $accent;
+            }
+        }
+    }
+}

@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import WipPage from '@/components/wip/WipPage';
+import LogsPage from '@/components/logs/LogsPage';
 
 export const metadata: Metadata = { title: 'Logs' };
 
 export default function Logs() {
-    return <WipPage />;
+    return <LogsPage />;
 }

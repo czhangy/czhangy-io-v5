@@ -33,22 +33,7 @@
         }
 
         .confirm-button {
-            @include mono-label;
-
-            background: $accent;
-            border: 1px solid $accent;
-            color: $background;
-            cursor: pointer;
-            font-size: 1rem;
-            letter-spacing: 0.15em;
-            padding: 0.625rem 1.25rem;
-            transition: opacity 0.15s ease;
-
-            @media (hover: hover) {
-                &:hover {
-                    opacity: 0.85;
-                }
-            }
+            @include accent-button;
         }
     }
 }
