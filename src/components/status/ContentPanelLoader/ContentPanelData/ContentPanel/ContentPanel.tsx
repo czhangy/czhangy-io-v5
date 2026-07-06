@@ -6,7 +6,6 @@ import SearchInput from '@/components/common/SearchInput/SearchInput';
 import EditButton from '@/components/status/EditButton/EditButton';
 import LinkButton from '@/components/status/LinkButton/LinkButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
-import { Key } from '@/lib/static/enums';
 import { Content, TMDBResponse } from '@/lib/static/types';
 import styles from './ContentPanel.module.scss';
 
@@ -103,8 +102,12 @@ const ContentPanel: React.FC<ContentPanelProps> = ({
         setSearchResults([]);
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === Key.Escape) handleCancel();
+    const handleToggleAdd = (): void => {
+        if (isAdding) {
+            handleCancel();
+            return;
+        }
+        handleStartAdd();
     };
 
     // -------------------------------------------------------------------------
@@ -128,7 +131,7 @@ const ContentPanel: React.FC<ContentPanelProps> = ({
 
     const headerActions: React.ReactNode = (
         <>
-            <EditButton onClick={handleStartAdd} disabled={isAdding} />
+            <EditButton onClick={handleToggleAdd} active={isAdding} />
             <LinkButton href="/status/archives" />
         </>
     );
@@ -160,7 +163,6 @@ const ContentPanel: React.FC<ContentPanelProps> = ({
                                 image: r.poster ?? undefined,
                             }))}
                             onChange={handleQueryChange}
-                            onKeyDown={handleKeyDown}
                             onClear={handleCancel}
                             onSelectResult={handleSelectResult}
                         />

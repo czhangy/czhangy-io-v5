@@ -152,14 +152,15 @@ const GamePanel: React.FC<GamePanelProps> = ({
         setNewRating(value);
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent): void => {
-        if (e.key === Key.Escape) {
-            if (showDropdown) {
-                setShowDropdown(false);
-                return;
-            }
+    const handleToggleEdit = async (): Promise<void> => {
+        if (isEditing) {
             handleCancel();
+            return;
         }
+        await handleEdit();
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent): void => {
         if (e.key === Key.Enter) handleSaveNew();
     };
 
@@ -169,7 +170,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
 
     const headerActions: React.ReactNode = (
         <>
-            <EditButton onClick={handleEdit} disabled={isEditing} />
+            <EditButton onClick={handleToggleEdit} active={isEditing} />
             <LinkButton href="/status/games" />
         </>
     );

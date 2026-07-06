@@ -14,14 +14,19 @@
         width: 0.9rem;
     }
 
-    &:disabled {
-        cursor: default;
-        opacity: 0.4;
+    @media (hover: hover) {
+        &:hover {
+            color: $foreground;
+        }
     }
 
-    @media (hover: hover) {
-        &:not(:disabled):hover {
-            color: $foreground;
+    &--active {
+        color: $accent;
+
+        @media (hover: hover) {
+            &:hover {
+                color: $accent;
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 # LocationPanel
 
-A Status page panel displaying the user's current general location. Admins see an edit button that opens a `SearchInput` backed by `GET /api/locations/search` (Nominatim). Selecting a result immediately persists the location via `PATCH /api/status/location` and closes the search form. Pressing Escape or clicking outside cancels without saving.
+A Status page panel displaying the user's current general location. Admins see an edit toggle button that opens a `SearchInput` backed by `GET /api/locations/search` (Nominatim). Selecting a result immediately persists the location via `PATCH /api/status/location` and closes the search form. Clicking the edit button again while open, or clicking outside, cancels without saving.
 
 ## Props
 

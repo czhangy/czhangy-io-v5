@@ -67,6 +67,14 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
         if (move) await handleSelect(move);
     };
 
+    const handleToggleEdit = async (): Promise<void> => {
+        if (isEditing) {
+            handleCancel();
+            return;
+        }
+        await handleEdit();
+    };
+
     // -------------------------------------------------------------------------
     // EFFECTS
     // -------------------------------------------------------------------------
@@ -97,7 +105,7 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
 
     const headerActions: React.ReactNode = (
         <>
-            <EditButton onClick={handleEdit} disabled={isEditing} />
+            <EditButton onClick={handleToggleEdit} active={isEditing} />
             <LinkButton href="/status/cardistry" />
         </>
     );
