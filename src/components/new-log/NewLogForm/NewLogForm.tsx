@@ -6,6 +6,9 @@ import { EditorContent, useEditor, useEditorState } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import AddButton from '@/components/common/AddButton/AddButton';
 import FormField from '@/components/common/FormField/FormField';
+import LinkIcon from '@/lib/icons/LinkIcon';
+import ListIcon from '@/lib/icons/ListIcon';
+import QuoteIcon from '@/lib/icons/QuoteIcon';
 import styles from './NewLogForm.module.scss';
 
 const NewLogForm: React.FC = () => {
@@ -22,7 +25,6 @@ const NewLogForm: React.FC = () => {
         heading2: false,
         heading3: false,
         bulletList: false,
-        orderedList: false,
         blockquote: false,
         link: false,
     };
@@ -47,6 +49,7 @@ const NewLogForm: React.FC = () => {
                     codeBlock: false,
                     horizontalRule: false,
                     strike: false,
+                    orderedList: false,
                     heading: { levels: [1, 2, 3] },
                     link: { openOnClick: false },
                 }),
@@ -76,7 +79,6 @@ const NewLogForm: React.FC = () => {
             heading2: editor?.isActive('heading', { level: 2 }) ?? false,
             heading3: editor?.isActive('heading', { level: 3 }) ?? false,
             bulletList: editor?.isActive('bulletList') ?? false,
-            orderedList: editor?.isActive('orderedList') ?? false,
             blockquote: editor?.isActive('blockquote') ?? false,
             link: editor?.isActive('link') ?? false,
         }),
@@ -214,17 +216,7 @@ const NewLogForm: React.FC = () => {
                             editor?.chain().focus().toggleBulletList().run()
                         }
                     >
-                        • List
-                    </button>
-                    <button
-                        type="button"
-                        className={toolbarButtonClass(editorState.orderedList)}
-                        disabled={!editor}
-                        onClick={() =>
-                            editor?.chain().focus().toggleOrderedList().run()
-                        }
-                    >
-                        1. List
+                        <ListIcon />
                     </button>
                     <button
                         type="button"
@@ -234,7 +226,7 @@ const NewLogForm: React.FC = () => {
                             editor?.chain().focus().toggleBlockquote().run()
                         }
                     >
-                        Quote
+                        <QuoteIcon />
                     </button>
                     <button
                         type="button"
@@ -242,7 +234,7 @@ const NewLogForm: React.FC = () => {
                         disabled={!editor}
                         onClick={handleToggleLink}
                     >
-                        Link
+                        <LinkIcon />
                     </button>
                 </div>
                 <EditorContent editor={editor} />

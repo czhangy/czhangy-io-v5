@@ -68,6 +68,12 @@
                     border-color: $accent;
                     color: $accent;
                 }
+
+                svg {
+                    display: block;
+                    height: 0.9rem;
+                    width: 0.9rem;
+                }
             }
         }
 
@@ -83,6 +89,8 @@
 
             &:focus-within {
                 @include focus-glow;
+
+                outline: none;
             }
 
             p:global(.is-editor-empty):first-child::before {
@@ -101,8 +109,7 @@
                 margin: 1rem 0 0.5rem;
             }
 
-            ul,
-            ol {
+            ul {
                 margin: 0.5rem 0;
                 padding-left: 1.5rem;
             }

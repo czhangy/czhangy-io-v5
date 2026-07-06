@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import LinkIcon from '@/lib/icons/LinkIcon';
+import PageLinkIcon from '@/lib/icons/PageLinkIcon';
 import styles from './LinkButton.module.scss';
 
 type LinkButtonProps = {
@@ -13,7 +13,7 @@ const LinkButton: React.FC<LinkButtonProps> = ({ href }) => {
 
     return (
         <Link href={href} className={styles.button}>
-            <LinkIcon />
+            <PageLinkIcon />
         </Link>
     );
 };
