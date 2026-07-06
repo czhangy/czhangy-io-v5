@@ -11,6 +11,7 @@ import ListIcon from '@/lib/icons/ListIcon';
 import QuoteIcon from '@/lib/icons/QuoteIcon';
 import LinkModal from './LinkModal/LinkModal';
 import styles from './NewLogForm.module.scss';
+import TagsField from './TagsField/TagsField';
 
 const NewLogForm: React.FC = () => {
     // -------------------------------------------------------------------------
@@ -35,7 +36,7 @@ const NewLogForm: React.FC = () => {
     // -------------------------------------------------------------------------
 
     const [title, setTitle] = useState<string>('');
-    const [tags, setTags] = useState<string>('');
+    const [tags, setTags] = useState<string[]>([]);
     const [body, setBody] = useState<string>('');
     const [isPublishing, setIsPublishing] = useState<boolean>(false);
     const [isLinkModalOpen, setIsLinkModalOpen] = useState<boolean>(false);
@@ -110,14 +111,10 @@ const NewLogForm: React.FC = () => {
 
     const handlePublish = async (): Promise<void> => {
         setIsPublishing(true);
-        const tagList = tags
-            .split(',')
-            .map((tag) => tag.trim())
-            .filter(Boolean);
         const res = await fetch('/api/logs', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title, tags: tagList, body }),
+            body: JSON.stringify({ title, tags, body }),
         });
         if (!res.ok) {
             console.error('Failed to publish log', await res.json());
@@ -157,7 +154,7 @@ const NewLogForm: React.FC = () => {
                 onChange={setTitle}
                 autoFocus
             />
-            <FormField label="Tags" value={tags} onChange={setTags} />
+            <TagsField label="Tags" tags={tags} onChange={setTags} />
             <div className={styles['body-field']}>
                 <span className={styles.label}>Body</span>
                 <div className={styles.toolbar}>
