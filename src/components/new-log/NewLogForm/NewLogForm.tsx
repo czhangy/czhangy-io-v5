@@ -9,6 +9,7 @@ import FormField from '@/components/common/FormField/FormField';
 import LinkIcon from '@/lib/icons/LinkIcon';
 import ListIcon from '@/lib/icons/ListIcon';
 import QuoteIcon from '@/lib/icons/QuoteIcon';
+import LinkModal from './LinkModal/LinkModal';
 import styles from './NewLogForm.module.scss';
 
 const NewLogForm: React.FC = () => {
@@ -37,6 +38,7 @@ const NewLogForm: React.FC = () => {
     const [tags, setTags] = useState<string>('');
     const [body, setBody] = useState<string>('');
     const [isPublishing, setIsPublishing] = useState<boolean>(false);
+    const [isLinkModalOpen, setIsLinkModalOpen] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
     // HOOKS
@@ -54,7 +56,7 @@ const NewLogForm: React.FC = () => {
                     strike: false,
                     orderedList: false,
                     heading: { levels: [1, 2, 3] },
-                    link: { openOnClick: false },
+                    link: { openOnClick: false, autolink: false },
                 }),
             ],
             immediatelyRender: false,
@@ -94,9 +96,16 @@ const NewLogForm: React.FC = () => {
             editor.chain().focus().unsetLink().run();
             return;
         }
-        const url = window.prompt('URL');
-        if (!url) return;
-        editor.chain().focus().setLink({ href: url }).run();
+        setIsLinkModalOpen(true);
+    };
+
+    const handleConfirmLink = (url: string): void => {
+        editor?.chain().focus().setLink({ href: url }).run();
+        setIsLinkModalOpen(false);
+    };
+
+    const handleCancelLink = (): void => {
+        setIsLinkModalOpen(false);
     };
 
     const handlePublish = async (): Promise<void> => {
@@ -260,6 +269,12 @@ const NewLogForm: React.FC = () => {
                 disabled={!isValid}
                 onSubmit={handlePublish}
             />
+            {isLinkModalOpen ? (
+                <LinkModal
+                    onConfirm={handleConfirmLink}
+                    onCancel={handleCancelLink}
+                />
+            ) : null}
         </div>
     );
 };

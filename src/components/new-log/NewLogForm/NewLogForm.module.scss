@@ -29,15 +29,19 @@
             .toolbar-button {
                 @include mono-label;
 
+                align-items: center;
                 background: transparent;
                 border: 1px solid $border-subtle;
                 color: $text-dim;
                 cursor: pointer;
+                display: flex;
                 font-size: 0.75rem;
-                padding: 0.4rem 0.6rem;
+                height: 2.25rem;
+                justify-content: center;
                 transition:
                     border-color 0.15s ease,
                     color 0.15s ease;
+                width: 2.25rem;
 
                 .bold {
                     font-weight: 700;
@@ -83,7 +87,7 @@
             color: $foreground;
             font-family: $font-mono;
             font-size: 0.875rem;
-            min-height: 16rem;
+            min-height: 32rem;
             padding: 0.75rem;
             transition: border-color 0.15s ease;
 

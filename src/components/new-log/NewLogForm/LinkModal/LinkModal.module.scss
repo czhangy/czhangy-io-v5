@@ -1,0 +1,16 @@
+@use '@/styles/mixins' as *;
+
+.link-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+
+        .confirm-button {
+            @include accent-button;
+        }
+    }
+}

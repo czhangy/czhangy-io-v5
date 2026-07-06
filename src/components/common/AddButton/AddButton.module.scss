@@ -1,4 +1,3 @@
-@use '@/styles/constants' as *;
 @use '@/styles/mixins' as *;
 
 .actions {
@@ -7,20 +6,6 @@
     margin-top: 0.25rem;
 
     .submit {
-        @include mono-label;
-
-        background: $accent;
-        border: 1px solid $accent;
-        color: $background;
-        cursor: pointer;
-        font-size: 1rem;
-        letter-spacing: 0.15em;
-        padding: 0.625rem 1.25rem;
-        transition: opacity 0.15s ease;
-
-        &:disabled {
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
+        @include accent-button;
     }
 }
