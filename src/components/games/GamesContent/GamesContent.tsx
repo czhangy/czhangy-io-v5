@@ -162,6 +162,7 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
                         </div>
                         {isAdmin ? (
                             <AdminActions
+                                entryName={game.name}
                                 onEdit={() => setEditingGame(game)}
                                 onDelete={() => handleDelete(game.name)}
                             />

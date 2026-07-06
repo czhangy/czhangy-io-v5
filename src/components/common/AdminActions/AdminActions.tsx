@@ -1,9 +1,14 @@
+'use client';
+
+import { useState } from 'react';
+import ConfirmationModal from '@/components/common/AdminActions/ConfirmationModal/ConfirmationModal';
 import DeleteIcon from '@/lib/icons/DeleteIcon';
 import EditIcon from '@/lib/icons/EditIcon';
 import StarIcon from '@/lib/icons/StarIcon';
 import styles from './AdminActions.module.scss';
 
 type AdminActionsProps = {
+    entryName: string;
     onHighlight?: () => void;
     onEdit?: () => void;
     onDelete?: () => void;
@@ -11,11 +16,46 @@ type AdminActionsProps = {
 };
 
 const AdminActions: React.FC<AdminActionsProps> = ({
+    entryName,
     onHighlight,
     onEdit,
     onDelete,
     className,
 }) => {
+    // -------------------------------------------------------------------------
+    // CONSTANTS
+    // -------------------------------------------------------------------------
+
+    type PendingAction = 'highlight' | 'delete' | null;
+
+    // -------------------------------------------------------------------------
+    // STATE
+    // -------------------------------------------------------------------------
+
+    const [pendingAction, setPendingAction] = useState<PendingAction>(null);
+
+    // -------------------------------------------------------------------------
+    // HANDLERS
+    // -------------------------------------------------------------------------
+
+    const handleHighlightClick = (): void => {
+        setPendingAction('highlight');
+    };
+
+    const handleDeleteClick = (): void => {
+        setPendingAction('delete');
+    };
+
+    const handleCancel = (): void => {
+        setPendingAction(null);
+    };
+
+    const handleConfirm = (): void => {
+        if (pendingAction === 'highlight') onHighlight?.();
+        if (pendingAction === 'delete') onDelete?.();
+        setPendingAction(null);
+    };
+
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
@@ -26,7 +66,7 @@ const AdminActions: React.FC<AdminActionsProps> = ({
                 <button
                     type="button"
                     className={styles['action-button']}
-                    onClick={onHighlight}
+                    onClick={handleHighlightClick}
                 >
                     <StarIcon />
                 </button>
@@ -44,10 +84,28 @@ const AdminActions: React.FC<AdminActionsProps> = ({
                 <button
                     type="button"
                     className={styles['action-button']}
-                    onClick={onDelete}
+                    onClick={handleDeleteClick}
                 >
                     <DeleteIcon />
                 </button>
+            ) : null}
+            {pendingAction === 'highlight' ? (
+                <ConfirmationModal
+                    title="CONFIRM HIGHLIGHT"
+                    action="highlight"
+                    entryName={entryName}
+                    onConfirm={handleConfirm}
+                    onCancel={handleCancel}
+                />
+            ) : null}
+            {pendingAction === 'delete' ? (
+                <ConfirmationModal
+                    title="CONFIRM DELETE"
+                    action="delete"
+                    entryName={entryName}
+                    onConfirm={handleConfirm}
+                    onCancel={handleCancel}
+                />
             ) : null}
         </div>
     );

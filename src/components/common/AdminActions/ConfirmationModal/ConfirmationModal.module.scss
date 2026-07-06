@@ -1,0 +1,54 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.confirmation-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+    .message {
+        color: $text-mid;
+        font-family: $font-mono;
+        font-size: 0.8rem;
+        letter-spacing: 0.03em;
+        line-height: 1.5;
+
+        .entry-name {
+            color: $accent;
+            font-weight: 700;
+        }
+    }
+
+    .actions {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: flex-end;
+
+        .cancel-button {
+            @include game-button;
+
+            cursor: pointer;
+            letter-spacing: 0.15em;
+            padding: 0.625rem 1.25rem;
+        }
+
+        .confirm-button {
+            @include mono-label;
+
+            background: $accent;
+            border: 1px solid $accent;
+            color: $background;
+            cursor: pointer;
+            font-size: 1rem;
+            letter-spacing: 0.15em;
+            padding: 0.625rem 1.25rem;
+            transition: opacity 0.15s ease;
+
+            @media (hover: hover) {
+                &:hover {
+                    opacity: 0.85;
+                }
+            }
+        }
+    }
+}
