@@ -207,6 +207,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                                     </div>
                                     <AdminActions
                                         className={styles['admin-actions']}
+                                        entryName={move.name}
                                         onEdit={() => setEditingMove(move)}
                                         onDelete={() => handleDelete(move.name)}
                                     />

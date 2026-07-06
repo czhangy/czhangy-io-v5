@@ -157,6 +157,7 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
                         </div>
                         {isAdmin ? (
                             <AdminActions
+                                entryName={entry.name}
                                 onHighlight={() => handleFeature(entry)}
                                 onDelete={() => handleDelete(entry.name)}
                             />

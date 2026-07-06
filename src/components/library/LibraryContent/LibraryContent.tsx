@@ -158,6 +158,7 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
                         </div>
                         {isAdmin ? (
                             <AdminActions
+                                entryName={entry.name}
                                 onHighlight={() => handleFeature(entry)}
                                 onDelete={() => handleDelete(entry.id)}
                             />
