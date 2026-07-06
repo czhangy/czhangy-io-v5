@@ -1,41 +1,34 @@
-'use client';
-
-import { useState } from 'react';
 import Link from 'next/link';
 import Pagination from '@/components/common/Pagination/Pagination';
-import { Book } from '@/lib/static/types';
-import AddBookModal from './AddBookModal/AddBookModal';
-import styles from './LibraryControls.module.scss';
+import styles from './ListControls.module.scss';
 
-type LibraryControlsProps = {
+type ListControlsProps = {
     page: number;
     totalPages: number;
     onPrev: () => void;
     onNext: () => void;
     isAdmin: boolean;
-    onAdd: (entry: Book) => void;
+    addLabel: string;
+    onAddClick: () => void;
+    children?: React.ReactNode;
 };
 
-const LibraryControls: React.FC<LibraryControlsProps> = ({
+const ListControls: React.FC<ListControlsProps> = ({
     page,
     totalPages,
     onPrev,
     onNext,
     isAdmin,
-    onAdd,
+    addLabel,
+    onAddClick,
+    children,
 }) => {
-    // -------------------------------------------------------------------------
-    // STATE
-    // -------------------------------------------------------------------------
-
-    const [isOpen, setIsOpen] = useState<boolean>(false);
-
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
 
     return (
-        <div className={styles['library-controls']}>
+        <div className={styles['list-controls']}>
             <Link className={styles['back-button']} href="/status">
                 ← Back to Status
             </Link>
@@ -44,9 +37,9 @@ const LibraryControls: React.FC<LibraryControlsProps> = ({
                     <button
                         className={styles['add-button']}
                         type="button"
-                        onClick={() => setIsOpen(true)}
+                        onClick={onAddClick}
                     >
-                        Add Book
+                        {addLabel}
                     </button>
                 ) : null}
                 {totalPages > 1 ? (
@@ -60,11 +53,9 @@ const LibraryControls: React.FC<LibraryControlsProps> = ({
                     </div>
                 ) : null}
             </div>
-            {isOpen ? (
-                <AddBookModal onClose={() => setIsOpen(false)} onAdd={onAdd} />
-            ) : null}
+            {children}
         </div>
     );
 };
 
-export default LibraryControls;
+export default ListControls;

@@ -6,10 +6,10 @@ import styles from './EditButton.module.scss';
 
 type EditButtonProps = {
     onClick?: () => void;
-    disabled?: boolean;
+    active?: boolean;
 };
 
-const EditButton: React.FC<EditButtonProps> = ({ onClick, disabled }) => {
+const EditButton: React.FC<EditButtonProps> = ({ onClick, active }) => {
     // -------------------------------------------------------------------------
     // HOOKS
     // -------------------------------------------------------------------------
@@ -25,9 +25,8 @@ const EditButton: React.FC<EditButtonProps> = ({ onClick, disabled }) => {
     return (
         <button
             type="button"
-            className={styles.button}
+            className={`${styles.button}${active ? ` ${styles['button--active']}` : ''}`}
             onClick={onClick}
-            disabled={disabled}
         >
             <EditIcon />
         </button>

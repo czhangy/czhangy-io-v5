@@ -1,19 +1,20 @@
 # LibraryContent
 
-Client component rendered by LibraryPage. Displays a paginated list of read media entries with cover, title, author, and genre tags. Admin users see a feature button and a delete button on each row, plus an "Add Book" button in the controls bar.
+Client component rendered by LibraryPage. Displays a paginated list of library entries with cover, title, author, and genre tags. Admin users see a highlight button and a delete button on each row. The controls bar (back link, add button, pagination) is rendered via ListControls, with AddBookModal opened from the add button.
 
 ## Props
 
-| Prop             | Type               | Required | Default | Description                     |
-| ---------------- | ------------------ | -------- | ------- | ------------------------------- |
-| `initialEntries` | `ReadMediaEntry[]` | Yes      | —       | All library entries from the DB |
+| Prop             | Type     | Required | Default | Description                     |
+| ---------------- | -------- | -------- | ------- | ------------------------------- |
+| `initialEntries` | `Book[]` | Yes      | —       | All library entries from the DB |
 
 ## State
 
-| State     | Type               | Initial value    | Description                  |
-| --------- | ------------------ | ---------------- | ---------------------------- |
-| `entries` | `ReadMediaEntry[]` | `initialEntries` | Currently displayed entries  |
-| `page`    | `number`           | `1`              | Current page index (1-based) |
+| State       | Type      | Initial value    | Description                  |
+| ----------- | --------- | ---------------- | ---------------------------- |
+| `entries`   | `Book[]`  | `initialEntries` | Currently displayed entries  |
+| `page`      | `number`  | `1`              | Current page index (1-based) |
+| `isAddOpen` | `boolean` | `false`          | Whether AddBookModal is open |
 
 ## Handlers
 

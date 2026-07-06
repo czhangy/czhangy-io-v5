@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import Dropdown from '@/components/common/Dropdown/Dropdown';
+import AddButton from '@/components/common/AddButton/AddButton';
+import FormField from '@/components/common/FormField/FormField';
 import Modal from '@/components/common/Modal/Modal';
 import { GAME_GENRES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
@@ -75,22 +76,6 @@ const EditGameModal: React.FC<EditGameModalProps> = ({
         if (e.key === Key.Escape) onClose();
     };
 
-    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        setName(e.target.value);
-    };
-
-    const handleGenreChange = (value: string): void => {
-        setGenre(value);
-    };
-
-    const handleIconChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        setIcon(e.target.value);
-    };
-
-    const handleRatingChange = (value: string): void => {
-        setRating(value);
-    };
-
     // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
@@ -107,53 +92,38 @@ const EditGameModal: React.FC<EditGameModalProps> = ({
     return (
         <Modal title="EDIT GAME" onClose={onClose}>
             <div className={styles['edit-game-modal']}>
-                <div className={styles.field}>
-                    <span className={styles.label}>Name</span>
-                    <input
-                        className={styles.input}
-                        value={name}
-                        onChange={handleNameChange}
-                        onKeyDown={handleKeyDown}
-                        autoFocus
-                    />
-                </div>
+                <FormField
+                    label="Name"
+                    value={name}
+                    onChange={setName}
+                    onKeyDown={handleKeyDown}
+                    autoFocus
+                />
                 <div className={styles.row}>
-                    <div className={styles.field}>
-                        <span className={styles.label}>Genre</span>
-                        <Dropdown
-                            value={genre}
-                            onChange={handleGenreChange}
-                            options={GAME_GENRES}
-                        />
-                    </div>
-                    <div className={styles.field}>
-                        <span className={styles.label}>Icon URL</span>
-                        <input
-                            className={styles.input}
-                            value={icon}
-                            onChange={handleIconChange}
-                            onKeyDown={handleKeyDown}
-                        />
-                    </div>
-                </div>
-                <div className={styles.field}>
-                    <span className={styles.label}>Rating</span>
-                    <Dropdown
-                        value={rating}
-                        onChange={handleRatingChange}
-                        options={RATING_OPTIONS}
+                    <FormField
+                        label="Genre"
+                        value={genre}
+                        onChange={setGenre}
+                        options={GAME_GENRES}
+                    />
+                    <FormField
+                        label="Icon URL"
+                        value={icon}
+                        onChange={setIcon}
+                        onKeyDown={handleKeyDown}
                     />
                 </div>
-                <div className={styles.actions}>
-                    <button
-                        type="button"
-                        className={styles.submit}
-                        onClick={handleSubmit}
-                        disabled={!isValid}
-                    >
-                        Save
-                    </button>
-                </div>
+                <FormField
+                    label="Rating"
+                    value={rating}
+                    onChange={setRating}
+                    options={RATING_OPTIONS}
+                />
+                <AddButton
+                    label="Save"
+                    disabled={!isValid}
+                    onSubmit={handleSubmit}
+                />
             </div>
         </Modal>
     );

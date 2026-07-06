@@ -4,7 +4,6 @@ import { useRef, useState } from 'react';
 import SearchInput from '@/components/common/SearchInput/SearchInput';
 import EditButton from '@/components/status/EditButton/EditButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
-import { Key } from '@/lib/static/enums';
 import styles from './LocationPanel.module.scss';
 
 type LocationPanelProps = {
@@ -95,8 +94,12 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
         setIsEditing(false);
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-        if (e.key === Key.Escape) handleClose();
+    const handleToggleEdit = (): void => {
+        if (isEditing) {
+            handleClose();
+            return;
+        }
+        handleEdit();
     };
 
     // -------------------------------------------------------------------------
@@ -114,7 +117,7 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
             cols={cols}
             rows={rows}
             headerAction={
-                <EditButton onClick={handleEdit} disabled={isEditing} />
+                <EditButton onClick={handleToggleEdit} active={isEditing} />
             }
         >
             {isEditing ? (
@@ -127,7 +130,6 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
                         name: r,
                     }))}
                     onChange={handleQueryChange}
-                    onKeyDown={handleKeyDown}
                     onClear={handleClose}
                     onSelectResult={handleSelectResult}
                     hideClear={!query}

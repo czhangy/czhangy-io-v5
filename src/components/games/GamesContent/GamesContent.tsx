@@ -2,12 +2,13 @@
 
 import { useState } from 'react';
 import AdminActions from '@/components/common/AdminActions/AdminActions';
+import ListControls from '@/components/common/ListControls/ListControls';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import { Game } from '@/lib/static/types';
+import AddGameModal from './AddGameModal/AddGameModal';
 import EditGameModal from './EditGameModal/EditGameModal';
 import styles from './GamesContent.module.scss';
-import GamesControls from './GamesControls/GamesControls';
 
 type GamesContentProps = {
     initialGames: Game[];
@@ -33,6 +34,7 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
     const [games, setGames] = useState<Game[]>(initialGames);
     const [page, setPage] = useState<number>(1);
     const [editingGame, setEditingGame] = useState<Game | null>(null);
+    const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -106,14 +108,22 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
 
     return (
         <div className={styles['games-content']}>
-            <GamesControls
+            <ListControls
                 page={page}
                 totalPages={totalPages}
                 onPrev={handlePrevPage}
                 onNext={handleNextPage}
                 isAdmin={isAdmin}
-                onAdd={handleAdd}
-            />
+                addLabel="Add Game"
+                onAddClick={() => setIsAddOpen(true)}
+            >
+                {isAddOpen ? (
+                    <AddGameModal
+                        onClose={() => setIsAddOpen(false)}
+                        onAdd={handleAdd}
+                    />
+                ) : null}
+            </ListControls>
             <ul className={styles.list}>
                 {paginatedGames.map((game) => (
                     <li key={game.name} className={styles.item}>

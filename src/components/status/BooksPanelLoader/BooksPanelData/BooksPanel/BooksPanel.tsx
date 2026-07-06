@@ -6,7 +6,6 @@ import SearchInput from '@/components/common/SearchInput/SearchInput';
 import EditButton from '@/components/status/EditButton/EditButton';
 import LinkButton from '@/components/status/LinkButton/LinkButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
-import { Key } from '@/lib/static/enums';
 import { Book, GoogleBooksResponse } from '@/lib/static/types';
 import styles from './BooksPanel.module.scss';
 
@@ -107,8 +106,12 @@ const BooksPanel: React.FC<BooksPanelProps> = ({
         setSearchResults([]);
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-        if (e.key === Key.Escape) handleCancel();
+    const handleToggleAdd = (): void => {
+        if (isAdding) {
+            handleCancel();
+            return;
+        }
+        handleStartAdd();
     };
 
     // -------------------------------------------------------------------------
@@ -134,7 +137,7 @@ const BooksPanel: React.FC<BooksPanelProps> = ({
 
     const headerActions: React.ReactNode = (
         <>
-            <EditButton onClick={handleStartAdd} disabled={isAdding} />
+            <EditButton onClick={handleToggleAdd} active={isAdding} />
             <LinkButton href="/status/library" />
         </>
     );
@@ -166,7 +169,6 @@ const BooksPanel: React.FC<BooksPanelProps> = ({
                                 image: r.cover ?? undefined,
                             }))}
                             onChange={handleQueryChange}
-                            onKeyDown={handleKeyDown}
                             onClear={handleCancel}
                             onSelectResult={handleSelectResult}
                         />

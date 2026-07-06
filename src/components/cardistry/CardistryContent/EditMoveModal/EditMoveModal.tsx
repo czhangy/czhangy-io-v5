@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import Dropdown from '@/components/common/Dropdown/Dropdown';
+import AddButton from '@/components/common/AddButton/AddButton';
+import FormField from '@/components/common/FormField/FormField';
 import Modal from '@/components/common/Modal/Modal';
 import { CARDISTRY_MOVE_TYPES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
@@ -54,16 +55,6 @@ const EditMoveModal: React.FC<EditMoveModalProps> = ({
         if (e.key === Key.Escape) onClose();
     };
 
-    const handleCountChange = (
-        e: React.ChangeEvent<HTMLInputElement>
-    ): void => {
-        setCount(e.target.value);
-    };
-
-    const handleTypeChange = (value: string): void => {
-        setType(value);
-    };
-
     // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
@@ -79,46 +70,31 @@ const EditMoveModal: React.FC<EditMoveModalProps> = ({
         <Modal title="EDIT MOVE" onClose={onClose}>
             <div className={styles['edit-move-modal']}>
                 <div className={styles.row}>
-                    <div className={styles.field}>
-                        <span className={styles.label}>Name</span>
-                        <input
-                            className={styles.input}
-                            value={name}
-                            onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>
-                            ) => setName(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            autoFocus
-                        />
-                    </div>
-                    <div className={styles.field}>
-                        <span className={styles.label}>Type</span>
-                        <Dropdown
-                            value={type}
-                            onChange={handleTypeChange}
-                            options={CARDISTRY_MOVE_TYPES}
-                        />
-                    </div>
-                </div>
-                <div className={styles.field}>
-                    <span className={styles.label}>Count</span>
-                    <input
-                        className={styles.input}
-                        value={count}
-                        onChange={handleCountChange}
+                    <FormField
+                        label="Name"
+                        value={name}
+                        onChange={setName}
                         onKeyDown={handleKeyDown}
+                        autoFocus
+                    />
+                    <FormField
+                        label="Type"
+                        value={type}
+                        onChange={setType}
+                        options={CARDISTRY_MOVE_TYPES}
                     />
                 </div>
-                <div className={styles.actions}>
-                    <button
-                        type="button"
-                        className={styles.submit}
-                        onClick={handleSubmit}
-                        disabled={!isValid}
-                    >
-                        Save
-                    </button>
-                </div>
+                <FormField
+                    label="Count"
+                    value={count}
+                    onChange={setCount}
+                    onKeyDown={handleKeyDown}
+                />
+                <AddButton
+                    label="Save"
+                    disabled={!isValid}
+                    onSubmit={handleSubmit}
+                />
             </div>
         </Modal>
     );

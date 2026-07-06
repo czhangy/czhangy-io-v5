@@ -17,7 +17,7 @@ type SearchInputProps = {
         genres?: string[];
     }[];
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+    onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     onClear: () => void;
     onSelectResult: (id: string | number) => void;
     hideClear?: boolean;

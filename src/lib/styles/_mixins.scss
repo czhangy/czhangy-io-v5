@@ -38,6 +38,17 @@
     box-shadow: 0 0 6px rgba($accent, 0.35);
 }
 
+// Two-column grid for pairing form fields side by side, stacking on mobile.
+@mixin form-row {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr;
+
+    @media (width <= 768px) {
+        grid-template-columns: 1fr;
+    }
+}
+
 // Bordered interactive button matching the site's game UI aesthetic.
 @mixin game-button {
     background: transparent;
