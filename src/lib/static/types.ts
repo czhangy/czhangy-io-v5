@@ -38,6 +38,16 @@ export type Content = {
     addedAt: string;
 };
 
+export type Log = {
+    id: number;
+    slug: string;
+    title: string;
+    tags: string[];
+    body: string;
+    createdAt: string;
+    updatedAt: string;
+};
+
 // External API responses
 export type SpotifyResponse = {
     name: string;

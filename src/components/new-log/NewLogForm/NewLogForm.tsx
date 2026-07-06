@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Placeholder } from '@tiptap/extensions';
+import { useRouter } from 'next/navigation';
 import { EditorContent, useEditor, useEditorState } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import AddButton from '@/components/common/AddButton/AddButton';
@@ -36,10 +36,13 @@ const NewLogForm: React.FC = () => {
     const [title, setTitle] = useState<string>('');
     const [tags, setTags] = useState<string>('');
     const [body, setBody] = useState<string>('');
+    const [isPublishing, setIsPublishing] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
     // HOOKS
     // -------------------------------------------------------------------------
+
+    const router = useRouter();
 
     const editor = useEditor(
         {
@@ -52,9 +55,6 @@ const NewLogForm: React.FC = () => {
                     orderedList: false,
                     heading: { levels: [1, 2, 3] },
                     link: { openOnClick: false },
-                }),
-                Placeholder.configure({
-                    placeholder: 'Write your entry...',
                 }),
             ],
             immediatelyRender: false,
@@ -99,8 +99,23 @@ const NewLogForm: React.FC = () => {
         editor.chain().focus().setLink({ href: url }).run();
     };
 
-    const handlePublish = (): void => {
-        console.log({ title, tags, body });
+    const handlePublish = async (): Promise<void> => {
+        setIsPublishing(true);
+        const tagList = tags
+            .split(',')
+            .map((tag) => tag.trim())
+            .filter(Boolean);
+        const res = await fetch('/api/logs', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, tags: tagList, body }),
+        });
+        if (!res.ok) {
+            console.error('Failed to publish log', await res.json());
+            setIsPublishing(false);
+            return;
+        }
+        router.push('/logs');
     };
 
     // -------------------------------------------------------------------------
@@ -118,7 +133,8 @@ const NewLogForm: React.FC = () => {
 
     const editorState = rawEditorState ?? DEFAULT_EDITOR_STATE;
 
-    const isValid: boolean = title.trim().length > 0 && !editorState.isEmpty;
+    const isValid: boolean =
+        title.trim().length > 0 && !editorState.isEmpty && !isPublishing;
 
     // -------------------------------------------------------------------------
     // MARKUP

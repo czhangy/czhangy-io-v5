@@ -8,6 +8,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 > Build verification is not necessary for any change.
 
+> Never start a dev server (`npm run dev`) to perform end-to-end verification, especially when implementing or changing API routes. Rely on type-checking, linting, and static review instead. If live/browser verification is genuinely needed, ask the user to run it themselves rather than starting a server directly.
+
 ## Project Overview
 
 > This description should be updated as the project is built out further.

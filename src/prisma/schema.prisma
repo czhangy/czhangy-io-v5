@@ -71,3 +71,13 @@ model Games {
     icon   String
     rating Float
 }
+
+model Logs {
+    id        Int      @id @default(autoincrement())
+    slug      String   @unique
+    title     String
+    tags      String[]
+    body      String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
