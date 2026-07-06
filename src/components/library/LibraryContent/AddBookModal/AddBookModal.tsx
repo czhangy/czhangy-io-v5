@@ -1,9 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import Modal from '@/components/common/Modal/Modal';
-import SearchInput from '@/components/common/SearchInput/SearchInput';
-import { Key } from '@/lib/static/enums';
+import AddSearchableModal from '@/components/common/AddSearchableModal/AddSearchableModal';
 import { Book, GoogleBooksResponse } from '@/lib/static/types';
 
 type AddBookModalProps = {
@@ -13,61 +10,21 @@ type AddBookModalProps = {
 
 const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
     // -------------------------------------------------------------------------
-    // HOOKS
-    // -------------------------------------------------------------------------
-
-    const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-    // -------------------------------------------------------------------------
-    // STATE
-    // -------------------------------------------------------------------------
-
-    const [query, setQuery] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<GoogleBooksResponse[]>(
-        []
-    );
-    const [isSearching, setIsSearching] = useState<boolean>(false);
-
-    // -------------------------------------------------------------------------
-    // COMPUTATIONS
-    // -------------------------------------------------------------------------
-
-    const performSearch = async (q: string): Promise<void> => {
-        setIsSearching(true);
-        setSearchResults([]);
-        const res = await fetch(
-            `/api/google_books/search?q=${encodeURIComponent(q)}`
-        );
-        const results: GoogleBooksResponse[] = res.ok
-            ? ((await res.json()) as GoogleBooksResponse[])
-            : [];
-        setSearchResults(results);
-        setIsSearching(false);
-    };
-
-    // -------------------------------------------------------------------------
     // HANDLERS
     // -------------------------------------------------------------------------
 
-    const handleQueryChange = (
-        e: React.ChangeEvent<HTMLInputElement>
-    ): void => {
-        const value = e.target.value;
-        setQuery(value);
-        if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        if (!value.trim()) {
-            setSearchResults([]);
-            return;
-        }
-        searchTimeoutRef.current = setTimeout(() => {
-            performSearch(value);
-        }, 1000);
+    const handleSearch = async (
+        query: string
+    ): Promise<GoogleBooksResponse[]> => {
+        const res = await fetch(
+            `/api/google_books/search?q=${encodeURIComponent(query)}`
+        );
+        return res.ok ? ((await res.json()) as GoogleBooksResponse[]) : [];
     };
 
-    const handleSelectResult = async (id: string | number): Promise<void> => {
-        const result = searchResults.find((r) => r.googleBooksId === id);
-        if (!result) return;
-        if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+    const handleSelect = async (
+        result: GoogleBooksResponse
+    ): Promise<Book | null> => {
         const res = await fetch('/api/books', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -78,21 +35,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
                 genres: result.genres,
             }),
         });
-        if (!res.ok) return;
-        const saved = (await res.json()) as Book;
-        onAdd(saved);
-        onClose();
-    };
-
-    const handleClear = (): void => {
-        if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        setQuery('');
-        setSearchResults([]);
-        setIsSearching(false);
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-        if (e.key === Key.Escape) onClose();
+        return res.ok ? ((await res.json()) as Book) : null;
     };
 
     // -------------------------------------------------------------------------
@@ -100,24 +43,21 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
     // -------------------------------------------------------------------------
 
     return (
-        <Modal title="ADD BOOK" onClose={onClose}>
-            <SearchInput
-                value={query}
-                placeholder="Search books..."
-                isSearching={isSearching}
-                results={searchResults.map((r) => ({
-                    ...r,
-                    id: r.googleBooksId,
-                    note: r.note ?? undefined,
-                    image: r.cover ?? undefined,
-                }))}
-                onChange={handleQueryChange}
-                onKeyDown={handleKeyDown}
-                onClear={handleClear}
-                onSelectResult={handleSelectResult}
-                hideClear
-            />
-        </Modal>
+        <AddSearchableModal<GoogleBooksResponse, Book>
+            title="ADD BOOK"
+            placeholder="Search books..."
+            search={handleSearch}
+            toResult={(r) => ({
+                id: r.googleBooksId,
+                name: r.name,
+                note: r.note ?? undefined,
+                image: r.cover ?? undefined,
+                genres: r.genres,
+            })}
+            onSelect={handleSelect}
+            onClose={onClose}
+            onAdd={onAdd}
+        />
     );
 };
 

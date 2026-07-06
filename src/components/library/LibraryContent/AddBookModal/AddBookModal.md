@@ -1,18 +1,15 @@
 # AddBookModal
 
-Modal for searching and adding a book to the library. Uses the shared search interface with debounced Google Books lookup. On selection, POSTs to `/api/read` and notifies the parent with the saved entry.
+Modal for searching and adding a book to the library. Thin wrapper around AddSearchableModal that supplies the debounced Google Books search and the POST to `/api/books`.
 
 ## Props
 
-| Prop      | Type                              | Required | Default | Description                                        |
-| --------- | --------------------------------- | -------- | ------- | -------------------------------------------------- |
-| `onClose` | `() => void`                      | Yes      | —       | Called when the modal should close                 |
-| `onAdd`   | `(entry: ReadMediaEntry) => void` | Yes      | —       | Called with the saved entry after a successful add |
+| Prop      | Type                    | Required | Default | Description                                        |
+| --------- | ----------------------- | -------- | ------- | -------------------------------------------------- |
+| `onClose` | `() => void`            | Yes      | —       | Called when the modal should close                 |
+| `onAdd`   | `(entry: Book) => void` | Yes      | —       | Called with the saved entry after a successful add |
 
-## State
+## Handlers
 
-| State           | Type                 | Initial value | Description                           |
-| --------------- | -------------------- | ------------- | ------------------------------------- |
-| `query`         | `string`             | `''`          | Current search input value            |
-| `searchResults` | `BookSearchResult[]` | `[]`          | Results returned from book search     |
-| `isSearching`   | `boolean`            | `false`       | Whether a search request is in flight |
+- `handleSearch` — fetches `/api/google_books/search` for the given query, returning an empty array on failure
+- `handleSelect` — POSTs the selected result to `/api/books`, returning the saved entry or `null` on failure

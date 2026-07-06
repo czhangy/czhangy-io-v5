@@ -1,9 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import Modal from '@/components/common/Modal/Modal';
-import SearchInput from '@/components/common/SearchInput/SearchInput';
-import { Key } from '@/lib/static/enums';
+import AddSearchableModal from '@/components/common/AddSearchableModal/AddSearchableModal';
 import { Content, TMDBResponse } from '@/lib/static/types';
 
 type AddContentModalProps = {
@@ -16,57 +13,19 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
     onAdd,
 }) => {
     // -------------------------------------------------------------------------
-    // HOOKS
-    // -------------------------------------------------------------------------
-
-    const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-    // -------------------------------------------------------------------------
-    // STATE
-    // -------------------------------------------------------------------------
-
-    const [query, setQuery] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<TMDBResponse[]>([]);
-    const [isSearching, setIsSearching] = useState<boolean>(false);
-
-    // -------------------------------------------------------------------------
-    // COMPUTATIONS
-    // -------------------------------------------------------------------------
-
-    const performSearch = async (q: string): Promise<void> => {
-        setIsSearching(true);
-        setSearchResults([]);
-        const res = await fetch(`/api/tmdb/search?q=${encodeURIComponent(q)}`);
-        const results: TMDBResponse[] = res.ok
-            ? ((await res.json()) as TMDBResponse[])
-            : [];
-        setSearchResults(results);
-        setIsSearching(false);
-    };
-
-    // -------------------------------------------------------------------------
     // HANDLERS
     // -------------------------------------------------------------------------
 
-    const handleQueryChange = (
-        e: React.ChangeEvent<HTMLInputElement>
-    ): void => {
-        const value = e.target.value;
-        setQuery(value);
-        if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        if (!value.trim()) {
-            setSearchResults([]);
-            return;
-        }
-        searchTimeoutRef.current = setTimeout(() => {
-            performSearch(value);
-        }, 1000);
+    const handleSearch = async (query: string): Promise<TMDBResponse[]> => {
+        const res = await fetch(
+            `/api/tmdb/search?q=${encodeURIComponent(query)}`
+        );
+        return res.ok ? ((await res.json()) as TMDBResponse[]) : [];
     };
 
-    const handleSelectResult = async (id: string | number): Promise<void> => {
-        const result = searchResults.find((r) => r.tmdbId === id);
-        if (!result) return;
-        if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+    const handleSelect = async (
+        result: TMDBResponse
+    ): Promise<Content | null> => {
         const res = await fetch('/api/content', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -77,21 +36,7 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
                 genres: result.genres,
             }),
         });
-        if (!res.ok) return;
-        const saved = (await res.json()) as Content;
-        onAdd(saved);
-        onClose();
-    };
-
-    const handleClear = (): void => {
-        if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        setQuery('');
-        setSearchResults([]);
-        setIsSearching(false);
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-        if (e.key === Key.Escape) onClose();
+        return res.ok ? ((await res.json()) as Content) : null;
     };
 
     // -------------------------------------------------------------------------
@@ -99,24 +44,21 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
     // -------------------------------------------------------------------------
 
     return (
-        <Modal title="ADD CONTENT" onClose={onClose}>
-            <SearchInput
-                value={query}
-                placeholder="Search movies & shows..."
-                isSearching={isSearching}
-                results={searchResults.map((r) => ({
-                    ...r,
-                    id: r.tmdbId,
-                    note: r.note ?? undefined,
-                    image: r.poster ?? undefined,
-                }))}
-                onChange={handleQueryChange}
-                onKeyDown={handleKeyDown}
-                onClear={handleClear}
-                onSelectResult={handleSelectResult}
-                hideClear
-            />
-        </Modal>
+        <AddSearchableModal<TMDBResponse, Content>
+            title="ADD CONTENT"
+            placeholder="Search movies & shows..."
+            search={handleSearch}
+            toResult={(r) => ({
+                id: r.tmdbId,
+                name: r.name,
+                note: r.note ?? undefined,
+                image: r.poster ?? undefined,
+                genres: r.genres,
+            })}
+            onSelect={handleSelect}
+            onClose={onClose}
+            onAdd={onAdd}
+        />
     );
 };
 

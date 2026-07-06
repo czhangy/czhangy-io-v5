@@ -1,18 +1,15 @@
 # AddContentModal
 
-Modal for searching and adding a movie or TV show to the watched list. Uses the shared search interface with debounced TMDB lookup. On selection, POSTs to `/api/watched` and notifies the parent with the saved entry.
+Modal for searching and adding a movie or TV show to the archives. Thin wrapper around AddSearchableModal that supplies the debounced TMDB search and the POST to `/api/content`.
 
 ## Props
 
-| Prop      | Type                                 | Required | Default | Description                                        |
-| --------- | ------------------------------------ | -------- | ------- | -------------------------------------------------- |
-| `onClose` | `() => void`                         | Yes      | —       | Called when the modal should close                 |
-| `onAdd`   | `(entry: WatchedMediaEntry) => void` | Yes      | —       | Called with the saved entry after a successful add |
+| Prop      | Type                       | Required | Default | Description                                        |
+| --------- | -------------------------- | -------- | ------- | -------------------------------------------------- |
+| `onClose` | `() => void`               | Yes      | —       | Called when the modal should close                 |
+| `onAdd`   | `(entry: Content) => void` | Yes      | —       | Called with the saved entry after a successful add |
 
-## State
+## Handlers
 
-| State           | Type                 | Initial value | Description                           |
-| --------------- | -------------------- | ------------- | ------------------------------------- |
-| `query`         | `string`             | `''`          | Current search input value            |
-| `searchResults` | `TMDBSearchResult[]` | `[]`          | Results returned from TMDB search     |
-| `isSearching`   | `boolean`            | `false`       | Whether a search request is in flight |
+- `handleSearch` — fetches `/api/tmdb/search` for the given query, returning an empty array on failure
+- `handleSelect` — POSTs the selected TMDB result to `/api/content`, returning the saved entry or `null` on failure
