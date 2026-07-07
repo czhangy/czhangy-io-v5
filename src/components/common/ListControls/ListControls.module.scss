@@ -20,9 +20,9 @@
         color: $foreground;
         flex: 1;
         font-family: $font-mono;
-        font-size: 0.85rem;
+        font-size: 1rem;
         min-width: 0;
-        padding: 0.625rem 0.75rem;
+        padding: 0.625rem 1.25rem;
         transition: border-color 0.15s ease;
 
         &::placeholder {
