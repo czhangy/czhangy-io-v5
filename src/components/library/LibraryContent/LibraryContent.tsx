@@ -42,7 +42,7 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
     const handleAdd = (entry: Book): void => {
         const filtered = entries.filter((e) => e.id !== entry.id);
         const nextEntries = [...filtered, entry].sort((a, b) =>
-            a.name.localeCompare(b.name)
+            a.name.toLowerCase().localeCompare(b.name.toLowerCase())
         );
         const index = nextEntries.findIndex((e) => e.id === entry.id);
         setEntries(nextEntries);

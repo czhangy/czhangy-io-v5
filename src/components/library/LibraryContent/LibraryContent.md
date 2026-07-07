@@ -18,7 +18,7 @@ Client component rendered by LibraryPage. Displays a paginated list of library e
 
 ## Handlers
 
-- `handleAdd` — inserts a newly added entry (deduplicating by `id`) into its sorted position and navigates to the page it lands on
+- `handleAdd` — inserts a newly added entry (deduplicating by `id`) into its case-insensitively sorted position and navigates to the page it lands on
 - `handleFeature` — re-submits an entry's existing data to `POST /api/books`, bumping its `addedAt` to now without changing any other field
 - `handleDelete` — removes an entry by id and clamps the page if necessary
 

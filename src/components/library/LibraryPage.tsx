@@ -13,14 +13,18 @@ const LibraryPage = async () => {
         orderBy: { name: 'asc' },
     });
 
-    const entries: Book[] = records.map((r) => ({
-        id: r.id,
-        name: r.name,
-        author: r.author,
-        cover: r.cover,
-        genres: r.genres,
-        addedAt: r.addedAt.toISOString(),
-    }));
+    const entries: Book[] = records
+        .map((r) => ({
+            id: r.id,
+            name: r.name,
+            author: r.author,
+            cover: r.cover,
+            genres: r.genres,
+            addedAt: r.addedAt.toISOString(),
+        }))
+        .sort((a, b) =>
+            a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+        );
 
     // -------------------------------------------------------------------------
     // MARKUP
