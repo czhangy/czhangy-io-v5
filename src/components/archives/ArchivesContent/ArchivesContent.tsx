@@ -38,6 +38,7 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
     const [page, setPage] = useState<number>(1);
     const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [searchQuery, setSearchQuery] = useState<string>('');
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -80,10 +81,15 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
         const nextEntries = entries.filter((e) => e.id !== id);
         const newTotalPages = Math.max(
             1,
-            Math.ceil(nextEntries.length / ITEMS_PER_PAGE)
+            Math.ceil(filterEntries(nextEntries).length / ITEMS_PER_PAGE)
         );
         setEntries(nextEntries);
         setPage((p) => Math.min(p, newTotalPages));
+    };
+
+    const handleSearchChange = (value: string): void => {
+        setSearchQuery(value);
+        setPage(1);
     };
 
     const handleAddError = (message: string): void => {
@@ -104,17 +110,28 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
     };
 
     // -------------------------------------------------------------------------
+    // COMPUTATIONS
+    // -------------------------------------------------------------------------
+
+    const filterEntries = (list: Content[]): Content[] =>
+        list.filter((e) =>
+            e.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+    // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
 
     const isAdmin: boolean = role === 'ADMIN';
 
+    const filteredEntries: Content[] = filterEntries(entries);
+
     const totalPages: number = Math.max(
         1,
-        Math.ceil(entries.length / ITEMS_PER_PAGE)
+        Math.ceil(filteredEntries.length / ITEMS_PER_PAGE)
     );
 
-    const paginatedEntries: Content[] = entries.slice(
+    const paginatedEntries: Content[] = filteredEntries.slice(
         (page - 1) * ITEMS_PER_PAGE,
         page * ITEMS_PER_PAGE
     );
@@ -133,6 +150,9 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
                 isAdmin={isAdmin}
                 addLabel="Add Content"
                 onAddClick={() => setIsAddOpen(true)}
+                searchValue={searchQuery}
+                searchPlaceholder="Search content..."
+                onSearchChange={handleSearchChange}
             >
                 {isAddOpen ? (
                     <AddContentModal
