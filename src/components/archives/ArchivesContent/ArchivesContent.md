@@ -18,9 +18,9 @@ Client component rendered by ArchivesPage. Displays a paginated list of archived
 
 ## Handlers
 
-- `handleAdd` — inserts a newly added entry (deduplicating by `name`) into its sorted position and navigates to the page it lands on
+- `handleAdd` — inserts a newly added entry (deduplicating by `id`) into its sorted position and navigates to the page it lands on
 - `handleFeature` — re-submits an entry's existing data to `POST /api/content`, bumping its `addedAt` to now without changing any other field
-- `handleDelete` — removes an entry by name and clamps the page if necessary
+- `handleDelete` — removes an entry by id and clamps the page if necessary
 
 ## Computations
 

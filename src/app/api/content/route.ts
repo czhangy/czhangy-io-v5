@@ -27,10 +27,12 @@ export const POST = async (request: NextRequest) => {
         );
     }
 
-    const existing = await prisma.content.findUnique({ where: { name } });
+    const existing = await prisma.content.findUnique({
+        where: { name_poster: { name, poster } },
+    });
 
     const record = await prisma.content.upsert({
-        where: { name },
+        where: { name_poster: { name, poster } },
         create: {
             name,
             mediaType,

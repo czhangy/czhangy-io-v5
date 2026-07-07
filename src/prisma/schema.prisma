@@ -27,11 +27,13 @@ model Highlights {
 
 model Content {
     id        Int      @id @default(autoincrement())
-    name      String   @unique
+    name      String
     mediaType String
     poster    String
     genres    String[]
     addedAt   DateTime @default(now()) @db.Timestamptz(3)
+
+    @@unique([name, poster])
 }
 
 model Books {

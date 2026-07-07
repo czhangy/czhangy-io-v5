@@ -42,11 +42,11 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
     // -------------------------------------------------------------------------
 
     const handleAdd = (entry: Content): void => {
-        const filtered = entries.filter((e) => e.name !== entry.name);
+        const filtered = entries.filter((e) => e.id !== entry.id);
         const nextEntries = [...filtered, entry].sort((a, b) =>
             a.name.localeCompare(b.name)
         );
-        const index = nextEntries.findIndex((e) => e.name === entry.name);
+        const index = nextEntries.findIndex((e) => e.id === entry.id);
         setEntries(nextEntries);
         setPage(Math.floor(index / ITEMS_PER_PAGE) + 1);
     };
@@ -65,17 +65,17 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
         if (!res.ok) return;
         const updated = (await res.json()) as Content;
         const nextEntries = entries.map((e) =>
-            e.name === updated.name ? updated : e
+            e.id === updated.id ? updated : e
         );
         setEntries(nextEntries);
     };
 
-    const handleDelete = async (name: string): Promise<void> => {
-        const res = await fetch(`/api/content/${encodeURIComponent(name)}`, {
+    const handleDelete = async (id: number): Promise<void> => {
+        const res = await fetch(`/api/content/${id}`, {
             method: 'DELETE',
         });
         if (!res.ok) return;
-        const nextEntries = entries.filter((e) => e.name !== name);
+        const nextEntries = entries.filter((e) => e.id !== id);
         const newTotalPages = Math.max(
             1,
             Math.ceil(nextEntries.length / ITEMS_PER_PAGE)
@@ -132,7 +132,7 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
             </ListControls>
             <ul className={styles.list}>
                 {paginatedEntries.map((entry) => (
-                    <li key={entry.name} className={styles.item}>
+                    <li key={entry.id} className={styles.item}>
                         <Image
                             className={styles.poster}
                             src={entry.poster}
@@ -159,7 +159,7 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
                             <AdminActions
                                 entryName={entry.name}
                                 onHighlight={() => handleFeature(entry)}
-                                onDelete={() => handleDelete(entry.name)}
+                                onDelete={() => handleDelete(entry.id)}
                             />
                         ) : null}
                     </li>

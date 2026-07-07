@@ -31,6 +31,7 @@ export type Book = {
 };
 
 export type Content = {
+    id: number;
     name: string;
     mediaType: 'movie' | 'tv';
     poster: string;
