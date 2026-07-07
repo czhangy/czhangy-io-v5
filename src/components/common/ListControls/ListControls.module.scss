@@ -15,7 +15,7 @@
     }
 
     .search {
-        background: $background;
+        background: transparent;
         border: 1px solid $border-subtle;
         color: $foreground;
         flex: 1;
@@ -27,6 +27,7 @@
 
         &::placeholder {
             color: $text-dim;
+            letter-spacing: 0.1em;
         }
 
         &:focus {
