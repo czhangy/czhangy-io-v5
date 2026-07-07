@@ -18,6 +18,7 @@ const AchievementsPage = async () => {
         category: r.category,
         description: r.description,
         date: r.date,
+        createdAt: r.createdAt.toISOString(),
     }));
 
     // -------------------------------------------------------------------------

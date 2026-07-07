@@ -133,6 +133,15 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
     };
 
     // -------------------------------------------------------------------------
+    // COMPUTATIONS
+    // -------------------------------------------------------------------------
+
+    const getSortTimestamp = (a: Achievement): number =>
+        a.date
+            ? DateHelpers.getUnixTimestamp(a.date)
+            : new Date(a.createdAt).getTime();
+
+    // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
 
@@ -151,18 +160,15 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
                 if (tierDiff !== 0) {
                     return sortDirection === 'asc' ? tierDiff : -tierDiff;
                 }
-                return (
-                    DateHelpers.getUnixTimestamp(b.date) -
-                    DateHelpers.getUnixTimestamp(a.date)
-                );
+                return getSortTimestamp(b) - getSortTimestamp(a);
             }
             let comparison = 0;
             if (sortField === 'name') {
-                comparison = a.name.localeCompare(b.name);
+                comparison = a.name
+                    .toLowerCase()
+                    .localeCompare(b.name.toLowerCase());
             } else {
-                comparison =
-                    DateHelpers.getUnixTimestamp(a.date) -
-                    DateHelpers.getUnixTimestamp(b.date);
+                comparison = getSortTimestamp(a) - getSortTimestamp(b);
             }
             return sortDirection === 'asc' ? comparison : -comparison;
         });

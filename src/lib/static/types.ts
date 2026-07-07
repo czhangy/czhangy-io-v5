@@ -5,6 +5,7 @@ export type Achievement = {
     category: string;
     description: string;
     date: string | null;
+    createdAt: string;
 };
 
 export type Move = {
