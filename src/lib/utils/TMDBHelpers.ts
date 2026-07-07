@@ -94,7 +94,7 @@ export default class TMDBHelpers {
             .filter((r) => (r.release_date ?? r.first_air_date)?.slice(0, 4))
             .filter((r) => r.poster_path)
             .filter((r) => r.genre_ids?.length)
-            .slice(0, 5)
+            .slice(0, 12)
             .map((r) => ({
                 tmdbId: r.id,
                 name: r.title ?? r.name ?? '',
