@@ -168,7 +168,9 @@ const ContentPanel: React.FC<ContentPanelProps> = ({
                         />
                     </div>
                 ) : null}
-                <ul className={styles.list}>
+                <ul
+                    className={`${styles.list}${isAdding ? ` ${styles['list--dimmed']}` : ''}`}
+                >
                     {entries.map((entry) => (
                         <li key={entry.id} className={styles.item}>
                             <Image
