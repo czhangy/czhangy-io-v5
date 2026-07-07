@@ -33,6 +33,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
                 author: result.author,
                 cover: result.cover,
                 genres: result.genres,
+                isOldEntry: true,
             }),
         });
         return res.ok ? ((await res.json()) as Book) : null;

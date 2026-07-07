@@ -13,12 +13,14 @@ export const POST = async (request: NextRequest) => {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { name, mediaType, poster, genres } = (await request.json()) as {
-        name: string;
-        mediaType: 'movie' | 'tv';
-        poster: string | null;
-        genres: string[];
-    };
+    const { name, mediaType, poster, genres, isOldEntry } =
+        (await request.json()) as {
+            name: string;
+            mediaType: 'movie' | 'tv';
+            poster: string | null;
+            genres: string[];
+            isOldEntry?: boolean;
+        };
 
     if (!poster || !genres?.length) {
         return NextResponse.json(
@@ -31,6 +33,8 @@ export const POST = async (request: NextRequest) => {
         where: { name_poster: { name, poster } },
     });
 
+    const addedAt = isOldEntry ? new Date(0) : new Date();
+
     const record = await prisma.content.upsert({
         where: { name_poster: { name, poster } },
         create: {
@@ -38,8 +42,9 @@ export const POST = async (request: NextRequest) => {
             mediaType,
             poster,
             genres,
+            addedAt,
         },
-        update: { addedAt: new Date() },
+        update: { addedAt },
     });
 
     if (!existing) {

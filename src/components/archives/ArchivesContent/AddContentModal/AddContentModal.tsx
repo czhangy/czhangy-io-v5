@@ -34,6 +34,7 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
                 mediaType: result.mediaType,
                 poster: result.poster,
                 genres: result.genres,
+                isOldEntry: true,
             }),
         });
         return res.ok ? ((await res.json()) as Content) : null;

@@ -12,4 +12,4 @@ Modal for searching and adding a movie or TV show to the archives. Thin wrapper 
 ## Handlers
 
 - `handleSearch` — fetches `/api/tmdb/search` for the given query, returning an empty array on failure
-- `handleSelect` — POSTs the selected TMDB result to `/api/content`, returning the saved entry or `null` on failure
+- `handleSelect` — POSTs the selected TMDB result to `/api/content` with `isOldEntry: true`, backdating `addedAt` to the epoch; returns the saved entry or `null` on failure

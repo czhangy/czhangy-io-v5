@@ -12,4 +12,4 @@ Modal for searching and adding a book to the library. Thin wrapper around AddSea
 ## Handlers
 
 - `handleSearch` — fetches `/api/google_books/search` for the given query, returning an empty array on failure
-- `handleSelect` — POSTs the selected result to `/api/books`, returning the saved entry or `null` on failure
+- `handleSelect` — POSTs the selected result to `/api/books` with `isOldEntry: true`, backdating `addedAt` to the epoch; returns the saved entry or `null` on failure

@@ -13,12 +13,14 @@ export const POST = async (request: NextRequest) => {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { name, author, cover, genres } = (await request.json()) as {
-        name: string;
-        author: string | null;
-        cover: string | null;
-        genres: string[];
-    };
+    const { name, author, cover, genres, isOldEntry } =
+        (await request.json()) as {
+            name: string;
+            author: string | null;
+            cover: string | null;
+            genres: string[];
+            isOldEntry?: boolean;
+        };
 
     if (!author || !cover || !genres?.length) {
         return NextResponse.json(
@@ -31,6 +33,8 @@ export const POST = async (request: NextRequest) => {
         where: { name_author: { name, author } },
     });
 
+    const addedAt = isOldEntry ? new Date(0) : new Date();
+
     const record = await prisma.books.upsert({
         where: { name_author: { name, author } },
         create: {
@@ -38,8 +42,9 @@ export const POST = async (request: NextRequest) => {
             author,
             cover,
             genres,
+            addedAt,
         },
-        update: { addedAt: new Date() },
+        update: { addedAt },
     });
 
     if (!existing) {
