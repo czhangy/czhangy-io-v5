@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import AdminActions from '@/components/common/AdminActions/AdminActions';
+import HighlightMatch from '@/components/common/HighlightMatch/HighlightMatch';
 import ListControls from '@/components/common/ListControls/ListControls';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
@@ -192,7 +193,12 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                                 </span>
                             </div>
                             <div className={styles.details}>
-                                <span className={styles.name}>{move.name}</span>
+                                <span className={styles.name}>
+                                    <HighlightMatch
+                                        text={move.name}
+                                        query={searchQuery}
+                                    />
+                                </span>
                                 <div className={styles.metadata}>
                                     <span className={styles['type-tag']}>
                                         {move.type}

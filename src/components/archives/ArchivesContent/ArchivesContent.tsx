@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import AdminActions from '@/components/common/AdminActions/AdminActions';
 import AlertModal from '@/components/common/AlertModal/AlertModal';
+import HighlightMatch from '@/components/common/HighlightMatch/HighlightMatch';
 import ListControls from '@/components/common/ListControls/ListControls';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
@@ -180,7 +181,12 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
                             height={60}
                         />
                         <div className={styles.info}>
-                            <span className={styles.name}>{entry.name}</span>
+                            <span className={styles.name}>
+                                <HighlightMatch
+                                    text={entry.name}
+                                    query={searchQuery}
+                                />
+                            </span>
                             {entry.genres.length > 0 ? (
                                 <div className={styles.genres}>
                                     {entry.genres.slice(0, 2).map((g) => (

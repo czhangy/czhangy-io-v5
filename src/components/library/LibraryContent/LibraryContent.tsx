@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import AdminActions from '@/components/common/AdminActions/AdminActions';
 import AlertModal from '@/components/common/AlertModal/AlertModal';
+import HighlightMatch from '@/components/common/HighlightMatch/HighlightMatch';
 import ListControls from '@/components/common/ListControls/ListControls';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
@@ -178,7 +179,12 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
                             height={60}
                         />
                         <div className={styles.info}>
-                            <span className={styles.name}>{entry.name}</span>
+                            <span className={styles.name}>
+                                <HighlightMatch
+                                    text={entry.name}
+                                    query={searchQuery}
+                                />
+                            </span>
                             <span className={styles.author}>
                                 {entry.author}
                             </span>
