@@ -1,14 +1,19 @@
 'use client';
 
 import AddSearchableModal from '@/components/common/AddSearchableModal/AddSearchableModal';
-import { Book, GoogleBooksResponse } from '@/lib/static/types';
+import { Book, GoogleBooksResponse, SelectOutcome } from '@/lib/static/types';
 
 type AddBookModalProps = {
     onClose: () => void;
     onAdd: (entry: Book) => void;
+    onError: (message: string) => void;
 };
 
-const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
+const AddBookModal: React.FC<AddBookModalProps> = ({
+    onClose,
+    onAdd,
+    onError,
+}) => {
     // -------------------------------------------------------------------------
     // HANDLERS
     // -------------------------------------------------------------------------
@@ -24,7 +29,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
 
     const handleSelect = async (
         result: GoogleBooksResponse
-    ): Promise<Book | null> => {
+    ): Promise<SelectOutcome<Book>> => {
         const res = await fetch('/api/books', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -34,9 +39,15 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
                 cover: result.cover,
                 genres: result.genres,
                 isOldEntry: true,
+                preventDuplicate: true,
             }),
         });
-        return res.ok ? ((await res.json()) as Book) : null;
+        if (res.status === 409) {
+            const body = (await res.json()) as { error: string };
+            return { error: body.error };
+        }
+        if (!res.ok) return { error: 'Failed to add book.' };
+        return { saved: (await res.json()) as Book };
     };
 
     // -------------------------------------------------------------------------
@@ -58,6 +69,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ onClose, onAdd }) => {
             onSelect={handleSelect}
             onClose={onClose}
             onAdd={onAdd}
+            onError={onError}
         />
     );
 };

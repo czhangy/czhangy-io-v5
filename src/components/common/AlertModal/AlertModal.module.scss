@@ -1,0 +1,25 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.alert-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+    .message {
+        color: $text-mid;
+        font-family: $font-mono;
+        font-size: 0.8rem;
+        letter-spacing: 0.03em;
+        line-height: 1.5;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+
+        .ok-button {
+            @include accent-button;
+        }
+    }
+}

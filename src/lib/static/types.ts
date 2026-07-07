@@ -118,3 +118,5 @@ export type CreateAchievementParams = {
     description: string;
     date: string;
 };
+
+export type SelectOutcome<TSaved> = { saved: TSaved } | { error: string };

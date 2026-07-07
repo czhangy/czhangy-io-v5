@@ -13,13 +13,14 @@ export const POST = async (request: NextRequest) => {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { name, mediaType, poster, genres, isOldEntry } =
+    const { name, mediaType, poster, genres, isOldEntry, preventDuplicate } =
         (await request.json()) as {
             name: string;
             mediaType: 'movie' | 'tv';
             poster: string | null;
             genres: string[];
             isOldEntry?: boolean;
+            preventDuplicate?: boolean;
         };
 
     if (!poster || !genres?.length) {
@@ -32,6 +33,13 @@ export const POST = async (request: NextRequest) => {
     const existing = await prisma.content.findUnique({
         where: { name_poster: { name, poster } },
     });
+
+    if (existing && preventDuplicate) {
+        return NextResponse.json(
+            { error: 'That entry has already been recorded.' },
+            { status: 409 }
+        );
+    }
 
     const addedAt = isOldEntry ? new Date(0) : new Date();
 

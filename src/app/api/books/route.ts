@@ -13,13 +13,14 @@ export const POST = async (request: NextRequest) => {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { name, author, cover, genres, isOldEntry } =
+    const { name, author, cover, genres, isOldEntry, preventDuplicate } =
         (await request.json()) as {
             name: string;
             author: string | null;
             cover: string | null;
             genres: string[];
             isOldEntry?: boolean;
+            preventDuplicate?: boolean;
         };
 
     if (!author || !cover || !genres?.length) {
@@ -32,6 +33,13 @@ export const POST = async (request: NextRequest) => {
     const existing = await prisma.books.findUnique({
         where: { name_author: { name, author } },
     });
+
+    if (existing && preventDuplicate) {
+        return NextResponse.json(
+            { error: 'That entry has already been recorded.' },
+            { status: 409 }
+        );
+    }
 
     const addedAt = isOldEntry ? new Date(0) : new Date();
 

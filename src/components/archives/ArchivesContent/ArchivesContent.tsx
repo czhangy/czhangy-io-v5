@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import AdminActions from '@/components/common/AdminActions/AdminActions';
+import AlertModal from '@/components/common/AlertModal/AlertModal';
 import ListControls from '@/components/common/ListControls/ListControls';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
@@ -36,6 +37,7 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
     const [entries, setEntries] = useState<Content[]>(initialEntries);
     const [page, setPage] = useState<number>(1);
     const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>('');
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -84,6 +86,15 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
         setPage((p) => Math.min(p, newTotalPages));
     };
 
+    const handleAddError = (message: string): void => {
+        setIsAddOpen(false);
+        setErrorMessage(message);
+    };
+
+    const handleErrorClose = (): void => {
+        setErrorMessage('');
+    };
+
     const handlePrevPage = (): void => {
         setPage((p) => p - 1);
     };
@@ -127,9 +138,17 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
                     <AddContentModal
                         onClose={() => setIsAddOpen(false)}
                         onAdd={handleAdd}
+                        onError={handleAddError}
                     />
                 ) : null}
             </ListControls>
+            {errorMessage ? (
+                <AlertModal
+                    title="ERROR"
+                    message={errorMessage}
+                    onClose={handleErrorClose}
+                />
+            ) : null}
             <ul className={styles.list}>
                 {paginatedEntries.map((entry) => (
                     <li key={entry.id} className={styles.item}>
