@@ -82,6 +82,17 @@ export default class GoogleBooksHelpers {
         return result;
     }
 
+    private static compareRelevance(
+        a: GoogleBooksItem,
+        b: GoogleBooksItem,
+        normalizedQuery: string
+    ): number {
+        const aExact = a.volumeInfo.title.toLowerCase() === normalizedQuery;
+        const bExact = b.volumeInfo.title.toLowerCase() === normalizedQuery;
+        if (aExact === bExact) return 0;
+        return aExact ? -1 : 1;
+    }
+
     // -------------------------------------------------------------------------
     // PUBLIC
     // -------------------------------------------------------------------------
@@ -95,11 +106,13 @@ export default class GoogleBooksHelpers {
         );
         if (!res.ok) return [];
         const data = (await res.json()) as GoogleBooksSearchResponse;
+        const normalizedQuery = query.trim().toLowerCase();
         return (data.items ?? [])
             .filter((item) => this.coverUrl(item.volumeInfo) !== null)
             .filter((item) => item.volumeInfo.publishedDate)
             .filter((item) => item.volumeInfo.authors?.length)
             .filter((item) => item.volumeInfo.categories?.length)
+            .sort((a, b) => this.compareRelevance(a, b, normalizedQuery))
             .map((item) => ({
                 googleBooksId: item.id,
                 name: item.volumeInfo.title,
