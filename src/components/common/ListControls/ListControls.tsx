@@ -10,6 +10,9 @@ type ListControlsProps = {
     isAdmin: boolean;
     addLabel: string;
     onAddClick: () => void;
+    searchValue: string;
+    searchPlaceholder: string;
+    onSearchChange: (value: string) => void;
     children?: React.ReactNode;
 };
 
@@ -21,8 +24,21 @@ const ListControls: React.FC<ListControlsProps> = ({
     isAdmin,
     addLabel,
     onAddClick,
+    searchValue,
+    searchPlaceholder,
+    onSearchChange,
     children,
 }) => {
+    // -------------------------------------------------------------------------
+    // HANDLERS
+    // -------------------------------------------------------------------------
+
+    const handleSearchChange = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ): void => {
+        onSearchChange(e.target.value);
+    };
+
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
@@ -32,6 +48,13 @@ const ListControls: React.FC<ListControlsProps> = ({
             <Link className={styles['back-button']} href="/status">
                 ← Back to Status
             </Link>
+            <input
+                className={styles.search}
+                type="text"
+                value={searchValue}
+                onChange={handleSearchChange}
+                placeholder={searchPlaceholder}
+            />
             <div className={styles.right}>
                 {isAdmin ? (
                     <button

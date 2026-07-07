@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import AdminActions from '@/components/common/AdminActions/AdminActions';
 import AlertModal from '@/components/common/AlertModal/AlertModal';
+import HighlightMatch from '@/components/common/HighlightMatch/HighlightMatch';
 import ListControls from '@/components/common/ListControls/ListControls';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
@@ -36,6 +37,7 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
     const [page, setPage] = useState<number>(1);
     const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [searchQuery, setSearchQuery] = useState<string>('');
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -78,10 +80,15 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
         const nextEntries = entries.filter((e) => e.id !== id);
         const newTotalPages = Math.max(
             1,
-            Math.ceil(nextEntries.length / ITEMS_PER_PAGE)
+            Math.ceil(filterEntries(nextEntries).length / ITEMS_PER_PAGE)
         );
         setEntries(nextEntries);
         setPage((p) => Math.min(p, newTotalPages));
+    };
+
+    const handleSearchChange = (value: string): void => {
+        setSearchQuery(value);
+        setPage(1);
     };
 
     const handleAddError = (message: string): void => {
@@ -102,17 +109,28 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
     };
 
     // -------------------------------------------------------------------------
+    // COMPUTATIONS
+    // -------------------------------------------------------------------------
+
+    const filterEntries = (list: Book[]): Book[] =>
+        list.filter((e) =>
+            e.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+    // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
 
     const isAdmin: boolean = role === 'ADMIN';
 
+    const filteredEntries: Book[] = filterEntries(entries);
+
     const totalPages: number = Math.max(
         1,
-        Math.ceil(entries.length / ITEMS_PER_PAGE)
+        Math.ceil(filteredEntries.length / ITEMS_PER_PAGE)
     );
 
-    const paginatedEntries: Book[] = entries.slice(
+    const paginatedEntries: Book[] = filteredEntries.slice(
         (page - 1) * ITEMS_PER_PAGE,
         page * ITEMS_PER_PAGE
     );
@@ -131,6 +149,9 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
                 isAdmin={isAdmin}
                 addLabel="Add Book"
                 onAddClick={() => setIsAddOpen(true)}
+                searchValue={searchQuery}
+                searchPlaceholder="Search books..."
+                onSearchChange={handleSearchChange}
             >
                 {isAddOpen ? (
                     <AddBookModal
@@ -158,7 +179,12 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
                             height={60}
                         />
                         <div className={styles.info}>
-                            <span className={styles.name}>{entry.name}</span>
+                            <span className={styles.name}>
+                                <HighlightMatch
+                                    text={entry.name}
+                                    query={searchQuery}
+                                />
+                            </span>
                             <span className={styles.author}>
                                 {entry.author}
                             </span>

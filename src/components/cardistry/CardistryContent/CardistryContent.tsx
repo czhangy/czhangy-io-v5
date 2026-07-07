@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import AdminActions from '@/components/common/AdminActions/AdminActions';
+import HighlightMatch from '@/components/common/HighlightMatch/HighlightMatch';
 import ListControls from '@/components/common/ListControls/ListControls';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
@@ -41,6 +42,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
         new Set()
     );
     const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
+    const [searchQuery, setSearchQuery] = useState<string>('');
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -99,10 +101,15 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
         const nextMoves = moves.filter((m) => m.name !== name);
         const newTotalPages = Math.max(
             1,
-            Math.ceil(nextMoves.length / ITEMS_PER_PAGE)
+            Math.ceil(filterMoves(nextMoves).length / ITEMS_PER_PAGE)
         );
         setMoves(nextMoves);
         setPage((p) => Math.min(p, newTotalPages));
+    };
+
+    const handleSearchChange = (value: string): void => {
+        setSearchQuery(value);
+        setPage(1);
     };
 
     const handlePrevPage = (): void => {
@@ -114,17 +121,28 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
     };
 
     // -------------------------------------------------------------------------
+    // COMPUTATIONS
+    // -------------------------------------------------------------------------
+
+    const filterMoves = (list: Move[]): Move[] =>
+        list.filter((m) =>
+            m.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+    // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
 
     const isAdmin: boolean = role === 'ADMIN';
 
+    const filteredMoves: Move[] = filterMoves(moves);
+
     const totalPages: number = Math.max(
         1,
-        Math.ceil(moves.length / ITEMS_PER_PAGE)
+        Math.ceil(filteredMoves.length / ITEMS_PER_PAGE)
     );
 
-    const paginatedMoves: Move[] = moves.slice(
+    const paginatedMoves: Move[] = filteredMoves.slice(
         (page - 1) * ITEMS_PER_PAGE,
         page * ITEMS_PER_PAGE
     );
@@ -143,6 +161,9 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                 isAdmin={isAdmin}
                 addLabel="Add Move"
                 onAddClick={() => setIsAddOpen(true)}
+                searchValue={searchQuery}
+                searchPlaceholder="Search moves..."
+                onSearchChange={handleSearchChange}
             >
                 {isAddOpen ? (
                     <AddMoveModal
@@ -172,7 +193,12 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                                 </span>
                             </div>
                             <div className={styles.details}>
-                                <span className={styles.name}>{move.name}</span>
+                                <span className={styles.name}>
+                                    <HighlightMatch
+                                        text={move.name}
+                                        query={searchQuery}
+                                    />
+                                </span>
                                 <div className={styles.metadata}>
                                     <span className={styles['type-tag']}>
                                         {move.type}

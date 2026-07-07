@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import AdminActions from '@/components/common/AdminActions/AdminActions';
+import HighlightMatch from '@/components/common/HighlightMatch/HighlightMatch';
 import ListControls from '@/components/common/ListControls/ListControls';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
@@ -35,6 +36,7 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
     const [page, setPage] = useState<number>(1);
     const [editingGame, setEditingGame] = useState<Game | null>(null);
     const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
+    const [searchQuery, setSearchQuery] = useState<string>('');
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -72,10 +74,15 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
         const nextGames = games.filter((g) => g.name !== name);
         const newTotalPages = Math.max(
             1,
-            Math.ceil(nextGames.length / ITEMS_PER_PAGE)
+            Math.ceil(filterGames(nextGames).length / ITEMS_PER_PAGE)
         );
         setGames(nextGames);
         setPage((p) => Math.min(p, newTotalPages));
+    };
+
+    const handleSearchChange = (value: string): void => {
+        setSearchQuery(value);
+        setPage(1);
     };
 
     const handlePrevPage = (): void => {
@@ -87,17 +94,28 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
     };
 
     // -------------------------------------------------------------------------
+    // COMPUTATIONS
+    // -------------------------------------------------------------------------
+
+    const filterGames = (list: Game[]): Game[] =>
+        list.filter((g) =>
+            g.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+    // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
 
     const isAdmin: boolean = role === 'ADMIN';
 
+    const filteredGames: Game[] = filterGames(games);
+
     const totalPages: number = Math.max(
         1,
-        Math.ceil(games.length / ITEMS_PER_PAGE)
+        Math.ceil(filteredGames.length / ITEMS_PER_PAGE)
     );
 
-    const paginatedGames: Game[] = games.slice(
+    const paginatedGames: Game[] = filteredGames.slice(
         (page - 1) * ITEMS_PER_PAGE,
         page * ITEMS_PER_PAGE
     );
@@ -116,6 +134,9 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
                 isAdmin={isAdmin}
                 addLabel="Add Game"
                 onAddClick={() => setIsAddOpen(true)}
+                searchValue={searchQuery}
+                searchPlaceholder="Search games..."
+                onSearchChange={handleSearchChange}
             >
                 {isAddOpen ? (
                     <AddGameModal
@@ -138,7 +159,12 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
                             />
                         </div>
                         <div className={styles.details}>
-                            <span className={styles.name}>{game.name}</span>
+                            <span className={styles.name}>
+                                <HighlightMatch
+                                    text={game.name}
+                                    query={searchQuery}
+                                />
+                            </span>
                             <div className={styles.metadata}>
                                 <span className={styles['genre-tag']}>
                                     {game.genre}

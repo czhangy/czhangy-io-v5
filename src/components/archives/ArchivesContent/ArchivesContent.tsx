@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import AdminActions from '@/components/common/AdminActions/AdminActions';
 import AlertModal from '@/components/common/AlertModal/AlertModal';
+import HighlightMatch from '@/components/common/HighlightMatch/HighlightMatch';
 import ListControls from '@/components/common/ListControls/ListControls';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
@@ -38,6 +39,7 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
     const [page, setPage] = useState<number>(1);
     const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [searchQuery, setSearchQuery] = useState<string>('');
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -80,10 +82,15 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
         const nextEntries = entries.filter((e) => e.id !== id);
         const newTotalPages = Math.max(
             1,
-            Math.ceil(nextEntries.length / ITEMS_PER_PAGE)
+            Math.ceil(filterEntries(nextEntries).length / ITEMS_PER_PAGE)
         );
         setEntries(nextEntries);
         setPage((p) => Math.min(p, newTotalPages));
+    };
+
+    const handleSearchChange = (value: string): void => {
+        setSearchQuery(value);
+        setPage(1);
     };
 
     const handleAddError = (message: string): void => {
@@ -104,17 +111,28 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
     };
 
     // -------------------------------------------------------------------------
+    // COMPUTATIONS
+    // -------------------------------------------------------------------------
+
+    const filterEntries = (list: Content[]): Content[] =>
+        list.filter((e) =>
+            e.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+    // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
 
     const isAdmin: boolean = role === 'ADMIN';
 
+    const filteredEntries: Content[] = filterEntries(entries);
+
     const totalPages: number = Math.max(
         1,
-        Math.ceil(entries.length / ITEMS_PER_PAGE)
+        Math.ceil(filteredEntries.length / ITEMS_PER_PAGE)
     );
 
-    const paginatedEntries: Content[] = entries.slice(
+    const paginatedEntries: Content[] = filteredEntries.slice(
         (page - 1) * ITEMS_PER_PAGE,
         page * ITEMS_PER_PAGE
     );
@@ -133,6 +151,9 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
                 isAdmin={isAdmin}
                 addLabel="Add Content"
                 onAddClick={() => setIsAddOpen(true)}
+                searchValue={searchQuery}
+                searchPlaceholder="Search content..."
+                onSearchChange={handleSearchChange}
             >
                 {isAddOpen ? (
                     <AddContentModal
@@ -160,7 +181,12 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
                             height={60}
                         />
                         <div className={styles.info}>
-                            <span className={styles.name}>{entry.name}</span>
+                            <span className={styles.name}>
+                                <HighlightMatch
+                                    text={entry.name}
+                                    query={searchQuery}
+                                />
+                            </span>
                             {entry.genres.length > 0 ? (
                                 <div className={styles.genres}>
                                     {entry.genres.slice(0, 2).map((g) => (
