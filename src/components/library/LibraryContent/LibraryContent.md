@@ -10,17 +10,20 @@ Client component rendered by LibraryPage. Displays a paginated list of library e
 
 ## State
 
-| State       | Type      | Initial value    | Description                  |
-| ----------- | --------- | ---------------- | ---------------------------- |
-| `entries`   | `Book[]`  | `initialEntries` | Currently displayed entries  |
-| `page`      | `number`  | `1`              | Current page index (1-based) |
-| `isAddOpen` | `boolean` | `false`          | Whether AddBookModal is open |
+| State          | Type      | Initial value    | Description                                              |
+| -------------- | --------- | ---------------- | -------------------------------------------------------- |
+| `entries`      | `Book[]`  | `initialEntries` | Currently displayed entries                              |
+| `page`         | `number`  | `1`              | Current page index (1-based)                             |
+| `isAddOpen`    | `boolean` | `false`          | Whether AddBookModal is open                             |
+| `errorMessage` | `string`  | `''`             | Message from a failed add; when set, shows an AlertModal |
 
 ## Handlers
 
-- `handleAdd` — inserts a newly added entry (deduplicating by `id`) into its sorted position and navigates to the page it lands on
+- `handleAdd` — inserts a newly added entry (deduplicating by `id`) into its case-insensitively sorted position and navigates to the page it lands on
 - `handleFeature` — re-submits an entry's existing data to `POST /api/books`, bumping its `addedAt` to now without changing any other field
 - `handleDelete` — removes an entry by id and clamps the page if necessary
+- `handleAddError` — closes AddBookModal and sets `errorMessage`, shown via a standalone AlertModal independent of the modal's own lifecycle
+- `handleErrorClose` — clears `errorMessage`
 
 ## Computations
 

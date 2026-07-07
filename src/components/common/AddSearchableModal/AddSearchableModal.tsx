@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import Modal from '@/components/common/Modal/Modal';
 import SearchInput from '@/components/common/SearchInput/SearchInput';
 import { Key } from '@/lib/static/enums';
+import { SelectOutcome } from '@/lib/static/types';
 
 type AddSearchableModalProps<TResult, TSaved> = {
     title: string;
@@ -16,9 +17,10 @@ type AddSearchableModalProps<TResult, TSaved> = {
         image?: string;
         genres?: string[];
     };
-    onSelect: (result: TResult) => Promise<TSaved | null>;
+    onSelect: (result: TResult) => Promise<SelectOutcome<TSaved>>;
     onClose: () => void;
     onAdd: (saved: TSaved) => void;
+    onError: (message: string) => void;
 };
 
 const AddSearchableModal = <TResult, TSaved>({
@@ -29,6 +31,7 @@ const AddSearchableModal = <TResult, TSaved>({
     onSelect,
     onClose,
     onAdd,
+    onError,
 }: AddSearchableModalProps<TResult, TSaved>) => {
     // -------------------------------------------------------------------------
     // HOOKS
@@ -78,9 +81,13 @@ const AddSearchableModal = <TResult, TSaved>({
         const result = searchResults.find((r) => toResult(r).id === id);
         if (!result) return;
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        const saved = await onSelect(result);
-        if (!saved) return;
-        onAdd(saved);
+        const outcome = await onSelect(result);
+        if ('error' in outcome) {
+            onClose();
+            onError(outcome.error);
+            return;
+        }
+        onAdd(outcome.saved);
         onClose();
     };
 

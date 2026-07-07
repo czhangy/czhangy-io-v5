@@ -12,6 +12,7 @@ type TMDBMultiResult = {
     first_air_date?: string;
     poster_path?: string | null;
     genre_ids?: number[];
+    popularity?: number;
 };
 
 type TMDBMultiResponse = {
@@ -77,6 +78,19 @@ export default class TMDBHelpers {
             .filter((name): name is string => name !== undefined);
     }
 
+    private static compareRelevance(
+        a: TMDBMultiResult,
+        b: TMDBMultiResult,
+        normalizedQuery: string
+    ): number {
+        const aExact =
+            (a.title ?? a.name ?? '').toLowerCase() === normalizedQuery;
+        const bExact =
+            (b.title ?? b.name ?? '').toLowerCase() === normalizedQuery;
+        if (aExact !== bExact) return aExact ? -1 : 1;
+        return (b.popularity ?? 0) - (a.popularity ?? 0);
+    }
+
     // -------------------------------------------------------------------------
     // PUBLIC
     // -------------------------------------------------------------------------
@@ -89,12 +103,14 @@ export default class TMDBHelpers {
         );
         if (!res.ok) return [];
         const data = (await res.json()) as TMDBMultiResponse;
+        const normalizedQuery = query.trim().toLowerCase();
         return data.results
             .filter((r) => r.media_type === 'movie' || r.media_type === 'tv')
             .filter((r) => (r.release_date ?? r.first_air_date)?.slice(0, 4))
             .filter((r) => r.poster_path)
             .filter((r) => r.genre_ids?.length)
-            .slice(0, 5)
+            .sort((a, b) => this.compareRelevance(a, b, normalizedQuery))
+            .slice(0, 12)
             .map((r) => ({
                 tmdbId: r.id,
                 name: r.title ?? r.name ?? '',

@@ -1,6 +1,6 @@
 # WatchingPanel
 
-A status panel displaying the 5 most recently added movies and TV shows, with an admin-only "+" button in the header to add a new entry. Adding an entry POSTs to `/api/content` (which upserts by `name`), then prepends the saved record to the list, keeping at most 5 entries.
+A status panel displaying the 5 most recently added movies and TV shows, with an admin-only "+" button in the header to add a new entry. Adding an entry POSTs to `/api/content` (which upserts by `name`+`poster`), then prepends the saved record to the list, keeping at most 5 entries.
 
 ## Props
 

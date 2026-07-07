@@ -10,17 +10,20 @@ Client component rendered by ArchivesPage. Displays a paginated list of archived
 
 ## State
 
-| State       | Type        | Initial value    | Description                     |
-| ----------- | ----------- | ---------------- | ------------------------------- |
-| `entries`   | `Content[]` | `initialEntries` | Currently displayed entries     |
-| `page`      | `number`    | `1`              | Current page index (1-based)    |
-| `isAddOpen` | `boolean`   | `false`          | Whether AddContentModal is open |
+| State          | Type        | Initial value    | Description                                              |
+| -------------- | ----------- | ---------------- | -------------------------------------------------------- |
+| `entries`      | `Content[]` | `initialEntries` | Currently displayed entries                              |
+| `page`         | `number`    | `1`              | Current page index (1-based)                             |
+| `isAddOpen`    | `boolean`   | `false`          | Whether AddContentModal is open                          |
+| `errorMessage` | `string`    | `''`             | Message from a failed add; when set, shows an AlertModal |
 
 ## Handlers
 
-- `handleAdd` — inserts a newly added entry (deduplicating by `name`) into its sorted position and navigates to the page it lands on
+- `handleAdd` — inserts a newly added entry (deduplicating by `id`) into its case-insensitively sorted position and navigates to the page it lands on
 - `handleFeature` — re-submits an entry's existing data to `POST /api/content`, bumping its `addedAt` to now without changing any other field
-- `handleDelete` — removes an entry by name and clamps the page if necessary
+- `handleDelete` — removes an entry by id and clamps the page if necessary
+- `handleAddError` — closes AddContentModal and sets `errorMessage`, shown via a standalone AlertModal independent of the modal's own lifecycle
+- `handleErrorClose` — clears `errorMessage`
 
 ## Computations
 

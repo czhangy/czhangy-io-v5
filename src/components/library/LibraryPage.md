@@ -1,3 +1,3 @@
 # LibraryPage
 
-Async server component for the `/status/library` route. Fetches all ReadMedia records ordered by `addedAt` descending and passes them to LibraryContent.
+Async server component for the `/library` route. Fetches all `Books` records, sorts them case-insensitively by name, and passes them to LibraryContent.

@@ -16,7 +16,7 @@ model Users {
     id             String   @id @default(cuid())
     hashedPassword String
     role           Role     @default(USER)
-    createdAt      DateTime @default(now())
+    createdAt      DateTime @default(now()) @db.Timestamptz(3)
 }
 
 model Highlights {
@@ -27,11 +27,13 @@ model Highlights {
 
 model Content {
     id        Int      @id @default(autoincrement())
-    name      String   @unique
+    name      String
     mediaType String
     poster    String
     genres    String[]
-    addedAt   DateTime @default(now())
+    addedAt   DateTime @default(now()) @db.Timestamptz(3)
+
+    @@unique([name, poster])
 }
 
 model Books {
@@ -40,7 +42,7 @@ model Books {
     author  String
     cover   String
     genres  String[]
-    addedAt DateTime @default(now())
+    addedAt DateTime @default(now()) @db.Timestamptz(3)
 
     @@unique([name, author])
 }
@@ -52,8 +54,7 @@ model Achievements {
     category    String
     description String
     date        String?
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
+    createdAt   DateTime @default(now()) @db.Timestamptz(3)
 }
 
 model Moves {
@@ -61,7 +62,7 @@ model Moves {
     name      String   @unique
     type      String
     count     Int      @default(0)
-    createdAt DateTime @default(now())
+    createdAt DateTime @default(now()) @db.Timestamptz(3)
 }
 
 model Games {
@@ -78,6 +79,6 @@ model Logs {
     title     String
     tags      String[]
     body      String
-    createdAt DateTime @default(now())
+    createdAt DateTime @default(now()) @db.Timestamptz(3)
     updatedAt DateTime @updatedAt
 }

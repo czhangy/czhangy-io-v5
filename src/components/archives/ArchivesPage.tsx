@@ -13,11 +13,15 @@ const ArchivesPage = async () => {
         orderBy: { name: 'asc' },
     });
 
-    const entries: Content[] = records.map((r) => ({
-        ...r,
-        mediaType: r.mediaType as 'movie' | 'tv',
-        addedAt: r.addedAt.toISOString(),
-    }));
+    const entries: Content[] = records
+        .map((r) => ({
+            ...r,
+            mediaType: r.mediaType as 'movie' | 'tv',
+            addedAt: r.addedAt.toISOString(),
+        }))
+        .sort((a, b) =>
+            a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+        );
 
     // -------------------------------------------------------------------------
     // MARKUP

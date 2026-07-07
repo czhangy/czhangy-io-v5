@@ -5,6 +5,7 @@ export type Achievement = {
     category: string;
     description: string;
     date: string | null;
+    createdAt: string;
 };
 
 export type Move = {
@@ -31,6 +32,7 @@ export type Book = {
 };
 
 export type Content = {
+    id: number;
     name: string;
     mediaType: 'movie' | 'tv';
     poster: string;
@@ -116,3 +118,5 @@ export type CreateAchievementParams = {
     description: string;
     date: string;
 };
+
+export type SelectOutcome<TSaved> = { saved: TSaved } | { error: string };

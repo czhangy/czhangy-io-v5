@@ -26,4 +26,6 @@ All state is managed by a single `useReducer`. The `State` shape:
 
 ## Computations
 
-- `parseDate` — converts a nullable MM/DD/YYYY string to a timestamp for date comparison
+- `getSortTimestamp` — converts an achievement to a timestamp for date comparison: uses its MM/DD/YYYY `date` string if set, otherwise falls back to `createdAt`. Used both for the `date` sort field and as the tie-breaker when sorting by `tier`.
+
+Sorting by `name` is case-insensitive.

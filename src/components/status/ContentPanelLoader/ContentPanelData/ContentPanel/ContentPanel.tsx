@@ -95,7 +95,7 @@ const ContentPanel: React.FC<ContentPanelProps> = ({
         });
         if (!res.ok) return;
         const saved = (await res.json()) as Content;
-        const filtered = entries.filter((e) => e.name !== saved.name);
+        const filtered = entries.filter((e) => e.id !== saved.id);
         setEntries([saved, ...filtered].slice(0, MAX_ENTRIES));
         setIsAdding(false);
         setQuery('');
@@ -168,9 +168,11 @@ const ContentPanel: React.FC<ContentPanelProps> = ({
                         />
                     </div>
                 ) : null}
-                <ul className={styles.list}>
+                <ul
+                    className={`${styles.list}${isAdding ? ` ${styles['list--dimmed']}` : ''}`}
+                >
                     {entries.map((entry) => (
-                        <li key={entry.name} className={styles.item}>
+                        <li key={entry.id} className={styles.item}>
                             <Image
                                 className={styles.poster}
                                 src={entry.poster}

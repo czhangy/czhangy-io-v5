@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import AdminActions from '@/components/common/AdminActions/AdminActions';
+import AlertModal from '@/components/common/AlertModal/AlertModal';
 import ListControls from '@/components/common/ListControls/ListControls';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
@@ -34,6 +35,7 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
     const [entries, setEntries] = useState<Book[]>(initialEntries);
     const [page, setPage] = useState<number>(1);
     const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>('');
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -42,7 +44,7 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
     const handleAdd = (entry: Book): void => {
         const filtered = entries.filter((e) => e.id !== entry.id);
         const nextEntries = [...filtered, entry].sort((a, b) =>
-            a.name.localeCompare(b.name)
+            a.name.toLowerCase().localeCompare(b.name.toLowerCase())
         );
         const index = nextEntries.findIndex((e) => e.id === entry.id);
         setEntries(nextEntries);
@@ -80,6 +82,15 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
         );
         setEntries(nextEntries);
         setPage((p) => Math.min(p, newTotalPages));
+    };
+
+    const handleAddError = (message: string): void => {
+        setIsAddOpen(false);
+        setErrorMessage(message);
+    };
+
+    const handleErrorClose = (): void => {
+        setErrorMessage('');
     };
 
     const handlePrevPage = (): void => {
@@ -125,9 +136,17 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
                     <AddBookModal
                         onClose={() => setIsAddOpen(false)}
                         onAdd={handleAdd}
+                        onError={handleAddError}
                     />
                 ) : null}
             </ListControls>
+            {errorMessage ? (
+                <AlertModal
+                    title="ERROR"
+                    message={errorMessage}
+                    onClose={handleErrorClose}
+                />
+            ) : null}
             <ul className={styles.list}>
                 {paginatedEntries.map((entry) => (
                     <li key={entry.id} className={styles.item}>
