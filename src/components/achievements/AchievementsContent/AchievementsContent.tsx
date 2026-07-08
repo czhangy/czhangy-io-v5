@@ -1,13 +1,15 @@
 'use client';
 
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
+import Controls from '@/components/common/Controls/Controls';
+import Dropdown from '@/components/common/Dropdown/Dropdown';
 import Pagination from '@/components/common/Pagination/Pagination';
+import { useSession } from '@/lib/context/SessionContext';
 import { Achievement } from '@/lib/static/types';
 import DateHelpers from '@/lib/utils/DateHelpers';
 import AchievementCard from './AchievementCard/AchievementCard';
 import styles from './AchievementsContent.module.scss';
-import AchievementsControls from './AchievementsControls/AchievementsControls';
-import FilterControl from './AchievementsControls/FilterControl/FilterControl';
+import AddAchievementModal from './AddAchievementModal/AddAchievementModal';
 
 type AchievementsContentProps = {
     achievements: Achievement[];
@@ -66,6 +68,8 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
     // HOOKS
     // -------------------------------------------------------------------------
 
+    const { role } = useSession();
+
     const [state, dispatch] = useReducer(
         (state: State, action: Action): State => {
             switch (action.type) {
@@ -100,6 +104,12 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
         },
         INITIAL_STATE
     );
+
+    // -------------------------------------------------------------------------
+    // STATE
+    // -------------------------------------------------------------------------
+
+    const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -203,37 +213,49 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
 
     return (
         <div className={styles['achievements-content']}>
-            <div className={styles.controls}>
-                <div className={styles.left}>
-                    <FilterControl
-                        value={categoryFilter === '' ? 'All' : categoryFilter}
-                        onChange={handleCategoryChange}
-                        options={['All', ...CATEGORIES]}
-                        maxLabel="Hobbies"
-                    />
-                    <FilterControl
-                        value={currentSortLabel}
-                        onChange={handleFieldChange}
-                        options={SORT_FIELD_LABELS}
-                    />
-                    <button
-                        className={styles['direction-button']}
-                        type="button"
-                        onClick={handleDirectionToggle}
-                    >
-                        {sortDirection === 'asc' ? '↑ Asc' : '↓ Desc'}
-                    </button>
-                </div>
-                <div className={styles.right}>
-                    <AchievementsControls />
-                    <Pagination
-                        page={page}
-                        totalPages={totalPages}
-                        onPrev={handlePrevPage}
-                        onNext={handleNextPage}
-                    />
-                </div>
-            </div>
+            <Controls
+                left={
+                    <>
+                        <Dropdown
+                            value={
+                                categoryFilter === '' ? 'All' : categoryFilter
+                            }
+                            onChange={handleCategoryChange}
+                            options={['All', ...CATEGORIES]}
+                            maxLabel="Hobbies"
+                            variant="control"
+                        />
+                        <Dropdown
+                            value={currentSortLabel}
+                            onChange={handleFieldChange}
+                            options={SORT_FIELD_LABELS}
+                            variant="control"
+                        />
+                        <button
+                            className={styles['direction-button']}
+                            type="button"
+                            onClick={handleDirectionToggle}
+                        >
+                            {sortDirection === 'asc' ? '↑ Asc' : '↓ Desc'}
+                        </button>
+                    </>
+                }
+                add={{
+                    label: 'Add Achievement',
+                    isAdmin: role === 'ADMIN',
+                    onClick: () => setIsAddOpen(true),
+                }}
+                pagination={{
+                    page,
+                    totalPages,
+                    onPrev: handlePrevPage,
+                    onNext: handleNextPage,
+                }}
+            >
+                {isAddOpen ? (
+                    <AddAchievementModal onClose={() => setIsAddOpen(false)} />
+                ) : null}
+            </Controls>
             <div className={styles.grid}>
                 {paginatedAchievements.map((achievement) => (
                     <AchievementCard

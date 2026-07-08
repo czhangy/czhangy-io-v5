@@ -1,6 +1,6 @@
 # CardistryContent
 
-Client component that manages the cardistry move list, pagination state, and add flow for the Cardistry page. The controls bar (back link, add button, pagination) is rendered via ListControls, with AddMoveModal opened from the add button.
+Client component that manages the cardistry move list, pagination state, and add flow for the Cardistry page. The controls bar (back link, add button, pagination) is rendered via Controls, with AddMoveModal opened from the add button.
 
 ## Props
 

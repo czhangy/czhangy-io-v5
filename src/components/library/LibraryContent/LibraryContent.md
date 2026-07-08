@@ -1,6 +1,6 @@
 # LibraryContent
 
-Client component rendered by LibraryPage. Displays a paginated list of library entries with cover, title, author, and genre tags. Admin users see a highlight button and a delete button on each row. The controls bar (back link, add button, pagination) is rendered via ListControls, with AddBookModal opened from the add button.
+Client component rendered by LibraryPage. Displays a paginated list of library entries with cover, title, author, and genre tags. Admin users see a highlight button and a delete button on each row. The controls bar (back link, add button, pagination) is rendered via Controls, with AddBookModal opened from the add button.
 
 ## Props
 

@@ -4,11 +4,13 @@ A custom dropdown for use in forms and filter controls. Replaces native `<select
 
 ## Props
 
-| Prop       | Type                      | Required | Default | Description                                      |
-| ---------- | ------------------------- | -------- | ------- | ------------------------------------------------ |
-| `value`    | `string`                  | Yes      | —       | Currently selected option value                  |
-| `onChange` | `(value: string) => void` | Yes      | —       | Called with the selected option string           |
-| `options`  | `string[]`                | Yes      | —       | List of option strings (value and display label) |
+| Prop       | Type                      | Required | Default | Description                                                                                                        |
+| ---------- | ------------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
+| `value`    | `string`                  | Yes      | —       | Currently selected option value                                                                                    |
+| `onChange` | `(value: string) => void` | Yes      | —       | Called with the selected option string                                                                             |
+| `options`  | `string[]`                | Yes      | —       | List of option strings (value and display label)                                                                   |
+| `maxLabel` | `string`                  | No       | —       | Longest possible label; pins the component width so it never resizes on selection                                  |
+| `variant`  | `'control'`               | No       | —       | Renders with the bordered game-button look for use in a Controls bar, instead of the default solid form-field look |
 
 ## State
 

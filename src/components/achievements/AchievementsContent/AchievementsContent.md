@@ -1,6 +1,6 @@
 # AchievementsContent
 
-Client shell for the achievements page. Owns sort, filter, and pagination state via a reducer, and renders the controls row (category filter + sort field + direction toggle on the left; pagination + admin add button on the right), the paginated achievement grid, and a centered pagination footer.
+Client shell for the achievements page. Owns sort, filter, and pagination state via a reducer, and renders the controls row (category filter + sort field + direction toggle on the left; admin add button + pagination on the right) via the shared Controls component, the paginated achievement grid, and a centered pagination footer.
 
 ## Props
 
@@ -10,7 +10,7 @@ Client shell for the achievements page. Owns sort, filter, and pagination state 
 
 ## State
 
-All state is managed by a single `useReducer`. The `State` shape:
+Sort/filter/pagination state is managed by a single `useReducer`. The `State` shape:
 
 | Field            | Type            | Initial value            | Description                                               |
 | ---------------- | --------------- | ------------------------ | --------------------------------------------------------- |
@@ -19,6 +19,8 @@ All state is managed by a single `useReducer`. The `State` shape:
 | `categoryFilter` | `string`        | `''`                     | Active category filter; `''` means "All"                  |
 | `page`           | `number`        | `1`                      | Current page (1-indexed); resets to 1 on any state change |
 | `itemsPerPage`   | `number`        | `ITEMS_PER_PAGE_DESKTOP` | Items per page; set responsively by `RESIZE` action       |
+
+A separate `isAddOpen` (`boolean`, initial `false`) `useState` tracks whether AddAchievementModal is open, set by the admin add button's `onClick`.
 
 ## Effects
 

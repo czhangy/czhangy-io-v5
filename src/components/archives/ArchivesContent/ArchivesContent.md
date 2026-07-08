@@ -1,6 +1,6 @@
 # ArchivesContent
 
-Client component rendered by ArchivesPage. Displays a paginated list of archived media entries with poster, name, and genre tags. Admin users see a highlight button and a delete button on the right of each row — delete removes the entry from the DB and filters it from local state. The controls bar (back link, add button, pagination) is rendered via ListControls, with AddContentModal opened from the add button.
+Client component rendered by ArchivesPage. Displays a paginated list of archived media entries with poster, name, and genre tags. Admin users see a highlight button and a delete button on the right of each row — delete removes the entry from the DB and filters it from local state. The controls bar (back link, add button, pagination) is rendered via Controls, with AddContentModal opened from the add button.
 
 ## Props
 

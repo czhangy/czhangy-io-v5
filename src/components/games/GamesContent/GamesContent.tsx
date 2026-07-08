@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import AdminActions from '@/components/common/AdminActions/AdminActions';
+import Controls from '@/components/common/Controls/Controls';
 import HighlightMatch from '@/components/common/HighlightMatch/HighlightMatch';
-import ListControls from '@/components/common/ListControls/ListControls';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import { Game } from '@/lib/static/types';
@@ -126,17 +126,24 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
 
     return (
         <div className={styles['games-content']}>
-            <ListControls
-                page={page}
-                totalPages={totalPages}
-                onPrev={handlePrevPage}
-                onNext={handleNextPage}
-                isAdmin={isAdmin}
-                addLabel="Add Game"
-                onAddClick={() => setIsAddOpen(true)}
-                searchValue={searchQuery}
-                searchPlaceholder="Search games..."
-                onSearchChange={handleSearchChange}
+            <Controls
+                backLink={{ href: '/status', label: '← Back to Status' }}
+                search={{
+                    value: searchQuery,
+                    placeholder: 'Search games...',
+                    onChange: handleSearchChange,
+                }}
+                add={{
+                    label: 'Add Game',
+                    isAdmin,
+                    onClick: () => setIsAddOpen(true),
+                }}
+                pagination={{
+                    page,
+                    totalPages,
+                    onPrev: handlePrevPage,
+                    onNext: handleNextPage,
+                }}
             >
                 {isAddOpen ? (
                     <AddGameModal
@@ -144,7 +151,7 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
                         onAdd={handleAdd}
                     />
                 ) : null}
-            </ListControls>
+            </Controls>
             <ul className={styles.list}>
                 {paginatedGames.map((game) => (
                     <li key={game.name} className={styles.item}>

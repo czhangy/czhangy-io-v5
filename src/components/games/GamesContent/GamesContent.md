@@ -1,6 +1,6 @@
 # GamesContent
 
-Client component that renders the full games list with admin controls for adding, editing, and deleting entries. The controls bar (back link, add button, pagination) is rendered via ListControls, with AddGameModal opened from the add button.
+Client component that renders the full games list with admin controls for adding, editing, and deleting entries. The controls bar (back link, add button, pagination) is rendered via Controls, with AddGameModal opened from the add button.
 
 ## Props
 
