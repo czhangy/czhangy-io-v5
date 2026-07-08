@@ -3,50 +3,37 @@
 import { useState } from 'react';
 import AddButton from '@/components/common/AddButton/AddButton';
 import FormField from '@/components/common/FormField/FormField';
-import { GAME_GENRES } from '@/lib/static/constants';
+import { CARDISTRY_MOVE_TYPES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
-import { Game } from '@/lib/static/types';
-import UrlHelpers from '@/lib/utils/UrlHelpers';
-import styles from './GameForm.module.scss';
+import { Move } from '@/lib/static/types';
+import StringHelpers from '@/lib/utils/StringHelpers';
+import styles from './MoveForm.module.scss';
 
-type GameFormProps = {
+type MoveFormProps = {
     submitLabel: string;
-    initialValues?: Partial<Game>;
-    onSubmit: (values: Game) => Promise<void>;
+    initialValues?: Partial<Move>;
+    onSubmit: (values: {
+        name: string;
+        type: string;
+        count?: number;
+    }) => Promise<void>;
     onClose: () => void;
 };
 
-const GameForm: React.FC<GameFormProps> = ({
+const MoveForm: React.FC<MoveFormProps> = ({
     submitLabel,
     initialValues,
     onSubmit,
     onClose,
 }) => {
     // -------------------------------------------------------------------------
-    // CONSTANTS
-    // -------------------------------------------------------------------------
-
-    const RATING_OPTIONS: string[] = [
-        '1',
-        '1.5',
-        '2',
-        '2.5',
-        '3',
-        '3.5',
-        '4',
-        '4.5',
-        '5',
-    ];
-
-    // -------------------------------------------------------------------------
     // STATE
     // -------------------------------------------------------------------------
 
     const [name, setName] = useState<string>(initialValues?.name ?? '');
-    const [genre, setGenre] = useState<string>(initialValues?.genre ?? '');
-    const [icon, setIcon] = useState<string>(initialValues?.icon ?? '');
-    const [rating, setRating] = useState<string>(
-        initialValues?.rating !== undefined ? String(initialValues.rating) : '1'
+    const [type, setType] = useState<string>(initialValues?.type ?? '');
+    const [count, setCount] = useState<string>(
+        initialValues?.count !== undefined ? String(initialValues.count) : '0'
     );
     const [error, setError] = useState<string>('');
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -67,9 +54,8 @@ const GameForm: React.FC<GameFormProps> = ({
         try {
             await onSubmit({
                 name: name.trim(),
-                genre: genre.trim(),
-                icon: icon.trim(),
-                rating: parseFloat(rating),
+                type,
+                ...(isEditing ? { count: parseInt(count, 10) } : {}),
             });
         } catch (err) {
             setError(err instanceof Error ? err.message : String(err));
@@ -88,46 +74,49 @@ const GameForm: React.FC<GameFormProps> = ({
 
     const validate = (): string => {
         if (!name.trim()) return 'Name is required.';
-        if (!genre.trim()) return 'Genre is required.';
-        if (!icon.trim()) return 'Icon is required.';
-        if (!UrlHelpers.isImageUrl(icon.trim()))
-            return 'Icon must be a valid image URL.';
+        if (!StringHelpers.isTitleCase(name.trim()))
+            return 'Name must be title case.';
+        if (!type) return 'Type is required.';
+        if (isEditing && !/^\d+$/.test(count.trim()))
+            return 'Count must be a non-negative integer.';
         return '';
     };
+
+    // -------------------------------------------------------------------------
+    // RENDERING
+    // -------------------------------------------------------------------------
+
+    const isEditing: boolean = initialValues?.count !== undefined;
 
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
 
     return (
-        <div className={styles['game-form']}>
-            <FormField
-                label="Name"
-                value={name}
-                onChange={setName}
-                onKeyDown={handleKeyDown}
-                autoFocus
-            />
+        <div className={styles['move-form']}>
             <div className={styles.row}>
                 <FormField
-                    label="Genre"
-                    value={genre}
-                    onChange={setGenre}
-                    options={GAME_GENRES}
+                    label="Name"
+                    value={name}
+                    onChange={setName}
+                    onKeyDown={handleKeyDown}
+                    autoFocus
                 />
                 <FormField
-                    label="Icon URL"
-                    value={icon}
-                    onChange={setIcon}
-                    onKeyDown={handleKeyDown}
+                    label="Type"
+                    value={type}
+                    onChange={setType}
+                    options={CARDISTRY_MOVE_TYPES}
                 />
             </div>
-            <FormField
-                label="Rating"
-                value={rating}
-                onChange={setRating}
-                options={RATING_OPTIONS}
-            />
+            {isEditing ? (
+                <FormField
+                    label="Count"
+                    value={count}
+                    onChange={setCount}
+                    onKeyDown={handleKeyDown}
+                />
+            ) : null}
             {error ? <span className={styles.error}>{error}</span> : null}
             <AddButton
                 label={isSubmitting ? 'Saving...' : submitLabel}
@@ -138,4 +127,4 @@ const GameForm: React.FC<GameFormProps> = ({
     );
 };
 
-export default GameForm;
+export default MoveForm;

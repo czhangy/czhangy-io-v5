@@ -1,13 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import AddButton from '@/components/common/AddButton/AddButton';
-import FormField from '@/components/common/FormField/FormField';
+import MoveForm from '@/components/cardistry/CardistryContent/MoveForm/MoveForm';
 import Modal from '@/components/common/Modal/Modal';
-import { CARDISTRY_MOVE_TYPES } from '@/lib/static/constants';
-import { Key } from '@/lib/static/enums';
 import { Move } from '@/lib/static/types';
-import styles from './AddMoveModal.module.scss';
 
 type AddMoveModalProps = {
     onClose: () => void;
@@ -16,32 +11,26 @@ type AddMoveModalProps = {
 
 const AddMoveModal: React.FC<AddMoveModalProps> = ({ onClose, onAdd }) => {
     // -------------------------------------------------------------------------
-    // STATE
-    // -------------------------------------------------------------------------
-
-    const [name, setName] = useState<string>('');
-    const [type, setType] = useState<string>('');
-
-    // -------------------------------------------------------------------------
     // HANDLERS
     // -------------------------------------------------------------------------
 
-    const handleSubmit = async (): Promise<void> => {
-        const trimmed = name.trim();
-        if (!trimmed) return;
+    const handleSubmit = async (values: {
+        name: string;
+        type: string;
+    }): Promise<void> => {
         const res = await fetch('/api/moves', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: trimmed, type }),
+            body: JSON.stringify(values),
         });
-        if (!res.ok) return;
+        if (!res.ok) {
+            const data = (await res.json().catch(() => ({}))) as {
+                error?: string;
+            };
+            throw new Error(data.error ?? 'Failed to create move.');
+        }
         onAdd((await res.json()) as Move);
         onClose();
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-        if (e.key === Key.Enter) handleSubmit();
-        if (e.key === Key.Escape) onClose();
     };
 
     // -------------------------------------------------------------------------
@@ -50,28 +39,11 @@ const AddMoveModal: React.FC<AddMoveModalProps> = ({ onClose, onAdd }) => {
 
     return (
         <Modal title="ADD MOVE" onClose={onClose}>
-            <div className={styles['add-move-modal']}>
-                <div className={styles.row}>
-                    <FormField
-                        label="Name"
-                        value={name}
-                        onChange={setName}
-                        onKeyDown={handleKeyDown}
-                        autoFocus
-                    />
-                    <FormField
-                        label="Type"
-                        value={type}
-                        onChange={setType}
-                        options={CARDISTRY_MOVE_TYPES}
-                    />
-                </div>
-                <AddButton
-                    label="Add"
-                    disabled={!name.trim() || !type}
-                    onSubmit={handleSubmit}
-                />
-            </div>
+            <MoveForm
+                submitLabel="Add"
+                onSubmit={handleSubmit}
+                onClose={onClose}
+            />
         </Modal>
     );
 };
