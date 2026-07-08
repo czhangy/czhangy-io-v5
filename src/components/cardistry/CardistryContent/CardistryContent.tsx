@@ -1,29 +1,30 @@
 'use client';
 
 import { useState } from 'react';
-import AdminActions from '@/components/common/AdminActions/AdminActions';
 import Controls from '@/components/common/Controls/Controls';
-import HighlightMatch from '@/components/common/HighlightMatch/HighlightMatch';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import { Move } from '@/lib/static/types';
-import CardistryHelpers from '@/lib/utils/CardistryHelpers';
 import AddMoveModal from './AddMoveModal/AddMoveModal';
 import styles from './CardistryContent.module.scss';
 import EditMoveModal from './EditMoveModal/EditMoveModal';
+import MoveListItem from './MoveListItem/MoveListItem';
 
 type CardistryContentProps = {
     initialMoves: Move[];
+    highlightedMove: Move | null;
 };
 
 const CardistryContent: React.FC<CardistryContentProps> = ({
     initialMoves,
+    highlightedMove,
 }) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
 
     const ITEMS_PER_PAGE: number = 10;
+    const HIGHLIGHT_LABEL: string = 'CURRENTLY PRACTICING';
 
     // -------------------------------------------------------------------------
     // HOOKS
@@ -43,6 +44,9 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
     );
     const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState<string>('');
+    const [highlightedName, setHighlightedName] = useState<string | null>(
+        highlightedMove?.name ?? null
+    );
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -105,6 +109,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
         );
         setMoves(nextMoves);
         setPage((p) => Math.min(p, newTotalPages));
+        if (name === highlightedName) setHighlightedName(null);
     };
 
     const handleSearchChange = (value: string): void => {
@@ -125,8 +130,10 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
     // -------------------------------------------------------------------------
 
     const filterMoves = (list: Move[]): Move[] =>
-        list.filter((m) =>
-            m.name.toLowerCase().includes(searchQuery.toLowerCase())
+        list.filter(
+            (m) =>
+                m.name !== highlightedName &&
+                m.name.toLowerCase().includes(searchQuery.toLowerCase())
         );
 
     // -------------------------------------------------------------------------
@@ -134,6 +141,9 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
     // -------------------------------------------------------------------------
 
     const isAdmin: boolean = role === 'ADMIN';
+
+    const spotlightMove: Move | null =
+        moves.find((m) => m.name === highlightedName) ?? null;
 
     const filteredMoves: Move[] = filterMoves(moves);
 
@@ -179,76 +189,37 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                     />
                 ) : null}
             </Controls>
+            {spotlightMove ? (
+                <ul className={styles.spotlight}>
+                    <MoveListItem
+                        move={spotlightMove}
+                        searchQuery={searchQuery}
+                        isAdmin={isAdmin}
+                        isIncrementing={incrementingMoves.has(
+                            spotlightMove.name
+                        )}
+                        onIncrement={(amount) =>
+                            handleIncrement(spotlightMove, amount)
+                        }
+                        onEdit={() => setEditingMove(spotlightMove)}
+                        onDelete={() => handleDelete(spotlightMove.name)}
+                        highlightLabel={HIGHLIGHT_LABEL}
+                    />
+                </ul>
+            ) : null}
             <ul className={styles.list}>
-                {paginatedMoves.map((move) => {
-                    const proficiency = CardistryHelpers.getProficiency(
-                        move.count
-                    );
-                    return (
-                        <li key={move.name} className={styles.item}>
-                            <div className={styles.proficiency}>
-                                <div className={styles.pips}>
-                                    {[0, 1, 2].map((i) => (
-                                        <span
-                                            key={i}
-                                            className={`${styles.pip}${i < proficiency.tier ? ` ${styles['pip--filled']}` : ''}`}
-                                        />
-                                    ))}
-                                </div>
-                                <span className={styles.count}>
-                                    {proficiency.display}
-                                </span>
-                            </div>
-                            <div className={styles.details}>
-                                <span className={styles.name}>
-                                    <HighlightMatch
-                                        text={move.name}
-                                        query={searchQuery}
-                                    />
-                                </span>
-                                <div className={styles.metadata}>
-                                    <span className={styles['type-tag']}>
-                                        {move.type}
-                                    </span>
-                                </div>
-                            </div>
-                            {isAdmin ? (
-                                <>
-                                    <div
-                                        className={styles['increment-buttons']}
-                                    >
-                                        {[1, 10, 25, 50].map((amount) => (
-                                            <button
-                                                key={amount}
-                                                type="button"
-                                                className={
-                                                    styles['increment-btn']
-                                                }
-                                                disabled={incrementingMoves.has(
-                                                    move.name
-                                                )}
-                                                onClick={() =>
-                                                    handleIncrement(
-                                                        move,
-                                                        amount
-                                                    )
-                                                }
-                                            >
-                                                +{amount}
-                                            </button>
-                                        ))}
-                                    </div>
-                                    <AdminActions
-                                        className={styles['admin-actions']}
-                                        entryName={move.name}
-                                        onEdit={() => setEditingMove(move)}
-                                        onDelete={() => handleDelete(move.name)}
-                                    />
-                                </>
-                            ) : null}
-                        </li>
-                    );
-                })}
+                {paginatedMoves.map((move) => (
+                    <MoveListItem
+                        key={move.name}
+                        move={move}
+                        searchQuery={searchQuery}
+                        isAdmin={isAdmin}
+                        isIncrementing={incrementingMoves.has(move.name)}
+                        onIncrement={(amount) => handleIncrement(move, amount)}
+                        onEdit={() => setEditingMove(move)}
+                        onDelete={() => handleDelete(move.name)}
+                    />
+                ))}
             </ul>
             <div className={styles.pagination}>
                 <Pagination

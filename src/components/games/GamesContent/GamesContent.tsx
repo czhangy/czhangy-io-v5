@@ -1,26 +1,30 @@
 'use client';
 
 import { useState } from 'react';
-import AdminActions from '@/components/common/AdminActions/AdminActions';
 import Controls from '@/components/common/Controls/Controls';
-import HighlightMatch from '@/components/common/HighlightMatch/HighlightMatch';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import { Game } from '@/lib/static/types';
 import AddGameModal from './AddGameModal/AddGameModal';
 import EditGameModal from './EditGameModal/EditGameModal';
+import GameListItem from './GameListItem/GameListItem';
 import styles from './GamesContent.module.scss';
 
 type GamesContentProps = {
     initialGames: Game[];
+    highlightedGame: Game | null;
 };
 
-const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
+const GamesContent: React.FC<GamesContentProps> = ({
+    initialGames,
+    highlightedGame,
+}) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
 
     const ITEMS_PER_PAGE: number = 10;
+    const HIGHLIGHT_LABEL: string = 'CURRENTLY PLAYING';
 
     // -------------------------------------------------------------------------
     // HOOKS
@@ -37,6 +41,9 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
     const [editingGame, setEditingGame] = useState<Game | null>(null);
     const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState<string>('');
+    const [highlightedName, setHighlightedName] = useState<string | null>(
+        highlightedGame?.name ?? null
+    );
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -78,6 +85,7 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
         );
         setGames(nextGames);
         setPage((p) => Math.min(p, newTotalPages));
+        if (name === highlightedName) setHighlightedName(null);
     };
 
     const handleSearchChange = (value: string): void => {
@@ -98,8 +106,10 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
     // -------------------------------------------------------------------------
 
     const filterGames = (list: Game[]): Game[] =>
-        list.filter((g) =>
-            g.name.toLowerCase().includes(searchQuery.toLowerCase())
+        list.filter(
+            (g) =>
+                g.name !== highlightedName &&
+                g.name.toLowerCase().includes(searchQuery.toLowerCase())
         );
 
     // -------------------------------------------------------------------------
@@ -107,6 +117,9 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
     // -------------------------------------------------------------------------
 
     const isAdmin: boolean = role === 'ADMIN';
+
+    const spotlightGame: Game | null =
+        games.find((g) => g.name === highlightedName) ?? null;
 
     const filteredGames: Game[] = filterGames(games);
 
@@ -152,55 +165,28 @@ const GamesContent: React.FC<GamesContentProps> = ({ initialGames }) => {
                     />
                 ) : null}
             </Controls>
+            {spotlightGame ? (
+                <ul className={styles.spotlight}>
+                    <GameListItem
+                        game={spotlightGame}
+                        searchQuery={searchQuery}
+                        isAdmin={isAdmin}
+                        onEdit={() => setEditingGame(spotlightGame)}
+                        onDelete={() => handleDelete(spotlightGame.name)}
+                        highlightLabel={HIGHLIGHT_LABEL}
+                    />
+                </ul>
+            ) : null}
             <ul className={styles.list}>
                 {paginatedGames.map((game) => (
-                    <li key={game.name} className={styles.item}>
-                        <div className={styles['icon-wrapper']}>
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                                className={styles.icon}
-                                src={game.icon}
-                                alt={`${game.name} icon`}
-                                width={64}
-                                height={64}
-                            />
-                        </div>
-                        <div className={styles.details}>
-                            <span className={styles.name}>
-                                <HighlightMatch
-                                    text={game.name}
-                                    query={searchQuery}
-                                />
-                            </span>
-                            <div className={styles.metadata}>
-                                <span className={styles['genre-tag']}>
-                                    {game.genre}
-                                </span>
-                            </div>
-                            <div className={styles.rating}>
-                                {[1, 2, 3, 4, 5].map((i) => {
-                                    const isFull = game.rating >= i;
-                                    const isHalf =
-                                        !isFull && game.rating >= i - 0.5;
-                                    return (
-                                        <span
-                                            key={i}
-                                            className={`${styles.star}${isFull ? ` ${styles['star--full']}` : isHalf ? ` ${styles['star--half']}` : ''}`}
-                                        >
-                                            ★
-                                        </span>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                        {isAdmin ? (
-                            <AdminActions
-                                entryName={game.name}
-                                onEdit={() => setEditingGame(game)}
-                                onDelete={() => handleDelete(game.name)}
-                            />
-                        ) : null}
-                    </li>
+                    <GameListItem
+                        key={game.name}
+                        game={game}
+                        searchQuery={searchQuery}
+                        isAdmin={isAdmin}
+                        onEdit={() => setEditingGame(game)}
+                        onDelete={() => handleDelete(game.name)}
+                    />
                 ))}
             </ul>
             <div className={styles.pagination}>

@@ -1,0 +1,126 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.item {
+    border: 1px solid $border-subtle;
+    transition: border-color 0.3s ease;
+
+    .item-header {
+        align-items: center;
+        background: rgba($foreground, 0.05);
+        border-bottom: 1px solid $border-subtle;
+        display: flex;
+        padding: 0.5rem 0.75rem;
+
+        .item-label {
+            @include mono-label;
+
+            color: $text-dim;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+        }
+    }
+
+    .item-body {
+        align-items: center;
+        display: flex;
+        gap: 1.5rem;
+        padding: 0.75rem 1.25rem;
+
+        .icon-wrapper {
+            align-items: center;
+            display: flex;
+            flex-shrink: 0;
+            justify-content: center;
+
+            .icon {
+                display: block;
+                object-fit: contain;
+            }
+        }
+
+        .details {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            gap: 0.5rem;
+            min-width: 0;
+
+            .name {
+                @include mono-label;
+
+                font-size: 1.1rem;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .metadata {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.25rem;
+
+                .genre-tag {
+                    @include mono-label;
+
+                    border: 1px solid $border-subtle;
+                    color: $text-dim;
+                    flex-shrink: 0;
+                    font-size: 0.8rem;
+                    letter-spacing: 0.05em;
+                    padding: 0.1rem 0.3rem;
+                }
+            }
+
+            .rating {
+                align-items: center;
+                display: flex;
+                flex-shrink: 0;
+                gap: 0.2rem;
+
+                .star {
+                    color: $foreground;
+                    font-size: 1.3rem;
+                    line-height: 1;
+                    position: relative;
+
+                    &--full {
+                        color: $accent;
+                    }
+
+                    &--half {
+                        &::after {
+                            color: $accent;
+                            content: '★';
+                            left: 0;
+                            overflow: hidden;
+                            position: absolute;
+                            top: 0;
+                            width: 50%;
+                        }
+                    }
+                }
+            }
+        }
+
+        @media (width <= 768px) {
+            gap: 0.75rem 1rem;
+
+            .icon-wrapper {
+                flex-shrink: 0;
+            }
+
+            .details {
+                .metadata {
+                    .genre-tag {
+                        font-size: 0.65rem;
+                    }
+                }
+            }
+        }
+    }
+
+    &--highlighted {
+        @include focus-glow;
+    }
+}
