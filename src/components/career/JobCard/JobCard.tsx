@@ -1,12 +1,24 @@
+'use client';
+
 import Image from 'next/image';
+import AdminActions from '@/components/common/AdminActions/AdminActions';
 import { Job } from '@/lib/static/types';
+import DateHelpers from '@/lib/utils/DateHelpers';
 import styles from './JobCard.module.scss';
 
 type JobCardProps = {
     job: Job;
+    isAdmin: boolean;
+    onEdit: () => void;
+    onDelete: () => void;
 };
 
-const JobCard: React.FC<JobCardProps> = ({ job }) => {
+const JobCard: React.FC<JobCardProps> = ({
+    job,
+    isAdmin,
+    onEdit,
+    onDelete,
+}) => {
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
@@ -26,11 +38,20 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                 <span className={styles.company}>{job.company}</span>
                 <span className={styles.role}>{job.title}</span>
                 <span className={styles.dates}>
-                    {job.startDate}
+                    {DateHelpers.getMonthYear(job.startDate)}
                     {' – '}
-                    {job.endDate ? job.endDate : 'Present'}
+                    {job.endDate
+                        ? DateHelpers.getMonthYear(job.endDate)
+                        : 'Present'}
                 </span>
             </div>
+            {isAdmin ? (
+                <AdminActions
+                    entryName={`${job.company} — ${job.title}`}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
+                />
+            ) : null}
         </div>
     );
 };

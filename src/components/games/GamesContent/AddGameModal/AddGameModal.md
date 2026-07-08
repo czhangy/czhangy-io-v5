@@ -1,6 +1,6 @@
 # AddGameModal
 
-Modal form for creating a new game with name, genre, icon URL, and rating fields.
+Modal that wraps GameForm to create a new game, POSTing to the games API on submit.
 
 ## Props
 
@@ -9,15 +9,6 @@ Modal form for creating a new game with name, genre, icon URL, and rating fields
 | `onClose` | `() => void`           | Yes      | —       | Called to dismiss the modal             |
 | `onAdd`   | `(game: Game) => void` | Yes      | —       | Called with the created game on success |
 
-## State
+## Handlers
 
-| State    | Type     | Initial value | Description                |
-| -------- | -------- | ------------- | -------------------------- |
-| `name`   | `string` | `''`          | Controlled name input      |
-| `genre`  | `string` | `''`          | Controlled genre dropdown  |
-| `icon`   | `string` | `''`          | Controlled icon URL input  |
-| `rating` | `string` | `'1'`         | Controlled rating dropdown |
-
-## Computations
-
-- `isValid` — true when name, genre, and icon are all non-empty
+- `handleSubmit` — posts the form values to `/api/games`, throwing on failure so GameForm can surface the error

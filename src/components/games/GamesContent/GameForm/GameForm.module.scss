@@ -1,0 +1,19 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.game-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+    .row {
+        @include form-row;
+    }
+
+    .error {
+        color: $error;
+        font-family: $font-mono;
+        font-size: 0.75rem;
+        letter-spacing: 0.03em;
+    }
+}

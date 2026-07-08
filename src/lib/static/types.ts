@@ -50,6 +50,15 @@ export type Log = {
     updatedAt: string;
 };
 
+export type Job = {
+    id: number;
+    company: string;
+    title: string;
+    startDate: string;
+    endDate: string | null; // null = Present
+    logo: string; // path relative to /public, e.g. '/logos/company.png'
+};
+
 // External API responses
 export type SpotifyResponse = {
     name: string;
@@ -103,20 +112,20 @@ export type NavItem = {
     label: string;
 };
 
-export type Job = {
-    company: string;
-    title: string;
-    startDate: string;
-    endDate: string | null; // null = Present
-    logo: string; // path relative to /public, e.g. '/logos/company.png'
-};
-
 export type CreateAchievementParams = {
     tier: number;
     name: string;
     category: string;
     description: string;
     date: string;
+};
+
+export type CreateJobParams = {
+    company: string;
+    title: string;
+    startDate: string;
+    endDate: string | null;
+    logo: string;
 };
 
 export type SelectOutcome<TSaved> = { saved: TSaved } | { error: string };

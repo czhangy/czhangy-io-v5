@@ -1,17 +1,17 @@
 'use client';
 
+import JobForm from '@/components/career/CareerContent/JobForm/JobForm';
 import Modal from '@/components/common/Modal/Modal';
-import GameForm from '@/components/games/GamesContent/GameForm/GameForm';
-import { Game } from '@/lib/static/types';
+import { CreateJobParams, Job } from '@/lib/static/types';
 
-type EditGameModalProps = {
-    game: Game;
+type EditJobModalProps = {
+    job: Job;
     onClose: () => void;
-    onEdit: (game: Game) => void;
+    onEdit: (job: Job) => void;
 };
 
-const EditGameModal: React.FC<EditGameModalProps> = ({
-    game,
+const EditJobModal: React.FC<EditJobModalProps> = ({
+    job,
     onClose,
     onEdit,
 }) => {
@@ -19,8 +19,8 @@ const EditGameModal: React.FC<EditGameModalProps> = ({
     // HANDLERS
     // -------------------------------------------------------------------------
 
-    const handleSubmit = async (values: Game): Promise<void> => {
-        const res = await fetch(`/api/games/${encodeURIComponent(game.name)}`, {
+    const handleSubmit = async (values: CreateJobParams): Promise<void> => {
+        const res = await fetch(`/api/career/${job.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(values),
@@ -29,9 +29,9 @@ const EditGameModal: React.FC<EditGameModalProps> = ({
             const data = (await res.json().catch(() => ({}))) as {
                 error?: string;
             };
-            throw new Error(data.error ?? 'Failed to save game.');
+            throw new Error(data.error ?? 'Failed to save job.');
         }
-        onEdit((await res.json()) as Game);
+        onEdit((await res.json()) as Job);
         onClose();
     };
 
@@ -40,10 +40,16 @@ const EditGameModal: React.FC<EditGameModalProps> = ({
     // -------------------------------------------------------------------------
 
     return (
-        <Modal title="EDIT GAME" onClose={onClose}>
-            <GameForm
+        <Modal title="EDIT JOB" onClose={onClose}>
+            <JobForm
                 submitLabel="Save"
-                initialValues={game}
+                initialValues={{
+                    company: job.company,
+                    title: job.title,
+                    logo: job.logo,
+                    startDate: job.startDate,
+                    endDate: job.endDate ?? '',
+                }}
                 onSubmit={handleSubmit}
                 onClose={onClose}
             />
@@ -51,4 +57,4 @@ const EditGameModal: React.FC<EditGameModalProps> = ({
     );
 };
 
-export default EditGameModal;
+export default EditJobModal;

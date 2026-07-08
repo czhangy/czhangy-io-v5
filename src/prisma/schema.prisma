@@ -73,6 +73,18 @@ model Games {
     rating Float
 }
 
+model Jobs {
+    id        Int      @id @default(autoincrement())
+    company   String
+    title     String
+    startDate String
+    endDate   String?
+    logo      String
+    createdAt DateTime @default(now()) @db.Timestamptz(3)
+
+    @@unique([company, startDate])
+}
+
 model Logs {
     id        Int      @id @default(autoincrement())
     slug      String   @unique

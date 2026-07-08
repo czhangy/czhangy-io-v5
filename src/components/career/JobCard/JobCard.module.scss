@@ -2,6 +2,7 @@
 @use '@/styles/mixins' as *;
 
 .job-card {
+    align-items: center;
     background: $surface;
     border: 1px solid $border-subtle;
     display: flex;
@@ -20,9 +21,11 @@
 
     .content {
         display: flex;
+        flex: 1;
         flex-direction: column;
         gap: 0.375rem;
         justify-content: center;
+        min-width: 0;
 
         .company {
             @include mono-label;
