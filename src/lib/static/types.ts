@@ -55,8 +55,8 @@ export type Job = {
     company: string;
     title: string;
     startDate: string;
-    endDate: string | null; // null = Present
-    logo: string; // path relative to /public, e.g. '/logos/company.png'
+    endDate: string | null;
+    logo: string;
 };
 
 // External API responses

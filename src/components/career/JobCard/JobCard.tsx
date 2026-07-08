@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import AdminActions from '@/components/common/AdminActions/AdminActions';
 import { Job } from '@/lib/static/types';
 import DateHelpers from '@/lib/utils/DateHelpers';
@@ -26,7 +25,8 @@ const JobCard: React.FC<JobCardProps> = ({
     return (
         <div className={styles['job-card']}>
             <div className={styles['logo-wrapper']}>
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                     src={job.logo}
                     alt={`${job.company} logo`}
                     width={40}
