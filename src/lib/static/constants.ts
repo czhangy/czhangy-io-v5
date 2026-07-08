@@ -1,6 +1,13 @@
-import { NavItem } from './types';
+import { NavItem, Track } from './types';
 
 export const SESSION_COOKIE = 'session';
+
+// Music
+export const MUSIC_TRACK: Track = {
+    title: 'Track Title',
+    source: 'Artist Name',
+    file: '/audio/track-1.mp3',
+};
 
 // Milestones
 export const WATCHED_MILESTONES = [

@@ -129,3 +129,9 @@ export type CreateJobParams = {
 };
 
 export type SelectOutcome<TSaved> = { saved: TSaved } | { error: string };
+
+export type Track = {
+    title: string;
+    source: string;
+    file: string;
+};
