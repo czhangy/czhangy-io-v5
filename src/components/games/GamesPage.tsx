@@ -6,6 +6,22 @@ import styles from './GamesPage.module.scss';
 
 const GamesPage = async () => {
     // -------------------------------------------------------------------------
+    // COMPUTATIONS
+    // -------------------------------------------------------------------------
+
+    const fetchHighlightedGame = async (list: Game[]): Promise<Game | null> => {
+        try {
+            const item = await prisma.highlights.findUnique({
+                where: { key: 'game' },
+            });
+            if (!item) return null;
+            return list.find((g) => g.name === item.value) ?? null;
+        } catch {
+            return null;
+        }
+    };
+
+    // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
 
@@ -18,6 +34,7 @@ const GamesPage = async () => {
         icon: g.icon,
         rating: g.rating,
     }));
+    const highlightedGame: Game | null = await fetchHighlightedGame(games);
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -27,7 +44,10 @@ const GamesPage = async () => {
         <div className={styles['games-page']}>
             <div className={styles.content}>
                 <GlitchText text="GAMES" className={styles.title} />
-                <GamesContent initialGames={games} />
+                <GamesContent
+                    initialGames={games}
+                    highlightedGame={highlightedGame}
+                />
             </div>
         </div>
     );
