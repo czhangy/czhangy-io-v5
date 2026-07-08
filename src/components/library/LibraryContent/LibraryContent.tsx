@@ -4,8 +4,8 @@ import { useState } from 'react';
 import Image from 'next/image';
 import AdminActions from '@/components/common/AdminActions/AdminActions';
 import AlertModal from '@/components/common/AlertModal/AlertModal';
+import Controls from '@/components/common/Controls/Controls';
 import HighlightMatch from '@/components/common/HighlightMatch/HighlightMatch';
-import ListControls from '@/components/common/ListControls/ListControls';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import { Book } from '@/lib/static/types';
@@ -141,17 +141,24 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
 
     return (
         <div className={styles['library-content']}>
-            <ListControls
-                page={page}
-                totalPages={totalPages}
-                onPrev={handlePrevPage}
-                onNext={handleNextPage}
-                isAdmin={isAdmin}
-                addLabel="Add Book"
-                onAddClick={() => setIsAddOpen(true)}
-                searchValue={searchQuery}
-                searchPlaceholder="Search books..."
-                onSearchChange={handleSearchChange}
+            <Controls
+                backLink={{ href: '/status', label: '← Back to Status' }}
+                search={{
+                    value: searchQuery,
+                    placeholder: 'Search books...',
+                    onChange: handleSearchChange,
+                }}
+                add={{
+                    label: 'Add Book',
+                    isAdmin,
+                    onClick: () => setIsAddOpen(true),
+                }}
+                pagination={{
+                    page,
+                    totalPages,
+                    onPrev: handlePrevPage,
+                    onNext: handleNextPage,
+                }}
             >
                 {isAddOpen ? (
                     <AddBookModal
@@ -160,7 +167,7 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
                         onError={handleAddError}
                     />
                 ) : null}
-            </ListControls>
+            </Controls>
             {errorMessage ? (
                 <AlertModal
                     title="ERROR"

@@ -8,6 +8,8 @@ $spotify-green: #1db954;
     color: inherit;
     display: flex;
     gap: 0.75rem;
+    max-width: 85%;
+    min-width: 0;
     text-decoration: none;
     transition: opacity 0.15s ease;
 

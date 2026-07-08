@@ -1,5 +1,5 @@
 import GlitchText from '@/components/common/GlitchText/GlitchText';
-import LogsControls from './LogsControls/LogsControls';
+import LogsContent from './LogsContent/LogsContent';
 import styles from './LogsPage.module.scss';
 
 const LogsPage: React.FC = () => {
@@ -11,7 +11,7 @@ const LogsPage: React.FC = () => {
         <div className={styles['logs-page']}>
             <div className={styles.content}>
                 <GlitchText text="LOGS" className={styles.title} />
-                <LogsControls />
+                <LogsContent />
             </div>
         </div>
     );

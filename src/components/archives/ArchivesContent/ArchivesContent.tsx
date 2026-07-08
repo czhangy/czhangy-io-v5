@@ -4,8 +4,8 @@ import { useState } from 'react';
 import Image from 'next/image';
 import AdminActions from '@/components/common/AdminActions/AdminActions';
 import AlertModal from '@/components/common/AlertModal/AlertModal';
+import Controls from '@/components/common/Controls/Controls';
 import HighlightMatch from '@/components/common/HighlightMatch/HighlightMatch';
-import ListControls from '@/components/common/ListControls/ListControls';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import { Content } from '@/lib/static/types';
@@ -143,17 +143,24 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
 
     return (
         <div className={styles['archives-content']}>
-            <ListControls
-                page={page}
-                totalPages={totalPages}
-                onPrev={handlePrevPage}
-                onNext={handleNextPage}
-                isAdmin={isAdmin}
-                addLabel="Add Content"
-                onAddClick={() => setIsAddOpen(true)}
-                searchValue={searchQuery}
-                searchPlaceholder="Search content..."
-                onSearchChange={handleSearchChange}
+            <Controls
+                backLink={{ href: '/status', label: '← Back to Status' }}
+                search={{
+                    value: searchQuery,
+                    placeholder: 'Search content...',
+                    onChange: handleSearchChange,
+                }}
+                add={{
+                    label: 'Add Content',
+                    isAdmin,
+                    onClick: () => setIsAddOpen(true),
+                }}
+                pagination={{
+                    page,
+                    totalPages,
+                    onPrev: handlePrevPage,
+                    onNext: handleNextPage,
+                }}
             >
                 {isAddOpen ? (
                     <AddContentModal
@@ -162,7 +169,7 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
                         onError={handleAddError}
                     />
                 ) : null}
-            </ListControls>
+            </Controls>
             {errorMessage ? (
                 <AlertModal
                     title="ERROR"

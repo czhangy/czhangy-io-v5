@@ -7,45 +7,16 @@
     gap: 1.5rem;
     margin-top: 2rem;
 
-    .controls {
-        align-items: center;
-        display: flex;
-        justify-content: space-between;
+    .direction-button {
+        @include game-button;
+
+        cursor: pointer;
+        letter-spacing: 0.05em;
+        padding: 0.5rem 0.75rem;
 
         @media (width <= 768px) {
-            align-items: stretch;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .left {
-            align-items: center;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-
-            @media (width <= 768px) {
-                justify-content: center;
-            }
-
-            .direction-button {
-                @include game-button;
-
-                cursor: pointer;
-                letter-spacing: 0.1em;
-                padding: 0.5rem 0.75rem;
-            }
-        }
-
-        .right {
-            align-items: center;
-            display: flex;
-            gap: 0.75rem;
-
-            @media (width <= 768px) {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
+            font-size: 0.75rem;
+            padding: 0.4rem 0.75rem;
         }
     }
 

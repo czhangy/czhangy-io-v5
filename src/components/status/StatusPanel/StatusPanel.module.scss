@@ -77,13 +77,11 @@
     }
 
     @media (width <= 768px) {
-        grid-row: span 1;
         order: var(--mobile-order, 0);
     }
 
     @media (width <= 480px) {
         grid-column: span 1;
-        grid-row: span var(--rows);
     }
 }
 

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import JobCard from '@/components/career/JobCard/JobCard';
+import Controls from '@/components/common/Controls/Controls';
 import { useSession } from '@/lib/context/SessionContext';
 import { Job } from '@/lib/static/types';
 import DateHelpers from '@/lib/utils/DateHelpers';
@@ -74,17 +75,21 @@ const CareerContent: React.FC<CareerContentProps> = ({ jobs: initialJobs }) => {
 
     return (
         <div className={styles['career-content']}>
-            {isAdmin ? (
-                <div className={styles.controls}>
-                    <button
-                        className={styles['add-button']}
-                        type="button"
-                        onClick={() => setIsAddOpen(true)}
-                    >
-                        Add Job
-                    </button>
-                </div>
-            ) : null}
+            <Controls
+                add={{
+                    label: 'Add Job',
+                    isAdmin,
+                    onClick: () => setIsAddOpen(true),
+                }}
+                rightAlign
+            >
+                {isAddOpen ? (
+                    <AddJobModal
+                        onClose={() => setIsAddOpen(false)}
+                        onAdd={handleAdd}
+                    />
+                ) : null}
+            </Controls>
             <div className={styles.timeline}>
                 {jobs.map((job) => (
                     <div key={job.id} className={styles['timeline-entry']}>
@@ -102,12 +107,6 @@ const CareerContent: React.FC<CareerContentProps> = ({ jobs: initialJobs }) => {
                     </div>
                 ))}
             </div>
-            {isAddOpen ? (
-                <AddJobModal
-                    onClose={() => setIsAddOpen(false)}
-                    onAdd={handleAdd}
-                />
-            ) : null}
             {editingJob ? (
                 <EditJobModal
                     job={editingJob}

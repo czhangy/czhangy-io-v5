@@ -2,19 +2,6 @@
 @use '@/styles/mixins' as *;
 
 .career-content {
-    .controls {
-        display: flex;
-        justify-content: flex-end;
-
-        .add-button {
-            @include game-button;
-
-            cursor: pointer;
-            letter-spacing: 0.15em;
-            padding: 0.625rem 1.25rem;
-        }
-    }
-
     .timeline {
         display: flex;
         flex-direction: column;

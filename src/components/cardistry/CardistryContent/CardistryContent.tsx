@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import AdminActions from '@/components/common/AdminActions/AdminActions';
+import Controls from '@/components/common/Controls/Controls';
 import HighlightMatch from '@/components/common/HighlightMatch/HighlightMatch';
-import ListControls from '@/components/common/ListControls/ListControls';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import { Move } from '@/lib/static/types';
@@ -153,17 +153,24 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
 
     return (
         <div className={styles['cardistry-content']}>
-            <ListControls
-                page={page}
-                totalPages={totalPages}
-                onPrev={handlePrevPage}
-                onNext={handleNextPage}
-                isAdmin={isAdmin}
-                addLabel="Add Move"
-                onAddClick={() => setIsAddOpen(true)}
-                searchValue={searchQuery}
-                searchPlaceholder="Search moves..."
-                onSearchChange={handleSearchChange}
+            <Controls
+                backLink={{ href: '/status', label: '← Back to Status' }}
+                search={{
+                    value: searchQuery,
+                    placeholder: 'Search moves...',
+                    onChange: handleSearchChange,
+                }}
+                add={{
+                    label: 'Add Move',
+                    isAdmin,
+                    onClick: () => setIsAddOpen(true),
+                }}
+                pagination={{
+                    page,
+                    totalPages,
+                    onPrev: handlePrevPage,
+                    onNext: handleNextPage,
+                }}
             >
                 {isAddOpen ? (
                     <AddMoveModal
@@ -171,7 +178,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                         onAdd={handleAdd}
                     />
                 ) : null}
-            </ListControls>
+            </Controls>
             <ul className={styles.list}>
                 {paginatedMoves.map((move) => {
                     const proficiency = CardistryHelpers.getProficiency(

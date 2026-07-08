@@ -1,13 +1,15 @@
 'use client';
 
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
+import Controls from '@/components/common/Controls/Controls';
+import Dropdown from '@/components/common/Dropdown/Dropdown';
 import Pagination from '@/components/common/Pagination/Pagination';
+import { useSession } from '@/lib/context/SessionContext';
 import { Achievement } from '@/lib/static/types';
 import DateHelpers from '@/lib/utils/DateHelpers';
 import AchievementCard from './AchievementCard/AchievementCard';
 import styles from './AchievementsContent.module.scss';
-import AchievementsControls from './AchievementsControls/AchievementsControls';
-import FilterControl from './AchievementsControls/FilterControl/FilterControl';
+import AddAchievementModal from './AddAchievementModal/AddAchievementModal';
 
 type AchievementsContentProps = {
     achievements: Achievement[];
@@ -27,6 +29,7 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
         sortField: SortField;
         sortDirection: SortDirection;
         categoryFilter: string;
+        searchQuery: string;
         page: number;
         itemsPerPage: number;
     };
@@ -35,6 +38,7 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
         | { type: 'SET_SORT_FIELD'; field: SortField }
         | { type: 'TOGGLE_DIRECTION' }
         | { type: 'SET_CATEGORY'; category: string }
+        | { type: 'SET_SEARCH'; query: string }
         | { type: 'PREV_PAGE' }
         | { type: 'NEXT_PAGE' }
         | { type: 'RESIZE'; isMobile: boolean };
@@ -46,6 +50,7 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
         sortField: 'date',
         sortDirection: 'desc',
         categoryFilter: '',
+        searchQuery: '',
         page: 1,
         itemsPerPage: ITEMS_PER_PAGE_DESKTOP,
     };
@@ -66,6 +71,8 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
     // HOOKS
     // -------------------------------------------------------------------------
 
+    const { role } = useSession();
+
     const [state, dispatch] = useReducer(
         (state: State, action: Action): State => {
             switch (action.type) {
@@ -84,6 +91,8 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
                         categoryFilter: action.category,
                         page: 1,
                     };
+                case 'SET_SEARCH':
+                    return { ...state, searchQuery: action.query, page: 1 };
                 case 'PREV_PAGE':
                     return { ...state, page: state.page - 1 };
                 case 'NEXT_PAGE':
@@ -100,6 +109,12 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
         },
         INITIAL_STATE
     );
+
+    // -------------------------------------------------------------------------
+    // STATE
+    // -------------------------------------------------------------------------
+
+    const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -124,6 +139,10 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
         });
     };
 
+    const handleSearchChange = (value: string): void => {
+        dispatch({ type: 'SET_SEARCH', query: value });
+    };
+
     const handlePrevPage = (): void => {
         dispatch({ type: 'PREV_PAGE' });
     };
@@ -145,8 +164,14 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const { sortField, sortDirection, categoryFilter, page, itemsPerPage } =
-        state;
+    const {
+        sortField,
+        sortDirection,
+        categoryFilter,
+        searchQuery,
+        page,
+        itemsPerPage,
+    } = state;
 
     const currentSortLabel: string =
         SORT_FIELDS.find((f) => f.value === sortField)?.label ??
@@ -154,6 +179,7 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
 
     const sortedAchievements: Achievement[] = achievements
         .filter((a) => (categoryFilter ? a.category === categoryFilter : true))
+        .filter((a) => a.name.toLowerCase().includes(searchQuery.toLowerCase()))
         .sort((a, b) => {
             if (sortField === 'tier') {
                 const tierDiff = b.tier - a.tier;
@@ -203,42 +229,60 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
 
     return (
         <div className={styles['achievements-content']}>
-            <div className={styles.controls}>
-                <div className={styles.left}>
-                    <FilterControl
-                        value={categoryFilter === '' ? 'All' : categoryFilter}
-                        onChange={handleCategoryChange}
-                        options={['All', ...CATEGORIES]}
-                        maxLabel="Hobbies"
-                    />
-                    <FilterControl
-                        value={currentSortLabel}
-                        onChange={handleFieldChange}
-                        options={SORT_FIELD_LABELS}
-                    />
-                    <button
-                        className={styles['direction-button']}
-                        type="button"
-                        onClick={handleDirectionToggle}
-                    >
-                        {sortDirection === 'asc' ? '↑ Asc' : '↓ Desc'}
-                    </button>
-                </div>
-                <div className={styles.right}>
-                    <AchievementsControls />
-                    <Pagination
-                        page={page}
-                        totalPages={totalPages}
-                        onPrev={handlePrevPage}
-                        onNext={handleNextPage}
-                    />
-                </div>
-            </div>
+            <Controls
+                left={
+                    <>
+                        <Dropdown
+                            value={
+                                categoryFilter === '' ? 'All' : categoryFilter
+                            }
+                            onChange={handleCategoryChange}
+                            options={['All', ...CATEGORIES]}
+                            maxLabel="Hobbies"
+                            variant="control"
+                        />
+                        <Dropdown
+                            value={currentSortLabel}
+                            onChange={handleFieldChange}
+                            options={SORT_FIELD_LABELS}
+                            variant="control"
+                        />
+                        <button
+                            className={styles['direction-button']}
+                            type="button"
+                            onClick={handleDirectionToggle}
+                        >
+                            {sortDirection === 'asc' ? '↑ Asc' : '↓ Desc'}
+                        </button>
+                    </>
+                }
+                add={{
+                    label: 'Add Achievement',
+                    isAdmin: role === 'ADMIN',
+                    onClick: () => setIsAddOpen(true),
+                }}
+                search={{
+                    value: searchQuery,
+                    placeholder: 'Search achievements...',
+                    onChange: handleSearchChange,
+                }}
+                pagination={{
+                    page,
+                    totalPages,
+                    onPrev: handlePrevPage,
+                    onNext: handleNextPage,
+                }}
+            >
+                {isAddOpen ? (
+                    <AddAchievementModal onClose={() => setIsAddOpen(false)} />
+                ) : null}
+            </Controls>
             <div className={styles.grid}>
                 {paginatedAchievements.map((achievement) => (
                     <AchievementCard
                         key={achievement.name}
                         achievement={achievement}
+                        searchQuery={searchQuery}
                     />
                 ))}
             </div>

@@ -1,0 +1,122 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.controls {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: space-between;
+
+    // Groups back-link + left + add into one non-splitting unit so
+    // justify-content: space-between only ever separates this group from
+    // .trailing as a whole — never individual atoms within it when the
+    // row wraps onto two lines.
+    .leading {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .back-link {
+        @include game-button;
+
+        cursor: pointer;
+        letter-spacing: 0.05em;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .left {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+
+        // Overrides child components (e.g. Dropdown) that default to
+        // width: 100% for form contexts — here they should size to content.
+        > * {
+            width: auto;
+        }
+    }
+
+    .add-button {
+        @include game-button;
+
+        cursor: pointer;
+        letter-spacing: 0.05em;
+        padding: 0.5rem 0.75rem;
+    }
+
+    // Grows to consume the row's remaining space, matching the search
+    // input's own flex: 1 — when there's no search (e.g. Achievements),
+    // this just aligns Pagination against the row's trailing edge.
+    .trailing {
+        align-items: center;
+        display: flex;
+        flex: 1;
+        gap: 0.5rem;
+        justify-content: flex-end;
+
+        .search {
+            background: transparent;
+            border: 1px solid $border-subtle;
+            color: $foreground;
+            flex: 1;
+            font-family: $font-mono;
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+            min-width: 0;
+            padding: 0.5rem 0.75rem;
+            transition: border-color 0.15s ease;
+
+            &::placeholder {
+                @include mono-label;
+
+                color: $text-dim;
+                letter-spacing: 0.05em;
+            }
+
+            &:focus {
+                @include focus-glow;
+
+                outline: none;
+            }
+        }
+    }
+
+    &--right-align {
+        justify-content: flex-end;
+    }
+
+    @media (width <= 768px) {
+        .leading,
+        .left {
+            display: contents;
+        }
+
+        .back-link,
+        .add-button,
+        .left > * {
+            flex: 1 1 auto;
+        }
+
+        .back-link {
+            font-size: 0.75rem;
+            padding: 0.4rem 0.75rem;
+            text-align: center;
+        }
+
+        .add-button {
+            font-size: 0.75rem;
+            padding: 0.4rem 0.75rem;
+        }
+
+        .trailing {
+            .search {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.75rem;
+            }
+        }
+    }
+}

@@ -9,9 +9,17 @@ type DropdownProps = {
     value: string;
     onChange: (value: string) => void;
     options: string[];
+    maxLabel?: string;
+    variant?: 'control';
 };
 
-const Dropdown: React.FC<DropdownProps> = ({ value, onChange, options }) => {
+const Dropdown: React.FC<DropdownProps> = ({
+    value,
+    onChange,
+    options,
+    maxLabel,
+    variant,
+}) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
     // -------------------------------------------------------------------------
@@ -109,9 +117,15 @@ const Dropdown: React.FC<DropdownProps> = ({ value, onChange, options }) => {
     return (
         <div
             ref={wrapperRef}
-            className={styles.dropdown}
+            className={`${styles.dropdown}${maxLabel !== undefined ? ` ${styles['dropdown--fixed']}` : ''}${variant === 'control' ? ` ${styles['dropdown--control']}` : ''}`}
             onKeyDown={handleKeyDown}
         >
+            {maxLabel !== undefined ? (
+                <div className={styles.sizer} aria-hidden="true">
+                    <span>{maxLabel}</span>
+                    <ChevronIcon />
+                </div>
+            ) : null}
             <button
                 type="button"
                 className={styles.trigger}
@@ -124,7 +138,7 @@ const Dropdown: React.FC<DropdownProps> = ({ value, onChange, options }) => {
                 ? createPortal(
                       <ul
                           ref={optionsRef}
-                          className={styles.options}
+                          className={`${styles.options}${variant === 'control' ? ` ${styles['options--control']}` : ''}`}
                           style={
                               {
                                   '--options-top': `${optionsRect.top}px`,
