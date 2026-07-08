@@ -24,7 +24,6 @@ type ControlsProps = {
         onPrev: () => void;
         onNext: () => void;
     };
-    rightAlign?: boolean;
     children?: React.ReactNode;
 };
 
@@ -34,7 +33,6 @@ const Controls: React.FC<ControlsProps> = ({
     search,
     add,
     pagination,
-    rightAlign,
     children,
 }) => {
     // -------------------------------------------------------------------------
@@ -59,9 +57,7 @@ const Controls: React.FC<ControlsProps> = ({
     // -------------------------------------------------------------------------
 
     return (
-        <div
-            className={`${styles.controls}${rightAlign ? ` ${styles['controls--right-align']}` : ''}`}
-        >
+        <div className={styles.controls}>
             {hasLeading ? (
                 <div className={styles.leading}>
                     {backLink ? (

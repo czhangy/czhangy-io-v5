@@ -6,6 +6,7 @@ import FormField from '@/components/common/FormField/FormField';
 import { Key } from '@/lib/static/enums';
 import { CreateJobParams } from '@/lib/static/types';
 import DateHelpers from '@/lib/utils/DateHelpers';
+import UrlHelpers from '@/lib/utils/UrlHelpers';
 import styles from './JobForm.module.scss';
 
 type JobFormProps = {
@@ -81,6 +82,8 @@ const JobForm: React.FC<JobFormProps> = ({
         if (!company.trim()) return 'Company is required.';
         if (!title.trim()) return 'Title is required.';
         if (!logo.trim()) return 'Logo is required.';
+        if (!UrlHelpers.isImageUrl(logo.trim()))
+            return 'Logo must be a valid image URL.';
         if (!DateHelpers.getDateObject(startDate.trim()))
             return 'Start date has incorrect format.';
         if (endDate.trim() && !DateHelpers.getDateObject(endDate.trim()))

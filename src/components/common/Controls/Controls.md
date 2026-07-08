@@ -11,7 +11,6 @@ A composable controls bar for list/collection pages. Optionally renders a leadin
 | `add`        | `{ label: string; isAdmin: boolean; onClick: () => void }`                     | No       | —       | Renders an admin-only add button, positioned to the left of the search input                |
 | `search`     | `{ value: string; placeholder: string; onChange: (value: string) => void }`    | No       | —       | Renders a controlled live-filter search input, paired with pagination in the trailing group |
 | `pagination` | `{ page: number; totalPages: number; onPrev: () => void; onNext: () => void }` | No       | —       | Renders pagination controls, paired with search in the trailing group                       |
-| `rightAlign` | `boolean`                                                                      | No       | `false` | Right-aligns the bar instead of space-between (for pages with no search/left content)       |
 | `children`   | `React.ReactNode`                                                              | No       | —       | Rendered inside the bar, e.g. an add modal                                                  |
 
 ## Rendering

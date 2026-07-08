@@ -5,6 +5,8 @@ import Controls from '@/components/common/Controls/Controls';
 import Dropdown from '@/components/common/Dropdown/Dropdown';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
+import FilterIcon from '@/lib/icons/FilterIcon';
+import SortIcon from '@/lib/icons/SortIcon';
 import { Achievement } from '@/lib/static/types';
 import DateHelpers from '@/lib/utils/DateHelpers';
 import AchievementCard from './AchievementCard/AchievementCard';
@@ -238,6 +240,7 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
                             }
                             onChange={handleCategoryChange}
                             options={['All', ...CATEGORIES]}
+                            icon={<FilterIcon />}
                             maxLabel="Hobbies"
                             variant="control"
                         />
@@ -245,6 +248,7 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
                             value={currentSortLabel}
                             onChange={handleFieldChange}
                             options={SORT_FIELD_LABELS}
+                            icon={<SortIcon />}
                             variant="control"
                         />
                         <button

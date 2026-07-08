@@ -85,10 +85,6 @@
         }
     }
 
-    &--right-align {
-        justify-content: flex-end;
-    }
-
     @media (width <= 768px) {
         .leading,
         .left {
