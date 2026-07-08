@@ -81,7 +81,6 @@ const CareerContent: React.FC<CareerContentProps> = ({ jobs: initialJobs }) => {
                     isAdmin,
                     onClick: () => setIsAddOpen(true),
                 }}
-                rightAlign
             >
                 {isAddOpen ? (
                     <AddJobModal
