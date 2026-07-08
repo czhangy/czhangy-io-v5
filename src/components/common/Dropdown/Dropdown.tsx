@@ -9,6 +9,7 @@ type DropdownProps = {
     value: string;
     onChange: (value: string) => void;
     options: string[];
+    icon?: React.ReactNode;
     maxLabel?: string;
     variant?: 'control';
 };
@@ -17,6 +18,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     value,
     onChange,
     options,
+    icon,
     maxLabel,
     variant,
 }) => {
@@ -122,6 +124,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         >
             {maxLabel !== undefined ? (
                 <div className={styles.sizer} aria-hidden="true">
+                    {icon}
                     <span>{maxLabel}</span>
                     <ChevronIcon />
                 </div>
@@ -131,6 +134,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                 className={styles.trigger}
                 onClick={handleTriggerClick}
             >
+                {icon}
                 <span className={styles['trigger-label']}>{displayLabel}</span>
                 <ChevronIcon />
             </button>
