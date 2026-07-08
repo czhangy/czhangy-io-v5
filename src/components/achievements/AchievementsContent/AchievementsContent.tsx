@@ -29,6 +29,7 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
         sortField: SortField;
         sortDirection: SortDirection;
         categoryFilter: string;
+        searchQuery: string;
         page: number;
         itemsPerPage: number;
     };
@@ -37,6 +38,7 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
         | { type: 'SET_SORT_FIELD'; field: SortField }
         | { type: 'TOGGLE_DIRECTION' }
         | { type: 'SET_CATEGORY'; category: string }
+        | { type: 'SET_SEARCH'; query: string }
         | { type: 'PREV_PAGE' }
         | { type: 'NEXT_PAGE' }
         | { type: 'RESIZE'; isMobile: boolean };
@@ -48,6 +50,7 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
         sortField: 'date',
         sortDirection: 'desc',
         categoryFilter: '',
+        searchQuery: '',
         page: 1,
         itemsPerPage: ITEMS_PER_PAGE_DESKTOP,
     };
@@ -88,6 +91,8 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
                         categoryFilter: action.category,
                         page: 1,
                     };
+                case 'SET_SEARCH':
+                    return { ...state, searchQuery: action.query, page: 1 };
                 case 'PREV_PAGE':
                     return { ...state, page: state.page - 1 };
                 case 'NEXT_PAGE':
@@ -134,6 +139,10 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
         });
     };
 
+    const handleSearchChange = (value: string): void => {
+        dispatch({ type: 'SET_SEARCH', query: value });
+    };
+
     const handlePrevPage = (): void => {
         dispatch({ type: 'PREV_PAGE' });
     };
@@ -155,8 +164,14 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const { sortField, sortDirection, categoryFilter, page, itemsPerPage } =
-        state;
+    const {
+        sortField,
+        sortDirection,
+        categoryFilter,
+        searchQuery,
+        page,
+        itemsPerPage,
+    } = state;
 
     const currentSortLabel: string =
         SORT_FIELDS.find((f) => f.value === sortField)?.label ??
@@ -164,6 +179,7 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
 
     const sortedAchievements: Achievement[] = achievements
         .filter((a) => (categoryFilter ? a.category === categoryFilter : true))
+        .filter((a) => a.name.toLowerCase().includes(searchQuery.toLowerCase()))
         .sort((a, b) => {
             if (sortField === 'tier') {
                 const tierDiff = b.tier - a.tier;
@@ -245,6 +261,11 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
                     isAdmin: role === 'ADMIN',
                     onClick: () => setIsAddOpen(true),
                 }}
+                search={{
+                    value: searchQuery,
+                    placeholder: 'Search achievements...',
+                    onChange: handleSearchChange,
+                }}
                 pagination={{
                     page,
                     totalPages,
@@ -261,6 +282,7 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
                     <AchievementCard
                         key={achievement.name}
                         achievement={achievement}
+                        searchQuery={searchQuery}
                     />
                 ))}
             </div>

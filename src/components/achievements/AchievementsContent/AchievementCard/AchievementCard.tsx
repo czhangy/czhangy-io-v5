@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import HighlightMatch from '@/components/common/HighlightMatch/HighlightMatch';
 import { useSession } from '@/lib/context/SessionContext';
 import DeleteIcon from '@/lib/icons/DeleteIcon';
 import EditIcon from '@/lib/icons/EditIcon';
@@ -11,9 +12,13 @@ import EditAchievementModal from './EditAchievementModal/EditAchievementModal';
 
 type AchievementCardProps = {
     achievement: Achievement;
+    searchQuery: string;
 };
 
-const AchievementCard: React.FC<AchievementCardProps> = ({ achievement }) => {
+const AchievementCard: React.FC<AchievementCardProps> = ({
+    achievement,
+    searchQuery,
+}) => {
     // -------------------------------------------------------------------------
     // HOOKS
     // -------------------------------------------------------------------------
@@ -93,7 +98,12 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement }) => {
                 </div>
             ) : null}
             <div className={styles.header}>
-                <span className={styles.name}>{achievement.name}</span>
+                <span className={styles.name}>
+                    <HighlightMatch
+                        text={achievement.name}
+                        query={searchQuery}
+                    />
+                </span>
                 <span className={styles.date}>{achievement.date}</span>
             </div>
             <span className={styles.category}>{achievement.category}</span>

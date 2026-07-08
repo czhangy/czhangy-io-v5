@@ -4,9 +4,10 @@ A single achievement card displaying name and date (same row), category, tier (r
 
 ## Props
 
-| Prop          | Type          | Required | Default | Description                 |
-| ------------- | ------------- | -------- | ------- | --------------------------- |
-| `achievement` | `Achievement` | Yes      | —       | Achievement data to display |
+| Prop          | Type          | Required | Default | Description                                                   |
+| ------------- | ------------- | -------- | ------- | ------------------------------------------------------------- |
+| `achievement` | `Achievement` | Yes      | —       | Achievement data to display                                   |
+| `searchQuery` | `string`      | Yes      | —       | Active search query; bolds the matching substring of the name |
 
 ## State
 

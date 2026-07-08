@@ -1,6 +1,6 @@
 # Controls
 
-A composable controls bar for list/collection pages. Optionally renders a back-link, a left-side filter/sort slot, an admin-gated add button, and a trailing group pairing the live-filter search input with pagination, arranged in a single responsive row. Any modal opened by the add button is rendered via `children`.
+A composable controls bar for list/collection pages. Optionally renders a leading group (back-link + left-side filter/sort slot + admin-gated add button) and a trailing group pairing the live-filter search input with pagination, arranged in a single responsive row. Any modal opened by the add button is rendered via `children`.
 
 ## Props
 
@@ -16,4 +16,5 @@ A composable controls bar for list/collection pages. Optionally renders a back-l
 
 ## Rendering
 
+- `hasLeading` — whether the leading group renders at all; it's only emitted when at least one of `backLink`/`left`/`add` is supplied. Grouping these together keeps them as one non-splitting unit, so `justify-content: space-between` only ever separates the leading group from `trailing` as a whole — never individual atoms within it when the row wraps onto two lines
 - `hasTrailing` — whether the trailing group renders at all; it's only emitted when at least one of `search`/`pagination` is supplied, and always keeps the two together on the same row without splitting across a wrap

@@ -51,6 +51,7 @@ const Controls: React.FC<ControlsProps> = ({
     // RENDERING
     // -------------------------------------------------------------------------
 
+    const hasLeading = Boolean(backLink) || Boolean(left) || Boolean(add);
     const hasTrailing = Boolean(search) || Boolean(pagination);
 
     // -------------------------------------------------------------------------
@@ -61,20 +62,27 @@ const Controls: React.FC<ControlsProps> = ({
         <div
             className={`${styles.controls}${rightAlign ? ` ${styles['controls--right-align']}` : ''}`}
         >
-            {backLink ? (
-                <Link className={styles['back-link']} href={backLink.href}>
-                    {backLink.label}
-                </Link>
-            ) : null}
-            {left ? <div className={styles.left}>{left}</div> : null}
-            {add?.isAdmin ? (
-                <button
-                    className={styles['add-button']}
-                    type="button"
-                    onClick={add.onClick}
-                >
-                    {add.label}
-                </button>
+            {hasLeading ? (
+                <div className={styles.leading}>
+                    {backLink ? (
+                        <Link
+                            className={styles['back-link']}
+                            href={backLink.href}
+                        >
+                            {backLink.label}
+                        </Link>
+                    ) : null}
+                    {left ? <div className={styles.left}>{left}</div> : null}
+                    {add?.isAdmin ? (
+                        <button
+                            className={styles['add-button']}
+                            type="button"
+                            onClick={add.onClick}
+                        >
+                            {add.label}
+                        </button>
+                    ) : null}
+                </div>
             ) : null}
             {hasTrailing ? (
                 <div className={styles.trailing}>
