@@ -35,13 +35,13 @@
                 color: $text-dim;
                 cursor: pointer;
                 display: flex;
-                font-size: 0.75rem;
-                height: 2.25rem;
+                font-size: 0.7rem;
+                height: 1.875rem;
                 justify-content: center;
                 transition:
                     border-color 0.15s ease,
                     color 0.15s ease;
-                width: 2.25rem;
+                width: 1.875rem;
 
                 .bold {
                     font-weight: 700;
@@ -75,8 +75,8 @@
 
                 svg {
                     display: block;
-                    height: 0.9rem;
-                    width: 0.9rem;
+                    height: 0.8rem;
+                    width: 0.8rem;
                 }
             }
         }
