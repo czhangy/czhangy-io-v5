@@ -2,12 +2,16 @@
 @use '@/styles/mixins' as *;
 
 .career-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2rem;
+
     .timeline {
         display: flex;
         flex-direction: column;
         gap: 2.5rem;
         margin-left: -1.5rem;
-        margin-top: 2rem;
         position: relative;
 
         // Vertical line centered in the 3rem gutter
