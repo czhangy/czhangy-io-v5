@@ -20,56 +20,5 @@
         .title {
             @include page-title;
         }
-
-        .timeline {
-            display: flex;
-            flex-direction: column;
-            gap: 2.5rem;
-            margin-left: -1.5rem;
-            margin-top: 2rem;
-            position: relative;
-
-            // Vertical line centered in the 3rem gutter
-            &::before {
-                background: rgba($foreground, 0.25);
-                bottom: 0;
-                content: '';
-                left: 1.5rem;
-                position: absolute;
-                top: 0;
-                transform: translateX(-50%);
-                width: 2px;
-            }
-
-            .timeline-entry {
-                align-items: center;
-                display: flex;
-
-                .card-wrapper {
-                    flex: 1;
-                    min-width: 0;
-                }
-
-                .gutter {
-                    display: flex;
-                    flex-shrink: 0;
-                    justify-content: center;
-                    width: 3rem;
-
-                    .dot {
-                        background: $accent;
-                        border-radius: 50%;
-                        box-shadow:
-                            0 0 0 3px $background,
-                            0 0 0 5px rgba($accent, 0.25);
-                        flex-shrink: 0;
-                        height: 0.75rem;
-                        position: relative;
-                        width: 0.75rem;
-                        z-index: 1;
-                    }
-                }
-            }
-        }
     }
 }

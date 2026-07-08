@@ -1,24 +1,15 @@
 # EditGameModal
 
-Modal form for editing an existing game's name, genre, icon URL, and rating, pre-filled from the current values.
+Modal that wraps GameForm to edit an existing game, PUTing to the games API on submit.
 
 ## Props
 
 | Prop      | Type                   | Required | Default | Description                             |
 | --------- | ---------------------- | -------- | ------- | --------------------------------------- |
-| `game`    | `Game`                 | Yes      | —       | The game being edited                   |
+| `game`    | `Game`                 | Yes      | —       | Game being edited                       |
 | `onClose` | `() => void`           | Yes      | —       | Called to dismiss the modal             |
 | `onEdit`  | `(game: Game) => void` | Yes      | —       | Called with the updated game on success |
 
-## State
+## Handlers
 
-| State    | Type     | Initial value                                      | Description                |
-| -------- | -------- | -------------------------------------------------- | -------------------------- |
-| `name`   | `string` | `game.name`                                        | Controlled name input      |
-| `genre`  | `string` | `game.genre`                                       | Controlled genre dropdown  |
-| `icon`   | `string` | `game.icon`                                        | Controlled icon URL input  |
-| `rating` | `string` | `game.rating !== null ? String(game.rating) : '1'` | Controlled rating dropdown |
-
-## Computations
-
-- `isValid` — true when name, genre, and icon are all non-empty
+- `handleSubmit` — puts the form values to `/api/games/[name]`, throwing on failure so GameForm can surface the error

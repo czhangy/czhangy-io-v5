@@ -1,21 +1,21 @@
 'use client';
 
+import JobForm from '@/components/career/CareerContent/JobForm/JobForm';
 import Modal from '@/components/common/Modal/Modal';
-import GameForm from '@/components/games/GamesContent/GameForm/GameForm';
-import { Game } from '@/lib/static/types';
+import { CreateJobParams, Job } from '@/lib/static/types';
 
-type AddGameModalProps = {
+type AddJobModalProps = {
     onClose: () => void;
-    onAdd: (game: Game) => void;
+    onAdd: (job: Job) => void;
 };
 
-const AddGameModal: React.FC<AddGameModalProps> = ({ onClose, onAdd }) => {
+const AddJobModal: React.FC<AddJobModalProps> = ({ onClose, onAdd }) => {
     // -------------------------------------------------------------------------
     // HANDLERS
     // -------------------------------------------------------------------------
 
-    const handleSubmit = async (values: Game): Promise<void> => {
-        const res = await fetch('/api/games', {
+    const handleSubmit = async (values: CreateJobParams): Promise<void> => {
+        const res = await fetch('/api/career', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(values),
@@ -24,9 +24,9 @@ const AddGameModal: React.FC<AddGameModalProps> = ({ onClose, onAdd }) => {
             const data = (await res.json().catch(() => ({}))) as {
                 error?: string;
             };
-            throw new Error(data.error ?? 'Failed to create game.');
+            throw new Error(data.error ?? 'Failed to create job.');
         }
-        onAdd((await res.json()) as Game);
+        onAdd((await res.json()) as Job);
         onClose();
     };
 
@@ -35,8 +35,8 @@ const AddGameModal: React.FC<AddGameModalProps> = ({ onClose, onAdd }) => {
     // -------------------------------------------------------------------------
 
     return (
-        <Modal title="ADD GAME" onClose={onClose}>
-            <GameForm
+        <Modal title="ADD JOB" onClose={onClose}>
+            <JobForm
                 submitLabel="Add"
                 onSubmit={handleSubmit}
                 onClose={onClose}
@@ -45,4 +45,4 @@ const AddGameModal: React.FC<AddGameModalProps> = ({ onClose, onAdd }) => {
     );
 };
 
-export default AddGameModal;
+export default AddJobModal;

@@ -59,4 +59,13 @@ export default class DateHelpers {
         const [month, day, year] = dateStr.split('/').map(Number);
         return new Date(year, month - 1, day).getTime();
     };
+
+    static getMonthYear = (dateStr: string): string => {
+        const parsed = DateHelpers.getDateObject(dateStr);
+        if (!parsed) return dateStr;
+        return parsed.toLocaleDateString('en-US', {
+            month: 'short',
+            year: 'numeric',
+        });
+    };
 }

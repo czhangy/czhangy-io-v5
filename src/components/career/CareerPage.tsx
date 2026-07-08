@@ -1,9 +1,35 @@
 import GlitchText from '@/components/common/GlitchText/GlitchText';
-import { JOBS } from '@/lib/static/job-data';
+import { prisma } from '@/lib/static/prisma';
+import { Job } from '@/lib/static/types';
+import DateHelpers from '@/lib/utils/DateHelpers';
+import CareerContent from './CareerContent/CareerContent';
 import styles from './CareerPage.module.scss';
-import JobCard from './JobCard/JobCard';
 
-const CareerPage: React.FC = () => {
+const CareerPage = async () => {
+    // -------------------------------------------------------------------------
+    // COMPUTATIONS
+    // -------------------------------------------------------------------------
+
+    const getSortTimestamp = (job: Job): number =>
+        job.endDate ? DateHelpers.getUnixTimestamp(job.endDate) : Infinity;
+
+    // -------------------------------------------------------------------------
+    // RENDERING
+    // -------------------------------------------------------------------------
+
+    const records = await prisma.jobs.findMany();
+
+    const jobs: Job[] = records
+        .map((r) => ({
+            id: r.id,
+            company: r.company,
+            title: r.title,
+            startDate: r.startDate,
+            endDate: r.endDate,
+            logo: r.logo,
+        }))
+        .sort((a, b) => getSortTimestamp(b) - getSortTimestamp(a));
+
     // -------------------------------------------------------------------------
     // MARKUP
     // -------------------------------------------------------------------------
@@ -12,21 +38,7 @@ const CareerPage: React.FC = () => {
         <div className={styles['career-page']}>
             <div className={styles.content}>
                 <GlitchText text="CAREER" className={styles.title} />
-                <div className={styles.timeline}>
-                    {JOBS.map((job) => (
-                        <div
-                            key={`${job.company}-${job.startDate}`}
-                            className={styles['timeline-entry']}
-                        >
-                            <div className={styles.gutter}>
-                                <span className={styles.dot} />
-                            </div>
-                            <div className={styles['card-wrapper']}>
-                                <JobCard job={job} />
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                <CareerContent jobs={jobs} />
             </div>
         </div>
     );
