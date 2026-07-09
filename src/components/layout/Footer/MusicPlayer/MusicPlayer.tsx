@@ -15,11 +15,18 @@ import styles from './MusicPlayer.module.scss';
 
 const MusicPlayer: React.FC = () => {
     // -------------------------------------------------------------------------
+    // CONSTANTS
+    // -------------------------------------------------------------------------
+
+    const NO_REPEAT_WINDOW = 5;
+
+    // -------------------------------------------------------------------------
     // HOOKS
     // -------------------------------------------------------------------------
 
     const audioRef = useRef<HTMLAudioElement>(null);
     const isPlayingRef = useRef<boolean>(false);
+    const initialTrackIndexRef = useRef<number>(0);
 
     // -------------------------------------------------------------------------
     // STATE
@@ -28,7 +35,7 @@ const MusicPlayer: React.FC = () => {
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const [isMuted, setIsMuted] = useState<boolean>(true);
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
-    const [trackIndex, setTrackIndex] = useState<number>(0);
+    const [history, setHistory] = useState<number[]>([0]);
     const [currentTime, setCurrentTime] = useState<number>(0);
     const [duration, setDuration] = useState<number>(0);
 
@@ -51,13 +58,23 @@ const MusicPlayer: React.FC = () => {
     };
 
     const handlePreviousClick = (): void => {
-        setTrackIndex(
-            (prev) => (prev - 1 + MUSIC_TRACKS.length) % MUSIC_TRACKS.length
-        );
+        setHistory((prev) => (prev.length > 1 ? prev.slice(0, -1) : prev));
     };
 
     const handleNextClick = (): void => {
-        setTrackIndex((prev) => (prev + 1) % MUSIC_TRACKS.length);
+        setHistory((prev) => {
+            const excludeCount = Math.min(
+                NO_REPEAT_WINDOW,
+                MUSIC_TRACKS.length - 1
+            );
+            const excluded = new Set(prev.slice(-excludeCount));
+            const candidates = MUSIC_TRACKS.map((_, i) => i).filter(
+                (i) => !excluded.has(i)
+            );
+            const next =
+                candidates[Math.floor(Math.random() * candidates.length)];
+            return [...prev, next];
+        });
     };
 
     const handleTimeUpdate = (
@@ -73,14 +90,11 @@ const MusicPlayer: React.FC = () => {
         setCurrentTime(e.currentTarget.currentTime);
     };
 
-    const handleTrackEnd = (): void => {
-        setTrackIndex((prev) => (prev + 1) % MUSIC_TRACKS.length);
-    };
-
     // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
 
+    const trackIndex = history[history.length - 1];
     const currentTrack: Track = MUSIC_TRACKS[trackIndex];
     const currentTimeLabel = StringHelpers.formatDuration(currentTime);
     const durationLabel = StringHelpers.formatDuration(duration);
@@ -88,6 +102,13 @@ const MusicPlayer: React.FC = () => {
     // -------------------------------------------------------------------------
     // EFFECTS
     // -------------------------------------------------------------------------
+
+    useEffect(() => {
+        initialTrackIndexRef.current = Math.floor(
+            Math.random() * MUSIC_TRACKS.length
+        );
+        setHistory([initialTrackIndexRef.current]);
+    }, []);
 
     useEffect(() => {
         const audio = audioRef.current;
@@ -143,46 +164,50 @@ const MusicPlayer: React.FC = () => {
                 <MusicIcon />
             </button>
             <div className={styles.content}>
-                <div className={styles.info}>
-                    <span className={styles.title}>{currentTrack.title}</span>
-                    <span className={styles.meta}>
-                        {currentTrack.source} · {currentTimeLabel} /{' '}
-                        {durationLabel}
-                    </span>
-                </div>
-                <div className={styles.controls}>
-                    <button
-                        type="button"
-                        className={styles.control}
-                        onClick={handlePreviousClick}
-                        aria-label="Previous track"
-                    >
-                        <PreviousIcon />
-                    </button>
-                    <button
-                        type="button"
-                        className={`${styles.control} ${styles['control--primary']}`}
-                        onClick={handlePlayPauseClick}
-                        aria-label={isPlaying ? 'Pause' : 'Play'}
-                    >
-                        {isPlaying ? <PauseIcon /> : <PlayIcon />}
-                    </button>
-                    <button
-                        type="button"
-                        className={styles.control}
-                        onClick={handleNextClick}
-                        aria-label="Next track"
-                    >
-                        <NextIcon />
-                    </button>
-                    <button
-                        type="button"
-                        className={styles.control}
-                        onClick={handleMuteToggleClick}
-                        aria-label={isMuted ? 'Unmute music' : 'Mute music'}
-                    >
-                        {isMuted ? <MuteIcon /> : <SoundIcon />}
-                    </button>
+                <div className={styles.inner}>
+                    <div className={styles.info}>
+                        <span className={styles.title}>
+                            {currentTrack.title}
+                        </span>
+                        <span className={styles.meta}>
+                            {currentTrack.source} · {currentTimeLabel} /{' '}
+                            {durationLabel}
+                        </span>
+                    </div>
+                    <div className={styles.controls}>
+                        <button
+                            type="button"
+                            className={styles.control}
+                            onClick={handlePreviousClick}
+                            aria-label="Previous track"
+                        >
+                            <PreviousIcon />
+                        </button>
+                        <button
+                            type="button"
+                            className={`${styles.control} ${styles['control--primary']}`}
+                            onClick={handlePlayPauseClick}
+                            aria-label={isPlaying ? 'Pause' : 'Play'}
+                        >
+                            {isPlaying ? <PauseIcon /> : <PlayIcon />}
+                        </button>
+                        <button
+                            type="button"
+                            className={styles.control}
+                            onClick={handleNextClick}
+                            aria-label="Next track"
+                        >
+                            <NextIcon />
+                        </button>
+                        <button
+                            type="button"
+                            className={styles.control}
+                            onClick={handleMuteToggleClick}
+                            aria-label={isMuted ? 'Unmute music' : 'Mute music'}
+                        >
+                            {isMuted ? <MuteIcon /> : <SoundIcon />}
+                        </button>
+                    </div>
                 </div>
             </div>
             <audio
@@ -190,7 +215,7 @@ const MusicPlayer: React.FC = () => {
                 src={currentTrack.file}
                 onTimeUpdate={handleTimeUpdate}
                 onLoadedMetadata={handleLoadedMetadata}
-                onEnded={handleTrackEnd}
+                onEnded={handleNextClick}
                 muted
             />
         </div>
