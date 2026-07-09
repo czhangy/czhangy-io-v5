@@ -69,7 +69,7 @@ const MoveListItem: React.FC<MoveListItemProps> = ({
                 {isAdmin ? (
                     <>
                         <div className={styles['increment-buttons']}>
-                            {[1, 10, 25, 50].map((amount) => (
+                            {[1, 10, 25].map((amount) => (
                                 <button
                                     key={amount}
                                     type="button"
