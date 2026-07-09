@@ -62,6 +62,16 @@ export const MUSIC_TRACKS: Track[] = [
         file: '/audio/pokemon-dppt_jubilife-city-night.mp3',
     },
     {
+        title: 'Twinleaf Town (Day)',
+        source: 'Pokémon D/P/Pt',
+        file: '/audio/pokemon-twinleaf-town-day.mp3',
+    },
+    {
+        title: 'Twinleaf Town (Night)',
+        source: 'Pokémon D/P/Pt',
+        file: '/audio/pokemon-twinleaf-town-night.mp3',
+    },
+    {
         title: "I Don't Want to Say Goodbye",
         source: 'Pokémon Mystery Dungeon',
         file: '/audio/pokemon-mystery-dungeon_i-dont-want-to-say-goodbye.mp3',
