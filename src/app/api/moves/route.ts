@@ -12,6 +12,7 @@ export const GET = async () => {
         moves.map((m) => ({
             name: m.name,
             type: m.type,
+            tutorial: m.tutorial,
             count: m.count,
             createdAt: m.createdAt.toISOString(),
         })) as Move[]
@@ -26,9 +27,10 @@ export const POST = async (request: NextRequest) => {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { name, type } = (await request.json()) as {
+    const { name, type, tutorial } = (await request.json()) as {
         name: string;
         type: string;
+        tutorial: string;
     };
 
     if (!name?.trim()) {
@@ -45,6 +47,13 @@ export const POST = async (request: NextRequest) => {
         );
     }
 
+    if (!tutorial?.trim()) {
+        return NextResponse.json(
+            { error: 'Tutorial is required' },
+            { status: 400 }
+        );
+    }
+
     const existing = await prisma.moves.findUnique({
         where: { name: name.trim() },
     });
@@ -57,7 +66,11 @@ export const POST = async (request: NextRequest) => {
     }
 
     const move = await prisma.moves.create({
-        data: { name: name.trim(), type: type.trim() },
+        data: {
+            name: name.trim(),
+            type: type.trim(),
+            tutorial: tutorial.trim(),
+        },
     });
 
     await prisma.highlights.upsert({
@@ -69,6 +82,7 @@ export const POST = async (request: NextRequest) => {
     return NextResponse.json({
         name: move.name,
         type: move.type,
+        tutorial: move.tutorial,
         count: move.count,
         createdAt: move.createdAt.toISOString(),
     } as Move);

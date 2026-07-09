@@ -61,6 +61,7 @@ model Moves {
     id        Int      @id @default(autoincrement())
     name      String   @unique
     type      String
+    tutorial  String
     count     Int      @default(0)
     createdAt DateTime @default(now()) @db.Timestamptz(3)
 }

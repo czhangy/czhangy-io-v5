@@ -39,6 +39,7 @@ export const PATCH = async (
     return NextResponse.json({
         name: move.name,
         type: move.type,
+        tutorial: move.tutorial,
         count: move.count,
         createdAt: move.createdAt.toISOString(),
     } as Move);
@@ -58,10 +59,12 @@ export const PUT = async (
     const {
         name: newName,
         type,
+        tutorial,
         count,
     } = (await request.json()) as {
         name: string;
         type: string;
+        tutorial: string;
         count: number;
     };
 
@@ -74,6 +77,12 @@ export const PUT = async (
     if (!type?.trim()) {
         return NextResponse.json(
             { error: 'Type is required' },
+            { status: 400 }
+        );
+    }
+    if (!tutorial?.trim()) {
+        return NextResponse.json(
+            { error: 'Tutorial is required' },
             { status: 400 }
         );
     }
@@ -100,13 +109,18 @@ export const PUT = async (
 
     const move = await prisma.moves.update({
         where: { name: decodedName },
-        data: { name: newName.trim(), type: type.trim(), count },
+        data: {
+            name: newName.trim(),
+            type: type.trim(),
+            tutorial: tutorial.trim(),
+            count,
+        },
     });
 
     const tierThresholds = [
-        { threshold: 100, label: 'Beginner', tier: 1 },
+        { threshold: 100, label: 'Beginner', tier: 3 },
         { threshold: 1000, label: 'Proficient', tier: 2 },
-        { threshold: 10000, label: 'Master', tier: 3 },
+        { threshold: 10000, label: 'Master', tier: 1 },
     ];
     const today = DateHelpers.getTodayString();
 
@@ -136,6 +150,7 @@ export const PUT = async (
     return NextResponse.json({
         name: move.name,
         type: move.type,
+        tutorial: move.tutorial,
         count: move.count,
         createdAt: move.createdAt.toISOString(),
     } as Move);

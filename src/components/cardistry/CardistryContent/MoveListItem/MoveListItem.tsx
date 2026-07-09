@@ -59,9 +59,14 @@ const MoveListItem: React.FC<MoveListItemProps> = ({
                     <span className={styles.count}>{proficiency.display}</span>
                 </div>
                 <div className={styles.details}>
-                    <span className={styles.name}>
+                    <a
+                        className={styles.name}
+                        href={move.tutorial}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
                         <HighlightMatch text={move.name} query={searchQuery} />
-                    </span>
+                    </a>
                     <div className={styles.metadata}>
                         <span className={styles['type-tag']}>{move.type}</span>
                     </div>

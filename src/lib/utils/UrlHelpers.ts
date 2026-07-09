@@ -15,4 +15,14 @@ export default class UrlHelpers {
             parsed.pathname
         );
     };
+
+    static isValidUrl = (url: string): boolean => {
+        let parsed: URL;
+        try {
+            parsed = new URL(url);
+        } catch {
+            return false;
+        }
+        return ['http:', 'https:'].includes(parsed.protocol);
+    };
 }

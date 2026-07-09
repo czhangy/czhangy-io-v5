@@ -32,6 +32,7 @@ const CardistryPage = async () => {
     const moves: Move[] = records.map((r) => ({
         name: r.name,
         type: r.type,
+        tutorial: r.tutorial,
         count: r.count,
         createdAt: r.createdAt.toISOString(),
     }));

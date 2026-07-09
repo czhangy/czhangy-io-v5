@@ -94,8 +94,8 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
 
     const validate = (): string => {
         if (!name.trim()) return 'Name is required.';
-        if (name.trim().length > 24)
-            return 'Name must be 24 characters or fewer.';
+        if (name.trim().length > 25)
+            return 'Name must be 25 characters or fewer.';
 
         const dateStr = date.trim();
         if (!dateStr) return 'Date is required.';
@@ -127,7 +127,7 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
                     <span className={styles.label}>Name</span>
                     <input
                         className={styles.input}
-                        maxLength={24}
+                        maxLength={25}
                         value={name}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                             setName(e.target.value)

@@ -11,6 +11,7 @@ export type Achievement = {
 export type Move = {
     name: string;
     type: string;
+    tutorial: string;
     count: number;
     createdAt: string;
 };

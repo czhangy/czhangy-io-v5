@@ -1,6 +1,6 @@
 # AchievementsContent
 
-Client shell for the achievements page. Owns sort, filter, search, and pagination state via a reducer, and renders the controls row (category filter + sort field + direction toggle on the left; admin add button + search + pagination on the right) via the shared Controls component, the paginated achievement grid, and a centered pagination footer.
+Client shell for the achievements page. Owns filter, search, and pagination state via a reducer, and renders the controls row (category filter on the left; admin add button + search + pagination on the right) via the shared Controls component, the paginated achievement grid, and a centered pagination footer. Achievements are always sorted by date (most recent first).
 
 ## Props
 
@@ -10,16 +10,14 @@ Client shell for the achievements page. Owns sort, filter, search, and paginatio
 
 ## State
 
-Sort/filter/pagination state is managed by a single `useReducer`. The `State` shape:
+Filter/pagination state is managed by a single `useReducer`. The `State` shape:
 
-| Field            | Type            | Initial value            | Description                                               |
-| ---------------- | --------------- | ------------------------ | --------------------------------------------------------- |
-| `sortField`      | `SortField`     | `'date'`                 | Active sort field                                         |
-| `sortDirection`  | `SortDirection` | `'asc'`                  | Active sort direction                                     |
-| `categoryFilter` | `string`        | `''`                     | Active category filter; `''` means "All"                  |
-| `searchQuery`    | `string`        | `''`                     | Active live-filter search query, matched against name     |
-| `page`           | `number`        | `1`                      | Current page (1-indexed); resets to 1 on any state change |
-| `itemsPerPage`   | `number`        | `ITEMS_PER_PAGE_DESKTOP` | Items per page; set responsively by `RESIZE` action       |
+| Field            | Type     | Initial value            | Description                                               |
+| ---------------- | -------- | ------------------------ | --------------------------------------------------------- |
+| `categoryFilter` | `string` | `''`                     | Active category filter; `''` means "All"                  |
+| `searchQuery`    | `string` | `''`                     | Active live-filter search query, matched against name     |
+| `page`           | `number` | `1`                      | Current page (1-indexed); resets to 1 on any state change |
+| `itemsPerPage`   | `number` | `ITEMS_PER_PAGE_DESKTOP` | Items per page; set responsively by `RESIZE` action       |
 
 A separate `isAddOpen` (`boolean`, initial `false`) `useState` tracks whether AddAchievementModal is open, set by the admin add button's `onClick`.
 
@@ -29,6 +27,7 @@ A separate `isAddOpen` (`boolean`, initial `false`) `useState` tracks whether Ad
 
 ## Computations
 
-- `getSortTimestamp` — converts an achievement to a timestamp for date comparison: uses its MM/DD/YYYY `date` string if set, otherwise falls back to `createdAt`. Used both for the `date` sort field and as the tie-breaker when sorting by `tier`.
+- `getSortTimestamp` — converts an achievement to a timestamp for date comparison: uses its MM/DD/YYYY `date` string if set, otherwise falls back to `createdAt`.
+- `getCreatedTimestamp` — converts an achievement's `createdAt` to a timestamp. Used as the secondary sort key (tie-breaker) when two achievements share the same `getSortTimestamp` value.
 
-Sorting by `name` is case-insensitive.
+Achievements are always sorted by `getSortTimestamp` descending (most recent first), with ties broken by `getCreatedTimestamp` descending.

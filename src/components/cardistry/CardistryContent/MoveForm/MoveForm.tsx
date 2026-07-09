@@ -7,6 +7,7 @@ import { CARDISTRY_MOVE_TYPES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
 import { Move } from '@/lib/static/types';
 import StringHelpers from '@/lib/utils/StringHelpers';
+import UrlHelpers from '@/lib/utils/UrlHelpers';
 import styles from './MoveForm.module.scss';
 
 type MoveFormProps = {
@@ -15,6 +16,7 @@ type MoveFormProps = {
     onSubmit: (values: {
         name: string;
         type: string;
+        tutorial: string;
         count?: number;
     }) => Promise<void>;
     onClose: () => void;
@@ -32,6 +34,9 @@ const MoveForm: React.FC<MoveFormProps> = ({
 
     const [name, setName] = useState<string>(initialValues?.name ?? '');
     const [type, setType] = useState<string>(initialValues?.type ?? '');
+    const [tutorial, setTutorial] = useState<string>(
+        initialValues?.tutorial ?? ''
+    );
     const [count, setCount] = useState<string>(
         initialValues?.count !== undefined ? String(initialValues.count) : '0'
     );
@@ -55,6 +60,7 @@ const MoveForm: React.FC<MoveFormProps> = ({
             await onSubmit({
                 name: name.trim(),
                 type,
+                tutorial: tutorial.trim(),
                 ...(isEditing ? { count: parseInt(count, 10) } : {}),
             });
         } catch (err) {
@@ -77,6 +83,9 @@ const MoveForm: React.FC<MoveFormProps> = ({
         if (!StringHelpers.isTitleCase(name.trim()))
             return 'Name must be title case.';
         if (!type) return 'Type is required.';
+        if (!tutorial.trim()) return 'Tutorial is required.';
+        if (!UrlHelpers.isValidUrl(tutorial.trim()))
+            return 'Tutorial must be a valid URL.';
         if (isEditing && !/^\d+$/.test(count.trim()))
             return 'Count must be a non-negative integer.';
         return '';
@@ -109,6 +118,12 @@ const MoveForm: React.FC<MoveFormProps> = ({
                     options={CARDISTRY_MOVE_TYPES}
                 />
             </div>
+            <FormField
+                label="Tutorial"
+                value={tutorial}
+                onChange={setTutorial}
+                onKeyDown={handleKeyDown}
+            />
             {isEditing ? (
                 <FormField
                     label="Count"

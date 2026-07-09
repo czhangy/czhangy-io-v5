@@ -22,6 +22,7 @@ const EditMoveModal: React.FC<EditMoveModalProps> = ({
     const handleSubmit = async (values: {
         name: string;
         type: string;
+        tutorial: string;
         count?: number;
     }): Promise<void> => {
         const res = await fetch(`/api/moves/${encodeURIComponent(move.name)}`, {
