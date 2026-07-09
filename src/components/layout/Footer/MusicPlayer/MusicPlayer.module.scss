@@ -1,0 +1,174 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.music-player {
+    align-items: center;
+    background: $surface;
+    border: 1px solid $border-subtle;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 16px rgb(0 0 0 / 50%);
+    display: flex;
+    min-height: 3.25rem;
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+
+    @media (hover: hover) {
+        &:hover {
+            border-color: $accent;
+        }
+    }
+
+    @media (width <= 768px) {
+        min-height: 2.75rem;
+    }
+
+    .toggle {
+        align-items: center;
+        background: transparent;
+        border: none;
+        color: $text-mid;
+        cursor: pointer;
+        display: flex;
+        flex-shrink: 0;
+        height: 3.25rem;
+        justify-content: center;
+        padding: 0;
+        transition: color 0.15s ease;
+        width: 3.25rem;
+
+        svg {
+            height: 1.5rem;
+            width: 1.5rem;
+        }
+
+        @media (hover: hover) {
+            &:hover {
+                color: $accent;
+            }
+        }
+
+        @media (width <= 768px) {
+            height: 2.75rem;
+            width: 2.75rem;
+
+            svg {
+                height: 1.25rem;
+                width: 1.25rem;
+            }
+        }
+    }
+
+    .content {
+        display: grid;
+        grid-template-columns: 0fr;
+        grid-template-rows: 0fr;
+        opacity: 0;
+        transition:
+            grid-template-columns 0.25s ease,
+            grid-template-rows 0.25s ease,
+            opacity 0.2s ease;
+
+        .inner {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            min-height: 0;
+            min-width: 0;
+            overflow: hidden;
+            padding: 0;
+            transition: padding 0.25s ease;
+            white-space: nowrap;
+
+            .info {
+                display: flex;
+                flex-direction: column;
+                gap: 0.15rem;
+
+                .title {
+                    @include mono-label;
+
+                    color: $foreground;
+                    font-size: 0.85rem;
+                    letter-spacing: 0.05em;
+                }
+
+                .meta {
+                    @include mono-label;
+
+                    color: $text-dim;
+                    font-size: 0.7rem;
+                    letter-spacing: 0.05em;
+                }
+
+                @media (width <= 768px) {
+                    .title {
+                        font-size: 0.75rem;
+                    }
+
+                    .meta {
+                        font-size: 0.6rem;
+                    }
+                }
+            }
+
+            .controls {
+                align-items: center;
+                display: flex;
+                gap: 0.75rem;
+
+                .control {
+                    align-items: center;
+                    background: transparent;
+                    border: none;
+                    color: $text-mid;
+                    cursor: pointer;
+                    display: flex;
+                    flex-shrink: 0;
+                    justify-content: center;
+                    padding: 0;
+                    transition: color 0.15s ease;
+
+                    svg {
+                        height: 1rem;
+                        width: 1rem;
+                    }
+
+                    &--primary svg {
+                        height: 1.15rem;
+                        width: 1.15rem;
+                    }
+
+                    @media (hover: hover) {
+                        &:hover {
+                            color: $accent;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &--expanded {
+        border-color: $accent;
+
+        .content {
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+            opacity: 1;
+
+            .inner {
+                padding: 1rem 1.25rem 1rem 0;
+            }
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .content {
+            transition: none;
+
+            .inner {
+                transition: none;
+            }
+        }
+    }
+}
