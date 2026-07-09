@@ -82,6 +82,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
             body: JSON.stringify({
                 name: move.name,
                 type: move.type,
+                tutorial: move.tutorial,
                 count: move.count + amount,
             }),
         });
