@@ -3,6 +3,7 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
     reactCompiler: true,
     logging: false,
+    devIndicators: false,
     turbopack: {},
     images: {
         remotePatterns: [

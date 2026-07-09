@@ -1,6 +1,7 @@
 @use '@/styles/constants' as *;
 
 .footer {
+    align-items: flex-end;
     bottom: 1.5rem;
     display: flex;
     justify-content: space-between;

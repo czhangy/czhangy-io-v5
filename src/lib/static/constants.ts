@@ -1,25 +1,6 @@
-import { NavItem, Track } from './types';
+import { NavItem } from './types';
 
 export const SESSION_COOKIE = 'session';
-
-// Music
-export const MUSIC_TRACKS: Track[] = [
-    {
-        title: 'Track Title',
-        source: 'Artist Name',
-        file: '/audio/track-1.mp3',
-    },
-    {
-        title: 'Track Title 2',
-        source: 'Artist Name 2',
-        file: '/audio/track-2.mp3',
-    },
-    {
-        title: 'Track Title 3',
-        source: 'Artist Name 3',
-        file: '/audio/track-3.mp3',
-    },
-];
 
 // Milestones
 export const WATCHED_MILESTONES = [
