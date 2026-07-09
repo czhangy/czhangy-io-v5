@@ -1,6 +1,6 @@
 # MoveListItem
 
-A single cardistry move entry as rendered in the moves list — proficiency pips, name, type, and admin increment/edit/delete actions when applicable. Optionally renders as a highlighted spotlight entry with a small title header.
+A single cardistry move entry as rendered in the moves list — proficiency pips, name, type, and admin increment/edit/delete actions when applicable. The name links out to the move's tutorial URL. Optionally renders as a highlighted spotlight entry with a small title header.
 
 ## Props
 

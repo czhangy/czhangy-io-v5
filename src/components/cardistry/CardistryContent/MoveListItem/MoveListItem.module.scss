@@ -93,7 +93,18 @@
             .name {
                 @include mono-label;
 
+                align-self: flex-start;
+                color: inherit;
                 font-size: 1.1rem;
+                max-width: 100%;
+                text-decoration: none;
+                transition: color 0.15s ease;
+
+                @media (hover: hover) {
+                    &:hover {
+                        color: $accent;
+                    }
+                }
             }
 
             .metadata {

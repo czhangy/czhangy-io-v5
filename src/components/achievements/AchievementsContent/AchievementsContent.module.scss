@@ -7,19 +7,6 @@
     gap: 1.5rem;
     margin-top: 2rem;
 
-    .direction-button {
-        @include game-button;
-
-        cursor: pointer;
-        letter-spacing: 0.05em;
-        padding: 0.5rem 0.75rem;
-
-        @media (width <= 768px) {
-            font-size: 0.75rem;
-            padding: 0.4rem 0.75rem;
-        }
-    }
-
     .grid {
         display: grid;
         gap: 1.5rem;

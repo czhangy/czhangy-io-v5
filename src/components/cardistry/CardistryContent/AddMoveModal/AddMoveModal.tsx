@@ -17,6 +17,7 @@ const AddMoveModal: React.FC<AddMoveModalProps> = ({ onClose, onAdd }) => {
     const handleSubmit = async (values: {
         name: string;
         type: string;
+        tutorial: string;
     }): Promise<void> => {
         const res = await fetch('/api/moves', {
             method: 'POST',

@@ -1,6 +1,6 @@
 # MoveForm
 
-Shared form for creating and editing a cardistry move (name, type, and — when editing — count), used by both AddMoveModal and EditMoveModal.
+Shared form for creating and editing a cardistry move (name, type, tutorial, and — when editing — count), used by both AddMoveModal and EditMoveModal.
 
 ## Props
 
@@ -17,6 +17,7 @@ Shared form for creating and editing a cardistry move (name, type, and — when 
 | -------------- | --------- | ------------------------------------------------ | --------------------------------------- |
 | `name`         | `string`  | `initialValues?.name ?? ''`                      | Controlled name input                   |
 | `type`         | `string`  | `initialValues?.type ?? ''`                      | Controlled type dropdown                |
+| `tutorial`     | `string`  | `initialValues?.tutorial ?? ''`                  | Controlled tutorial input               |
 | `count`        | `string`  | `String(initialValues.count)` if set, else `'0'` | Controlled count input, edit-only field |
 | `error`        | `string`  | `''`                                             | Validation or submission error message  |
 | `isSubmitting` | `boolean` | `false`                                          | Whether a submission is in flight       |
@@ -29,4 +30,4 @@ Shared form for creating and editing a cardistry move (name, type, and — when 
 ## Computations
 
 - `isEditing` — true when `initialValues` includes a `count`, used to show the Count field and include it in submitted values
-- `validate` — returns a validation error message, or an empty string when the form is valid; requires the name to be title case
+- `validate` — returns a validation error message, or an empty string when the form is valid; requires the name to be title case and the tutorial to be a non-empty, valid URL
