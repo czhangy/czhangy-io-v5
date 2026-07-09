@@ -25,7 +25,7 @@ const VickyPanel: React.FC<VickyPanelProps> = ({ cols, rows, mobileOrder }) => {
         >
             <div className={styles['image-wrapper']}>
                 <Image
-                    src="/vicky.jpg"
+                    src="/img/vicky.jpg"
                     alt="Vicky"
                     fill
                     sizes="(max-width: 1024px) 50vw, 18rem"

@@ -18,7 +18,7 @@ const MusicPlayer: React.FC = () => {
     // CONSTANTS
     // -------------------------------------------------------------------------
 
-    const NO_REPEAT_WINDOW = 5;
+    const NO_REPEAT_WINDOW = 10;
 
     // -------------------------------------------------------------------------
     // HOOKS
@@ -114,7 +114,7 @@ const MusicPlayer: React.FC = () => {
         const audio = audioRef.current;
         if (!audio) return;
 
-        audio.volume = 0.03;
+        audio.volume = 0.08;
     }, []);
 
     useEffect(() => {
