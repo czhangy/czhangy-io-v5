@@ -88,7 +88,7 @@ model Jobs {
 model Logs {
     id        Int      @id @default(autoincrement())
     slug      String   @unique
-    title     String
+    title     String   @unique
     tags      String[]
     body      String
     createdAt DateTime @default(now()) @db.Timestamptz(3)
