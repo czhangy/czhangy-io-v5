@@ -158,6 +158,9 @@ const LogsContent: React.FC<LogsContentProps> = ({ initialEntries }) => {
                         {isAdmin ? (
                             <AdminActions
                                 entryName={entry.title}
+                                onEdit={() =>
+                                    router.push(`/logs/${entry.slug}/edit`)
+                                }
                                 onDelete={() => handleDelete(entry.id)}
                             />
                         ) : null}

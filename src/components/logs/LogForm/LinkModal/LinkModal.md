@@ -1,6 +1,6 @@
 # LinkModal
 
-A modal prompting for a URL, used when applying a link to the current selection in the rich text editor. Only mounted by `NewLogForm`.
+A modal prompting for a URL, used when applying a link to the current selection in the rich text editor. Only mounted by `LogForm`.
 
 ## Props
 

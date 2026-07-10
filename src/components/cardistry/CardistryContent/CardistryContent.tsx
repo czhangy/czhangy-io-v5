@@ -59,9 +59,8 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                 new Date(a.createdAt).getTime() -
                 new Date(b.createdAt).getTime()
         );
-        const index = nextMoves.findIndex((m) => m.name === move.name);
         setMoves(nextMoves);
-        setPage(Math.floor(index / ITEMS_PER_PAGE) + 1);
+        setHighlightedName(move.name);
     };
 
     const handleUpdate = (updated: Move): void => {
@@ -103,14 +102,42 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
             method: 'DELETE',
         });
         if (!res.ok) return;
+
         const nextMoves = moves.filter((m) => m.name !== name);
+
+        let nextHighlightedName = highlightedName;
+        if (name === highlightedName) {
+            const latestMove = nextMoves.reduce<Move | null>(
+                (latest, m) =>
+                    !latest ||
+                    new Date(m.createdAt).getTime() >
+                        new Date(latest.createdAt).getTime()
+                        ? m
+                        : latest,
+                null
+            );
+            nextHighlightedName = latestMove?.name ?? null;
+            if (latestMove) {
+                await fetch(
+                    `/api/moves/${encodeURIComponent(latestMove.name)}`,
+                    { method: 'PATCH' }
+                );
+            }
+        }
+
+        const nextFiltered = nextMoves.filter(
+            (m) =>
+                m.name !== nextHighlightedName &&
+                m.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
         const newTotalPages = Math.max(
             1,
-            Math.ceil(filterMoves(nextMoves).length / ITEMS_PER_PAGE)
+            Math.ceil(nextFiltered.length / ITEMS_PER_PAGE)
         );
+
         setMoves(nextMoves);
+        setHighlightedName(nextHighlightedName);
         setPage((p) => Math.min(p, newTotalPages));
-        if (name === highlightedName) setHighlightedName(null);
     };
 
     const handleSearchChange = (value: string): void => {

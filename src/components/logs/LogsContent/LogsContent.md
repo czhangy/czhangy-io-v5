@@ -1,6 +1,6 @@
 # LogsContent
 
-Client component rendered by LogsPage. Renders a searchable, paginated list of log summaries — title, tags, publish date, and a plain-text excerpt of the body — plus the controls bar with an admin-only "Add Log" button that navigates to the new-log route and, for admins, a delete action per entry. Each summary links to its full log at `/logs/[slug]`.
+Client component rendered by LogsPage. Renders a searchable, paginated list of log summaries — title, tags, publish date, and a plain-text excerpt of the body — plus the controls bar with an admin-only "Add Log" button that navigates to the new-log route and, for admins, edit and delete actions per entry. Each summary links to its full log at `/logs/[slug]`; the edit action navigates to `/logs/[slug]/edit`.
 
 ## Props
 

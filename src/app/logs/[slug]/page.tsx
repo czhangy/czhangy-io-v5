@@ -1,8 +1,13 @@
 import type { Metadata } from 'next';
-import WipPage from '@/components/wip/WipPage';
+import LogPage from '@/components/log/LogPage';
 
 export const metadata: Metadata = { title: 'Log' };
 
-export default function LogDetail() {
-    return <WipPage />;
+type LogDetailProps = {
+    params: Promise<{ slug: string }>;
+};
+
+export default async function LogDetail({ params }: LogDetailProps) {
+    const { slug } = await params;
+    return <LogPage slug={slug} />;
 }

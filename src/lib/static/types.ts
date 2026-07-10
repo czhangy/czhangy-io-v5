@@ -129,6 +129,12 @@ export type CreateJobParams = {
     logo: string;
 };
 
+export type CreateLogParams = {
+    title: string;
+    tags: string[];
+    body: string;
+};
+
 export type SelectOutcome<TSaved> = { saved: TSaved } | { error: string };
 
 export type Track = {

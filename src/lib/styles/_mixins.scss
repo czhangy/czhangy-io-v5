@@ -32,6 +32,22 @@
     }
 }
 
+// Bordered pill used for tags/genres/categories in list items.
+@mixin tag-pill {
+    @include mono-label;
+
+    border: 1px solid $border-subtle;
+    color: $text-dim;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    padding: 0.1rem 0.3rem;
+
+    @media (width <= 768px) {
+        font-size: 0.65rem;
+    }
+}
+
 // Accent-colored glow applied on focus for interactive input elements.
 @mixin focus-glow {
     border-color: $accent;

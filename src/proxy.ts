@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
+    ADMIN_ROUTE_PATTERNS,
     ADMIN_ROUTES,
     AUTH_ROUTES,
     SESSION_COOKIE,
@@ -9,9 +10,9 @@ import AuthHelpers from '@/lib/utils/AuthHelpers';
 export const proxy = async (request: NextRequest) => {
     const { pathname } = request.nextUrl;
     const isAuthRoute = AUTH_ROUTES.some((route) => pathname.startsWith(route));
-    const isAdminRoute = ADMIN_ROUTES.some((route) =>
-        pathname.startsWith(route)
-    );
+    const isAdminRoute =
+        ADMIN_ROUTES.some((route) => pathname.startsWith(route)) ||
+        ADMIN_ROUTE_PATTERNS.some((pattern) => pattern.test(pathname));
 
     if (!isAuthRoute && !isAdminRoute) return NextResponse.next();
 
