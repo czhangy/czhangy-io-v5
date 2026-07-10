@@ -1,7 +1,7 @@
 @use '@/styles/constants' as *;
 @use '@/styles/mixins' as *;
 
-.new-log-form {
+.log-form {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
@@ -129,5 +129,12 @@
                 color: $accent;
             }
         }
+    }
+
+    .error {
+        color: $error;
+        font-family: $font-mono;
+        font-size: 0.75rem;
+        letter-spacing: 0.03em;
     }
 }

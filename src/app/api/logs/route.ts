@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SESSION_COOKIE } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
+import { CreateLogParams } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
 import LogHelpers from '@/lib/utils/LogHelpers';
 
@@ -12,11 +13,7 @@ export const POST = async (request: NextRequest) => {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { title, tags, body } = (await request.json()) as {
-        title: string;
-        tags: string[];
-        body: string;
-    };
+    const { title, tags, body } = (await request.json()) as CreateLogParams;
 
     if (!title?.trim() || !body?.trim()) {
         return NextResponse.json(
