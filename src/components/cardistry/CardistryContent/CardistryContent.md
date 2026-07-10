@@ -22,10 +22,10 @@ Client component that manages the cardistry move list, pagination state, and add
 
 ## Handlers
 
-- `handleAdd` — inserts a newly added move (deduplicating by `name`) into its sorted position and navigates to the page it lands on
+- `handleAdd` — inserts a newly added move (deduplicating by `name`) into its sorted position and marks it as the highlighted move, mirroring the server always spotlighting newly created moves
 - `handleUpdate` — merges an edited move into the list and closes the edit modal
 - `handleIncrement` — bumps a move's count by a fixed amount via `PUT /api/moves/:name`, disabling its buttons while in flight
-- `handleDelete` — removes a move by name, clamps the page if necessary, and clears the highlight if the deleted move was highlighted
+- `handleDelete` — removes a move by name, clamps the page if necessary, and if the deleted move was highlighted, re-spotlights the remaining move with the most recent `createdAt` (persisted server-side via `PATCH /api/moves/:name`), or clears the highlight if none remain
 
 ## Computations
 

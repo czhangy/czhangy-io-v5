@@ -58,6 +58,7 @@
     .header {
         align-items: baseline;
         display: flex;
+        gap: 0.75rem;
         justify-content: space-between;
 
         .name {
@@ -70,6 +71,7 @@
 
         .date {
             color: $text-dim;
+            flex-shrink: 0;
             font-family: $font-mono;
             font-size: 0.7rem;
             letter-spacing: 0.05em;
