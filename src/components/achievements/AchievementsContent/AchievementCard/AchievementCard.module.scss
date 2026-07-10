@@ -100,4 +100,20 @@
         letter-spacing: 0.03em;
         line-height: 1.5;
     }
+
+    @media (width <= 768px) {
+        .header {
+            .date {
+                font-size: 0.6rem;
+            }
+        }
+
+        .category {
+            font-size: 0.6rem;
+        }
+
+        .description {
+            font-size: 0.75rem;
+        }
+    }
 }

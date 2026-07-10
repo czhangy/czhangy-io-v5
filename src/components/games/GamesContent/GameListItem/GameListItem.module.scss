@@ -61,14 +61,7 @@
                 gap: 0.25rem;
 
                 .genre-tag {
-                    @include mono-label;
-
-                    border: 1px solid $border-subtle;
-                    color: $text-dim;
-                    flex-shrink: 0;
-                    font-size: 0.8rem;
-                    letter-spacing: 0.05em;
-                    padding: 0.1rem 0.3rem;
+                    @include tag-pill;
                 }
             }
 
@@ -111,10 +104,8 @@
             }
 
             .details {
-                .metadata {
-                    .genre-tag {
-                        font-size: 0.65rem;
-                    }
+                .name {
+                    font-size: 1rem;
                 }
             }
         }
