@@ -1,0 +1,129 @@
+@use '@/styles/constants' as *;
+@use '@/styles/mixins' as *;
+
+.log-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 2rem;
+
+    .back {
+        @include mono-label;
+
+        align-self: flex-start;
+        color: $text-dim;
+        font-size: 0.85rem;
+        text-decoration: none;
+        transition: color 0.15s ease;
+
+        @media (hover: hover) {
+            &:hover {
+                color: $accent;
+            }
+        }
+    }
+
+    .top {
+        border-bottom: 1px solid $border-subtle;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding-bottom: 1rem;
+
+        .header {
+            align-items: flex-start;
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+
+            .heading {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                min-width: 0;
+
+                .entry-title {
+                    @include mono-label;
+
+                    font-size: 1.5rem;
+                    margin: 0;
+                }
+
+                .date {
+                    @include mono-label;
+
+                    color: $text-dim;
+                    font-size: 0.85rem;
+                }
+            }
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+
+            .tag-pill {
+                @include tag-pill;
+            }
+        }
+    }
+
+    .body {
+        color: $foreground;
+        font-family: $font-mono;
+        font-size: 0.9rem;
+        line-height: 1.7;
+
+        h1,
+        h2,
+        h3 {
+            @include mono-label;
+
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        p {
+            margin: 0 0 1rem;
+        }
+
+        ul {
+            margin: 0 0 1rem;
+            padding-left: 1.5rem;
+        }
+
+        blockquote {
+            border-left: 2px solid $accent;
+            color: $text-mid;
+            margin: 0 0 1rem;
+            padding-left: 1rem;
+        }
+
+        a {
+            color: $accent;
+        }
+    }
+
+    @media (width <= 768px) {
+        gap: 1rem;
+        margin-top: 1.5rem;
+
+        .top {
+            .header {
+                .heading {
+                    .entry-title {
+                        font-size: 1.2rem;
+                    }
+
+                    .date {
+                        font-size: 0.75rem;
+                    }
+                }
+            }
+        }
+
+        .body {
+            font-size: 0.8rem;
+        }
+    }
+}
