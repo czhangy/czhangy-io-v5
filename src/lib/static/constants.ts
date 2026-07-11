@@ -54,7 +54,8 @@ export const GAME_GENRES: string[] = [
     'Soulslike',
     'Survival',
     'Tower Defense',
-];
+    'Rhythm',
+].sort();
 
 // Cardistry
 export const CARDISTRY_MOVE_TYPES: string[] = [
