@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import DatePicker from '@/components/common/DatePicker/DatePicker';
 import Dropdown from '@/components/common/Dropdown/Dropdown';
 import { CreateAchievementParams } from '@/lib/static/types';
 import DateHelpers from '@/lib/utils/DateHelpers';
@@ -137,14 +138,7 @@ const AchievementForm: React.FC<AchievementFormProps> = ({
                 </div>
                 <div className={styles.field}>
                     <span className={styles.label}>Date</span>
-                    <input
-                        className={styles.input}
-                        placeholder="MM/DD/YYYY"
-                        value={date}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            setDate(e.target.value)
-                        }
-                    />
+                    <DatePicker value={date} onChange={setDate} />
                 </div>
             </div>
             <div className={styles.row}>

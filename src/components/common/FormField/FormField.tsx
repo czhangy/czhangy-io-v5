@@ -1,3 +1,4 @@
+import DatePicker from '@/components/common/DatePicker/DatePicker';
 import Dropdown from '@/components/common/Dropdown/Dropdown';
 import styles from './FormField.module.scss';
 
@@ -6,6 +7,7 @@ type FormFieldProps = {
     value: string;
     onChange: (value: string) => void;
     options?: string[];
+    type?: 'date';
     onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     autoFocus?: boolean;
 };
@@ -15,6 +17,7 @@ const FormField: React.FC<FormFieldProps> = ({
     value,
     onChange,
     options,
+    type,
     onKeyDown,
     autoFocus,
 }) => {
@@ -37,6 +40,8 @@ const FormField: React.FC<FormFieldProps> = ({
             <span className={styles.label}>{label}</span>
             {options ? (
                 <Dropdown value={value} onChange={onChange} options={options} />
+            ) : type === 'date' ? (
+                <DatePicker value={value} onChange={onChange} />
             ) : (
                 <input
                     className={styles.input}

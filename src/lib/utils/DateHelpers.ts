@@ -3,14 +3,14 @@ export default class DateHelpers {
     // PUBLIC
     // -------------------------------------------------------------------------
 
-    static getTodayString = (): string => {
-        const d = new Date();
-        return [
-            String(d.getMonth() + 1).padStart(2, '0'),
-            String(d.getDate()).padStart(2, '0'),
-            d.getFullYear(),
+    static getDateString = (date: Date): string =>
+        [
+            String(date.getMonth() + 1).padStart(2, '0'),
+            String(date.getDate()).padStart(2, '0'),
+            date.getFullYear(),
         ].join('/');
-    };
+
+    static getTodayString = (): string => DateHelpers.getDateString(new Date());
 
     static getDateObject = (dateStr: string): Date | null => {
         const match = dateStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/);
@@ -32,11 +32,7 @@ export default class DateHelpers {
     static getMMDDYYYY = (dateStr: string): string => {
         const parsed = DateHelpers.getDateObject(dateStr);
         if (!parsed) return dateStr;
-        return [
-            String(parsed.getMonth() + 1).padStart(2, '0'),
-            String(parsed.getDate()).padStart(2, '0'),
-            parsed.getFullYear(),
-        ].join('/');
+        return DateHelpers.getDateString(parsed);
     };
 
     static isWithinDays = (isoDate: string, days: number): boolean => {
