@@ -1,5 +1,7 @@
 import Link from 'next/link';
+import Dropdown from '@/components/common/Dropdown/Dropdown';
 import Pagination from '@/components/common/Pagination/Pagination';
+import FilterIcon from '@/lib/icons/FilterIcon';
 import styles from './Controls.module.scss';
 
 type ControlsProps = {
@@ -7,7 +9,12 @@ type ControlsProps = {
         href: string;
         label: string;
     };
-    left?: React.ReactNode;
+    filter?: {
+        value: string;
+        options: string[];
+        maxLabel: string;
+        onChange: (value: string) => void;
+    };
     search?: {
         value: string;
         placeholder: string;
@@ -29,12 +36,18 @@ type ControlsProps = {
 
 const Controls: React.FC<ControlsProps> = ({
     backLink,
-    left,
+    filter,
     search,
     add,
     pagination,
     children,
 }) => {
+    // -------------------------------------------------------------------------
+    // CONSTANTS
+    // -------------------------------------------------------------------------
+
+    const ALL_OPTION: string = 'All';
+
     // -------------------------------------------------------------------------
     // HANDLERS
     // -------------------------------------------------------------------------
@@ -45,11 +58,15 @@ const Controls: React.FC<ControlsProps> = ({
         search?.onChange(e.target.value);
     };
 
+    const handleFilterChange = (value: string): void => {
+        filter?.onChange(value === ALL_OPTION ? '' : value);
+    };
+
     // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const hasLeading = Boolean(backLink) || Boolean(left) || Boolean(add);
+    const hasLeading = Boolean(backLink) || Boolean(filter) || Boolean(add);
     const hasTrailing = Boolean(search) || Boolean(pagination);
 
     // -------------------------------------------------------------------------
@@ -68,7 +85,22 @@ const Controls: React.FC<ControlsProps> = ({
                             {backLink.label}
                         </Link>
                     ) : null}
-                    {left ? <div className={styles.left}>{left}</div> : null}
+                    {filter ? (
+                        <div className={styles.left}>
+                            <Dropdown
+                                value={
+                                    filter.value === ''
+                                        ? ALL_OPTION
+                                        : filter.value
+                                }
+                                onChange={handleFilterChange}
+                                options={[ALL_OPTION, ...filter.options]}
+                                icon={<FilterIcon />}
+                                maxLabel={filter.maxLabel}
+                                variant="control"
+                            />
+                        </div>
+                    ) : null}
                     {add?.isAdmin ? (
                         <button
                             className={styles['add-button']}

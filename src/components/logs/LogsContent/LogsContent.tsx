@@ -38,6 +38,7 @@ const LogsContent: React.FC<LogsContentProps> = ({ initialEntries }) => {
     const [entries, setEntries] = useState<Log[]>(initialEntries);
     const [page, setPage] = useState<number>(1);
     const [searchQuery, setSearchQuery] = useState<string>('');
+    const [tagFilter, setTagFilter] = useState<string>('');
 
     // -------------------------------------------------------------------------
     // HANDLERS
@@ -60,6 +61,11 @@ const LogsContent: React.FC<LogsContentProps> = ({ initialEntries }) => {
         setPage(1);
     };
 
+    const handleTagFilterChange = (value: string): void => {
+        setTagFilter(value);
+        setPage(1);
+    };
+
     const handlePrevPage = (): void => {
         setPage((p) => p - 1);
     };
@@ -73,15 +79,25 @@ const LogsContent: React.FC<LogsContentProps> = ({ initialEntries }) => {
     // -------------------------------------------------------------------------
 
     const filterEntries = (list: Log[]): Log[] =>
-        list.filter((e) =>
-            e.title.toLowerCase().includes(searchQuery.toLowerCase())
-        );
+        list
+            .filter((e) =>
+                e.title.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+            .filter((e) => (tagFilter ? e.tags.includes(tagFilter) : true));
 
     // -------------------------------------------------------------------------
     // RENDERING
     // -------------------------------------------------------------------------
 
     const isAdmin: boolean = role === 'ADMIN';
+
+    const allTags: string[] = [
+        ...new Set(entries.flatMap((e) => e.tags)),
+    ].sort();
+
+    const maxTagLabel: string = [...allTags, 'All'].reduce((longest, tag) =>
+        tag.length > longest.length ? tag : longest
+    );
 
     const filteredEntries: Log[] = filterEntries(entries);
 
@@ -102,6 +118,12 @@ const LogsContent: React.FC<LogsContentProps> = ({ initialEntries }) => {
     return (
         <div className={styles['logs-content']}>
             <Controls
+                filter={{
+                    value: tagFilter,
+                    options: allTags,
+                    maxLabel: maxTagLabel,
+                    onChange: handleTagFilterChange,
+                }}
                 search={{
                     value: searchQuery,
                     placeholder: 'Search logs...',
