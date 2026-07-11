@@ -2,10 +2,8 @@
 
 import { useEffect, useReducer, useState } from 'react';
 import Controls from '@/components/common/Controls/Controls';
-import Dropdown from '@/components/common/Dropdown/Dropdown';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
-import FilterIcon from '@/lib/icons/FilterIcon';
 import { Achievement } from '@/lib/static/types';
 import DateHelpers from '@/lib/utils/DateHelpers';
 import AchievementCard from './AchievementCard/AchievementCard';
@@ -96,10 +94,7 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
     // -------------------------------------------------------------------------
 
     const handleCategoryChange = (value: string): void => {
-        dispatch({
-            type: 'SET_CATEGORY',
-            category: value === 'All' ? '' : value,
-        });
+        dispatch({ type: 'SET_CATEGORY', category: value });
     };
 
     const handleSearchChange = (value: string): void => {
@@ -174,16 +169,12 @@ const AchievementsContent: React.FC<AchievementsContentProps> = ({
     return (
         <div className={styles['achievements-content']}>
             <Controls
-                left={
-                    <Dropdown
-                        value={categoryFilter === '' ? 'All' : categoryFilter}
-                        onChange={handleCategoryChange}
-                        options={['All', ...CATEGORIES]}
-                        icon={<FilterIcon />}
-                        maxLabel="Hobbies"
-                        variant="control"
-                    />
-                }
+                filter={{
+                    value: categoryFilter,
+                    options: CATEGORIES,
+                    maxLabel: 'Hobbies',
+                    onChange: handleCategoryChange,
+                }}
                 add={{
                     label: 'Add Achievement',
                     isAdmin: role === 'ADMIN',
