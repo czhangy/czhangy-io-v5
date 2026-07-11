@@ -121,13 +121,13 @@ const JobForm: React.FC<JobFormProps> = ({
                     label="Start Date"
                     value={startDate}
                     onChange={setStartDate}
-                    onKeyDown={handleKeyDown}
+                    type="date"
                 />
                 <FormField
                     label="End Date (blank = Present)"
                     value={endDate}
                     onChange={setEndDate}
-                    onKeyDown={handleKeyDown}
+                    type="date"
                 />
             </div>
             {error ? <span className={styles.error}>{error}</span> : null}
