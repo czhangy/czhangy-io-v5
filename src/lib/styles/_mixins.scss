@@ -1,4 +1,4 @@
-@use 'constants' as *;
+@use '@/styles/constants' as *;
 
 // Stretches a positioned element to cover its nearest positioned ancestor.
 @mixin fill-parent {

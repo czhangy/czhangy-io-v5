@@ -4,11 +4,12 @@ Shared form for creating and editing a log entry: title, tags, and a Tiptap-powe
 
 ## Props
 
-| Prop            | Type                                         | Required | Default | Description                                                   |
-| --------------- | -------------------------------------------- | -------- | ------- | ------------------------------------------------------------- |
-| `submitLabel`   | `string`                                     | Yes      | —       | Label for the submit button (e.g. "Publish" or "Save")        |
-| `initialValues` | `Partial<CreateLogParams>`                   | No       | —       | Pre-filled field values, used when editing                    |
-| `onSubmit`      | `(values: CreateLogParams) => Promise<void>` | Yes      | —       | Called with the form values on submit; throw to show an error |
+| Prop            | Type                                         | Required | Default | Description                                                    |
+| --------------- | -------------------------------------------- | -------- | ------- | -------------------------------------------------------------- |
+| `submitLabel`   | `string`                                     | Yes      | —       | Label for the submit button (e.g. "Publish" or "Save")         |
+| `initialValues` | `Partial<CreateLogParams>`                   | No       | —       | Pre-filled field values, used when editing or resuming a draft |
+| `onSubmit`      | `(values: CreateLogParams) => Promise<void>` | Yes      | —       | Called with the form values on submit; throw to show an error  |
+| `onChange`      | `(values: CreateLogParams) => void`          | No       | —       | Called whenever `title`, `tags`, or `body` change              |
 
 ## State
 
@@ -20,6 +21,10 @@ Shared form for creating and editing a log entry: title, tags, and a Tiptap-powe
 | `error`           | `string`   | `''`                         | Validation or submission error message         |
 | `isSubmitting`    | `boolean`  | `false`                      | Whether a submission is in flight              |
 | `isLinkModalOpen` | `boolean`  | `false`                      | Whether `LinkModal` is open for entering a URL |
+
+## Effects
+
+- **On `title`/`tags`/`body` change** — calls `onChange` with the current field values, if provided
 
 ## Handlers
 

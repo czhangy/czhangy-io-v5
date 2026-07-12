@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { EditorContent, useEditor, useEditorState } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import AddButton from '@/components/common/AddButton/AddButton';
@@ -17,12 +17,14 @@ type LogFormProps = {
     submitLabel: string;
     initialValues?: Partial<CreateLogParams>;
     onSubmit: (values: CreateLogParams) => Promise<void>;
+    onChange?: (values: CreateLogParams) => void;
 };
 
 const LogForm: React.FC<LogFormProps> = ({
     submitLabel,
     initialValues,
     onSubmit,
+    onChange,
 }) => {
     // -------------------------------------------------------------------------
     // CONSTANTS
@@ -96,6 +98,14 @@ const LogForm: React.FC<LogFormProps> = ({
             link: editor?.isActive('link') ?? false,
         }),
     });
+
+    // -------------------------------------------------------------------------
+    // EFFECTS
+    // -------------------------------------------------------------------------
+
+    useEffect(() => {
+        onChange?.({ title, tags, body });
+    }, [title, tags, body, onChange]);
 
     // -------------------------------------------------------------------------
     // HANDLERS

@@ -95,3 +95,13 @@ model Logs {
     createdAt DateTime @default(now()) @db.Timestamptz(3)
     updatedAt DateTime @updatedAt
 }
+
+// Singleton row holding the in-progress "new log" draft, so autosave
+// survives across devices/sessions for the single admin user.
+model LogDraft {
+    id        String   @id @default("draft")
+    title     String   @default("")
+    tags      String[] @default([])
+    body      String   @default("")
+    updatedAt DateTime @updatedAt
+}
