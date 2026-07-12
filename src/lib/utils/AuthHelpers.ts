@@ -58,6 +58,29 @@ export default class AuthHelpers {
         return AUTH_ROUTES.some((route) => href.startsWith(route));
     };
 
+    static login = async (password: string): Promise<void> => {
+        const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password }),
+        });
+        if (!res.ok) throw new Error('Invalid password.');
+    };
+
+    static register = async (password: string): Promise<void> => {
+        const res = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password }),
+        });
+        if (!res.ok) {
+            const data = (await res.json().catch(() => ({}))) as {
+                error?: string;
+            };
+            throw new Error(data.error ?? 'Failed to create user.');
+        }
+    };
+
     static computeNavItems = (
         isLoggedIn: boolean,
         role: UserRole | null

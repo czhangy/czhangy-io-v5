@@ -7,6 +7,8 @@ import EditButton from '@/components/status/EditButton/EditButton';
 import LinkButton from '@/components/status/LinkButton/LinkButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { Book, GoogleBooksResponse } from '@/lib/static/types';
+import BookHelpers from '@/lib/utils/BookHelpers';
+import GoogleBooksHelpers from '@/lib/utils/GoogleBooksHelpers';
 import styles from './BooksPanel.module.scss';
 
 type BooksPanelProps = {
@@ -87,18 +89,13 @@ const BooksPanel: React.FC<BooksPanelProps> = ({
         const result = searchResults.find((r) => r.googleBooksId === id);
         if (!result) return;
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        const res = await fetch('/api/books', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: result.name,
-                author: result.author,
-                cover: result.cover,
-                genres: result.genres,
-            }),
+        const saved = await BookHelpers.upsert({
+            name: result.name,
+            author: result.author ?? '',
+            cover: result.cover ?? '',
+            genres: result.genres,
         });
-        if (!res.ok) return;
-        const saved = (await res.json()) as Book;
+        if (!saved) return;
         const filtered = entries.filter((e) => e.id !== saved.id);
         setEntries([saved, ...filtered].slice(0, MAX_ENTRIES));
         setIsAdding(false);
@@ -121,12 +118,7 @@ const BooksPanel: React.FC<BooksPanelProps> = ({
     const performSearch = async (q: string): Promise<void> => {
         setIsSearching(true);
         setSearchResults([]);
-        const res = await fetch(
-            `/api/google_books/search?q=${encodeURIComponent(q)}`
-        );
-        const results: GoogleBooksResponse[] = res.ok
-            ? ((await res.json()) as GoogleBooksResponse[])
-            : [];
+        const results = await GoogleBooksHelpers.search(q);
         setSearchResults(results);
         setIsSearching(false);
     };

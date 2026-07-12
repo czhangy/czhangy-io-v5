@@ -3,6 +3,7 @@
 import JobForm from '@/components/career/CareerContent/JobForm/JobForm';
 import Modal from '@/components/common/Modal/Modal';
 import { CreateJobParams, Job } from '@/lib/static/types';
+import CareerHelpers from '@/lib/utils/CareerHelpers';
 
 type EditJobModalProps = {
     job: Job;
@@ -20,18 +21,8 @@ const EditJobModal: React.FC<EditJobModalProps> = ({
     // -------------------------------------------------------------------------
 
     const handleSubmit = async (values: CreateJobParams): Promise<void> => {
-        const res = await fetch(`/api/career/${job.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(values),
-        });
-        if (!res.ok) {
-            const data = (await res.json().catch(() => ({}))) as {
-                error?: string;
-            };
-            throw new Error(data.error ?? 'Failed to save job.');
-        }
-        onEdit((await res.json()) as Job);
+        const updated = await CareerHelpers.update(job.id, values);
+        onEdit(updated);
         onClose();
     };
 

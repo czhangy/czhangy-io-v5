@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import AchievementForm from '@/components/achievements/AchievementsContent/AchievementForm/AchievementForm';
 import Modal from '@/components/common/Modal/Modal';
 import { Achievement, CreateAchievementParams } from '@/lib/static/types';
+import AchievementHelpers from '@/lib/utils/AchievementHelpers';
 
 type EditAchievementModalProps = {
     achievement: Achievement;
@@ -27,20 +28,7 @@ const EditAchievementModal: React.FC<EditAchievementModalProps> = ({
     const handleSubmit = async (
         values: CreateAchievementParams
     ): Promise<void> => {
-        const res = await fetch(
-            `/api/achievements/${encodeURIComponent(achievement.name)}`,
-            {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(values),
-            }
-        );
-        if (!res.ok) {
-            const data = (await res.json().catch(() => ({}))) as {
-                error?: string;
-            };
-            throw new Error(data.error ?? 'Failed to save achievement.');
-        }
+        await AchievementHelpers.update(achievement.name, values);
         router.refresh();
         onClose();
     };

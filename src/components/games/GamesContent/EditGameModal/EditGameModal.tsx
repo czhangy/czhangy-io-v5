@@ -3,6 +3,7 @@
 import Modal from '@/components/common/Modal/Modal';
 import GameForm from '@/components/games/GamesContent/GameForm/GameForm';
 import { Game } from '@/lib/static/types';
+import GameHelpers from '@/lib/utils/GameHelpers';
 
 type EditGameModalProps = {
     game: Game;
@@ -20,18 +21,8 @@ const EditGameModal: React.FC<EditGameModalProps> = ({
     // -------------------------------------------------------------------------
 
     const handleSubmit = async (values: Game): Promise<void> => {
-        const res = await fetch(`/api/games/${encodeURIComponent(game.name)}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(values),
-        });
-        if (!res.ok) {
-            const data = (await res.json().catch(() => ({}))) as {
-                error?: string;
-            };
-            throw new Error(data.error ?? 'Failed to save game.');
-        }
-        onEdit((await res.json()) as Game);
+        const updated = await GameHelpers.update(game.name, values);
+        onEdit(updated);
         onClose();
     };
 

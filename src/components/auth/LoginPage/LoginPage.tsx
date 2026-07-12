@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import AuthHelpers from '@/lib/utils/AuthHelpers';
 import styles from './LoginPage.module.scss';
 
 const LoginPage: React.FC = () => {
@@ -35,12 +36,7 @@ const LoginPage: React.FC = () => {
         setError('');
 
         try {
-            const res = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ password }),
-            });
-            if (!res.ok) throw new Error();
+            await AuthHelpers.login(password);
             const callbackUrl = searchParams.get('callbackUrl') ?? '/';
             router.push(callbackUrl);
             router.refresh();

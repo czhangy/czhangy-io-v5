@@ -17,6 +17,7 @@ const localComponentRules = {
     'props-convention': require('./.eslint-rules/components/props-convention.js'),
     'no-module-level-code': require('./.eslint-rules/components/no-module-level-code.js'),
     'component-sections': require('./.eslint-rules/components/component-sections.js'),
+    'no-fetch': require('./.eslint-rules/components/no-fetch.js'),
 };
 
 const localLibRules = {
@@ -59,6 +60,7 @@ const eslintConfig = defineConfig([
             'component/props-convention': 'error',
             'component/no-module-level-code': 'error',
             'component/component-sections': 'error',
+            'component/no-fetch': 'error',
         },
     },
     {

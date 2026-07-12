@@ -3,6 +3,7 @@
 import JobForm from '@/components/career/CareerContent/JobForm/JobForm';
 import Modal from '@/components/common/Modal/Modal';
 import { CreateJobParams, Job } from '@/lib/static/types';
+import CareerHelpers from '@/lib/utils/CareerHelpers';
 
 type AddJobModalProps = {
     onClose: () => void;
@@ -15,18 +16,8 @@ const AddJobModal: React.FC<AddJobModalProps> = ({ onClose, onAdd }) => {
     // -------------------------------------------------------------------------
 
     const handleSubmit = async (values: CreateJobParams): Promise<void> => {
-        const res = await fetch('/api/career', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(values),
-        });
-        if (!res.ok) {
-            const data = (await res.json().catch(() => ({}))) as {
-                error?: string;
-            };
-            throw new Error(data.error ?? 'Failed to create job.');
-        }
-        onAdd((await res.json()) as Job);
+        const created = await CareerHelpers.create(values);
+        onAdd(created);
         onClose();
     };
 

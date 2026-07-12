@@ -3,6 +3,7 @@
 import MoveForm from '@/components/cardistry/CardistryContent/MoveForm/MoveForm';
 import Modal from '@/components/common/Modal/Modal';
 import { Move } from '@/lib/static/types';
+import MoveHelpers from '@/lib/utils/MoveHelpers';
 
 type AddMoveModalProps = {
     onClose: () => void;
@@ -19,18 +20,8 @@ const AddMoveModal: React.FC<AddMoveModalProps> = ({ onClose, onAdd }) => {
         type: string;
         tutorial: string;
     }): Promise<void> => {
-        const res = await fetch('/api/moves', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(values),
-        });
-        if (!res.ok) {
-            const data = (await res.json().catch(() => ({}))) as {
-                error?: string;
-            };
-            throw new Error(data.error ?? 'Failed to create move.');
-        }
-        onAdd((await res.json()) as Move);
+        const created = await MoveHelpers.create(values);
+        onAdd(created);
         onClose();
     };
 

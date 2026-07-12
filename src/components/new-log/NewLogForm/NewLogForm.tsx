@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import LogForm from '@/components/logs/LogForm/LogForm';
 import { CreateLogParams } from '@/lib/static/types';
+import LogHelpers from '@/lib/utils/LogHelpers';
 
 type NewLogFormProps = {
     initialValues?: Partial<CreateLogParams>;
@@ -41,11 +42,7 @@ const NewLogForm: React.FC<NewLogFormProps> = ({ initialValues }) => {
             const { title, body } = draftRef.current;
             if (!title.trim() && !body.trim()) return;
 
-            void fetch('/api/logs/draft', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(draftRef.current),
-            });
+            void LogHelpers.saveDraft(draftRef.current);
         }, AUTOSAVE_INTERVAL_MS);
 
         return () => clearInterval(intervalId);
@@ -56,18 +53,8 @@ const NewLogForm: React.FC<NewLogFormProps> = ({ initialValues }) => {
     // -------------------------------------------------------------------------
 
     const handleSubmit = async (values: CreateLogParams): Promise<void> => {
-        const res = await fetch('/api/logs', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(values),
-        });
-        if (!res.ok) {
-            const data = (await res.json().catch(() => ({}))) as {
-                error?: string;
-            };
-            throw new Error(data.error ?? 'Failed to publish log.');
-        }
-        await fetch('/api/logs/draft', { method: 'DELETE' });
+        await LogHelpers.create(values);
+        await LogHelpers.deleteDraft();
         router.push('/logs');
     };
 

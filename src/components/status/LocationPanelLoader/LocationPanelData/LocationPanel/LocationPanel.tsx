@@ -4,6 +4,8 @@ import { useRef, useState } from 'react';
 import SearchInput from '@/components/common/SearchInput/SearchInput';
 import EditButton from '@/components/status/EditButton/EditButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
+import HighlightHelpers from '@/lib/utils/HighlightHelpers';
+import LocationHelpers from '@/lib/utils/LocationHelpers';
 import styles from './LocationPanel.module.scss';
 
 type LocationPanelProps = {
@@ -44,10 +46,7 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
     const performSearch = async (q: string): Promise<void> => {
         setIsSearching(true);
         setResults([]);
-        const res = await fetch(
-            `/api/locations/search?q=${encodeURIComponent(q)}`
-        );
-        const data: string[] = res.ok ? ((await res.json()) as string[]) : [];
+        const data = await LocationHelpers.search(q);
         setResults(data);
         setIsSearching(false);
     };
@@ -77,11 +76,7 @@ const LocationPanel: React.FC<LocationPanelProps> = ({
 
     const handleSelectResult = async (name: string | number): Promise<void> => {
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        await fetch('/api/highlights/location', {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ value: String(name) }),
-        });
+        await HighlightHelpers.set('location', String(name));
         setLocation(String(name));
         setIsEditing(false);
     };

@@ -7,6 +7,7 @@ import { useSession } from '@/lib/context/SessionContext';
 import DeleteIcon from '@/lib/icons/DeleteIcon';
 import EditIcon from '@/lib/icons/EditIcon';
 import { Achievement } from '@/lib/static/types';
+import AchievementHelpers from '@/lib/utils/AchievementHelpers';
 import styles from './AchievementCard.module.scss';
 import EditAchievementModal from './EditAchievementModal/EditAchievementModal';
 
@@ -39,12 +40,7 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
     // -------------------------------------------------------------------------
 
     const handleDelete = async (): Promise<void> => {
-        await fetch(
-            `/api/achievements/${encodeURIComponent(achievement.name)}`,
-            {
-                method: 'DELETE',
-            }
-        );
+        await AchievementHelpers.delete(achievement.name);
         router.refresh();
     };
 

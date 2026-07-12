@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import AuthHelpers from '@/lib/utils/AuthHelpers';
 import styles from './RegisterPage.module.scss';
 
 const RegisterPage: React.FC = () => {
@@ -30,20 +31,13 @@ const RegisterPage: React.FC = () => {
         setSuccess(false);
 
         try {
-            const res = await fetch('/api/auth/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ password }),
-            });
-            if (!res.ok) {
-                const data = await res.json();
-                setError(data.error ?? 'Failed to create user.');
-                return;
-            }
+            await AuthHelpers.register(password);
             setSuccess(true);
             setPassword('');
-        } catch {
-            setError('Failed to create user.');
+        } catch (err) {
+            setError(
+                err instanceof Error ? err.message : 'Failed to create user.'
+            );
         } finally {
             setLoading(false);
         }

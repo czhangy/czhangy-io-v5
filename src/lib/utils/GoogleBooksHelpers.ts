@@ -97,6 +97,13 @@ export default class GoogleBooksHelpers {
     // PUBLIC
     // -------------------------------------------------------------------------
 
+    static search = async (query: string): Promise<GoogleBooksResponse[]> => {
+        const res = await fetch(
+            `/api/google_books/search?q=${encodeURIComponent(query)}`
+        );
+        return res.ok ? ((await res.json()) as GoogleBooksResponse[]) : [];
+    };
+
     static async searchBooks(query: string): Promise<GoogleBooksResponse[]> {
         if (!query.trim()) return [];
         const keyParam = this.apiKey ? `&key=${this.apiKey}` : '';

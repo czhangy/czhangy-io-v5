@@ -8,6 +8,8 @@ import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { GAME_GENRES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
 import { Game } from '@/lib/static/types';
+import GameHelpers from '@/lib/utils/GameHelpers';
+import HighlightHelpers from '@/lib/utils/HighlightHelpers';
 import styles from './GamePanel.module.scss';
 
 type GamePanelProps = {
@@ -63,8 +65,8 @@ const GamePanel: React.FC<GamePanelProps> = ({
         setNewIcon('');
         setNewRating('1');
         setIsFetching(true);
-        const res = await fetch('/api/games');
-        if (res.ok) setGames((await res.json()) as Game[]);
+        const games = await GameHelpers.list();
+        if (games) setGames(games);
         setIsFetching(false);
     };
 
@@ -78,11 +80,7 @@ const GamePanel: React.FC<GamePanelProps> = ({
     };
 
     const handleSelectGame = async (selected: Game): Promise<void> => {
-        await fetch('/api/highlights/game', {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ value: selected.name }),
-        });
+        await HighlightHelpers.set('game', selected.name);
         setGame(selected);
         setIsEditing(false);
         setGames([]);
@@ -98,26 +96,19 @@ const GamePanel: React.FC<GamePanelProps> = ({
         const icon = newIcon.trim();
         if (!name || !genre || !icon) return;
         setIsSaving(true);
-        const res = await fetch('/api/games', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
+        let created: Game;
+        try {
+            created = await GameHelpers.create({
                 name,
                 genre,
                 icon,
                 rating: parseFloat(newRating),
-            }),
-        });
-        if (!res.ok) {
+            });
+        } catch {
             setIsSaving(false);
             return;
         }
-        const created = (await res.json()) as Game;
-        await fetch('/api/highlights/game', {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ value: created.name }),
-        });
+        await HighlightHelpers.set('game', created.name);
         setGame(created);
         setIsEditing(false);
         setGames([]);

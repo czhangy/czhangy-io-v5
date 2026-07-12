@@ -3,6 +3,7 @@
 import Modal from '@/components/common/Modal/Modal';
 import GameForm from '@/components/games/GamesContent/GameForm/GameForm';
 import { Game } from '@/lib/static/types';
+import GameHelpers from '@/lib/utils/GameHelpers';
 
 type AddGameModalProps = {
     onClose: () => void;
@@ -15,18 +16,8 @@ const AddGameModal: React.FC<AddGameModalProps> = ({ onClose, onAdd }) => {
     // -------------------------------------------------------------------------
 
     const handleSubmit = async (values: Game): Promise<void> => {
-        const res = await fetch('/api/games', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(values),
-        });
-        if (!res.ok) {
-            const data = (await res.json().catch(() => ({}))) as {
-                error?: string;
-            };
-            throw new Error(data.error ?? 'Failed to create game.');
-        }
-        onAdd((await res.json()) as Game);
+        const created = await GameHelpers.create(values);
+        onAdd(created);
         onClose();
     };
 

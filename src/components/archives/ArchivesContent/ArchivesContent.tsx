@@ -9,6 +9,7 @@ import HighlightMatch from '@/components/common/HighlightMatch/HighlightMatch';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import { Content } from '@/lib/static/types';
+import ContentHelpers from '@/lib/utils/ContentHelpers';
 import AddContentModal from './AddContentModal/AddContentModal';
 import styles from './ArchivesContent.module.scss';
 
@@ -56,18 +57,13 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
     };
 
     const handleFeature = async (entry: Content): Promise<void> => {
-        const res = await fetch('/api/content', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: entry.name,
-                mediaType: entry.mediaType,
-                poster: entry.poster,
-                genres: entry.genres,
-            }),
+        const updated = await ContentHelpers.upsert({
+            name: entry.name,
+            mediaType: entry.mediaType,
+            poster: entry.poster,
+            genres: entry.genres,
         });
-        if (!res.ok) return;
-        const updated = (await res.json()) as Content;
+        if (!updated) return;
         const nextEntries = entries.map((e) =>
             e.id === updated.id ? updated : e
         );
@@ -75,10 +71,8 @@ const ArchivesContent: React.FC<ArchivesContentProps> = ({
     };
 
     const handleDelete = async (id: number): Promise<void> => {
-        const res = await fetch(`/api/content/${id}`, {
-            method: 'DELETE',
-        });
-        if (!res.ok) return;
+        const success = await ContentHelpers.delete(id);
+        if (!success) return;
         const nextEntries = entries.filter((e) => e.id !== id);
         const newTotalPages = Math.max(
             1,
