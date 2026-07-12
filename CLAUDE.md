@@ -25,7 +25,7 @@ npm run lint       # Run ESLint
 npm run format     # Run Prettier
 ```
 
-Code generators (Python-based, run from project root):
+Code generators (TypeScript, run via `tsx` from project root):
 
 ```bash
 npm run gen:component   # Scaffold a new React component
