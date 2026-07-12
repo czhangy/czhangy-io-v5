@@ -45,8 +45,8 @@ const LogsContent: React.FC<LogsContentProps> = ({ initialEntries }) => {
     // -------------------------------------------------------------------------
 
     const handleDelete = async (id: number): Promise<void> => {
-        const res = await fetch(`/api/logs/${id}`, { method: 'DELETE' });
-        if (!res.ok) return;
+        const success = await LogHelpers.delete(id);
+        if (!success) return;
         const nextEntries = entries.filter((e) => e.id !== id);
         const newTotalPages = Math.max(
             1,

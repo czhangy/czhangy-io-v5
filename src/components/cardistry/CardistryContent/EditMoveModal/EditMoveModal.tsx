@@ -3,6 +3,7 @@
 import MoveForm from '@/components/cardistry/CardistryContent/MoveForm/MoveForm';
 import Modal from '@/components/common/Modal/Modal';
 import { Move } from '@/lib/static/types';
+import MoveHelpers from '@/lib/utils/MoveHelpers';
 
 type EditMoveModalProps = {
     move: Move;
@@ -25,18 +26,8 @@ const EditMoveModal: React.FC<EditMoveModalProps> = ({
         tutorial: string;
         count?: number;
     }): Promise<void> => {
-        const res = await fetch(`/api/moves/${encodeURIComponent(move.name)}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(values),
-        });
-        if (!res.ok) {
-            const data = (await res.json().catch(() => ({}))) as {
-                error?: string;
-            };
-            throw new Error(data.error ?? 'Failed to save move.');
-        }
-        onEdit((await res.json()) as Move);
+        const updated = await MoveHelpers.update(move.name, values);
+        onEdit(updated);
         onClose();
     };
 

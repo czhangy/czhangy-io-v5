@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import LogForm from '@/components/logs/LogForm/LogForm';
 import { CreateLogParams, Log } from '@/lib/static/types';
+import LogHelpers from '@/lib/utils/LogHelpers';
 
 type EditLogFormProps = {
     entry: Log;
@@ -20,17 +21,7 @@ const EditLogForm: React.FC<EditLogFormProps> = ({ entry }) => {
     // -------------------------------------------------------------------------
 
     const handleSubmit = async (values: CreateLogParams): Promise<void> => {
-        const res = await fetch(`/api/logs/${entry.id}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(values),
-        });
-        if (!res.ok) {
-            const data = (await res.json().catch(() => ({}))) as {
-                error?: string;
-            };
-            throw new Error(data.error ?? 'Failed to save log.');
-        }
+        await LogHelpers.update(entry.id, values);
         router.push(`/logs/${entry.slug}`);
     };
 

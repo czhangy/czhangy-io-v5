@@ -1,6 +1,7 @@
 import { NavItem } from './types';
 
 export const SESSION_COOKIE = 'session';
+export const LOG_DRAFT_ID = 'draft';
 
 // Milestones
 export const WATCHED_MILESTONES = [

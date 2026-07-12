@@ -5,6 +5,7 @@ import JobCard from '@/components/career/JobCard/JobCard';
 import Controls from '@/components/common/Controls/Controls';
 import { useSession } from '@/lib/context/SessionContext';
 import { Job } from '@/lib/static/types';
+import CareerHelpers from '@/lib/utils/CareerHelpers';
 import DateHelpers from '@/lib/utils/DateHelpers';
 import AddJobModal from './AddJobModal/AddJobModal';
 import styles from './CareerContent.module.scss';
@@ -51,8 +52,8 @@ const CareerContent: React.FC<CareerContentProps> = ({ jobs: initialJobs }) => {
     };
 
     const handleDelete = async (id: number): Promise<void> => {
-        const res = await fetch(`/api/career/${id}`, { method: 'DELETE' });
-        if (!res.ok) return;
+        const success = await CareerHelpers.delete(id);
+        if (!success) return;
         setJobs((prev) => prev.filter((j) => j.id !== id));
     };
 

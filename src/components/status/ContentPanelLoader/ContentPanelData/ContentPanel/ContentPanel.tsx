@@ -7,6 +7,8 @@ import EditButton from '@/components/status/EditButton/EditButton';
 import LinkButton from '@/components/status/LinkButton/LinkButton';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { Content, TMDBResponse } from '@/lib/static/types';
+import ContentHelpers from '@/lib/utils/ContentHelpers';
+import TMDBHelpers from '@/lib/utils/TMDBHelpers';
 import styles from './ContentPanel.module.scss';
 
 type ContentPanelProps = {
@@ -83,18 +85,13 @@ const ContentPanel: React.FC<ContentPanelProps> = ({
         const result = searchResults.find((r) => r.tmdbId === id);
         if (!result) return;
         if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        const res = await fetch('/api/content', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: result.name,
-                mediaType: result.mediaType,
-                poster: result.poster,
-                genres: result.genres,
-            }),
+        const saved = await ContentHelpers.upsert({
+            name: result.name,
+            mediaType: result.mediaType,
+            poster: result.poster,
+            genres: result.genres,
         });
-        if (!res.ok) return;
-        const saved = (await res.json()) as Content;
+        if (!saved) return;
         const filtered = entries.filter((e) => e.id !== saved.id);
         setEntries([saved, ...filtered].slice(0, MAX_ENTRIES));
         setIsAdding(false);
@@ -117,10 +114,7 @@ const ContentPanel: React.FC<ContentPanelProps> = ({
     const performSearch = async (q: string): Promise<void> => {
         setIsSearching(true);
         setSearchResults([]);
-        const res = await fetch(`/api/tmdb/search?q=${encodeURIComponent(q)}`);
-        const results: TMDBResponse[] = res.ok
-            ? ((await res.json()) as TMDBResponse[])
-            : [];
+        const results = await TMDBHelpers.search(q);
         setSearchResults(results);
         setIsSearching(false);
     };

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import AchievementForm from '@/components/achievements/AchievementsContent/AchievementForm/AchievementForm';
 import Modal from '@/components/common/Modal/Modal';
 import { CreateAchievementParams } from '@/lib/static/types';
+import AchievementHelpers from '@/lib/utils/AchievementHelpers';
 
 type AddAchievementModalProps = {
     onClose: () => void;
@@ -25,17 +26,7 @@ const AddAchievementModal: React.FC<AddAchievementModalProps> = ({
     const handleSubmit = async (
         values: CreateAchievementParams
     ): Promise<void> => {
-        const res = await fetch('/api/achievements', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(values),
-        });
-        if (!res.ok) {
-            const data = (await res.json().catch(() => ({}))) as {
-                error?: string;
-            };
-            throw new Error(data.error ?? 'Failed to create achievement.');
-        }
+        await AchievementHelpers.create(values);
         router.refresh();
         onClose();
     };

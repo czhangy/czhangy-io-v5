@@ -2,6 +2,8 @@
 
 import AddSearchableModal from '@/components/common/AddSearchableModal/AddSearchableModal';
 import { Content, SelectOutcome, TMDBResponse } from '@/lib/static/types';
+import ContentHelpers from '@/lib/utils/ContentHelpers';
+import TMDBHelpers from '@/lib/utils/TMDBHelpers';
 
 type AddContentModalProps = {
     onClose: () => void;
@@ -19,33 +21,13 @@ const AddContentModal: React.FC<AddContentModalProps> = ({
     // -------------------------------------------------------------------------
 
     const handleSearch = async (query: string): Promise<TMDBResponse[]> => {
-        const res = await fetch(
-            `/api/tmdb/search?q=${encodeURIComponent(query)}`
-        );
-        return res.ok ? ((await res.json()) as TMDBResponse[]) : [];
+        return TMDBHelpers.search(query);
     };
 
     const handleSelect = async (
         result: TMDBResponse
     ): Promise<SelectOutcome<Content>> => {
-        const res = await fetch('/api/content', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: result.name,
-                mediaType: result.mediaType,
-                poster: result.poster,
-                genres: result.genres,
-                isOldEntry: true,
-                preventDuplicate: true,
-            }),
-        });
-        if (res.status === 409) {
-            const body = (await res.json()) as { error: string };
-            return { error: body.error };
-        }
-        if (!res.ok) return { error: 'Failed to add content.' };
-        return { saved: (await res.json()) as Content };
+        return ContentHelpers.addFromSearch(result);
     };
 
     // -------------------------------------------------------------------------

@@ -9,6 +9,7 @@ import HighlightMatch from '@/components/common/HighlightMatch/HighlightMatch';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import { Book } from '@/lib/static/types';
+import BookHelpers from '@/lib/utils/BookHelpers';
 import AddBookModal from './AddBookModal/AddBookModal';
 import styles from './LibraryContent.module.scss';
 
@@ -54,18 +55,13 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
     };
 
     const handleFeature = async (entry: Book): Promise<void> => {
-        const res = await fetch('/api/books', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: entry.name,
-                author: entry.author,
-                cover: entry.cover,
-                genres: entry.genres,
-            }),
+        const updated = await BookHelpers.upsert({
+            name: entry.name,
+            author: entry.author,
+            cover: entry.cover,
+            genres: entry.genres,
         });
-        if (!res.ok) return;
-        const updated = (await res.json()) as Book;
+        if (!updated) return;
         const nextEntries = entries.map((e) =>
             e.id === updated.id ? updated : e
         );
@@ -73,10 +69,8 @@ const LibraryContent: React.FC<LibraryContentProps> = ({ initialEntries }) => {
     };
 
     const handleDelete = async (id: number): Promise<void> => {
-        const res = await fetch(`/api/books/${id}`, {
-            method: 'DELETE',
-        });
-        if (!res.ok) return;
+        const success = await BookHelpers.delete(id);
+        if (!success) return;
         const nextEntries = entries.filter((e) => e.id !== id);
         const newTotalPages = Math.max(
             1,

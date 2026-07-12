@@ -91,6 +91,13 @@ export default class LocationHelpers {
     // PUBLIC
     // -------------------------------------------------------------------------
 
+    static search = async (query: string): Promise<string[]> => {
+        const res = await fetch(
+            `/api/locations/search?q=${encodeURIComponent(query)}`
+        );
+        return res.ok ? ((await res.json()) as string[]) : [];
+    };
+
     static async searchLocations(q: string): Promise<string[]> {
         const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=8&osm_tag=place`;
         const res = await fetch(url, {

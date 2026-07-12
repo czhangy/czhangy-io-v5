@@ -5,6 +5,7 @@ import Controls from '@/components/common/Controls/Controls';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import { Game } from '@/lib/static/types';
+import GameHelpers from '@/lib/utils/GameHelpers';
 import AddGameModal from './AddGameModal/AddGameModal';
 import EditGameModal from './EditGameModal/EditGameModal';
 import GameListItem from './GameListItem/GameListItem';
@@ -74,10 +75,8 @@ const GamesContent: React.FC<GamesContentProps> = ({
     };
 
     const handleDelete = async (name: string): Promise<void> => {
-        const res = await fetch(`/api/games/${encodeURIComponent(name)}`, {
-            method: 'DELETE',
-        });
-        if (!res.ok) return;
+        const success = await GameHelpers.delete(name);
+        if (!success) return;
         const nextGames = games.filter((g) => g.name !== name);
         const newTotalPages = Math.max(
             1,

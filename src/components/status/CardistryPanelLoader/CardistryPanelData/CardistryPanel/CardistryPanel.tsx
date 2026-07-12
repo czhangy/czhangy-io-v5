@@ -7,6 +7,7 @@ import PanelDropdown from '@/components/status/PanelDropdown/PanelDropdown';
 import StatusPanel from '@/components/status/StatusPanel/StatusPanel';
 import { Move } from '@/lib/static/types';
 import CardistryHelpers from '@/lib/utils/CardistryHelpers';
+import MoveHelpers from '@/lib/utils/MoveHelpers';
 import styles from './CardistryPanel.module.scss';
 
 type CardistryPanelProps = {
@@ -44,8 +45,8 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
 
     const handleEdit = async (): Promise<void> => {
         setIsEditing(true);
-        const res = await fetch('/api/moves');
-        if (res.ok) setMoves((await res.json()) as Move[]);
+        const moves = await MoveHelpers.list();
+        if (moves) setMoves(moves);
     };
 
     const handleCancel = (): void => {
@@ -54,11 +55,9 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
     };
 
     const handleSelect = async (move: Move): Promise<void> => {
-        const res = await fetch(`/api/moves/${encodeURIComponent(move.name)}`, {
-            method: 'PATCH',
-        });
-        if (!res.ok) return;
-        setActiveMove((await res.json()) as Move);
+        const updated = await MoveHelpers.highlight(move.name);
+        if (!updated) return;
+        setActiveMove(updated);
         handleCancel();
     };
 

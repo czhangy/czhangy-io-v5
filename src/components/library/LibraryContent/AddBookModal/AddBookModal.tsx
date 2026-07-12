@@ -2,6 +2,8 @@
 
 import AddSearchableModal from '@/components/common/AddSearchableModal/AddSearchableModal';
 import { Book, GoogleBooksResponse, SelectOutcome } from '@/lib/static/types';
+import BookHelpers from '@/lib/utils/BookHelpers';
+import GoogleBooksHelpers from '@/lib/utils/GoogleBooksHelpers';
 
 type AddBookModalProps = {
     onClose: () => void;
@@ -21,33 +23,13 @@ const AddBookModal: React.FC<AddBookModalProps> = ({
     const handleSearch = async (
         query: string
     ): Promise<GoogleBooksResponse[]> => {
-        const res = await fetch(
-            `/api/google_books/search?q=${encodeURIComponent(query)}`
-        );
-        return res.ok ? ((await res.json()) as GoogleBooksResponse[]) : [];
+        return GoogleBooksHelpers.search(query);
     };
 
     const handleSelect = async (
         result: GoogleBooksResponse
     ): Promise<SelectOutcome<Book>> => {
-        const res = await fetch('/api/books', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: result.name,
-                author: result.author,
-                cover: result.cover,
-                genres: result.genres,
-                isOldEntry: true,
-                preventDuplicate: true,
-            }),
-        });
-        if (res.status === 409) {
-            const body = (await res.json()) as { error: string };
-            return { error: body.error };
-        }
-        if (!res.ok) return { error: 'Failed to add book.' };
-        return { saved: (await res.json()) as Book };
+        return BookHelpers.addFromSearch(result);
     };
 
     // -------------------------------------------------------------------------

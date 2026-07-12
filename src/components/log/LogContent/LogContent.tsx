@@ -6,6 +6,7 @@ import AdminActions from '@/components/common/AdminActions/AdminActions';
 import { useSession } from '@/lib/context/SessionContext';
 import { Log } from '@/lib/static/types';
 import DateHelpers from '@/lib/utils/DateHelpers';
+import LogHelpers from '@/lib/utils/LogHelpers';
 import styles from './LogContent.module.scss';
 
 type LogContentProps = {
@@ -25,10 +26,8 @@ const LogContent: React.FC<LogContentProps> = ({ entry }) => {
     // -------------------------------------------------------------------------
 
     const handleDelete = async (): Promise<void> => {
-        const res = await fetch(`/api/logs/${entry.id}`, {
-            method: 'DELETE',
-        });
-        if (!res.ok) return;
+        const success = await LogHelpers.delete(entry.id);
+        if (!success) return;
         router.push('/logs');
     };
 

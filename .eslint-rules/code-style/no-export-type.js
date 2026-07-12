@@ -4,7 +4,7 @@ module.exports = {
         type: 'suggestion',
         docs: {
             description:
-                'Disallow "export type" outside of src/lib/utils/shared/types.ts.',
+                'Disallow "export type" outside of src/lib/static/types.ts.',
         },
         messages: {
             noExportType:
@@ -16,9 +16,10 @@ module.exports = {
         const ALLOWED_SUFFIX = 'src/lib/static/types.ts';
 
         const check = (node) => {
+            const normalizedFilename = context.filename.replace(/\\/g, '/');
             if (
                 node.exportKind === 'type' &&
-                !context.filename.endsWith(ALLOWED_SUFFIX)
+                !normalizedFilename.endsWith(ALLOWED_SUFFIX)
             ) {
                 context.report({ node, messageId: 'noExportType' });
             }

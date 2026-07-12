@@ -5,6 +5,7 @@ import Controls from '@/components/common/Controls/Controls';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useSession } from '@/lib/context/SessionContext';
 import { Move } from '@/lib/static/types';
+import MoveHelpers from '@/lib/utils/MoveHelpers';
 import AddMoveModal from './AddMoveModal/AddMoveModal';
 import styles from './CardistryContent.module.scss';
 import EditMoveModal from './EditMoveModal/EditMoveModal';
@@ -75,33 +76,30 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
         amount: number
     ): Promise<void> => {
         setIncrementingMoves((prev) => new Set(prev).add(move.name));
-        const res = await fetch(`/api/moves/${encodeURIComponent(move.name)}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
+        try {
+            const updated = await MoveHelpers.update(move.name, {
                 name: move.name,
                 type: move.type,
                 tutorial: move.tutorial,
                 count: move.count + amount,
-            }),
-        });
-        setIncrementingMoves((prev) => {
-            const next = new Set(prev);
-            next.delete(move.name);
-            return next;
-        });
-        if (!res.ok) return;
-        const updated = (await res.json()) as Move;
-        setMoves((prev) =>
-            prev.map((m) => (m.name === updated.name ? updated : m))
-        );
+            });
+            setMoves((prev) =>
+                prev.map((m) => (m.name === updated.name ? updated : m))
+            );
+        } catch {
+            return;
+        } finally {
+            setIncrementingMoves((prev) => {
+                const next = new Set(prev);
+                next.delete(move.name);
+                return next;
+            });
+        }
     };
 
     const handleDelete = async (name: string): Promise<void> => {
-        const res = await fetch(`/api/moves/${encodeURIComponent(name)}`, {
-            method: 'DELETE',
-        });
-        if (!res.ok) return;
+        const success = await MoveHelpers.delete(name);
+        if (!success) return;
 
         const nextMoves = moves.filter((m) => m.name !== name);
 
@@ -118,10 +116,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
             );
             nextHighlightedName = latestMove?.name ?? null;
             if (latestMove) {
-                await fetch(
-                    `/api/moves/${encodeURIComponent(latestMove.name)}`,
-                    { method: 'PATCH' }
-                );
+                await MoveHelpers.highlight(latestMove.name);
             }
         }
 

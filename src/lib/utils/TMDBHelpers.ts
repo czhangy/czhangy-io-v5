@@ -95,6 +95,13 @@ export default class TMDBHelpers {
     // PUBLIC
     // -------------------------------------------------------------------------
 
+    static search = async (query: string): Promise<TMDBResponse[]> => {
+        const res = await fetch(
+            `/api/tmdb/search?q=${encodeURIComponent(query)}`
+        );
+        return res.ok ? ((await res.json()) as TMDBResponse[]) : [];
+    };
+
     static async searchMedia(query: string): Promise<TMDBResponse[]> {
         if (!query.trim() || !this.apiKey) return [];
         const res = await fetch(
