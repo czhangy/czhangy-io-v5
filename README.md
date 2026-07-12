@@ -4,7 +4,7 @@
     <img src="public/img/logo.png" alt="logo" width="200" height="auto" />
     <h1>czhangy.io</h1>
     <h4>
-        <a href="https://github.com/czhangy/clashpedia/issues">New Issue</a>
+        <a href="https://github.com/czhangy/czhangy-io-v5/issues">New Issue</a>
         <span> · </span>
         <a href="https://czhangy.io/">Site</a>
     </h4>
