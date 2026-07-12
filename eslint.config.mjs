@@ -24,7 +24,7 @@ const localLibRules = {
     'utils-helpers-naming': require('./.eslint-rules/lib/utils-helpers-naming.js'),
     'static-ts-only': require('./.eslint-rules/lib/static-ts-only.js'),
     'styles-scss-only': require('./.eslint-rules/lib/styles-scss-only.js'),
-    'scripts-py-only': require('./.eslint-rules/lib/scripts-py-only.js'),
+    'scripts-ts-only': require('./.eslint-rules/lib/scripts-ts-only.js'),
     'icons-naming': require('./.eslint-rules/lib/icons-naming.js'),
     'icons-svg-root': require('./.eslint-rules/lib/icons-svg-root.js'),
     'utils-class-only': require('./.eslint-rules/lib/utils-class-only.js'),
@@ -89,7 +89,7 @@ const eslintConfig = defineConfig([
     {
         files: ['src/lib/scripts/**/*.{ts,tsx,js}'],
         rules: {
-            'lib/scripts-py-only': 'error',
+            'lib/scripts-ts-only': 'error',
         },
     },
     {
