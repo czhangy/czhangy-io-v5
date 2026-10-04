@@ -1,23 +1,15 @@
 import { NavItem } from './types';
 
 export const SESSION_COOKIE = 'session';
+export const SESSION_MAX_AGE = 60 * 60 * 24 * 30;
+export const SESSION_REFRESH_AFTER = 60 * 60 * 24;
 export const LOG_DRAFT_ID = 'draft';
 
-// Milestones
-export const WATCHED_MILESTONES = [
-    { count: 50, name: 'Amateur Critic', tier: 3 },
-    { count: 250, name: 'Dedicated Critic', tier: 2 },
-    { count: 500, name: 'Professional Critic', tier: 1 },
-];
-export const READ_MILESTONES = [
-    { count: 50, name: 'Amateur Reader', tier: 3 },
-    { count: 250, name: 'Dedicated Reader', tier: 2 },
-    { count: 500, name: 'Professional Reader', tier: 1 },
-];
-export const GAME_MILESTONES = [
-    { count: 50, name: 'Amateur Gamer', tier: 3 },
-    { count: 250, name: 'Dedicated Gamer', tier: 2 },
-    { count: 500, name: 'Professional Gamer', tier: 1 },
+// Projects
+export const PROJECT_STATUSES: string[] = [
+    'Live',
+    'In Development',
+    'Archived',
 ];
 
 // Games
@@ -79,7 +71,7 @@ export const ADMIN_ROUTE_PATTERNS = [/^\/logs\/[^/]+\/edit$/];
 export const NAV_ITEMS: NavItem[] = [
     { href: '/status', label: 'Status' },
     { href: '/career', label: 'Career' },
-    { href: '/achievements', label: 'Achievements' },
+    { href: '/projects', label: 'Projects' },
     { href: '/logs', label: 'Logs' },
 ];
 export const LOGGED_OUT_NAV_ITEMS: NavItem[] = [

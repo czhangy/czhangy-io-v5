@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { READ_MILESTONES, SESSION_COOKIE } from '@/lib/static/constants';
+import { SESSION_COOKIE } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
 
@@ -16,15 +16,7 @@ export const DELETE = async (
 
     const { id } = await params;
 
-    const countBefore = await prisma.books.count();
     await prisma.books.delete({ where: { id: Number(id) } });
-
-    const milestone = READ_MILESTONES.find((m) => m.count === countBefore);
-    if (milestone) {
-        await prisma.achievements.deleteMany({
-            where: { name: milestone.name },
-        });
-    }
 
     return NextResponse.json({ success: true });
 };

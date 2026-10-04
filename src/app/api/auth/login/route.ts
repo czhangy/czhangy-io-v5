@@ -3,8 +3,6 @@ import { SESSION_COOKIE } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
 
-const COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-
 export const POST = async (request: NextRequest) => {
     const { password } = await request.json();
 
@@ -27,13 +25,11 @@ export const POST = async (request: NextRequest) => {
             const token = await AuthHelpers.signToken(user.role);
             const response = NextResponse.json({ role: user.role });
 
-            response.cookies.set(SESSION_COOKIE, token, {
-                httpOnly: true,
-                maxAge: COOKIE_MAX_AGE,
-                path: '/',
-                sameSite: 'lax',
-                secure: process.env.NODE_ENV === 'production',
-            });
+            response.cookies.set(
+                SESSION_COOKIE,
+                token,
+                AuthHelpers.getSessionCookieOptions()
+            );
 
             return response;
         }

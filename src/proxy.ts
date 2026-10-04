@@ -14,10 +14,8 @@ export const proxy = async (request: NextRequest) => {
         ADMIN_ROUTES.some((route) => pathname.startsWith(route)) ||
         ADMIN_ROUTE_PATTERNS.some((pattern) => pattern.test(pathname));
 
-    if (!isAuthRoute && !isAdminRoute) return NextResponse.next();
-
     const token = request.cookies.get(SESSION_COOKIE)?.value;
-    const session = token ? await AuthHelpers.verifyToken(token) : null;
+    const session = token ? await AuthHelpers.getSession(token) : null;
 
     if (isAuthRoute && !session) {
         const loginUrl = new URL('/login', request.url);
@@ -25,11 +23,22 @@ export const proxy = async (request: NextRequest) => {
         return NextResponse.redirect(loginUrl);
     }
 
-    if (isAdminRoute && session !== 'ADMIN') {
+    if (isAdminRoute && session?.role !== 'ADMIN') {
         return NextResponse.redirect(new URL('/', request.url));
     }
 
-    return NextResponse.next();
+    const response = NextResponse.next();
+
+    // Sliding session: re-issue the token for active users
+    if (session?.shouldRefresh) {
+        response.cookies.set(
+            SESSION_COOKIE,
+            await AuthHelpers.signToken(session.role),
+            AuthHelpers.getSessionCookieOptions()
+        );
+    }
+
+    return response;
 };
 
 export const config = {

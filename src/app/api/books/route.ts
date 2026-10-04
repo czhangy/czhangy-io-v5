@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { READ_MILESTONES, SESSION_COOKIE } from '@/lib/static/constants';
+import { SESSION_COOKIE } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
 import { Book } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
-import DateHelpers from '@/lib/utils/DateHelpers';
 
 export const POST = async (request: NextRequest) => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
@@ -54,24 +53,6 @@ export const POST = async (request: NextRequest) => {
         },
         update: { addedAt },
     });
-
-    if (!existing) {
-        const count = await prisma.books.count();
-        const milestone = READ_MILESTONES.find((m) => m.count === count);
-        if (milestone) {
-            await prisma.achievements
-                .create({
-                    data: {
-                        tier: milestone.tier,
-                        name: milestone.name,
-                        category: 'hobbies',
-                        description: `Recorded ${milestone.count} read books.`,
-                        date: DateHelpers.getTodayString(),
-                    },
-                })
-                .catch(() => {});
-        }
-    }
 
     const entry: Book = {
         id: record.id,

@@ -47,16 +47,6 @@ model Books {
     @@unique([name, author])
 }
 
-model Achievements {
-    id          Int      @id @default(autoincrement())
-    tier        Int      @default(1)
-    name        String   @unique
-    category    String
-    description String
-    date        String?
-    createdAt   DateTime @default(now()) @db.Timestamptz(3)
-}
-
 model Moves {
     id        Int      @id @default(autoincrement())
     name      String   @unique
@@ -84,6 +74,16 @@ model Jobs {
     createdAt DateTime @default(now()) @db.Timestamptz(3)
 
     @@unique([company, startDate])
+}
+
+model Projects {
+    id          Int      @id @default(autoincrement())
+    name        String   @unique
+    description String
+    icon        String
+    status      String
+    url         String
+    createdAt   DateTime @default(now()) @db.Timestamptz(3)
 }
 
 model Logs {

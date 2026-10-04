@@ -55,11 +55,10 @@ Pre-commit hooks via Husky/lint-staged automatically run ESLint, Prettier, and S
 
 ### Components
 
-**Components** live in `src/components/`. Each component requires three co-located files:
+**Components** live in `src/components/`. Each component requires two co-located files:
 
 - `ComponentName/ComponentName.tsx`
 - `ComponentName/ComponentName.module.scss`
-- `ComponentName/ComponentName.md`
 
 Shared UI primitives live in `src/components/common/` (Modal, Dropdown, Accordion, Spinner, etc.).
 
@@ -70,13 +69,11 @@ src/components/
   archives/               ← page for /status/archives
     ArchivesPage.tsx
     ArchivesPage.module.scss
-    ArchivesPage.md
     ArchivesContent/      ← child component, co-located here
       ...
   library/                ← page for /status/library
     LibraryPage.tsx
     LibraryPage.module.scss
-    LibraryPage.md
 ```
 
 **Domain directories** (`src/components/status/`, `src/components/career/`, etc.) exist only for shared child components used by pages in that feature area. They never contain page components.
@@ -88,42 +85,6 @@ src/components/
 **Page-level padding**: All full-page components must include `padding: 1.5rem` (desktop) and `padding: 1rem` (mobile, `width <= 768px`) on their outermost element. This matches the spacing of the GlobalNav and social link icons from the viewport edge. Because `box-sizing: border-box` is set globally, this padding is included within `@include full-height` — no overflow occurs.
 
 **Page stacking order**: The `.page-main` global class (applied in `layout.tsx`) sets `position: relative; z-index: 11`, ensuring all page content renders above the `Background` component (`z-index: 10`). Page components must not set their own `position`/`z-index` for this purpose — `page-main` handles it globally. Modals and overlays rendered within a page must use `ReactDOM.createPortal` to escape `page-main`'s stacking context, so their `z-index` is evaluated at the root level (above the Navbar at `z-index: 100`) rather than being capped at z-index 11.
-
-Each component directory contains a `ComponentName.md` documentation file co-located with the `.tsx` and `.module.scss` files. Whenever a component is modified, its documentation file must be updated to reflect the changes.
-
-Documentation files follow this structure (omit any section that does not apply):
-
-```
-# ComponentName
-
-A brief description of what the component is — no implementation details, prop names, or behavior specifics.
-
-## Props
-
-| Prop       | Type   | Required | Default   | Description |
-| ---------- | ------ | -------- | --------- | ----------- |
-| `propName` | `type` | Yes/No   | `default` | Description |
-
-## State
-
-| State       | Type   | Initial value  | Description |
-| ----------- | ------ | -------------- | ----------- |
-| `stateName` | `type` | `initialValue` | Description |
-
-## Effects
-
-- **On [trigger]** — description of the effect's purpose
-
-## Computations
-
-- `variableName` — description of what it represents and why it is computed
-
-## SCSS Variable Dependencies
-
-- `--variable-name` — description of where it is expected to be set by a parent
-
-Only list variables that this component consumes but does not define. Do not list variables that this component defines and passes down to its children.
-```
 
 **Icons** live in `src/lib/icons/` (flat, no subdirectories) and must be named with the `Icon` suffix (e.g., `ChevronIcon`).
 

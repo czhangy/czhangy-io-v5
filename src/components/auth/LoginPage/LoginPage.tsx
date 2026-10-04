@@ -37,7 +37,9 @@ const LoginPage: React.FC = () => {
 
         try {
             await AuthHelpers.login(password);
-            const callbackUrl = searchParams.get('callbackUrl') ?? '/';
+            const callbackUrl = AuthHelpers.getSafeCallbackUrl(
+                searchParams.get('callbackUrl')
+            );
             router.push(callbackUrl);
             router.refresh();
         } catch {

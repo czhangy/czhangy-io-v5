@@ -7,14 +7,11 @@ module.exports = {
         type: 'suggestion',
         docs: {
             description:
-                'Enforces directory naming, .md co-location, and .module.scss naming conventions for component files.',
+                'Enforces directory naming, and .module.scss naming conventions for component files.',
         },
         messages: {
             wrongDirectory:
                 '"{{name}}.tsx" must be inside a directory named "{{name}}".',
-            missingMd: '"{{name}}.tsx" must be co-located with "{{name}}.md".',
-            wrongMdName:
-                '"{{found}}" must be named "{{expected}}" to match the component.',
             wrongScssName:
                 '"{{found}}" must be named "{{expected}}" to match the component.',
         },
@@ -40,32 +37,11 @@ module.exports = {
                     }
                 }
 
-                // Every component must be co-located with a .md file of the
-                // same name, and any .md file in the directory must share
-                // that name.
                 let siblings;
                 try {
                     siblings = fs.readdirSync(dir);
                 } catch {
                     return;
-                }
-
-                const expectedMd = `${basename}.md`;
-                if (!siblings.includes(expectedMd)) {
-                    context.report({
-                        node,
-                        messageId: 'missingMd',
-                        data: { name: basename },
-                    });
-                }
-                for (const file of siblings) {
-                    if (file.endsWith('.md') && file !== expectedMd) {
-                        context.report({
-                            node,
-                            messageId: 'wrongMdName',
-                            data: { found: file, expected: expectedMd },
-                        });
-                    }
                 }
 
                 // Any .scss file in the same directory must be named

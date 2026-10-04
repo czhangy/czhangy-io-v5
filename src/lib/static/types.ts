@@ -1,13 +1,4 @@
 // Models
-export type Achievement = {
-    tier: number;
-    name: string;
-    category: string;
-    description: string;
-    date: string | null;
-    createdAt: string;
-};
-
 export type Move = {
     name: string;
     type: string;
@@ -113,13 +104,16 @@ export type NavItem = {
     label: string;
 };
 
-export type CreateAchievementParams = {
-    tier: number;
+export type Project = {
+    id: number;
     name: string;
-    category: string;
     description: string;
-    date: string;
+    icon: string;
+    status: string;
+    url: string;
 };
+
+export type CreateProjectParams = Omit<Project, 'id'>;
 
 export type CreateJobParams = {
     company: string;

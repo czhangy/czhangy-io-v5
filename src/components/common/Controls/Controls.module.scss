@@ -49,8 +49,8 @@
     }
 
     // Grows to consume the row's remaining space, matching the search
-    // input's own flex: 1 — when there's no search (e.g. Achievements),
-    // this just aligns Pagination against the row's trailing edge.
+    // input's own flex: 1 — when there's no search, this just
+    // aligns Pagination against the row's trailing edge.
     .trailing {
         align-items: center;
         display: flex;
