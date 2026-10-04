@@ -3,7 +3,6 @@ import { SESSION_COOKIE } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
 import { Move } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
-import DateHelpers from '@/lib/utils/DateHelpers';
 
 const authorize = async (request: NextRequest): Promise<boolean> => {
     const token = request.cookies.get(SESSION_COOKIE)?.value;
@@ -116,36 +115,6 @@ export const PUT = async (
             count,
         },
     });
-
-    const tierThresholds = [
-        { threshold: 100, label: 'Beginner', tier: 3 },
-        { threshold: 1000, label: 'Proficient', tier: 2 },
-        { threshold: 10000, label: 'Master', tier: 1 },
-    ];
-    const today = DateHelpers.getTodayString();
-
-    for (const { threshold, label, tier } of tierThresholds) {
-        if (currentMove.count < threshold && count >= threshold) {
-            try {
-                await prisma.achievements.create({
-                    data: {
-                        tier,
-                        name: `${move.name} ${label}`,
-                        category: 'Hobbies',
-                        description: `Perform ${threshold} ${move.name}s.`,
-                        date: today,
-                    },
-                });
-            } catch (e) {
-                if (
-                    (e as { code?: string }).code !== 'P2002' &&
-                    (e as { code?: string }).code !== '23505'
-                ) {
-                    throw e;
-                }
-            }
-        }
-    }
 
     return NextResponse.json({
         name: move.name,

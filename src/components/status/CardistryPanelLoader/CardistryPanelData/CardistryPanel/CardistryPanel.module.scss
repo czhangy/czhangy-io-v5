@@ -20,9 +20,7 @@
             @include mono-label;
 
             font-size: 1.25rem;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            overflow-wrap: anywhere;
         }
 
         .metadata {

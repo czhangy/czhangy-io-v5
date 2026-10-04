@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GAME_MILESTONES, SESSION_COOKIE } from '@/lib/static/constants';
+import { SESSION_COOKIE } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
 import { Game } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
@@ -98,15 +98,7 @@ export const DELETE = async (
     const { name } = await params;
     const decodedName = decodeURIComponent(name);
 
-    const countBefore = await prisma.games.count();
     await prisma.games.delete({ where: { name: decodedName } });
-
-    const milestone = GAME_MILESTONES.find((m) => m.count === countBefore);
-    if (milestone) {
-        await prisma.achievements.deleteMany({
-            where: { name: milestone.name },
-        });
-    }
 
     return NextResponse.json({ success: true });
 };

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useSession } from '@/lib/context/SessionContext';
 import HomeIcon from '@/lib/icons/HomeIcon';
 import { Key } from '@/lib/static/enums';
@@ -16,6 +17,7 @@ const Navbar: React.FC = () => {
 
     const containerRef = useRef<HTMLDivElement>(null);
     const { isLoggedIn, role } = useSession();
+    const pathname = usePathname();
 
     // -------------------------------------------------------------------------
     // STATE
@@ -27,10 +29,16 @@ const Navbar: React.FC = () => {
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const allItems: NavItem[] = AuthHelpers.computeNavItems(isLoggedIn, role);
+    const allItems: NavItem[] = AuthHelpers.computeNavItems(
+        isLoggedIn,
+        role,
+        pathname
+    );
 
     const badgeLabel: string | null = isLoggedIn
-        ? `Logged in as: ${role === 'ADMIN' ? 'ADMIN' : 'USER'}`
+        ? role === 'ADMIN'
+            ? 'ADMIN'
+            : 'USER'
         : null;
 
     // -------------------------------------------------------------------------

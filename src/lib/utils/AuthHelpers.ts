@@ -5,6 +5,8 @@ import {
     AUTH_ROUTES,
     LOGGED_OUT_NAV_ITEMS,
     NAV_ITEMS,
+    SESSION_MAX_AGE,
+    SESSION_REFRESH_AFTER,
 } from '@/lib/static/constants';
 import { NavItem, UserRole } from '@/lib/static/types';
 
@@ -14,7 +16,6 @@ export default class AuthHelpers {
     // -------------------------------------------------------------------------
 
     private static readonly BCRYPT_ROUNDS = 12;
-    private static readonly JWT_EXPIRY = '7d';
     private static readonly ALGORITHM = 'HS256';
 
     private static getSecret = (): Uint8Array => {
@@ -41,8 +42,33 @@ export default class AuthHelpers {
     static signToken = (role: UserRole): Promise<string> => {
         return new SignJWT({ role })
             .setProtectedHeader({ alg: AuthHelpers.ALGORITHM })
-            .setExpirationTime(AuthHelpers.JWT_EXPIRY)
+            .setIssuedAt()
+            .setExpirationTime(`${SESSION_MAX_AGE}s`)
             .sign(AuthHelpers.getSecret());
+    };
+
+    static getSessionCookieOptions = () => ({
+        httpOnly: true,
+        maxAge: SESSION_MAX_AGE,
+        path: '/',
+        sameSite: 'lax' as const,
+        secure: process.env.NODE_ENV === 'production',
+    });
+
+    // Returns the role and whether the token is old enough to be re-issued
+    // (sliding session: active users stay logged in).
+    static getSession = async (
+        token: string
+    ): Promise<{ role: UserRole; shouldRefresh: boolean } | null> => {
+        try {
+            const { payload } = await jwtVerify(token, AuthHelpers.getSecret());
+            const role = (payload as { role?: UserRole }).role;
+            if (!role) return null;
+            const age = Math.floor(Date.now() / 1000) - (payload.iat ?? 0);
+            return { role, shouldRefresh: age > SESSION_REFRESH_AFTER };
+        } catch {
+            return null;
+        }
     };
 
     static verifyToken = async (token: string): Promise<UserRole | null> => {
@@ -81,11 +107,39 @@ export default class AuthHelpers {
         }
     };
 
+    // Only same-origin relative paths are allowed, so a crafted callbackUrl
+    // can't redirect to another site after login.
+    static getSafeCallbackUrl = (callbackUrl: string | null): string => {
+        if (
+            !callbackUrl ||
+            !callbackUrl.startsWith('/') ||
+            callbackUrl.startsWith('//') ||
+            callbackUrl.startsWith('/\\') ||
+            callbackUrl.startsWith('/login')
+        ) {
+            return '/';
+        }
+        return callbackUrl;
+    };
+
     static computeNavItems = (
         isLoggedIn: boolean,
-        role: UserRole | null
+        role: UserRole | null,
+        currentPath?: string
     ): NavItem[] => {
-        if (!isLoggedIn) return LOGGED_OUT_NAV_ITEMS;
+        if (!isLoggedIn) {
+            if (!currentPath || currentPath === '/') {
+                return LOGGED_OUT_NAV_ITEMS;
+            }
+            return LOGGED_OUT_NAV_ITEMS.map((item) =>
+                item.href === '/login'
+                    ? {
+                          ...item,
+                          href: `/login?callbackUrl=${encodeURIComponent(currentPath)}`,
+                      }
+                    : item
+            );
+        }
         if (role === 'ADMIN') return ADMIN_NAV_ITEMS;
         return NAV_ITEMS;
     };
