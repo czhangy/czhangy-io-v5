@@ -69,17 +69,6 @@
                         @include tag-pill;
                     }
                 }
-
-                .excerpt {
-                    -webkit-box-orient: vertical;
-                    color: $text-mid;
-                    display: -webkit-box;
-                    font-family: $font-mono;
-                    font-size: 0.8rem;
-                    -webkit-line-clamp: 2;
-                    margin: 0;
-                    overflow: hidden;
-                }
             }
 
             @media (width <= 768px) {
@@ -94,10 +83,6 @@
                         .date {
                             font-size: 0.75rem;
                         }
-                    }
-
-                    .excerpt {
-                        font-size: 0.75rem;
                     }
                 }
             }
