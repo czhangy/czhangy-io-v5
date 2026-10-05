@@ -173,9 +173,6 @@ const LogsContent: React.FC<LogsContentProps> = ({ initialEntries }) => {
                                     ))}
                                 </div>
                             ) : null}
-                            <p className={styles.excerpt}>
-                                {LogHelpers.getExcerpt(entry.body)}
-                            </p>
                         </Link>
                         {isAdmin ? (
                             <AdminActions
