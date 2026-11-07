@@ -105,7 +105,7 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
     const headerActions: React.ReactNode = (
         <>
             <EditButton onClick={handleToggleEdit} active={isEditing} />
-            <LinkButton href="/status/cardistry" />
+            <LinkButton href="/status/carding" />
         </>
     );
 

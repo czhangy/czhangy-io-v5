@@ -45,7 +45,7 @@ const CardistryPage = async () => {
     return (
         <div className={styles['cardistry-page']}>
             <div className={styles.content}>
-                <GlitchText text="CARDISTRY" className={styles.title} />
+                <GlitchText text="CARDING" className={styles.title} />
                 <CardistryContent
                     initialMoves={moves}
                     highlightedMove={highlightedMove}
