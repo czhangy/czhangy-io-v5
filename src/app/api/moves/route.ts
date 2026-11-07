@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SESSION_COOKIE } from '@/lib/static/constants';
+import { ROUTINE_TYPE, SESSION_COOKIE } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
 import { Move } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
@@ -13,6 +13,7 @@ export const GET = async () => {
             name: m.name,
             type: m.type,
             tutorial: m.tutorial,
+            notes: m.notes,
             count: m.count,
             createdAt: m.createdAt.toISOString(),
         })) as Move[]
@@ -27,10 +28,11 @@ export const POST = async (request: NextRequest) => {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { name, type, tutorial } = (await request.json()) as {
+    const { name, type, tutorial, notes } = (await request.json()) as {
         name: string;
         type: string;
         tutorial: string;
+        notes?: string;
     };
 
     if (!name?.trim()) {
@@ -47,12 +49,7 @@ export const POST = async (request: NextRequest) => {
         );
     }
 
-    if (!tutorial?.trim()) {
-        return NextResponse.json(
-            { error: 'Tutorial is required' },
-            { status: 400 }
-        );
-    }
+    const isRoutine = type.trim() === ROUTINE_TYPE;
 
     const existing = await prisma.moves.findUnique({
         where: { name: name.trim() },
@@ -69,7 +66,8 @@ export const POST = async (request: NextRequest) => {
         data: {
             name: name.trim(),
             type: type.trim(),
-            tutorial: tutorial.trim(),
+            tutorial: isRoutine ? '' : (tutorial ?? '').trim(),
+            notes: isRoutine ? (notes ?? '').trim() : '',
         },
     });
 
@@ -83,6 +81,7 @@ export const POST = async (request: NextRequest) => {
         name: move.name,
         type: move.type,
         tutorial: move.tutorial,
+        notes: move.notes,
         count: move.count,
         createdAt: move.createdAt.toISOString(),
     } as Move);

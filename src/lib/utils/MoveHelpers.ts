@@ -14,6 +14,7 @@ export default class MoveHelpers {
         name: string;
         type: string;
         tutorial: string;
+        notes?: string;
     }): Promise<Move> => {
         const res = await fetch('/api/moves', {
             method: 'POST',
@@ -31,7 +32,13 @@ export default class MoveHelpers {
 
     static update = async (
         name: string,
-        params: { name: string; type: string; tutorial: string; count?: number }
+        params: {
+            name: string;
+            type: string;
+            tutorial: string;
+            notes?: string;
+            count?: number;
+        }
     ): Promise<Move> => {
         const res = await fetch(`/api/moves/${encodeURIComponent(name)}`, {
             method: 'PUT',

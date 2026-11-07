@@ -3,6 +3,7 @@ export type Move = {
     name: string;
     type: string;
     tutorial: string;
+    notes: string;
     count: number;
     createdAt: string;
 };

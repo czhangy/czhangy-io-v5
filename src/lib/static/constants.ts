@@ -62,8 +62,14 @@ export const CARDISTRY_MOVE_TYPES: string[] = [
     'Shuffle',
     'Flourish',
     'Sleight',
+    'Combo',
     'Control',
-];
+    'False Cut',
+    'False Shuffle',
+    'Force',
+    'Routine',
+].sort();
+export const ROUTINE_TYPE: string = 'Routine';
 
 // Routes
 export const AUTH_ROUTES = ['/logs'];

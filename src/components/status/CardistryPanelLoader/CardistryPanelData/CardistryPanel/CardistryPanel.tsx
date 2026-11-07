@@ -98,9 +98,10 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
     // RENDERING
     // -------------------------------------------------------------------------
 
-    const proficiency = activeMove
-        ? CardistryHelpers.getProficiency(activeMove.count)
-        : null;
+    const proficiency =
+        activeMove && !CardistryHelpers.isRoutine(activeMove.type)
+            ? CardistryHelpers.getProficiency(activeMove.count)
+            : null;
 
     const headerActions: React.ReactNode = (
         <>
@@ -139,7 +140,9 @@ const CardistryPanel: React.FC<CardistryPanelProps> = ({
                         {activeMove?.type ? (
                             <div className={styles.metadata}>
                                 <span className={styles['type-tag']}>
-                                    {activeMove.type}
+                                    {CardistryHelpers.getTypeLabel(
+                                        activeMove.type
+                                    )}
                                 </span>
                             </div>
                         ) : null}

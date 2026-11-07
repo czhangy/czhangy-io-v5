@@ -6,6 +6,7 @@ import FormField from '@/components/common/FormField/FormField';
 import { CARDISTRY_MOVE_TYPES } from '@/lib/static/constants';
 import { Key } from '@/lib/static/enums';
 import { Move } from '@/lib/static/types';
+import CardistryHelpers from '@/lib/utils/CardistryHelpers';
 import StringHelpers from '@/lib/utils/StringHelpers';
 import UrlHelpers from '@/lib/utils/UrlHelpers';
 import styles from './MoveForm.module.scss';
@@ -17,6 +18,7 @@ type MoveFormProps = {
         name: string;
         type: string;
         tutorial: string;
+        notes?: string;
         count?: number;
     }) => Promise<void>;
     onClose: () => void;
@@ -37,6 +39,7 @@ const MoveForm: React.FC<MoveFormProps> = ({
     const [tutorial, setTutorial] = useState<string>(
         initialValues?.tutorial ?? ''
     );
+    const [notes, setNotes] = useState<string>(initialValues?.notes ?? '');
     const [count, setCount] = useState<string>(
         initialValues?.count !== undefined ? String(initialValues.count) : '0'
     );
@@ -60,8 +63,11 @@ const MoveForm: React.FC<MoveFormProps> = ({
             await onSubmit({
                 name: name.trim(),
                 type,
-                tutorial: tutorial.trim(),
-                ...(isEditing ? { count: parseInt(count, 10) } : {}),
+                tutorial: isRoutine ? '' : tutorial.trim(),
+                notes: isRoutine ? notes.trim() : '',
+                ...(isEditing
+                    ? { count: isRoutine ? 0 : parseInt(count, 10) }
+                    : {}),
             });
         } catch (err) {
             setError(err instanceof Error ? err.message : String(err));
@@ -83,8 +89,8 @@ const MoveForm: React.FC<MoveFormProps> = ({
         if (!StringHelpers.isTitleCase(name.trim()))
             return 'Name must be title case.';
         if (!type) return 'Type is required.';
-        if (!tutorial.trim()) return 'Tutorial is required.';
-        if (!UrlHelpers.isValidUrl(tutorial.trim()))
+        if (isRoutine) return '';
+        if (tutorial.trim() && !UrlHelpers.isValidUrl(tutorial.trim()))
             return 'Tutorial must be a valid URL.';
         if (isEditing && !/^\d+$/.test(count.trim()))
             return 'Count must be a non-negative integer.';
@@ -96,6 +102,7 @@ const MoveForm: React.FC<MoveFormProps> = ({
     // -------------------------------------------------------------------------
 
     const isEditing: boolean = initialValues?.count !== undefined;
+    const isRoutine: boolean = CardistryHelpers.isRoutine(type);
 
     // -------------------------------------------------------------------------
     // MARKUP
@@ -118,13 +125,22 @@ const MoveForm: React.FC<MoveFormProps> = ({
                     options={CARDISTRY_MOVE_TYPES}
                 />
             </div>
-            <FormField
-                label="Tutorial"
-                value={tutorial}
-                onChange={setTutorial}
-                onKeyDown={handleKeyDown}
-            />
-            {isEditing ? (
+            {isRoutine ? (
+                <FormField
+                    label="Notes"
+                    value={notes}
+                    onChange={setNotes}
+                    multiline
+                />
+            ) : (
+                <FormField
+                    label="Tutorial"
+                    value={tutorial}
+                    onChange={setTutorial}
+                    onKeyDown={handleKeyDown}
+                />
+            )}
+            {isEditing && !isRoutine ? (
                 <FormField
                     label="Count"
                     value={count}

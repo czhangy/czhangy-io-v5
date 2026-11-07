@@ -33,6 +33,7 @@ const CardistryPage = async () => {
         name: r.name,
         type: r.type,
         tutorial: r.tutorial,
+        notes: r.notes,
         count: r.count,
         createdAt: r.createdAt.toISOString(),
     }));

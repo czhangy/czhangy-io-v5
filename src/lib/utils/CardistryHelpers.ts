@@ -1,7 +1,19 @@
+import { ROUTINE_TYPE } from '@/lib/static/constants';
+
 export default class CardistryHelpers {
     // -------------------------------------------------------------------------
     // PUBLIC
     // -------------------------------------------------------------------------
+
+    static isRoutine = (type: string): boolean => type === ROUTINE_TYPE;
+
+    static getTypeLabel = (type: string): string => {
+        const labels: Record<string, string> = {
+            'False Cut': 'F. Cut',
+            'False Shuffle': 'F. Shuffle',
+        };
+        return labels[type] ?? type;
+    };
 
     static getProficiency = (
         count: number

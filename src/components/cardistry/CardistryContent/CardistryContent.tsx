@@ -24,8 +24,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
     // CONSTANTS
     // -------------------------------------------------------------------------
 
-    const ITEMS_PER_PAGE: number = 10;
-    const HIGHLIGHT_LABEL: string = 'CURRENTLY PRACTICING';
+    const ITEMS_PER_PAGE: number = 19;
 
     // -------------------------------------------------------------------------
     // HOOKS
@@ -81,6 +80,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                 name: move.name,
                 type: move.type,
                 tutorial: move.tutorial,
+                notes: move.notes,
                 count: move.count + amount,
             });
             setMoves((prev) =>
@@ -95,6 +95,12 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                 return next;
             });
         }
+    };
+
+    const handleHighlight = async (move: Move): Promise<void> => {
+        const updated = await MoveHelpers.highlight(move.name);
+        if (!updated) return;
+        setHighlightedName(updated.name);
     };
 
     const handleDelete = async (name: string): Promise<void> => {
@@ -153,11 +159,13 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
     // -------------------------------------------------------------------------
 
     const filterMoves = (list: Move[]): Move[] =>
-        list.filter(
-            (m) =>
-                m.name !== highlightedName &&
-                m.name.toLowerCase().includes(searchQuery.toLowerCase())
-        );
+        list
+            .filter(
+                (m) =>
+                    m.name !== highlightedName &&
+                    m.name.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+            .sort((a, b) => a.name.localeCompare(b.name));
 
     // -------------------------------------------------------------------------
     // RENDERING
@@ -212,8 +220,8 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                     />
                 ) : null}
             </Controls>
-            {spotlightMove ? (
-                <ul className={styles.spotlight}>
+            <ul className={styles.list}>
+                {spotlightMove ? (
                     <MoveListItem
                         move={spotlightMove}
                         searchQuery={searchQuery}
@@ -226,11 +234,9 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                         }
                         onEdit={() => setEditingMove(spotlightMove)}
                         onDelete={() => handleDelete(spotlightMove.name)}
-                        highlightLabel={HIGHLIGHT_LABEL}
+                        highlighted
                     />
-                </ul>
-            ) : null}
-            <ul className={styles.list}>
+                ) : null}
                 {paginatedMoves.map((move) => (
                     <MoveListItem
                         key={move.name}
@@ -239,6 +245,7 @@ const CardistryContent: React.FC<CardistryContentProps> = ({
                         isAdmin={isAdmin}
                         isIncrementing={incrementingMoves.has(move.name)}
                         onIncrement={(amount) => handleIncrement(move, amount)}
+                        onHighlight={() => handleHighlight(move)}
                         onEdit={() => setEditingMove(move)}
                         onDelete={() => handleDelete(move.name)}
                     />

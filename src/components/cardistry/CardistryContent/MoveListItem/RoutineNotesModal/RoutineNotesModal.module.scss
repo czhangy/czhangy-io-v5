@@ -1,0 +1,14 @@
+@use '@/styles/constants' as *;
+
+.notes {
+    font-family: $font-mono;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin: 0;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+
+    &--empty {
+        color: $text-dim;
+    }
+}

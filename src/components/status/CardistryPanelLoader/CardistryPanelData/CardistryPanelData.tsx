@@ -33,6 +33,7 @@ const CardistryPanelData = async ({
                     name: move.name,
                     type: move.type,
                     tutorial: move.tutorial,
+                    notes: move.notes,
                     count: move.count,
                     createdAt: move.createdAt.toISOString(),
                 };
