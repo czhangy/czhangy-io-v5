@@ -62,6 +62,7 @@ export const CARDISTRY_MOVE_TYPES: string[] = [
     'Shuffle',
     'Flourish',
     'Sleight',
+    'Control',
 ];
 
 // Routes
