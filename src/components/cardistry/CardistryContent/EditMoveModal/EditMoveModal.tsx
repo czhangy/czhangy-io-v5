@@ -24,6 +24,7 @@ const EditMoveModal: React.FC<EditMoveModalProps> = ({
         name: string;
         type: string;
         tutorial: string;
+        notes?: string;
         count?: number;
     }): Promise<void> => {
         const updated = await MoveHelpers.update(move.name, values);

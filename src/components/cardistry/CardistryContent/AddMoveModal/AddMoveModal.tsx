@@ -19,6 +19,7 @@ const AddMoveModal: React.FC<AddMoveModalProps> = ({ onClose, onAdd }) => {
         name: string;
         type: string;
         tutorial: string;
+        notes?: string;
     }): Promise<void> => {
         const created = await MoveHelpers.create(values);
         onAdd(created);

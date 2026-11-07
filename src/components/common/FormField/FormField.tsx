@@ -8,6 +8,7 @@ type FormFieldProps = {
     onChange: (value: string) => void;
     options?: string[];
     type?: 'date';
+    multiline?: boolean;
     onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     autoFocus?: boolean;
 };
@@ -18,6 +19,7 @@ const FormField: React.FC<FormFieldProps> = ({
     onChange,
     options,
     type,
+    multiline,
     onKeyDown,
     autoFocus,
 }) => {
@@ -27,6 +29,12 @@ const FormField: React.FC<FormFieldProps> = ({
 
     const handleInputChange = (
         e: React.ChangeEvent<HTMLInputElement>
+    ): void => {
+        onChange(e.target.value);
+    };
+
+    const handleTextareaChange = (
+        e: React.ChangeEvent<HTMLTextAreaElement>
     ): void => {
         onChange(e.target.value);
     };
@@ -42,6 +50,13 @@ const FormField: React.FC<FormFieldProps> = ({
                 <Dropdown value={value} onChange={onChange} options={options} />
             ) : type === 'date' ? (
                 <DatePicker value={value} onChange={onChange} />
+            ) : multiline ? (
+                <textarea
+                    className={`${styles.input} ${styles.textarea}`}
+                    value={value}
+                    onChange={handleTextareaChange}
+                    rows={6}
+                />
             ) : (
                 <input
                     className={styles.input}

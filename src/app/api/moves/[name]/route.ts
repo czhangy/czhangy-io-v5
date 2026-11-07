@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SESSION_COOKIE } from '@/lib/static/constants';
+import { ROUTINE_TYPE, SESSION_COOKIE } from '@/lib/static/constants';
 import { prisma } from '@/lib/static/prisma';
 import { Move } from '@/lib/static/types';
 import AuthHelpers from '@/lib/utils/AuthHelpers';
@@ -39,6 +39,7 @@ export const PATCH = async (
         name: move.name,
         type: move.type,
         tutorial: move.tutorial,
+        notes: move.notes,
         count: move.count,
         createdAt: move.createdAt.toISOString(),
     } as Move);
@@ -59,11 +60,13 @@ export const PUT = async (
         name: newName,
         type,
         tutorial,
+        notes,
         count,
     } = (await request.json()) as {
         name: string;
         type: string;
         tutorial: string;
+        notes?: string;
         count: number;
     };
 
@@ -79,12 +82,8 @@ export const PUT = async (
             { status: 400 }
         );
     }
-    if (!tutorial?.trim()) {
-        return NextResponse.json(
-            { error: 'Tutorial is required' },
-            { status: 400 }
-        );
-    }
+    const isRoutine = type.trim() === ROUTINE_TYPE;
+
     if (typeof count !== 'number' || count < 0) {
         return NextResponse.json({ error: 'Invalid count' }, { status: 400 });
     }
@@ -111,8 +110,9 @@ export const PUT = async (
         data: {
             name: newName.trim(),
             type: type.trim(),
-            tutorial: tutorial.trim(),
-            count,
+            tutorial: isRoutine ? '' : (tutorial ?? '').trim(),
+            notes: isRoutine ? (notes ?? '').trim() : '',
+            count: isRoutine ? 0 : count,
         },
     });
 
@@ -120,6 +120,7 @@ export const PUT = async (
         name: move.name,
         type: move.type,
         tutorial: move.tutorial,
+        notes: move.notes,
         count: move.count,
         createdAt: move.createdAt.toISOString(),
     } as Move);
